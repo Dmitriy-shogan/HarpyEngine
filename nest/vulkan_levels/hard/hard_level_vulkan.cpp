@@ -1,0 +1,267 @@
+﻿#include "..//hard_level_vulkan.hpp"
+
+
+
+bool harpy_nest::hard_level_vulkan::is_device_suitable() const
+{
+    VkPhysicalDeviceProperties deviceProperties;
+    VkPhysicalDeviceFeatures deviceFeatures;
+    vkGetPhysicalDeviceProperties(ph_device, &deviceProperties);
+    vkGetPhysicalDeviceFeatures(ph_device, &deviceFeatures);
+
+    return deviceFeatures.geometryShader;
+}
+
+ harpy_nest::hard_level_vulkan::needed_queues_families harpy_nest::hard_level_vulkan::find_queue_families(needed_queues_bits bits) const
+ {
+    needed_queues_families result{};
+
+    uint32_t queueFamilyCount = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(ph_device, &queueFamilyCount, nullptr);
+
+    std::vector<VkQueueFamilyProperties> queue_families(queueFamilyCount);
+    vkGetPhysicalDeviceQueueFamilyProperties(ph_device, &queueFamilyCount, queue_families.data());
+
+    for(int i = 0; auto f : queue_families)
+    {
+        if (f.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
+            result.graphics_families = i;
+        }
+
+        VkBool32 present_support = false;
+        vkGetPhysicalDeviceSurfaceSupportKHR(ph_device, i, connected_window->surface, &present_support);
+
+        if (present_support) {
+            result.present_families = i;
+        }
+
+        if (result.is_completed()) {
+            break;
+        }
+
+        i++;
+    }
+
+    return result;
+}
+
+bool harpy_nest::hard_level_vulkan::check_device_extension_support()
+{
+    uint32_t extensionCount;
+    vkEnumerateDeviceExtensionProperties(ph_device, nullptr, &extensionCount, nullptr);
+
+    std::vector<VkExtensionProperties> availableExtensions(extensionCount);
+    vkEnumerateDeviceExtensionProperties(ph_device, nullptr, &extensionCount, availableExtensions.data());
+
+    std::set<std::string> requiredExtensions(device_extensions.begin(), device_extensions.end());
+
+    for (const auto& extension : availableExtensions) {
+        requiredExtensions.erase(extension.extensionName);
+    }
+
+    return requiredExtensions.empty();
+}
+
+std::vector<const char*> harpy_nest::hard_level_vulkan::get_required_extensions()
+{
+    uint32_t glfwExtensionCount = 0;
+    const char** glfw_extensions{nullptr};
+    glfw_extensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+
+    std::vector<const char*> extensions(glfw_extensions, glfw_extensions + glfwExtensionCount);
+
+    if constexpr (VALIDATION_LAYERS)
+    {
+        extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+    }
+
+    return extensions;
+}
+
+void harpy_nest::hard_level_vulkan::init_instance(harpy_hard_level_settings settings)
+{
+    //First checking validation support
+    //code goes here
+
+    //Second info
+    VkApplicationInfo app_info{};
+    app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+    app_info.pApplicationName = "BASE";
+    app_info.applicationVersion = APP_VERSION;
+    app_info.apiVersion = API_VERSION;
+    app_info.engineVersion = ENGINE_VERSION;
+    app_info.pEngineName = ENGINE_NAME;
+
+    VkInstanceCreateInfo create_info;
+    create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    create_info.pApplicationInfo = &app_info;
+
+    const auto extensions = get_required_extensions();
+    create_info.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+    create_info.ppEnabledExtensionNames = extensions.data();
+
+    VkDebugUtilsMessengerCreateInfoEXT debug_create_info{};
+    if constexpr (VALIDATION_LAYERS)
+    {
+        create_info.enabledLayerCount = static_cast<uint32_t>(base_valid.layers.size());
+        create_info.ppEnabledLayerNames = base_valid.layers.data();
+        
+        validation_layers::basic_debug_init(debug_create_info);
+
+        create_info.pNext = &debug_create_info;
+        
+    } else
+    {
+        create_info.enabledLayerCount = 0;
+        create_info.pNext = nullptr;
+    }
+
+    if (vkCreateInstance(&create_info, nullptr, &instance) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create instance!");
+    }
+    
+}
+
+void harpy_nest::hard_level_vulkan::init_ph_device(harpy_hard_level_settings settings)
+{
+    uint32_t device_count = 0;
+    vkEnumeratePhysicalDevices(instance, &device_count, nullptr);
+
+    if(!device_count) throw std::runtime_error("No device found. Dude, wtf?" + ERR_LINE);
+
+    std::vector<VkPhysicalDevice> devices(device_count);
+    vkEnumeratePhysicalDevices(instance, &device_count, devices.data());
+
+    for (const auto& pdevice : devices) {
+        if (is_device_suitable()) {
+            ph_device = pdevice;
+            break;
+        }
+    }
+
+    if (ph_device == VK_NULL_HANDLE) {
+        throw std::runtime_error("failed to find a suitable GPU!" + ERR_LINE);
+    }
+}
+
+void harpy_nest::hard_level_vulkan::init_device_and_queues(harpy_hard_level_settings settings)
+{
+    auto indices = find_queue_families();
+
+    std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
+    std::set<uint32_t> uniqueQueueFamilies = {indices.graphics_families.value(), indices.graphics_families.value()};
+
+    float queuePriority = 1.0f;
+    
+    for (uint32_t queueFamily : uniqueQueueFamilies) {
+        VkDeviceQueueCreateInfo queueCreateInfo{};
+        queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+        queueCreateInfo.queueFamilyIndex = queueFamily;
+        queueCreateInfo.queueCount = 1;
+        queueCreateInfo.pQueuePriorities = &queuePriority;
+        queueCreateInfos.push_back(queueCreateInfo);
+    }
+
+    VkPhysicalDeviceFeatures deviceFeatures{};
+
+    VkDeviceCreateInfo createInfo{};
+    createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+
+    createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
+    createInfo.pQueueCreateInfos = queueCreateInfos.data();
+
+    createInfo.pEnabledFeatures = &deviceFeatures;
+
+    createInfo.enabledExtensionCount = static_cast<uint32_t>(device_extensions.size());
+    createInfo.ppEnabledExtensionNames = device_extensions.data();
+
+    if constexpr (VALIDATION_LAYERS) {
+        createInfo.enabledLayerCount = static_cast<uint32_t>(base_valid.layers.size());
+        createInfo.ppEnabledLayerNames = base_valid.layers.data();
+    } else {
+        createInfo.enabledLayerCount = 0;
+    }
+
+    if (vkCreateDevice(ph_device, &createInfo, nullptr, &device) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create logical device!");
+    }
+
+    
+    vkGetDeviceQueue(device, indices.present_families.value(), 0, &present_queue);
+}
+
+VkInstance harpy_nest::hard_level_vulkan::get_instance()
+{
+    return instance;
+}
+
+VkPhysicalDevice harpy_nest::hard_level_vulkan::get_ph_device()
+{
+    return ph_device;
+}
+
+VkDevice harpy_nest::hard_level_vulkan::get_device()
+{
+    return device;
+}
+
+VkQueue harpy_nest::hard_level_vulkan::get_graphics_queue()
+{
+    return graphics_queue;
+}
+
+VkQueue harpy_nest::hard_level_vulkan::get_present_queue()
+{
+    return present_queue;
+}
+
+harpy_nest::validation_layers& harpy_nest::hard_level_vulkan::get_valid_layers()
+{
+    return base_valid;
+}
+
+harpy_nest::base_window* harpy_nest::hard_level_vulkan::get_base_window()
+{
+    return connected_window;
+}
+
+harpy_nest::hard_level_vulkan::operator bool()
+{
+    return is_inited;
+}
+
+const std::vector<const char*>& harpy_nest::hard_level_vulkan::get_device_extentions()
+{
+    return device_extensions;
+}
+
+harpy_nest::hard_level_vulkan::~hard_level_vulkan()
+{
+    vkDestroyDevice(device, nullptr);
+    
+    vkDestroySurfaceKHR(instance, connected_window->surface, nullptr);
+    vkDestroyInstance(instance, nullptr);
+}
+
+void harpy_nest::hard_level_vulkan::init_all_default()
+{
+    init_instance();
+    init_ph_device();
+    init_device_and_queues();
+
+    is_inited = true;
+}
+
+void harpy_nest::hard_level_vulkan::init_debug()
+{
+    if (!instance) throw std::runtime_error("Can't init debug before initiating instance" + ERR_LINE);
+    base_valid.init_debug_messenger();
+    
+}
+
+//Auto-initiates window when given one
+void harpy_nest::hard_level_vulkan::connect_window(base_window& win)
+{
+    connected_window = &win;
+    connected_window->init_all(instance);
+}
