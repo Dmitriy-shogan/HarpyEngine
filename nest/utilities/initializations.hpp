@@ -11,6 +11,7 @@
 #include <string>
 #include <array>
 #include <set>
+#include <cstdint>
 
 //GLFW libraries
 #define GLFW_INCLUDE_VULKAN

@@ -7,12 +7,13 @@
 namespace harpy_nest{
 
     class hard_level_vulkan;
-    class base_window
+    class base_window_layout
     {
         friend hard_level_vulkan;
         GLFWwindow* glfw_window{nullptr};
         VkSurfaceKHR surface {nullptr};
         bool do_resize {false};
+        
         
         static void framebuffer_resize_callback(GLFWwindow* window, int width, int height);
 
@@ -23,9 +24,12 @@ namespace harpy_nest{
         
     public:
 
-        base_window() = default;
+        GLFWwindow& get_glfw_window() const;
+        VkSurfaceKHR& get_VK_surface();
+
+        base_window_layout() = default;
         
-        ~base_window();
+        ~base_window_layout();
 };
     
 }

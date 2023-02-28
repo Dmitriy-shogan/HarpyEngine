@@ -97,7 +97,7 @@
       <AdditionalIncludeDirectories>nest;game_logic;third_party_services\include;</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
-    <ClCompile Include="nest\vision\window\base_window.cpp" />
+    <ClCompile Include="nest\vision\base_window_layout\base_window.cpp" />
     <ClCompile Include="nest\vulkan_levels\hard\hard_level_vulkan.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -328,7 +328,7 @@
     <ClInclude Include="nest\utilities\initializations.hpp" />
     <ClInclude Include="nest\utilities\utilities.hpp" />
     <ClInclude Include="nest\vision\camera.hpp" />
-    <ClInclude Include="nest\vision\base_window.hpp" />
+    <ClInclude Include="nest\vision\base_window_layout.hpp" />
     <ClInclude Include="nest\vulkan_levels\hard\validation_layers.hpp" />
     <ClInclude Include="nest\vulkan_levels\hard_level_vulkan.hpp" />
     <ClInclude Include="nest\vulkan_levels\medium_level_vulkan.hpp" />

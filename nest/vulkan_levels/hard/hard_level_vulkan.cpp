@@ -29,7 +29,7 @@ bool harpy_nest::hard_level_vulkan::is_device_suitable() const
         }
 
         VkBool32 present_support = false;
-        vkGetPhysicalDeviceSurfaceSupportKHR(ph_device, i, connected_window->surface, &present_support);
+        vkGetPhysicalDeviceSurfaceSupportKHR(ph_device, i, connected_window_layout->surface, &present_support);
 
         if (present_support) {
             result.present_families = i;
@@ -45,7 +45,7 @@ bool harpy_nest::hard_level_vulkan::is_device_suitable() const
     return result;
 }
 
-bool harpy_nest::hard_level_vulkan::check_device_extension_support()
+bool harpy_nest::hard_level_vulkan::check_device_extension_support() const
 {
     uint32_t extensionCount;
     vkEnumerateDeviceExtensionProperties(ph_device, nullptr, &extensionCount, nullptr);
@@ -190,27 +190,27 @@ void harpy_nest::hard_level_vulkan::init_device_and_queues(harpy_hard_level_sett
     vkGetDeviceQueue(device, indices.present_families.value(), 0, &present_queue);
 }
 
-VkInstance harpy_nest::hard_level_vulkan::get_instance()
+VkInstance harpy_nest::hard_level_vulkan::get_instance() const
 {
     return instance;
 }
 
-VkPhysicalDevice harpy_nest::hard_level_vulkan::get_ph_device()
+VkPhysicalDevice harpy_nest::hard_level_vulkan::get_ph_device() const
 {
     return ph_device;
 }
 
-VkDevice harpy_nest::hard_level_vulkan::get_device()
+VkDevice harpy_nest::hard_level_vulkan::get_device() const
 {
     return device;
 }
 
-VkQueue harpy_nest::hard_level_vulkan::get_graphics_queue()
+VkQueue harpy_nest::hard_level_vulkan::get_graphics_queue() const
 {
     return graphics_queue;
 }
 
-VkQueue harpy_nest::hard_level_vulkan::get_present_queue()
+VkQueue harpy_nest::hard_level_vulkan::get_present_queue() const
 {
     return present_queue;
 }
@@ -220,17 +220,17 @@ harpy_nest::validation_layers& harpy_nest::hard_level_vulkan::get_valid_layers()
     return base_valid;
 }
 
-harpy_nest::base_window* harpy_nest::hard_level_vulkan::get_base_window()
+harpy_nest::base_window_layout* harpy_nest::hard_level_vulkan::get_base_window_layout() const
 {
-    return connected_window;
+    return connected_window_layout;
 }
 
-harpy_nest::hard_level_vulkan::operator bool()
+harpy_nest::hard_level_vulkan::operator bool() const
 {
     return is_inited;
 }
 
-const std::vector<const char*>& harpy_nest::hard_level_vulkan::get_device_extentions()
+const std::vector<const char*>& harpy_nest::hard_level_vulkan::get_device_extensions() const
 {
     return device_extensions;
 }
@@ -239,7 +239,7 @@ harpy_nest::hard_level_vulkan::~hard_level_vulkan()
 {
     vkDestroyDevice(device, nullptr);
     
-    vkDestroySurfaceKHR(instance, connected_window->surface, nullptr);
+    vkDestroySurfaceKHR(instance, connected_window_layout->surface, nullptr);
     vkDestroyInstance(instance, nullptr);
 }
 
@@ -259,9 +259,9 @@ void harpy_nest::hard_level_vulkan::init_debug()
     
 }
 
-//Auto-initiates window when given one
-void harpy_nest::hard_level_vulkan::connect_window(base_window& win)
+void harpy_nest::hard_level_vulkan::connect_window(base_window_layout& win, bool do_init = true)
 {
-    connected_window = &win;
-    connected_window->init_all(instance);
+    connected_window_layout = &win;
+    if (do_init)
+    connected_window_layout->init_all(instance);
 }

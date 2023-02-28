@@ -4,7 +4,7 @@
 
 #include "..//utilities/initializations.hpp"
 #include "hard/validation_layers.hpp"
-#include "..//vision/base_window.hpp"
+#include "..//vision/base_window_layout.hpp"
 
 namespace harpy_nest {
 
@@ -48,7 +48,7 @@ namespace harpy_nest {
 
         validation_layers base_valid{&instance};
 
-        base_window* connected_window;
+        base_window_layout* connected_window_layout{nullptr};
 
         
 
@@ -58,9 +58,9 @@ namespace harpy_nest {
         bool is_device_suitable() const;
 
         //Bits isn't realised yet
-        needed_queues_families find_queue_families(needed_queues_bits bits = skip_bit) const;
+        [[nodiscard]] needed_queues_families find_queue_families(needed_queues_bits bits = skip_bit) const;
 
-        bool check_device_extension_support();
+        [[nodiscard]] bool check_device_extension_support() const;
         
         hard_level_vulkan() = default;
 
@@ -74,19 +74,19 @@ namespace harpy_nest {
 
         void init_debug();
 
-        void connect_window(base_window& win);
+        void connect_window(base_window_layout& win, bool do_init);
         
-        VkInstance get_instance();
-        VkPhysicalDevice get_ph_device();
-        VkDevice get_device();
-        VkQueue get_graphics_queue();
-        VkQueue get_present_queue();
+        VkInstance get_instance() const;
+        VkPhysicalDevice get_ph_device() const;
+        VkDevice get_device() const;
+        VkQueue get_graphics_queue() const;
+        VkQueue get_present_queue() const;
         validation_layers& get_valid_layers();
-        base_window* get_base_window();
+        base_window_layout* get_base_window_layout() const;
 
-        explicit operator bool();
+        explicit operator bool() const;
 
-        const std::vector<const char*>& get_device_extentions();
+        const std::vector<const char*>& get_device_extensions() const;
 
         ~hard_level_vulkan();
     };
