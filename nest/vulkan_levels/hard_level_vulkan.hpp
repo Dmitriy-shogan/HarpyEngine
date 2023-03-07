@@ -12,6 +12,7 @@ namespace harpy_nest {
     
     class hard_level_vulkan
     {
+    protected:
         enum needed_queues_bits
         {
             skip_bit = -1,
@@ -50,8 +51,7 @@ namespace harpy_nest {
 
         base_window_layout* connected_window_layout{nullptr};
 
-        
-
+        hard_level_vulkan() = default;
     public:
 
         //for later
@@ -62,7 +62,7 @@ namespace harpy_nest {
 
         [[nodiscard]] bool check_device_extension_support() const;
         
-        hard_level_vulkan() = default;
+        
 
         static std::vector<const char*> get_required_extensions();
 

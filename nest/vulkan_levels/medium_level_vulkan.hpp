@@ -5,80 +5,68 @@
 
 namespace harpy_nest{
     
-class medium_level_vulkan
+class medium_level_vulkan : public hard_level_vulkan
 {
+protected:
+    
     struct swap_chain_support_details {
         std::vector<VkSurfaceFormatKHR> formats;
         VkSurfaceCapabilitiesKHR capabilities;
         std::vector<VkPresentModeKHR> presentModes;
     };
     
-    hard_level_vulkan* hard_vulk;
-    
-
     VkSwapchainKHR swapchain{nullptr};
     std::vector<VkImage> swapchain_images{};
+    VkSurfaceFormatKHR surface_format {};
+    VkPresentModeKHR present_mode {};
+    VkExtent2D extent {};
+
+    std::vector<VkImageView> swapchain_image_views;
     
-    swap_chain_support_details query_swap_chain_support() const
+    swap_chain_support_details query_swap_chain_support() const;
+
+    VkExtent2D choose_swap_extent(const VkSurfaceCapabilitiesKHR& capabilities);
+
+    void init_image_views()
     {
-        swap_chain_support_details details{};
-        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(hard_vulk->get_ph_device(), hard_vulk->get_base_window_layout()->get_VK_surface(), &details.capabilities);
-        uint32_t formatCount;
-        vkGetPhysicalDeviceSurfaceFormatsKHR(hard_vulk->get_ph_device(), hard_vulk->get_base_window_layout()->get_VK_surface(), &formatCount, nullptr);
+        swapchain_image_views.resize(swapchain_images.size());
 
-        if (formatCount != 0) {
-            details.formats.resize(formatCount);
-            vkGetPhysicalDeviceSurfaceFormatsKHR(hard_vulk->get_ph_device(), hard_vulk->get_base_window_layout()->get_VK_surface(), &formatCount, details.formats.data());
-        }
+        VkImageViewCreateInfo create_info{};
+        create_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        
+        create_info.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        create_info.format = surface_format.format;
 
-        return details;
-    }
+        create_info.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+        create_info.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+        create_info.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+        create_info.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
 
-    VkExtent2D choose_swap_extent(const VkSurfaceCapabilitiesKHR& capabilities) {
-        if (capabilities.currentExtent.width != UINT32_MAX) {
-            return capabilities.currentExtent;
-        } else {
-            int width, height;
-            glfwGetFramebufferSize(&hard_vulk->get_base_window_layout()->get_glfw_window(), &width, &height);
+        create_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        create_info.subresourceRange.baseMipLevel = 0;
+        create_info.subresourceRange.levelCount = 1;
+        create_info.subresourceRange.baseArrayLayer = 0;
+        create_info.subresourceRange.layerCount = 1;
 
-            VkExtent2D actualExtent = {
-                static_cast<uint32_t>(width),
-                static_cast<uint32_t>(height)
-            };
 
-            actualExtent.width = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent.width, actualExtent.width));
-            actualExtent.height = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent.height, actualExtent.height));
-
-            return actualExtent;
+        for(int f = 0; auto& i : swapchain_images)
+        {
+            create_info.image = i;
+            if (vkCreateImageView(device, &create_info, nullptr, &swapchain_image_views[f++]) != VK_SUCCESS) {
+                throw std::runtime_error("failed to create image views!");
+            }
         }
     }
 
-    
+    medium_level_vulkan() : hard_level_vulkan(){}
     
 public:
     
-    medium_level_vulkan(hard_level_vulkan& vulk) : hard_vulk(&vulk) {}
+   
     
-    static VkSurfaceFormatKHR choose_swapchain_format(const std::vector<VkSurfaceFormatKHR>& available_formats)
-    {
-        for (const auto& available_format : available_formats) {
-            if (available_format.format == VK_FORMAT_B8G8R8A8_SRGB && available_format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
-                return available_format;
-            }
-        }
+    static VkSurfaceFormatKHR choose_swapchain_format(const std::vector<VkSurfaceFormatKHR>& available_formats);
 
-        return available_formats[0];
-    }
-    
-    static VkPresentModeKHR choose_swap_present_mode(const std::vector<VkPresentModeKHR>& availablePresentModes) {
-        for (const auto& availablePresentMode : availablePresentModes) {
-            if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
-                return availablePresentMode;
-            }
-        }
-
-        return VK_PRESENT_MODE_FIFO_KHR;
-    }
+    static VkPresentModeKHR choose_swap_present_mode(const std::vector<VkPresentModeKHR>& availablePresentModes);
 
     void init_swapchain();
 
@@ -87,8 +75,10 @@ public:
 
     ~medium_level_vulkan()
     {
-        vkDestroySwapchainKHR(hard_vulk->get_device(), swapchain, nullptr);
-        hard_vulk->~hard_level_vulkan();
+        for (auto image_view : swapchain_image_views) {
+            vkDestroyImageView(device, image_view, nullptr);
+        }
+        vkDestroySwapchainKHR(device, swapchain, nullptr);
     }
 };
     
