@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="nest\primitive_data_types\vertex_buffer.cpp" />
+    <ClCompile Include="nest\renderer\renderer.cpp" />
     <ClCompile Include="nest\shaders\base_shader.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -95,9 +96,11 @@
       <AdditionalIncludeDirectories>nest/;game_logic;third_party_services/include;</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="nest\threading\harpy_semaphore.cpp" />
     <ClCompile Include="nest\utilities\harpy_little_error.cpp" />
     <ClCompile Include="nest\utilities\initializations.cpp" />
     <ClCompile Include="nest\utilities\utilities.cpp" />
+    <ClCompile Include="nest\vision\base_window_layout\base_window_layout.cpp" />
     <ClCompile Include="nest\vision\camera\camera.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -172,7 +175,6 @@
       <AdditionalIncludeDirectories>nest;game_logic;third_party_services\include;</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
-    <ClCompile Include="nest\vision\base_window_layout\base_window.cpp" />
     <ClCompile Include="nest\vulkan_levels\hard\hard_level_vulkan.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -399,8 +401,11 @@
     <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="nest\interfaces\render\Idrawable.hpp" />
     <ClInclude Include="nest\primitive_data_types\vertex_buffer.hpp" />
+    <ClInclude Include="nest\renderer\renderer.hpp" />
     <ClInclude Include="nest\shaders\base_shader.hpp" />
+    <ClInclude Include="nest\threading\harpy_semaphore.hpp" />
     <ClInclude Include="nest\utilities\harpy_little_error.h" />
     <ClInclude Include="nest\utilities\initializations.hpp" />
     <ClInclude Include="nest\utilities\utilities.hpp" />
@@ -470,6 +475,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PublicIncludeDirectories></PublicIncludeDirectories>
     <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath);</ExecutablePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath); nest/;</IncludePath>
+    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath); nest/;</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -507,7 +514,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>nest/;game_logic;third_party_services/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>game_logic;third_party_services/include;nest/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

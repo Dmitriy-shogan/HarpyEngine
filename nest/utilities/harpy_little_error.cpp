@@ -28,7 +28,17 @@ void harpy_nest::harpy_little_error::log_this()
     string sever;
     switch (INTCAST(severity))
     {
-            
+
+    case INTCAST(error_severity::not_init):
+        {
+            sever = "Not initialised";
+            break;
+        }
+    case INTCAST(error_severity::wrong_init):
+        {
+            sever = "Wrong initialised";
+            break;
+        }
     case INTCAST(error_severity::harpys_eggs_under_attack):
         {
             sever = "HOLY MOLY TERRIBLE AS FUCK";

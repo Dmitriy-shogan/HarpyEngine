@@ -1,17 +1,6 @@
 ﻿#include "..//hard_level_vulkan.hpp"
 
 
-
-bool harpy_nest::hard_level_vulkan::is_device_suitable() const
-{
-    VkPhysicalDeviceProperties deviceProperties;
-    VkPhysicalDeviceFeatures deviceFeatures;
-    vkGetPhysicalDeviceProperties(ph_device, &deviceProperties);
-    vkGetPhysicalDeviceFeatures(ph_device, &deviceFeatures);
-
-    return deviceFeatures.geometryShader;
-}
-
  harpy_nest::hard_level_vulkan::needed_queues_families harpy_nest::hard_level_vulkan::find_queue_families(needed_queues_bits bits) const
  {
     needed_queues_families result{};
@@ -92,9 +81,12 @@ void harpy_nest::hard_level_vulkan::init_instance(harpy_hard_level_settings sett
     app_info.engineVersion = ENGINE_VERSION;
     app_info.pEngineName = ENGINE_NAME;
 
+    VkInstanceCreateFlags create_flags{};
+    
     VkInstanceCreateInfo create_info;
     create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     create_info.pApplicationInfo = &app_info;
+    create_info.flags = create_flags;
 
     const auto extensions = get_required_extensions();
     create_info.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
@@ -122,6 +114,16 @@ void harpy_nest::hard_level_vulkan::init_instance(harpy_hard_level_settings sett
     
 }
 
+bool harpy_nest::hard_level_vulkan::is_device_suitable(VkPhysicalDevice phys_device)
+{
+     VkPhysicalDeviceProperties deviceProperties;
+     VkPhysicalDeviceFeatures deviceFeatures;
+     vkGetPhysicalDeviceProperties(phys_device, &deviceProperties);
+     vkGetPhysicalDeviceFeatures(phys_device, &deviceFeatures); 
+
+     return deviceFeatures.geometryShader;
+}
+
 void harpy_nest::hard_level_vulkan::init_ph_device(harpy_hard_level_settings settings)
 {
     uint32_t device_count = 0;
@@ -133,7 +135,7 @@ void harpy_nest::hard_level_vulkan::init_ph_device(harpy_hard_level_settings set
     vkEnumeratePhysicalDevices(instance, &device_count, devices.data());
 
     for (const auto& pdevice : devices) {
-        if (is_device_suitable()) {
+        if (is_device_suitable(pdevice)) {
             ph_device = pdevice;
             break;
         }
@@ -188,75 +190,32 @@ void harpy_nest::hard_level_vulkan::init_device_and_queues(harpy_hard_level_sett
 
     
     vkGetDeviceQueue(device, indices.present_families.value(), 0, &present_queue);
+     vkGetDeviceQueue(device, indices.graphics_families.value(), 0, &graphics_queue);
 }
 
-VkInstance harpy_nest::hard_level_vulkan::get_instance() const
-{
-    return instance;
-}
 
-VkPhysicalDevice harpy_nest::hard_level_vulkan::get_ph_device() const
-{
-    return ph_device;
-}
-
-VkDevice harpy_nest::hard_level_vulkan::get_device() const
-{
-    return device;
-}
-
-VkQueue harpy_nest::hard_level_vulkan::get_graphics_queue() const
-{
-    return graphics_queue;
-}
-
-VkQueue harpy_nest::hard_level_vulkan::get_present_queue() const
-{
-    return present_queue;
-}
-
-harpy_nest::validation_layers& harpy_nest::hard_level_vulkan::get_valid_layers()
-{
-    return base_valid;
-}
-
-harpy_nest::base_window_layout* harpy_nest::hard_level_vulkan::get_base_window_layout() const
-{
-    return connected_window_layout;
-}
-
-harpy_nest::hard_level_vulkan::operator bool() const
-{
-    return is_inited;
-}
-
-const std::vector<const char*>& harpy_nest::hard_level_vulkan::get_device_extensions() const
-{
-    return device_extensions;
-}
 
 harpy_nest::hard_level_vulkan::~hard_level_vulkan()
 {
+     base_valid.clean_up_debug();
     vkDestroyDevice(device, nullptr);
-    
     vkDestroySurfaceKHR(instance, connected_window_layout->surface, nullptr);
     vkDestroyInstance(instance, nullptr);
 }
 
-void harpy_nest::hard_level_vulkan::init_all_default()
+void harpy_nest::hard_level_vulkan::init_default_hard()
 {
-    init_instance();
+     
+    init_debug();
     init_ph_device();
     init_device_and_queues();
-
-    is_inited = true;
+    
 }
 
 void harpy_nest::hard_level_vulkan::init_debug()
 {
     if (!instance) throw std::runtime_error("Can't init debug before initiating instance" + ERR_LINE);
     base_valid.init_debug_messenger();
-    
 }
 
 void harpy_nest::hard_level_vulkan::connect_window(base_window_layout& win, bool do_init = true)

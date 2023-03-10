@@ -2,13 +2,16 @@
 #ifndef HARPY_HARD_VULKAN
 #define HARPY_HARD_VULKAN
 
-#include "..//utilities/initializations.hpp"
+#include "..//utilities/harpy_little_error.h"
 #include "hard/validation_layers.hpp"
 #include "..//vision/base_window_layout.hpp"
 
+
 namespace harpy_nest {
 
-    
+
+    //TODO: remove std::runtime_exception and use harpy_little_error exceptions
+   
     
     class hard_level_vulkan
     {
@@ -38,9 +41,6 @@ namespace harpy_nest {
         const std::vector<const char*> device_extensions = {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME
         };
-
-        bool is_inited = false;
-        
         VkInstance instance = nullptr;
         VkPhysicalDevice ph_device = nullptr;
         VkDevice device = nullptr;
@@ -52,43 +52,29 @@ namespace harpy_nest {
         base_window_layout* connected_window_layout{nullptr};
 
         hard_level_vulkan() = default;
-    public:
 
-        //for later
-        bool is_device_suitable() const;
-
-        //Bits isn't realised yet
-        [[nodiscard]] needed_queues_families find_queue_families(needed_queues_bits bits = skip_bit) const;
-
-        [[nodiscard]] bool check_device_extension_support() const;
         
-        
-
-        static std::vector<const char*> get_required_extensions();
-
-        void init_instance(harpy_hard_level_settings settings = harpy_hard_level_settings::standard);
         void init_ph_device(harpy_hard_level_settings settings = harpy_hard_level_settings::standard);
         void init_device_and_queues(harpy_hard_level_settings settings = harpy_hard_level_settings::standard);
 
-        void init_all_default();
+        void init_default_hard();
 
         void init_debug();
+    public:
 
+        void init_instance(harpy_hard_level_settings settings = harpy_hard_level_settings::standard);
+
+        //for later
+        static bool is_device_suitable(VkPhysicalDevice phys_device);
+
+        //Bits isn't realised yet
+        needed_queues_families find_queue_families(needed_queues_bits bits = skip_bit) const;
+
+        bool check_device_extension_support() const;
         void connect_window(base_window_layout& win, bool do_init);
-        
-        VkInstance get_instance() const;
-        VkPhysicalDevice get_ph_device() const;
-        VkDevice get_device() const;
-        VkQueue get_graphics_queue() const;
-        VkQueue get_present_queue() const;
-        validation_layers& get_valid_layers();
-        base_window_layout* get_base_window_layout() const;
+        static std::vector<const char*> get_required_extensions();
 
-        explicit operator bool() const;
-
-        const std::vector<const char*>& get_device_extensions() const;
-
-        ~hard_level_vulkan();
+        virtual ~hard_level_vulkan();
     };
     
 }

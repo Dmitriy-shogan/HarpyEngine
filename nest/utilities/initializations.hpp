@@ -9,7 +9,6 @@
 #include <vector>
 #include <optional>
 #include <string>
-#include <array>
 #include <set>
 #include <cstdint>
 #include <stdexcept>
@@ -27,7 +26,11 @@
 #define API_VERSION VK_MAKE_API_VERSION(0, 0, 1, 0)
 #define ENGINE_NAME "Harpy's engine"
 
+//TODO: remove all ERR_LINE and use harpy_little_error
 #define ERR_LINE (" Line: " + std::to_string(__LINE__))
+
+#define MAX_FRAMES_IN_FLIGHT 3
+
 
 
 #define INTCAST(x) static_cast<int>(x)
@@ -35,7 +38,7 @@
 #ifdef ENABLE_VALIDATION_LAYERS
 #define VALIDATION_LAYERS true
 #else
-#define VALIDATION_LAYERS false
+#define VALIDATION_LAYERS true
 #endif
 
 //Enums go here

@@ -1,7 +1,7 @@
 ﻿#pragma once
 #ifndef HARPY_UTILS
 #define HARPY_UTILS
-#include <utilities/initializations.hpp>
+#include "initializations.hpp"
 
 namespace harpy_nest {
     

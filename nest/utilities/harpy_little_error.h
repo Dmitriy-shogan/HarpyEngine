@@ -1,18 +1,20 @@
 ﻿#pragma once
 #ifndef HARPY_ERRORS
 #define HARPY_ERRORS
-#include <utilities/initializations.hpp>
+#include "..//utilities/initializations.hpp"
 
 namespace harpy_nest{
 
     enum class error_severity
     {
         just_notate_dude = -1,
-         message,
-         warning,
-         error,
-         we_are_fucked,
-         harpys_eggs_under_attack = we_are_fucked,
+        message,
+        warning,
+        not_init,
+        wrong_init,
+        error,
+        we_are_fucked,
+        harpys_eggs_under_attack = we_are_fucked,
      };
     
     class harpy_little_error : public std::runtime_error

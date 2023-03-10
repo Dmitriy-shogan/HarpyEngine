@@ -73,10 +73,9 @@ void harpy_nest::medium_level_vulkan::init_swapchain()
     if (swapchain_support.capabilities.maxImageCount > 0 && image_count > swapchain_support.capabilities.maxImageCount) {
         image_count = swapchain_support.capabilities.maxImageCount;
     }
-
-    
     
     VkSwapchainCreateInfoKHR create_info{};
+    create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     create_info.surface = connected_window_layout->get_VK_surface();
     create_info.imageExtent = extent;
     create_info.minImageCount = image_count;
@@ -105,7 +104,7 @@ void harpy_nest::medium_level_vulkan::init_swapchain()
 
     create_info.oldSwapchain = VK_NULL_HANDLE;
 
-    if (vkCreateSwapchainKHR(device, &create_info, nullptr, nullptr) != VK_SUCCESS)
+    if (vkCreateSwapchainKHR(device, &create_info, nullptr, &swapchain) != VK_SUCCESS)
         throw std::runtime_error("failed to create swap chain!");
 
     vkGetSwapchainImagesKHR(device, swapchain, &image_count, nullptr);

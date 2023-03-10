@@ -57,23 +57,23 @@ protected:
             }
         }
     }
+    void init_swapchain();
 
     medium_level_vulkan() : hard_level_vulkan(){}
     
 public:
-    
-   
-    
     static VkSurfaceFormatKHR choose_swapchain_format(const std::vector<VkSurfaceFormatKHR>& available_formats);
 
     static VkPresentModeKHR choose_swap_present_mode(const std::vector<VkPresentModeKHR>& availablePresentModes);
 
-    void init_swapchain();
+    void init_default_softer()
+    {
+        init_default_hard();
+        init_swapchain();
+        init_image_views();
+    };
 
-
-    void init_all_default();
-
-    ~medium_level_vulkan()
+    ~medium_level_vulkan() override
     {
         for (auto image_view : swapchain_image_views) {
             vkDestroyImageView(device, image_view, nullptr);

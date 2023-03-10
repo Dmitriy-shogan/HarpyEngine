@@ -1,8 +1,8 @@
 ﻿#pragma once
 #ifndef HARPY_BASE_SHADER
 #define HARPY_BASE_SHADER
-#include <utilities/initializations.hpp>
-#include <utilities/utilities.hpp>
+#include "..//utilities/initializations.hpp"
+#include "..//utilities/utilities.hpp"
 
 class base_shader
 {

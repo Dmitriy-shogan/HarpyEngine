@@ -5,18 +5,10 @@ harpy_nest::validation_layers::validation_layers(VkInstance* instance): connecte
 
 void harpy_nest::validation_layers::init_debug_messenger()
 {
-    if constexpr  (VALIDATION_LAYERS) throw std::runtime_error("No debug information without validation layers");
-
-    VkDebugUtilsMessengerCreateInfoEXT create_info_ext;
-    basic_debug_init(create_info_ext);
-
-    if (const auto func = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>
-        (vkGetInstanceProcAddr(*connected_instance, "vkCreateDebugUtilsMessengerEXT")); func != nullptr) {
-        func(*connected_instance, &create_info_ext, nullptr, &debug_messenger);
-    } else {
-        throw std::exception(("Failed to set up debug messenger at " + std::to_string(__LINE__) + " line").c_str());
-    }
+    setupDebugMessenger();
 }
+
+
 
 void harpy_nest::validation_layers::basic_debug_init(VkDebugUtilsMessengerCreateInfoEXT& createInfo)
 {
@@ -36,10 +28,15 @@ VkBool32 harpy_nest::validation_layers::basic_debug_callback(VkDebugUtilsMessage
     return VK_FALSE;
 }
 
-harpy_nest::validation_layers::~validation_layers()
+VkResult harpy_nest::validation_layers::CreateDebugUtilsMessengerEXT(VkInstance instance,
+    const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator,
+    VkDebugUtilsMessengerEXT* pDebugMessenger)
 {
-    auto func = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(*connected_instance, "vkDestroyDebugUtilsMessengerEXT");
+    auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
     if (func != nullptr) {
-        func(*connected_instance, debug_messenger, nullptr);
+        return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
+    } else {
+        return VK_ERROR_EXTENSION_NOT_PRESENT;
     }
 }
+

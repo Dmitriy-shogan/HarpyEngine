@@ -1,7 +1,19 @@
-#include <iostream>
+#include "nest/renderer/renderer.hpp"
 
-
-/*int main()
+using namespace harpy_nest;
+//TODO: in all available hpp files rewrite includes to be in <> brackets instead of direct way
+int main()
 {
-	std::cout << "Hello, harpy engine" << std::endl;
-}*/
+	init_glfw();
+	try
+	{
+		renderer render;
+		render.main_loop();
+	}
+	catch (harpy_little_error& exp)
+	{
+		exp.show();
+		exp.log_this();
+	}
+	harpy_little_error logger(error_severity::message, "Everything went fine on first try");
+}

@@ -1,43 +1,68 @@
 ﻿#pragma once
 #ifndef HARPY_SOFT_VULKAN
 #define HARPY_SOFT_VULKAN
-#include <vulkan_levels/medium_level_vulkan.hpp>
-#include <utilities/utilities.hpp>
-#include <shaders/base_shader.hpp>
+#include "..//vulkan_levels/medium_level_vulkan.hpp"
+#include "..//utilities/utilities.hpp"
+#include "..//shaders/base_shader.hpp"
 
 namespace harpy_nest{
 
+    class renderer;
 class soft_level_vulkan : public medium_level_vulkan
 {
-
     VkPipelineLayout pipeline_layout{};
     VkRenderPass render_pass{};
+    VkPipeline graphics_pipeline{};
+    std::vector<VkFramebuffer> framebuffers_array;
+
+    VkCommandPool com_pool{};
+    std::vector<VkCommandBuffer> com_buffers;
     
     void init_graphics_pipeline();
-    void init_render_pass()
-    {
-        VkAttachmentDescription colorAttachment{};
-        colorAttachment.format = surface_format.format;
-        colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-
-
-        
-        VkRenderPassCreateInfo render_pass_create_info;
-
-        if(vkCreateRenderPass(device, &render_pass_create_info, nullptr, &render_pass) != VK_SUCCESS){
-            throw std::runtime_error("Couldn't create render pass, line is: " + std::to_string(__LINE__));
-        }
-    }
+    void init_render_pass();
+    void init_framebuffers();
+    void init_com_pool();
+    void init_com_buffers();
+    void record_com_buf();
 public:
 
     soft_level_vulkan() : medium_level_vulkan(){}
+    void init_default_softest()
+    {
+        init_default_softer();
+        init_render_pass();
+        init_graphics_pipeline();
+        init_framebuffers();
+        init_com_pool();
+        init_com_buffers();
+    };
+
+
+    ~soft_level_vulkan() override
+    {
+        vkDestroyCommandPool(device, com_pool, nullptr);
+        for (auto framebuffer : framebuffers_array) {
+            vkDestroyFramebuffer(device, framebuffer, nullptr);
+        }
+        vkDestroyPipeline(device, graphics_pipeline, nullptr);
+        vkDestroyPipelineLayout(device, pipeline_layout, nullptr);
+        vkDestroyRenderPass(device, render_pass, nullptr);
+    }
+
+    VkSwapchainKHR get_swapchain() const {return swapchain;}
+    std::vector<VkCommandBuffer>& get_com_buffers(){return com_buffers;}
+    VkQueue get_graph_queue() const {return graphics_queue;}
+    VkQueue get_present_queue() const {return present_queue;}
+    VkInstance get_instance() const;
+    VkPhysicalDevice get_ph_device() const;
+    VkDevice get_device() const;
+    VkQueue get_graphics_queue() const;
+    validation_layers& get_valid_layers();
+    base_window_layout* get_base_window_layout() const;
+    std::vector<VkImage> get_swapchain_images() const {return swapchain_images;}
     
 
-    ~soft_level_vulkan()
-    {
-        vkDestroyPipelineLayout(device, pipeline_layout, nullptr);
-    }
-    
+    const std::vector<const char*>& get_device_extensions() const;
 };
 
 }
