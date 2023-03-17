@@ -1,4 +1,4 @@
-#include "nest/renderer/renderer.hpp"
+#include <renderer/renderer.h>
 
 using namespace harpy_nest;
 //TODO: in all available hpp files rewrite includes to be in <> brackets instead of direct way
@@ -9,6 +9,7 @@ int main()
 	{
 		renderer render;
 		render.main_loop();
+		render.clean_up();
 	}
 	catch (harpy_little_error& exp)
 	{
@@ -16,4 +17,5 @@ int main()
 		exp.log_this();
 	}
 	harpy_little_error logger(error_severity::message, "Everything went fine on first try");
+	logger.show();
 }
