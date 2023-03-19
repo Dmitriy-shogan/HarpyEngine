@@ -34,3 +34,12 @@ harpy_nest::base_window_layout::~base_window_layout()
 {
     glfwDestroyWindow(glfw_window);
 }
+
+void harpy_nest::base_window_layout::base_framebuffer_resize(GLFWwindow* window, int width, int height)
+{
+    auto app = reinterpret_cast<base_window_layout*>(glfwGetWindowUserPointer(window));
+    app->resized = true;
+}
+
+bool& harpy_nest::base_window_layout::get_resize()
+{ return resized; }

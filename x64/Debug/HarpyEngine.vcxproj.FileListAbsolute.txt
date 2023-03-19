@@ -1,1 +1,2 @@
 C:\Users\Dima\source\repos\HarpyEngine\x64\Debug\HarpyEngine.exe
+C:\Users\Иван\RiderProjects\HarpyEngine\x64\Debug\HarpyEngine.exe

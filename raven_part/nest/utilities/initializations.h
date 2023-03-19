@@ -15,6 +15,8 @@
 #include <chrono>
 #include <ctime>
 #include <format>
+#include <functional>
+#include <array>
 
 //GLFW libraries
 #define GLFW_INCLUDE_VULKAN

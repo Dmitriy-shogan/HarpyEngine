@@ -22,8 +22,6 @@ protected:
     VkExtent2D extent {};
 
     std::vector<VkImageView> swapchain_image_views;
-    
-    swap_chain_support_details query_swap_chain_support() const;
 
     VkExtent2D choose_swap_extent(const VkSurfaceCapabilitiesKHR& capabilities);
 
@@ -72,6 +70,8 @@ public:
         init_swapchain();
         init_image_views();
     }
+
+    swap_chain_support_details query_swap_chain_support() const;
 
     
 

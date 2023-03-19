@@ -1,6 +1,6 @@
 ﻿#pragma once
-#ifndef HARPY_WINDOW
-#define HARPY_WINDOW
+#ifndef HARPY_WINDOW_LAYOUT
+#define HARPY_WINDOW_LAYOUT
 #include <utilities/initializations.h>
 
 
@@ -28,14 +28,11 @@ namespace harpy_nest{
         
         ~base_window_layout();
 
-        static void base_framebuffer_resize(GLFWwindow* window, int width, int height)
-        {
-            auto app = reinterpret_cast<base_window_layout*>(glfwGetWindowUserPointer(window));
-            app->resized = true;
-        }
-       bool& get_resize(){ return resized; }
-};
+        static void base_framebuffer_resize(GLFWwindow* window, int width, int height);
+        bool& get_resize();
+    };
+    
     
 }
 
-#endif
+#endif // HARPY_WINDOW_LAYOUT

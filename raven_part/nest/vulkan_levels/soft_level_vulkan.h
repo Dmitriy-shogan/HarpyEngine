@@ -65,6 +65,7 @@ public:
     validation_layers& get_valid_layers();
     base_window_layout* get_base_window_layout() const;
     std::vector<VkImage> get_swapchain_images() const {return swapchain_images;}
+    VkRenderPass get_render_pass() const { return render_pass; }
 
     void recreate_swapchain()
     {

@@ -5,6 +5,7 @@
 #include <nest/utilities/harpy_little_error.h>
 #include <AL/efx.h>
 
+namespace harpy_sound{
 class base_sound
 {
     //TODO: ogg, mp3, wav readers AT LEAST, then proceed to actually work with sound
@@ -16,7 +17,7 @@ public:
     }
     
 };
-
+}
 
 
 #endif //HARPY_SOUND

@@ -19,21 +19,31 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="human_part\GUI\base_gui_layout.cpp" />
     <ClCompile Include="human_part\sound\base_sound.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="raven_part\nest\primitive_data_types\vertex_buffer.cpp" />
     <ClCompile Include="raven_part\nest\renderer\renderer.cpp" />
     <ClCompile Include="raven_part\nest\shaders\base_shader.cpp" />
     <ClCompile Include="raven_part\nest\threading\harpy_semaphore.cpp" />
+    <ClCompile Include="raven_part\nest\utilities\delta_timer.cpp" />
     <ClCompile Include="raven_part\nest\utilities\harpy_little_error.cpp" />
     <ClCompile Include="raven_part\nest\utilities\initializations.cpp" />
     <ClCompile Include="raven_part\nest\utilities\utilities.cpp" />
+    <ClCompile Include="raven_part\nest\vision\base_window.cpp" />
     <ClCompile Include="raven_part\nest\vision\base_window_layout\base_window_layout.cpp" />
     <ClCompile Include="raven_part\nest\vision\camera\camera.cpp" />
     <ClCompile Include="raven_part\nest\vulkan_levels\hard\hard_level_vulkan.cpp" />
     <ClCompile Include="raven_part\nest\vulkan_levels\hard\validation_layers.cpp" />
     <ClCompile Include="raven_part\nest\vulkan_levels\mid\medium_level_vulkan.cpp" />
     <ClCompile Include="raven_part\nest\vulkan_levels\soft\soft_level_vulkan.cpp" />
+    <ClCompile Include="third_party_services\include\imgui\imgui.cpp" />
+    <ClCompile Include="third_party_services\include\imgui\imgui_demo.cpp" />
+    <ClCompile Include="third_party_services\include\imgui\imgui_draw.cpp" />
+    <ClCompile Include="third_party_services\include\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="third_party_services\include\imgui\imgui_impl_vulkan.cpp" />
+    <ClCompile Include="third_party_services\include\imgui\imgui_tables.cpp" />
+    <ClCompile Include="third_party_services\include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -44,21 +54,34 @@
     <Folder Include="raven_part" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="human_part\GUI\base_gui_layout.h" />
     <ClInclude Include="human_part\sound\base_sound.h" />
     <ClInclude Include="raven_part\nest\interfaces\render\Idrawable.h" />
     <ClInclude Include="raven_part\nest\primitive_data_types\vertex_buffer.h" />
     <ClInclude Include="raven_part\nest\renderer\renderer.h" />
     <ClInclude Include="raven_part\nest\shaders\base_shader.h" />
     <ClInclude Include="raven_part\nest\threading\harpy_semaphore.h" />
+    <ClInclude Include="raven_part\nest\utilities\delegate.h" />
+    <ClInclude Include="raven_part\nest\utilities\delta_timer.h" />
+    <ClInclude Include="raven_part\nest\utilities\property.h" />
     <ClInclude Include="raven_part\nest\utilities\harpy_little_error.h" />
     <ClInclude Include="raven_part\nest\utilities\initializations.h" />
     <ClInclude Include="raven_part\nest\utilities\utilities.h" />
+    <ClInclude Include="raven_part\nest\vision\base_window.h" />
     <ClInclude Include="raven_part\nest\vision\base_window_layout.h" />
     <ClInclude Include="raven_part\nest\vision\camera.h" />
     <ClInclude Include="raven_part\nest\vulkan_levels\hard\validation_layers.hpp" />
     <ClInclude Include="raven_part\nest\vulkan_levels\hard_level_vulkan.h" />
     <ClInclude Include="raven_part\nest\vulkan_levels\medium_level_vulkan.h" />
     <ClInclude Include="raven_part\nest\vulkan_levels\soft_level_vulkan.h" />
+    <ClInclude Include="third_party_services\include\imgui\imconfig.h" />
+    <ClInclude Include="third_party_services\include\imgui\imgui.h" />
+    <ClInclude Include="third_party_services\include\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="third_party_services\include\imgui\imgui_impl_vulkan.h" />
+    <ClInclude Include="third_party_services\include\imgui\imgui_internal.h" />
+    <ClInclude Include="third_party_services\include\imgui\imstb_rectpack.h" />
+    <ClInclude Include="third_party_services\include\imgui\imstb_textedit.h" />
+    <ClInclude Include="third_party_services\include\imgui\imstb_truetype.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
