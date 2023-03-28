@@ -39,6 +39,14 @@ void harpy_nest::soft_level_vulkan::init_graphics_pipeline()
     vertex_input_info.pVertexBindingDescriptions = nullptr; // Optional
     vertex_input_info.vertexAttributeDescriptionCount = 0;
     vertex_input_info.pVertexAttributeDescriptions = nullptr; // Optional
+
+    auto bindingDescription = get_binding_description();
+    auto attributeDescriptions = get_attributes_descriptions();
+
+    vertex_input_info.vertexBindingDescriptionCount = 1;
+    vertex_input_info.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
+    vertex_input_info.pVertexBindingDescriptions = &bindingDescription;
+    vertex_input_info.pVertexAttributeDescriptions = attributeDescriptions.data();
     
     VkPipelineInputAssemblyStateCreateInfo input_assembly_state_create_info{};
     input_assembly_state_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;

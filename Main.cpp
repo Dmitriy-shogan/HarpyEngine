@@ -18,4 +18,5 @@ int main()
 	}
 	harpy_little_error logger(error_severity::message, "Everything went fine on first try");
 	logger.show();
+	logger.log_this();
 }

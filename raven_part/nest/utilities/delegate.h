@@ -21,6 +21,7 @@ template<typename return_type, typename  ... Args>
 using func = st function<return_type(Args...)>;
 
 //TODO: Complete all delegate versions and their methods
+	//TODO: Add to methods, that returns object, whose methods were invoken
 template<typename return_type, typename ... Types>
 class delegate_methods
 {
