@@ -5,6 +5,7 @@
 #include <interfaces/render/Idrawable.h>
 /*#include <threading/harpy_semaphore.hpp>*/
 #include <utilities/harpy_little_error.h>
+#include <primitive_data_types/vertex_buffer.h>
 
 namespace harpy_nest{
 class renderer
@@ -22,6 +23,7 @@ class renderer
     //TEMPORARY
     base_window_layout window;
     void create_semaphores_fences();
+    vertex_buffer draw_object{&vulkan_backend};
 public:
     
     /*                      *
@@ -35,6 +37,8 @@ public:
         vulkan_backend.init_instance();
         vulkan_backend.connect_window(window, true);
         vulkan_backend.init_default_softest();
+        draw_object.init_standart_buffer();
+        vulkan_backend.record_com_buf(draw_object);
         fences_in_flight.resize(vulkan_backend.get_swapchain_images().size(), nullptr);
         create_semaphores_fences();
     }
@@ -58,7 +62,7 @@ public:
         vkResetFences(vulkan_backend.get_device(), 1, &fences_in_flight[frame]);
 
         vkResetCommandBuffer(vulkan_backend.get_com_buffers()[frame], 0);
-        vulkan_backend.rec_one_com_buf(vulkan_backend.get_com_buffers()[frame], image_index);
+        vulkan_backend.rec_one_com_buf(vulkan_backend.get_com_buffers()[frame], image_index, draw_object);
 
         
         VkSubmitInfo submitInfo{};
@@ -116,10 +120,10 @@ public:
 
     void clean_up()
     {
-        std::for_each(finish_sems.begin(), finish_sems.end(), [this](auto& x){ vkDestroySemaphore(vulkan_backend.get_device(), x, nullptr);});
-        std::for_each(image_sems.begin(), image_sems.end(), [this](auto& x){ vkDestroySemaphore(vulkan_backend.get_device(), x, nullptr);});
-        std::for_each(fences.begin(), fences.end(), [this](auto& x){ vkDestroyFence(vulkan_backend.get_device(), x, nullptr);});
-        std::for_each(fences_in_flight.begin(), fences_in_flight.end(), [this](auto& x){vkDestroyFence(vulkan_backend.get_device(), x, nullptr);});
+        std::ranges::for_each(finish_sems, [this](auto& x){ vkDestroySemaphore(vulkan_backend.get_device(), x, nullptr);});
+        std::ranges::for_each(image_sems, [this](auto& x){ vkDestroySemaphore(vulkan_backend.get_device(), x, nullptr);});
+        std::ranges::for_each(fences, [this](auto& x){ vkDestroyFence(vulkan_backend.get_device(), x, nullptr);});
+        std::ranges::for_each(fences_in_flight, [this](auto& x){vkDestroyFence(vulkan_backend.get_device(), x, nullptr);});
     }
 };
 }

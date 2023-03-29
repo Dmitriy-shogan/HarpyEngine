@@ -6,8 +6,10 @@
 #include <shaders/base_shader.h>
 
 namespace harpy_nest{
+    class vertex_buffer;
 
     class renderer;
+    //TODO: everything from soft_level must be in different parts of nest
 class soft_level_vulkan : public medium_level_vulkan
 {
     VkPipelineLayout pipeline_layout{};
@@ -15,7 +17,8 @@ class soft_level_vulkan : public medium_level_vulkan
     VkPipeline graphics_pipeline{};
     std::vector<VkFramebuffer> framebuffers_array;
 
-    VkCommandPool com_pool{};
+    VkCommandPool draw_com_pool{};
+    VkCommandPool copy_com_pool{};
     std::vector<VkCommandBuffer> com_buffers;
     
     void init_graphics_pipeline();
@@ -23,14 +26,15 @@ class soft_level_vulkan : public medium_level_vulkan
     void init_framebuffers();
     void init_com_pool();
     void init_com_buffers();
-    void record_com_buf();
     void clean_up_swapchain();
 
     void reinit_swapchain();
 
 public:
 
-    void rec_one_com_buf(VkCommandBuffer buffer, uint32_t image_index);
+    void rec_one_com_buf(VkCommandBuffer buffer, uint32_t image_index, vertex_buffer& buf);
+    void record_com_buf(vertex_buffer& buf);
+    
     soft_level_vulkan() : medium_level_vulkan(){}
     void init_default_softest()
     {
@@ -45,7 +49,8 @@ public:
 
     ~soft_level_vulkan() override
     {
-        vkDestroyCommandPool(device, com_pool, nullptr);
+        vkDestroyCommandPool(device, draw_com_pool, nullptr);
+        vkDestroyCommandPool(device, copy_com_pool, nullptr);
         for (auto framebuffer : framebuffers_array) {
             vkDestroyFramebuffer(device, framebuffer, nullptr);
         }
@@ -60,12 +65,13 @@ public:
     VkQueue get_present_queue() const {return present_queue;}
     VkInstance get_instance() const;
     VkPhysicalDevice get_ph_device() const;
-    VkDevice get_device() const;
+    VkDevice& get_device() ;
     VkQueue get_graphics_queue() const;
     validation_layers& get_valid_layers();
     base_window_layout* get_base_window_layout() const;
     std::vector<VkImage> get_swapchain_images() const {return swapchain_images;}
-    VkRenderPass get_render_pass() const { return render_pass; }
+    VkRenderPass& get_render_pass()  { return render_pass; }
+    VkCommandPool& get_copy_pool()  {return copy_com_pool;}
 
     void recreate_swapchain()
     {

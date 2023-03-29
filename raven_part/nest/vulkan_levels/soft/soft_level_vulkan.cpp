@@ -1,4 +1,5 @@
 ﻿#include "..//soft_level_vulkan.h"
+#include <primitive_data_types/vertex_buffer.h>
 
 void harpy_nest::soft_level_vulkan::init_graphics_pipeline()
 {
@@ -227,7 +228,14 @@ void harpy_nest::soft_level_vulkan::init_com_pool()
     poolInfo.queueFamilyIndex = queue_family_indices.graphics_families.value();
     poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
-    if (vkCreateCommandPool(device, &poolInfo, nullptr, &com_pool) != VK_SUCCESS) {
+    if (vkCreateCommandPool(device, &poolInfo, nullptr, &draw_com_pool) != VK_SUCCESS) {
+        throw harpy_little_error(error_severity::wrong_init, "failed to init command pool!");
+    }
+    
+    poolInfo.queueFamilyIndex = queue_family_indices.graphics_families.value();
+    poolInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+
+    if (vkCreateCommandPool(device, &poolInfo, nullptr, &copy_com_pool) != VK_SUCCESS) {
         throw harpy_little_error(error_severity::wrong_init, "failed to init command pool!");
     }
 }
@@ -238,17 +246,16 @@ void harpy_nest::soft_level_vulkan::init_com_buffers()
 
     VkCommandBufferAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    allocInfo.commandPool = com_pool;
+    allocInfo.commandPool = draw_com_pool;
     allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
     allocInfo.commandBufferCount = static_cast<uint32_t>(com_buffers.size());
 
     if (vkAllocateCommandBuffers(device, &allocInfo, com_buffers.data()) != VK_SUCCESS) {
         throw harpy_little_error(error_severity::wrong_init, "failed to allocate command buffers!");
     }
-    record_com_buf();
 }
 
-void harpy_nest::soft_level_vulkan::record_com_buf()
+void harpy_nest::soft_level_vulkan::record_com_buf(vertex_buffer& buf)
 {
 
     VkCommandBufferBeginInfo beginInfo{};
@@ -291,10 +298,13 @@ void harpy_nest::soft_level_vulkan::record_com_buf()
         
         vkCmdSetViewport(com_buffers[i], 0, 1, &viewport);
 
+        VkBuffer buffer = buf.get_vk_buffer();
+        VkDeviceSize offsets[] = {0};
+        vkCmdBindVertexBuffers(com_buffers[i], 0, 1, &buffer, offsets);
         
         vkCmdSetScissor(com_buffers[i], 0, 1, &scissor);
 
-        vkCmdDraw(com_buffers[i], 3, 1, 0, 0);
+        vkCmdDraw(com_buffers[i], buf.get_vertices_size(), 1, 0, 0);
 
         vkCmdEndRenderPass(com_buffers[i]);
 
@@ -382,7 +392,7 @@ void harpy_nest::soft_level_vulkan::reinit_swapchain()
 
 }
 
-void harpy_nest::soft_level_vulkan::rec_one_com_buf(VkCommandBuffer buffer, uint32_t image_index)
+void harpy_nest::soft_level_vulkan::rec_one_com_buf(VkCommandBuffer buffer, uint32_t image_index, vertex_buffer& buf)
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -420,7 +430,10 @@ void harpy_nest::soft_level_vulkan::rec_one_com_buf(VkCommandBuffer buffer, uint
     scissor.extent = extent;
     vkCmdSetScissor(buffer, 0, 1, &scissor);
 
-    vkCmdDraw(buffer, 3, 1, 0, 0);
+    VkBuffer buff = buf.get_vk_buffer();
+    VkDeviceSize offsets[] = {0};
+    vkCmdBindVertexBuffers(buffer, 0, 1, &buff, offsets);
+    vkCmdDraw(buffer, buf.get_vertices_size(), 1, 0, 0);
 
     vkCmdEndRenderPass(buffer);
 
@@ -439,7 +452,7 @@ VkPhysicalDevice harpy_nest::soft_level_vulkan::get_ph_device() const
     return ph_device;
 }
 
-VkDevice harpy_nest::soft_level_vulkan::get_device() const
+VkDevice& harpy_nest::soft_level_vulkan::get_device()
 {
     return device;
 }

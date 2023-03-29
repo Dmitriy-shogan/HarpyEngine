@@ -7,6 +7,7 @@ int main()
 	init_glfw();
 	try
 	{
+		system("glsl_to_spiv.bat");
 		renderer render;
 		render.main_loop();
 		render.clean_up();

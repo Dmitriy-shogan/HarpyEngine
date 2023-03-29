@@ -31,7 +31,7 @@ public:
         delta = now_time - last_time;
         last_time = now_time;
         delta_time.apply_object(this);
-        delta_time.apply_getter_property(get_delta_time);
+        delta_time.apply_getter_property(method<float, delta_timer>(&delta_timer::get_delta_time));
     }
     property<delta_timer, float, access::read> delta_time;
 };
