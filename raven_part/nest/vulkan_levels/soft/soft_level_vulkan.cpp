@@ -1,5 +1,5 @@
 ﻿#include "..//soft_level_vulkan.h"
-#include <primitive_data_types/vertex_buffer.h>
+#include <primitive_data_types/buffers/vertex_buffer.h>
 
 void harpy_nest::soft_level_vulkan::init_graphics_pipeline()
 {
@@ -219,34 +219,13 @@ void harpy_nest::soft_level_vulkan::init_framebuffers()
     }
 }
 
-void harpy_nest::soft_level_vulkan::init_com_pool()
-{
-    auto queue_family_indices = find_queue_families();
-
-    VkCommandPoolCreateInfo poolInfo{};
-    poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    poolInfo.queueFamilyIndex = queue_family_indices.graphics_families.value();
-    poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-
-    if (vkCreateCommandPool(device, &poolInfo, nullptr, &draw_com_pool) != VK_SUCCESS) {
-        throw harpy_little_error(error_severity::wrong_init, "failed to init command pool!");
-    }
-    
-    poolInfo.queueFamilyIndex = queue_family_indices.graphics_families.value();
-    poolInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
-
-    if (vkCreateCommandPool(device, &poolInfo, nullptr, &copy_com_pool) != VK_SUCCESS) {
-        throw harpy_little_error(error_severity::wrong_init, "failed to init command pool!");
-    }
-}
-
 void harpy_nest::soft_level_vulkan::init_com_buffers()
 {
     com_buffers.resize(MAX_FRAMES_IN_FLIGHT);
 
     VkCommandBufferAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    allocInfo.commandPool = draw_com_pool;
+    allocInfo.commandPool = pool->get_first_draw_pool();
     allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
     allocInfo.commandBufferCount = static_cast<uint32_t>(com_buffers.size());
 
@@ -313,6 +292,69 @@ void harpy_nest::soft_level_vulkan::record_com_buf(vertex_buffer& buf)
         }
     }
 }
+
+void harpy_nest::soft_level_vulkan::record_com_buf(vertex_buffer& buf, index_buffer& indexes)
+{
+        VkCommandBufferBeginInfo beginInfo{};
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags = 0 /*VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT*/;
+    beginInfo.pInheritanceInfo = nullptr; // Optional
+
+    VkRenderPassBeginInfo render_pass_info{};
+    render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    render_pass_info.renderPass = render_pass;
+    render_pass_info.renderArea.offset = {0, 0};
+    render_pass_info.renderArea.extent = extent;
+
+    VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
+    render_pass_info.clearValueCount = 1;
+    render_pass_info.pClearValues = &clearColor;
+
+    VkViewport viewport{};
+    viewport.x = 0.0f;
+    viewport.y = 0.0f;
+    viewport.width = static_cast<float>(extent.width);
+    viewport.height = static_cast<float>(extent.height);
+    viewport.minDepth = 0.0f;
+    viewport.maxDepth = 1.0f;
+
+    VkRect2D scissor{};
+    scissor.offset = {0, 0};
+    scissor.extent = extent;
+
+    for (size_t i = 0; i < com_buffers.size(); i++) {
+        
+        if (vkBeginCommandBuffer(com_buffers[i], &beginInfo) != VK_SUCCESS) {
+            throw harpy_little_error(error_severity::wrong_init, "failed to begin recording command buffer!");
+        }
+        
+        render_pass_info.framebuffer = framebuffers_array[i];
+        
+        vkCmdBeginRenderPass(com_buffers[i], &render_pass_info, VK_SUBPASS_CONTENTS_INLINE);
+        vkCmdBindPipeline(com_buffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, graphics_pipeline);
+        
+        vkCmdSetViewport(com_buffers[i], 0, 1, &viewport);
+
+        VkBuffer buffer = buf.get_vk_buffer();
+        VkDeviceSize offsets[] = {0};
+        vkCmdBindVertexBuffers(com_buffers[i], 0, 1, &buffer, offsets);
+        
+        vkCmdSetScissor(com_buffers[i], 0, 1, &scissor);
+
+        vkCmdBindIndexBuffer(com_buffers[i], buf.get_vk_buffer(), 0, VK_INDEX_TYPE_UINT32);
+    
+        vkCmdDrawIndexed(com_buffers[i], indexes.get_indices_size(), 1, 0, 0, 0);
+
+        vkCmdDraw(com_buffers[i], buf.get_vertices_size(), 1, 0, 0);
+
+        vkCmdEndRenderPass(com_buffers[i]);
+
+        if (vkEndCommandBuffer(com_buffers[i]) != VK_SUCCESS) {
+            throw harpy_little_error(error_severity::wrong_init,"failed to record command buffer!");
+        }
+    }
+}
+
 
 void harpy_nest::soft_level_vulkan::clean_up_swapchain()
 {
@@ -434,6 +476,60 @@ void harpy_nest::soft_level_vulkan::rec_one_com_buf(VkCommandBuffer buffer, uint
     VkDeviceSize offsets[] = {0};
     vkCmdBindVertexBuffers(buffer, 0, 1, &buff, offsets);
     vkCmdDraw(buffer, buf.get_vertices_size(), 1, 0, 0);
+
+    vkCmdEndRenderPass(buffer);
+
+    if (vkEndCommandBuffer(buffer) != VK_SUCCESS) {
+        throw harpy_little_error("failed to record command buffer!");
+    }
+}
+
+void harpy_nest::soft_level_vulkan::rec_one_com_buf(VkCommandBuffer buffer, uint32_t image_index, vertex_buffer& buf,
+    index_buffer& indexes)
+{
+    VkCommandBufferBeginInfo beginInfo{};
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+
+    if (vkBeginCommandBuffer(buffer, &beginInfo) != VK_SUCCESS) {
+        throw std::runtime_error("failed to begin recording command buffer!");
+    }
+
+    VkRenderPassBeginInfo renderPassInfo{};
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    renderPassInfo.renderPass = render_pass;
+    renderPassInfo.framebuffer = framebuffers_array[image_index];
+    renderPassInfo.renderArea.offset = {0, 0};
+    renderPassInfo.renderArea.extent = extent;
+
+    VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
+    renderPassInfo.clearValueCount = 1;
+    renderPassInfo.pClearValues = &clearColor;
+
+    vkCmdBeginRenderPass(buffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+    vkCmdBindPipeline(buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphics_pipeline);
+
+    VkViewport viewport{};
+    viewport.x = 0.0f;
+    viewport.y = 0.0f;
+    viewport.width = static_cast<float>(extent.width);
+    viewport.height = static_cast<float>(extent.height);
+    viewport.minDepth = 0.0f;
+    viewport.maxDepth = 1.0f;
+    vkCmdSetViewport(buffer, 0, 1, &viewport);
+
+    VkRect2D scissor{};
+    scissor.offset = {0, 0};
+    scissor.extent = extent;
+    vkCmdSetScissor(buffer, 0, 1, &scissor);
+
+    VkBuffer buff = buf.get_vk_buffer();
+    VkDeviceSize offsets[] = {0};
+    vkCmdBindVertexBuffers(buffer, 0, 1, &buff, offsets);
+
+    vkCmdBindIndexBuffer(buffer, indexes.get_vk_buffer(), 0, VK_INDEX_TYPE_UINT32);
+    
+    vkCmdDrawIndexed(buffer, indexes.get_indices_size(), 1, 0, 0, 0);
 
     vkCmdEndRenderPass(buffer);
 

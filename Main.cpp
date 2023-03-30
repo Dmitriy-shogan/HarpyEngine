@@ -8,7 +8,7 @@ int main()
 	try
 	{
 		system("glsl_to_spiv.bat");
-		renderer render;
+		harpy_renderer::renderer render;
 		render.main_loop();
 		render.clean_up();
 	}

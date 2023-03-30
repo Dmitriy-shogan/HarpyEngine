@@ -1,6 +1,5 @@
 ﻿#include "renderer.h"
-
-void harpy_nest::renderer::create_semaphores_fences()
+void harpy_renderer::renderer::create_semaphores_fences()
 {
     VkSemaphoreCreateInfo semaphoreInfo{};
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
@@ -25,3 +24,4 @@ void harpy_nest::renderer::create_semaphores_fences()
         }
     }
 }
+

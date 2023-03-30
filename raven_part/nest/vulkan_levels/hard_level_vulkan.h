@@ -23,7 +23,6 @@ namespace harpy_nest {
             graphic_bit = 1,
             present_bit,
         };
-        
         struct needed_queues_families
         {
             //Graphic family for render itself
@@ -37,6 +36,8 @@ namespace harpy_nest {
                 return graphics_families.has_value() && present_families.has_value();
             }
         };
+        
+        
 
         const std::vector<const char*> device_extensions = {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME
@@ -61,6 +62,7 @@ namespace harpy_nest {
 
         void init_debug();
     public:
+        
 
         void init_instance(harpy_hard_level_settings settings = harpy_hard_level_settings::standard);
 

@@ -129,7 +129,7 @@ void harpy_nest::hard_level_vulkan::init_ph_device(harpy_hard_level_settings set
     uint32_t device_count = 0;
     vkEnumeratePhysicalDevices(instance, &device_count, nullptr);
 
-    if(!device_count) throw std::runtime_error("No device found. Dude, wtf?" + ERR_LINE);
+    if(!device_count) throw harpy_little_error("No device found. Dude, wtf?");
 
     std::vector<VkPhysicalDevice> devices(device_count);
     vkEnumeratePhysicalDevices(instance, &device_count, devices.data());
@@ -142,7 +142,7 @@ void harpy_nest::hard_level_vulkan::init_ph_device(harpy_hard_level_settings set
     }
 
     if (ph_device == VK_NULL_HANDLE) {
-        throw std::runtime_error("failed to find a suitable GPU!" + ERR_LINE);
+        throw harpy_little_error("failed to find a suitable GPU!");
     }
 }
 
@@ -214,7 +214,7 @@ void harpy_nest::hard_level_vulkan::init_default_hard()
 
 void harpy_nest::hard_level_vulkan::init_debug()
 {
-    if (!instance) throw std::runtime_error("Can't init debug before initiating instance" + ERR_LINE);
+    if (!instance) throw harpy_little_error("Can't init debug before initiating instance");
     base_valid.init_debug_messenger();
 }
 

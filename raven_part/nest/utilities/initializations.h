@@ -31,9 +31,6 @@
 #define API_VERSION VK_MAKE_API_VERSION(0, 0, 1, 1)
 #define ENGINE_NAME "Harpy's engine"
 
-//TODO: remove all ERR_LINE and use harpy_little_error
-#define ERR_LINE (" Line: " + std::to_string(__LINE__))
-
 #define MAX_FRAMES_IN_FLIGHT 2
 
 
@@ -107,6 +104,9 @@ namespace harpy_nest
 
         return attribute_descriptions;
     }
+
+    static  glm::mat4  in_game_projection{1.0f};
+    static  glm::mat4  engine_projection{1.0f};
 }
 
 #endif //HARPY_INITS

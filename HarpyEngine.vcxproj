@@ -21,10 +21,85 @@
   <ItemGroup>
     <ClCompile Include="human_part\GUI\base_gui_layout.cpp" />
     <ClCompile Include="human_part\sound\base_sound.cpp" />
+    <ClCompile Include="human_part\sound\formats\wav.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="raven_part\nest\com_pools_and_buffers\cp_pool.cpp" />
     <ClCompile Include="raven_part\nest\primitive_data_types\base_block.cpp" />
-    <ClCompile Include="raven_part\nest\primitive_data_types\vertex_buffer.cpp" />
-    <ClCompile Include="raven_part\nest\renderer\renderer.cpp" />
+    <ClCompile Include="raven_part\nest\primitive_data_types\buffers\index_buffer.cpp" />
+    <ClCompile Include="raven_part\nest\primitive_data_types\buffers\vertex_buffer.cpp">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>x64\Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>x64\Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>true</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>x64\Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>x64\Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>x64\Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>x64\Debug\vc143.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>x64\Debug\HarpyEngine.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>x64\Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>x64\Debug\HarpyEngine.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>x64\Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>game_logic;third_party_services/include;raven_part/nest;raven_part;human_part;</AdditionalIncludeDirectories>
+      <LinkCompiled>true</LinkCompiled>
+    </ClCompile>
     <ClCompile Include="raven_part\nest\shaders\base_shader.cpp" />
     <ClCompile Include="raven_part\nest\threading\harpy_semaphore.cpp" />
     <ClCompile Include="raven_part\nest\utilities\delta_timer.cpp" />
@@ -33,11 +108,12 @@
     <ClCompile Include="raven_part\nest\utilities\utilities.cpp" />
     <ClCompile Include="raven_part\nest\vision\base_window.cpp" />
     <ClCompile Include="raven_part\nest\vision\base_window_layout\base_window_layout.cpp" />
-    <ClCompile Include="raven_part\nest\vision\camera\camera.cpp" />
     <ClCompile Include="raven_part\nest\vulkan_levels\hard\hard_level_vulkan.cpp" />
     <ClCompile Include="raven_part\nest\vulkan_levels\hard\validation_layers.cpp" />
     <ClCompile Include="raven_part\nest\vulkan_levels\mid\medium_level_vulkan.cpp" />
     <ClCompile Include="raven_part\nest\vulkan_levels\soft\soft_level_vulkan.cpp" />
+    <ClCompile Include="raven_part\objects\base_object.cpp" />
+    <ClCompile Include="raven_part\renderer\renderer.cpp" />
     <ClCompile Include="third_party_services\include\imgui\imgui.cpp" />
     <ClCompile Include="third_party_services\include\imgui\imgui_demo.cpp" />
     <ClCompile Include="third_party_services\include\imgui\imgui_draw.cpp" />
@@ -52,15 +128,17 @@
     <Content Include="glsl_to_spiv.bat" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="raven_part" />
+    <Folder Include="raven_part\camera" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="human_part\GUI\base_gui_layout.h" />
     <ClInclude Include="human_part\sound\base_sound.h" />
-    <ClInclude Include="raven_part\nest\interfaces\render\Idrawable.h" />
+    <ClInclude Include="human_part\sound\formats\wav.h" />
+    <ClInclude Include="raven_part\nest\com_pools_and_buffers\cp_pool.h" />
+    <ClInclude Include="raven_part\nest\interfaces\interfaces.h" />
     <ClInclude Include="raven_part\nest\primitive_data_types\base_block.h" />
-    <ClInclude Include="raven_part\nest\primitive_data_types\vertex_buffer.h" />
-    <ClInclude Include="raven_part\nest\renderer\renderer.h" />
+    <ClInclude Include="raven_part\nest\primitive_data_types\buffers\index_buffer.h" />
+    <ClInclude Include="raven_part\nest\primitive_data_types\buffers\vertex_buffer.h" />
     <ClInclude Include="raven_part\nest\shaders\base_shader.h" />
     <ClInclude Include="raven_part\nest\threading\harpy_semaphore.h" />
     <ClInclude Include="raven_part\nest\utilities\delegate.h" />
@@ -71,11 +149,12 @@
     <ClInclude Include="raven_part\nest\utilities\utilities.h" />
     <ClInclude Include="raven_part\nest\vision\base_window.h" />
     <ClInclude Include="raven_part\nest\vision\base_window_layout.h" />
-    <ClInclude Include="raven_part\nest\vision\camera.h" />
     <ClInclude Include="raven_part\nest\vulkan_levels\hard\validation_layers.hpp" />
     <ClInclude Include="raven_part\nest\vulkan_levels\hard_level_vulkan.h" />
     <ClInclude Include="raven_part\nest\vulkan_levels\medium_level_vulkan.h" />
     <ClInclude Include="raven_part\nest\vulkan_levels\soft_level_vulkan.h" />
+    <ClInclude Include="raven_part\objects\base_object.h" />
+    <ClInclude Include="raven_part\renderer\renderer.h" />
     <ClInclude Include="third_party_services\include\imgui\imconfig.h" />
     <ClInclude Include="third_party_services\include\imgui\imgui.h" />
     <ClInclude Include="third_party_services\include\imgui\imgui_impl_glfw.h" />

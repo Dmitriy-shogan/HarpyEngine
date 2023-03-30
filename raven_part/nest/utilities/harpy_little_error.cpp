@@ -18,7 +18,7 @@ harpy_nest::harpy_little_error::harpy_little_error(error_severity severity, cons
 void harpy_nest::harpy_little_error::log_this()
 {
     using namespace std;
-    ofstream log(todays_date + " log.txt", ios_base::app);
+    ofstream log(todays_date + " log№" + to_string(log_number) + ".txt", ios_base::app);
     if(!log.is_open())
     {
         ofstream create_file(todays_date + " log.txt");
