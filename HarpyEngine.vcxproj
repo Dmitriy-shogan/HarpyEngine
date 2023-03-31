@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClCompile Include="human_part\GUI\base_gui_layout.cpp" />
     <ClCompile Include="human_part\sound\base_sound.cpp" />
-    <ClCompile Include="human_part\sound\formats\wav.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="raven_part\nest\com_pools_and_buffers\cp_pool.cpp" />
     <ClCompile Include="raven_part\nest\primitive_data_types\base_block.cpp" />
@@ -133,7 +132,6 @@
   <ItemGroup>
     <ClInclude Include="human_part\GUI\base_gui_layout.h" />
     <ClInclude Include="human_part\sound\base_sound.h" />
-    <ClInclude Include="human_part\sound\formats\wav.h" />
     <ClInclude Include="raven_part\nest\com_pools_and_buffers\cp_pool.h" />
     <ClInclude Include="raven_part\nest\interfaces\interfaces.h" />
     <ClInclude Include="raven_part\nest\primitive_data_types\base_block.h" />
