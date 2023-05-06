@@ -5,7 +5,7 @@
 
 #define st ::std::
 
-namespace harpy_nest
+namespace harpy::utilities
 {
     template <typename return_type, class T, typename ... Args>
     using method = st function<return_type(T&, Args ...)>;

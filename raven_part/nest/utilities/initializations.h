@@ -23,7 +23,9 @@
 #include <GLFW/glfw3.h>
 
 //GLM libraries
+#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 //Defines goes here
 #define APP_VERSION VK_MAKE_API_VERSION(0,0,1,0)
@@ -32,6 +34,13 @@
 #define ENGINE_NAME "Harpy's engine"
 
 #define MAX_FRAMES_IN_FLIGHT 2
+
+#define SHADER_PATH_BASE_VERTEX "shaders/base/vertex/base.vert"
+#define SHADER_PATH_BASE_FRAGMENT "shaders/base/fragment/base.frag"
+#define SHADER_PATH_BASE_GEOMETRY "shaders/base/geometry/base.geom"
+#define SHADER_PATH_BASE_COMPUTE "shaders/base/compute/base.comp"
+#define SHADER_PATH_BASE_TESSALATION_CONTROL "shaders/base/tess_control/base.tesc"
+#define SHADER_PATH_BASE_TESSALATION_EVAL "shaders/base/tess_eval/base.tese"
 
 
 
@@ -45,22 +54,6 @@
 
 //Enums go here
 
-enum class harpy_hard_level_settings
-{
-    standard = 0,
-    
-};
-
-enum class harpy_mid_level_settings
-{
-    standard = 0,
-};
-
-
-//For later use
-#ifndef NO_HARPY_ENGINE_MACROS
-
-#endif
 
 //Here goes inline functions
 
@@ -71,7 +64,7 @@ inline void init_glfw()
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 }
 
-namespace harpy_nest
+namespace harpy::nest
 {
     struct vertex
     {
@@ -89,6 +82,20 @@ namespace harpy_nest
         return res;
     }
 
+    struct needed_queues_families
+    {
+        //Graphic family for render itself
+        std::optional<uint32_t> graphics_families;
+
+        //Graphic family for displaying
+        std::optional<uint32_t> present_families;
+
+        bool is_completed() const
+        {
+            return graphics_families.has_value() && present_families.has_value();
+        }
+    };
+
     static std::array<VkVertexInputAttributeDescription, 2> get_attributes_descriptions() {
         std::array<VkVertexInputAttributeDescription, 2> attribute_descriptions{{}};
         attribute_descriptions[0].binding = 0;
@@ -105,8 +112,19 @@ namespace harpy_nest
         return attribute_descriptions;
     }
 
-    static  glm::mat4  in_game_projection{1.0f};
-    static  glm::mat4  engine_projection{1.0f};
+    struct ubo
+    {
+        glm::mat4 model;
+        glm::mat4 view;
+        glm::mat4 projection;
+    };
+
+    static  glm::mat4  projection{1.0f};
+
+    static void change_projection(float angle, float aspect = 16.0f/9.0f, float near = 0.05f, float far = 50.0f)
+    {
+        projection = glm::perspective(glm::radians(angle), aspect, near, far);
+    }
 }
 
 #endif //HARPY_INITS

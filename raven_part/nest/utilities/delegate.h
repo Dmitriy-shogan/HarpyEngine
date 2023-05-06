@@ -10,7 +10,7 @@
 #include <any>
 #include <set>
 
-namespace harpy_nest {
+namespace harpy::utilities {
 
 #define st ::std::
 

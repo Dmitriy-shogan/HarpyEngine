@@ -4,10 +4,10 @@
 
 #include <utilities/harpy_little_error.h>
 #include <vulkan_levels/hard/validation_layers.hpp>
-#include <vision/base_window_layout.h>
+#include <windowing/base_window_layout.h>
 
 
-namespace harpy_nest {
+namespace harpy::nest {
 
 
     //TODO: remove std::runtime_exception and use harpy_little_error exceptions
@@ -50,31 +50,37 @@ namespace harpy_nest {
 
         validation_layers base_valid{&instance};
 
-        base_window_layout* connected_window_layout{nullptr};
-
-        hard_level_vulkan() = default;
-
+        windowing::base_window_layout& connected_window_layout;
         
-        void init_ph_device(harpy_hard_level_settings settings = harpy_hard_level_settings::standard);
-        void init_device_and_queues(harpy_hard_level_settings settings = harpy_hard_level_settings::standard);
+        
+        void init_ph_device();
+        void init_device_and_queues();
 
         void init_default_hard();
 
         void init_debug();
     public:
+        hard_level_vulkan(windowing::base_window_layout& window_layout) : connected_window_layout(window_layout){} 
         
 
-        void init_instance(harpy_hard_level_settings settings = harpy_hard_level_settings::standard);
+        void init_instance();
 
         //for later
         static bool is_device_suitable(VkPhysicalDevice phys_device);
 
         //Bits isn't realised yet
-        needed_queues_families find_queue_families(needed_queues_bits bits = skip_bit) const;
+        static needed_queues_families find_queue_families(VkPhysicalDevice& ph_device, VkSurfaceKHR& surface);
 
         bool check_device_extension_support() const;
-        void connect_window(base_window_layout& win, bool do_init);
+        void connect_window(windowing::base_window_layout& win, bool do_init);
         static std::vector<const char*> get_required_extensions();
+        VkDevice& get_vk_device(){return device;}
+        VkPhysicalDevice& get_vk_physical_device(){return ph_device;}
+        VkInstance& get_vk_instance(){return instance;}
+        VkSurfaceKHR& get_vk_surface(){return connected_window_layout.get_VK_surface();}
+        VkQueue& get_vk_present_queue(){return present_queue;}
+        VkQueue& get_vk_graphics_queue(){return graphics_queue;}
+        windowing::base_window_layout& get_window_layout(){return connected_window_layout;}
 
         virtual ~hard_level_vulkan();
     };

@@ -4,7 +4,7 @@
 #include <utilities/initializations.h>
 
 
-namespace harpy_nest{
+namespace harpy::nest::windowing{
 
     class hard_level_vulkan;
     class base_window_layout
@@ -17,12 +17,14 @@ namespace harpy_nest{
         void init_window();
         void init_surface(VkInstance& instance);
 
-        void init_all(VkInstance& instance);
+       
         
     public:
 
         GLFWwindow*& get_glfw_window();
         VkSurfaceKHR& get_VK_surface();
+        void init_all(VkInstance& instance);
+        
 
         base_window_layout() = default;
         

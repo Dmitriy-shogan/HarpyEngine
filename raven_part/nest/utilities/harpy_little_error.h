@@ -1,9 +1,9 @@
 ﻿#pragma once
 #ifndef HARPY_ERRORS
 #define HARPY_ERRORS
-#include <utilities/initializations.h>
+#include <utilities/utilities.h>
 
-namespace harpy_nest{
+namespace harpy::utilities {
 
     enum class error_severity
     {

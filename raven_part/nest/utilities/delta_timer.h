@@ -5,7 +5,7 @@
 #include <utilities/property.h>
 
 
-namespace harpy_nest {
+namespace harpy::utilities {
     
 class delta_timer
 {

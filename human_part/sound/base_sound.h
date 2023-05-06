@@ -7,7 +7,7 @@
 #include <libavcodec/avcodec.h>
 #include <AL/efx.h>
 
-namespace harpy_sound{
+namespace harpy::sound{
 class base_sound
 {
     std::unique_ptr<char> data{std::make_unique<char>()};

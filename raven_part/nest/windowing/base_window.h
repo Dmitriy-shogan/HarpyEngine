@@ -3,7 +3,7 @@
 #define HARPY_WINDOW
 #include <utilities/harpy_little_error.h>
 
-namespace harpy_nest
+namespace harpy::nest::windowing
 {
     
     class base_window

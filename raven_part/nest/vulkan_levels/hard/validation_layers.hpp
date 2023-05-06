@@ -4,7 +4,7 @@
 #include<utilities/initializations.h>
 
 
-namespace harpy_nest {
+namespace harpy::nest {
 class validation_layers
 {
     VkInstance* connected_instance;

@@ -3,17 +3,12 @@
 #define HARPY_MEDIUM_VULKAN
 #include "hard_level_vulkan.h"
 
-namespace harpy_nest{
+namespace harpy::nest{
     
 class medium_level_vulkan : public hard_level_vulkan
 {
 protected:
-    
-    struct swap_chain_support_details {
-        std::vector<VkSurfaceFormatKHR> formats;
-        VkSurfaceCapabilitiesKHR capabilities;
-        std::vector<VkPresentModeKHR> presentModes;
-    };
+
     
     VkSwapchainKHR swapchain{nullptr};
     std::vector<VkImage> swapchain_images{};
@@ -56,8 +51,9 @@ protected:
         }
     }
     void init_swapchain();
+    void reinit_swapchain();
 
-    medium_level_vulkan() : hard_level_vulkan(){}
+    
     
 public:
     static VkSurfaceFormatKHR choose_swapchain_format(const std::vector<VkSurfaceFormatKHR>& available_formats);
@@ -70,10 +66,12 @@ public:
         init_swapchain();
         init_image_views();
     }
-
-    swap_chain_support_details query_swap_chain_support() const;
-
+    medium_level_vulkan(windowing::base_window_layout& window_layout) : hard_level_vulkan(window_layout){}
     
+    
+    VkSwapchainKHR& get_vk_swapchain(){return swapchain;}
+    VkSurfaceFormatKHR& get_vk_surface_format(){return surface_format;}
+    VkExtent2D& get_vk_extent(){return extent;}
 
     ~medium_level_vulkan() override
     {

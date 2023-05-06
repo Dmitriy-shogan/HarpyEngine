@@ -1,43 +1,33 @@
 ﻿#pragma once
 #ifndef HARPY_BASE_SHADER
 #define HARPY_BASE_SHADER
-#include <utilities/initializations.h>
-#include <utilities/utilities.h>
+#include <shaders/shader_module.h>
 
-class base_shader
+namespace harpy::nest::shaders
 {
+    class base_shader
+    {
+        VkDevice& device; 
+        shader_module shader{device};
 
     
-public:
+    public:
 
-    static void shader_to_spiv(std::string shader_file)
-    {
-        
-    }
+        base_shader(VkDevice& device) : device(device) {}
 
-    static void convert_base_shaders()
-    {
-        system("glsl_to_spiv.bat");
-    }
-
-    static auto create_shader_module(std::vector<char>& byte_code, VkDevice device)
-    {
-        VkShaderModuleCreateInfo create_info{};
-        create_info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-        create_info.codeSize = byte_code.size();
-        create_info.pCode = reinterpret_cast<const uint32_t*>(byte_code.data());
-        
-        VkShaderModule shader_module;
-        if (vkCreateShaderModule(device, &create_info, nullptr, &shader_module) != VK_SUCCESS) {
-            throw std::runtime_error("failed to create shader module!");
+        void init(std::string filepath)
+        {
+            shader.init(std::move(filepath));
         }
-        return shader_module;
-        
-    }
+
+        //Legacy code, if we can say so.
+        static void convert_base_shaders()
+        {
+            system("glsl_to_spiv.bat");
+        }
     
     
-};
-
-
+    };
+}
 
 #endif //HARPY_BASE_SHADER

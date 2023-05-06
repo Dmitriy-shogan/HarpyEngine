@@ -1,28 +1,31 @@
 ﻿#include "..//medium_level_vulkan.h"
 
-harpy_nest::medium_level_vulkan::swap_chain_support_details harpy_nest::medium_level_vulkan::
+using namespace harpy::nest;
+using namespace harpy::utilities;
+
+medium_level_vulkan::swap_chain_support_details medium_level_vulkan::
 query_swap_chain_support() const
 {
     swap_chain_support_details details{};
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ph_device, connected_window_layout->get_VK_surface(), &details.capabilities);
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ph_device, connected_window_layout.get_VK_surface(), &details.capabilities);
     uint32_t formatCount;
-    vkGetPhysicalDeviceSurfaceFormatsKHR(ph_device, connected_window_layout->get_VK_surface(), &formatCount, nullptr);
+    vkGetPhysicalDeviceSurfaceFormatsKHR(ph_device, connected_window_layout.get_VK_surface(), &formatCount, nullptr);
 
     if (formatCount != 0) {
         details.formats.resize(formatCount);
-        vkGetPhysicalDeviceSurfaceFormatsKHR(ph_device, connected_window_layout->get_VK_surface(), &formatCount, details.formats.data());
+        vkGetPhysicalDeviceSurfaceFormatsKHR(ph_device, connected_window_layout.get_VK_surface(), &formatCount, details.formats.data());
     }
 
     return details;
 }
 
-VkExtent2D harpy_nest::medium_level_vulkan::choose_swap_extent(const VkSurfaceCapabilitiesKHR& capabilities)
+VkExtent2D medium_level_vulkan::choose_swap_extent(const VkSurfaceCapabilitiesKHR& capabilities)
 {
     if (capabilities.currentExtent.width != UINT32_MAX) {
         return capabilities.currentExtent;
     } else {
         int width, height;
-        glfwGetFramebufferSize(connected_window_layout->get_glfw_window(), &width, &height);
+        glfwGetFramebufferSize(connected_window_layout.get_glfw_window(), &width, &height);
 
         VkExtent2D actualExtent = {
             static_cast<uint32_t>(width),
@@ -36,7 +39,7 @@ VkExtent2D harpy_nest::medium_level_vulkan::choose_swap_extent(const VkSurfaceCa
     }
 }
 
-VkSurfaceFormatKHR harpy_nest::medium_level_vulkan::choose_swapchain_format(
+VkSurfaceFormatKHR medium_level_vulkan::choose_swapchain_format(
     const std::vector<VkSurfaceFormatKHR>& available_formats)
 {
     for (const auto& available_format : available_formats) {
@@ -48,7 +51,7 @@ VkSurfaceFormatKHR harpy_nest::medium_level_vulkan::choose_swapchain_format(
     return available_formats[0];
 }
 
-VkPresentModeKHR harpy_nest::medium_level_vulkan::choose_swap_present_mode(
+VkPresentModeKHR medium_level_vulkan::choose_swap_present_mode(
     const std::vector<VkPresentModeKHR>& availablePresentModes)
 {
     for (const auto& availablePresentMode : availablePresentModes) {
@@ -60,7 +63,7 @@ VkPresentModeKHR harpy_nest::medium_level_vulkan::choose_swap_present_mode(
     return VK_PRESENT_MODE_FIFO_KHR;
 }
 
-void harpy_nest::medium_level_vulkan::init_swapchain()
+void medium_level_vulkan::init_swapchain()
 {
     swap_chain_support_details swapchain_support = query_swap_chain_support();
 
@@ -76,7 +79,7 @@ void harpy_nest::medium_level_vulkan::init_swapchain()
     
     VkSwapchainCreateInfoKHR create_info{};
     create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    create_info.surface = connected_window_layout->get_VK_surface();
+    create_info.surface = connected_window_layout.get_VK_surface();
     create_info.imageExtent = extent;
     create_info.minImageCount = image_count;
     create_info.imageFormat = surface_format.format;
@@ -110,5 +113,5 @@ void harpy_nest::medium_level_vulkan::init_swapchain()
     vkGetSwapchainImagesKHR(device, swapchain, &image_count, nullptr);
     swapchain_images.resize(image_count);
     vkGetSwapchainImagesKHR(device, swapchain, &image_count, swapchain_images.data());
-
 }
+

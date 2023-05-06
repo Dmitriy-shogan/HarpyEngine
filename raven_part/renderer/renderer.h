@@ -7,8 +7,7 @@
 #include <utilities/harpy_little_error.h>
 #include <primitive_data_types/buffers/vertex_buffer.h>
 
-namespace harpy_renderer{
-    using namespace harpy_nest;
+namespace harpy{
 class renderer
 {
     static std::vector<std::vector<harpy_interfaces::IDrawable>> draw_objects;
