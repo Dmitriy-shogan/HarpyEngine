@@ -73,11 +73,12 @@ namespace harpy::nest
             return device;
         }
 
+        VkRenderPass& get_vk_render_pass(){return rend;}
         operator VkRenderPass&(){return rend;}
 
         
 
-        ~render_pass()
+        ~render_pass() override
         {
             vkDestroyRenderPass(device, rend, nullptr);
         }

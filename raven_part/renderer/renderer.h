@@ -1,18 +1,17 @@
 ﻿#pragma once
 #ifndef HARPY_RENDERER
 #define HARPY_RENDERER
-#include <vulkan_levels/soft_level_vulkan.h>
+#include <swapchain/swapchain.h>
 #include <interfaces/interfaces.h>
 /*#include <threading/harpy_semaphore.hpp>*/
 #include <utilities/harpy_little_error.h>
-#include <primitive_data_types/buffers/vertex_buffer.h>
 
 namespace harpy{
 class renderer
 {
-    static std::vector<std::vector<harpy_interfaces::IDrawable>> draw_objects;
+    static std::vector<std::vector<interfaces::IDrawable>> draw_objects;
     //std::vector<harpy_semaphore> semaphores;
-    soft_level_vulkan vulkan_backend;
+    
 
     std::vector<VkSemaphore> image_sems{MAX_FRAMES_IN_FLIGHT};
     std::vector<VkSemaphore> finish_sems{MAX_FRAMES_IN_FLIGHT};

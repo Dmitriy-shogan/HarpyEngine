@@ -18,4 +18,8 @@ void harpy::nest::buffers::staging_buffer::copy_into_buffer(index_buffer& buff)
     vkMapMemory(pool.get_vk_device(), buffer_mem, 0, buffer_size, 0, &data);
     memcpy(data, buff.get_indices().data(), (size_t) buffer_size);
     vkUnmapMemory(pool.get_vk_device(), buffer_mem);
+    
+
+
+    
 }

@@ -9,6 +9,7 @@ namespace harpy::nest::shaders
     {
         VkDevice& device; 
         shader_module shader{device};
+        
 
     
     public:
@@ -25,6 +26,9 @@ namespace harpy::nest::shaders
         {
             system("glsl_to_spiv.bat");
         }
+
+        VkShaderModule& get_vk_shader_module(){return shader.get_vk_shader_module();}
+        operator VkShaderModule&(){return shader.get_vk_shader_module();}
     
     
     };

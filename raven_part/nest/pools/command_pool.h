@@ -46,11 +46,12 @@ public:
 
     VkCommandPool& get_vk_command_pool(){return pool;}
     VkDevice& get_vk_device() override{return device;}
+    command_pool_types get_type() {return type;}
 
     operator VkCommandPool&(){return pool;}
     
 
-    ~command_pool()
+    ~command_pool() override
     {
         vkDestroyCommandPool(device, pool, nullptr);
     }

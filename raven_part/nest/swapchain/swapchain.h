@@ -7,15 +7,16 @@
 
 namespace harpy::nest
 {
-    struct swapchain_support_details {
+    struct swapchain_support_details  {
         std::vector<VkSurfaceFormatKHR> formats;
         VkSurfaceCapabilitiesKHR capabilities;
         std::vector<VkPresentModeKHR> presentModes;
     };
     
-    class swapchain
+    class swapchain : public interfaces::IStrong_component
     {
         hard_level_vulkan& vulkan_backend;
+        render_pass& rend;
         
         VkSwapchainKHR chain{nullptr};
         std::vector<buffers::framebuffer> framebuffs;
@@ -25,22 +26,8 @@ namespace harpy::nest
         VkSurfaceFormatKHR surface_format {};
         VkPresentModeKHR present_mode {};
         VkExtent2D extent {};
-        swapchain_support_details swapchain_details;
-
-        swapchain_support_details query_swap_chain_support() const
-        {
-            swapchain_support_details details{};
-            vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vulkan_backend.get_vk_physical_device(), vulkan_backend.get_vk_surface(), &details.capabilities);
-            uint32_t formatCount;
-            vkGetPhysicalDeviceSurfaceFormatsKHR(vulkan_backend.get_vk_physical_device(), vulkan_backend.get_vk_surface(), &formatCount, nullptr);
-
-            if (formatCount != 0) {
-                details.formats.resize(formatCount);
-                vkGetPhysicalDeviceSurfaceFormatsKHR(vulkan_backend.get_vk_physical_device(), vulkan_backend.get_vk_surface(), &formatCount, details.formats.data());
-            }
-
-            return details;
-        }
+        swapchain_support_details swapchain_details{};
+        
         VkExtent2D choose_swap_extent()
         {
             if (swapchain_details.capabilities.currentExtent.width != UINT32_MAX) {
@@ -116,10 +103,23 @@ namespace harpy::nest
         
     public:
         
-        swapchain(hard_level_vulkan& vulkan_backend): vulkan_backend(vulkan_backend){}
+        swapchain(hard_level_vulkan& vulkan_backend, render_pass& rend): vulkan_backend(vulkan_backend), rend(rend){}
+        
+        VkDevice& get_vk_device() override {return vulkan_backend.get_vk_device();}
 
         void init()
         {
+            vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vulkan_backend.get_vk_physical_device(), vulkan_backend.get_vk_surface(), &swapchain_details.capabilities);
+            uint32_t formatCount;
+            vkGetPhysicalDeviceSurfaceFormatsKHR(vulkan_backend.get_vk_physical_device(), vulkan_backend.get_vk_surface(), &formatCount, nullptr);
+
+            if (formatCount != 0) {
+                swapchain_details.formats.resize(formatCount);
+                vkGetPhysicalDeviceSurfaceFormatsKHR(vulkan_backend.get_vk_physical_device(),
+                    vulkan_backend.get_vk_surface(),
+                    &formatCount, swapchain_details.formats.data());
+            }
+            
             surface_format = choose_swapchain_format();
             present_mode = choose_swap_present_mode();
             extent = choose_swap_extent();
@@ -140,6 +140,7 @@ namespace harpy::nest
             create_info.imageArrayLayers = 1;
             create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
+            //not indices, shit name, needed to be changed
             auto indices = hard_level_vulkan::find_queue_families(
                 vulkan_backend.get_vk_physical_device(),
                 vulkan_backend.get_vk_surface()
@@ -169,8 +170,36 @@ namespace harpy::nest
             vkGetSwapchainImagesKHR(vulkan_backend.get_vk_device(), chain, &image_count, nullptr);
             images.resize(image_count);
             vkGetSwapchainImagesKHR(vulkan_backend.get_vk_device(), chain, &image_count, images.data());
+            
             init_image_views();
+            
+            framebuffs.resize(image_views.size(), {rend});
+            for(int f = 0;auto& i : framebuffs)
+            {
+                i.init(extent, image_views[f++]);
+            }
         }
+
+        void reinit()
+        {
+            for(auto& i : framebuffs)
+                vkDestroyFramebuffer(vulkan_backend.get_vk_device(), i, nullptr);
+            for(auto& i : image_views)
+                vkDestroyImageView(vulkan_backend.get_vk_device(), i, nullptr);
+            vkDestroySwapchainKHR(vulkan_backend.get_vk_device(), chain, nullptr);
+            
+            vkDeviceWaitIdle(vulkan_backend.get_vk_device());
+
+            int width = 0, height = 0;
+            glfwGetFramebufferSize(vulkan_backend.get_window_layout().get_glfw_window(), &width, &height);
+            while (width == 0 || height == 0) {
+                glfwGetFramebufferSize(vulkan_backend.get_window_layout().get_glfw_window(), &width, &height);
+                glfwWaitEvents();
+            }
+
+            init();
+        }
+        
 
 
 
@@ -184,6 +213,15 @@ namespace harpy::nest
         swapchain_support_details& get_vk_swapchain_details(){return swapchain_details;}
         VkSwapchainKHR& get_vk_swapchain(){return chain;}
         operator VkSwapchainKHR&(){return chain;}
+
+        ~swapchain() override
+        {
+            for(auto& i : image_views)
+            vkDestroyImageView(vulkan_backend.get_vk_device(), i, nullptr);
+            
+            vkDestroySwapchainKHR(vulkan_backend.get_vk_device(), chain, nullptr);
+            
+        }
         
     
     };
