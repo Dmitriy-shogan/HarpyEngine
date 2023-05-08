@@ -11,8 +11,8 @@ namespace harpy::nest::buffers
         };
         
     public:
-        index_buffer(pools::command_pool& pool, VkPhysicalDevice& ph_device, VkQueue& graphics_queue)
-            : base_buffer(pool, ph_device, graphics_queue) {}
+        index_buffer(pools::command_pool& pool, vulkan_spinal_cord& cord)
+            : base_buffer(pool, cord) {}
 
         void init() override
         {
@@ -20,7 +20,7 @@ namespace harpy::nest::buffers
      
             create_buffer(buffer_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
      
-            staging_buffer stage_buf{pool, ph_device, graphics_queue};
+            staging_buffer stage_buf{pool, vulkan_backend};
             stage_buf.init(buffer_size);
             stage_buf.copy_into_buffer(*this);
         }

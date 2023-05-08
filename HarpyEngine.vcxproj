@@ -101,8 +101,10 @@
     <ClCompile Include="raven_part\nest\buffers\framebuffer.cpp" />
     <ClCompile Include="raven_part\nest\buffers\index_buffer.cpp" />
     <ClCompile Include="raven_part\nest\buffers\staging_buffer.cpp" />
+    <ClCompile Include="raven_part\nest\buffers\uniform_buffer.cpp" />
     <ClCompile Include="raven_part\nest\buffers\vertex_buffer.cpp" />
     <ClCompile Include="raven_part\nest\command_buffer_controller\command_buffer_controller.cpp" />
+    <ClCompile Include="raven_part\nest\descriptor\descriptor.cpp" />
     <ClCompile Include="raven_part\nest\pipeline\pipeline.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -178,6 +180,7 @@
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
     <ClCompile Include="raven_part\nest\pools\command_pool.cpp" />
+    <ClCompile Include="raven_part\nest\pools\descriptor_pool.cpp" />
     <ClCompile Include="raven_part\nest\render_pass\render_pass.cpp" />
     <ClCompile Include="raven_part\nest\shaders\base_shader.cpp" />
     <ClCompile Include="raven_part\nest\shaders\shader_module.cpp" />
@@ -337,6 +340,7 @@
     </ClCompile>
     <ClCompile Include="raven_part\nest\windowing\base_window.cpp" />
     <ClCompile Include="raven_part\nest\windowing\base_window_layout\base_window_layout.cpp" />
+    <ClCompile Include="raven_part\objects\base_cube.cpp" />
     <ClCompile Include="raven_part\objects\base_object.cpp" />
     <ClCompile Include="raven_part\renderer\renderer.cpp" />
     <ClCompile Include="third_party_services\include\imgui\imgui.cpp" />
@@ -361,11 +365,14 @@
     <ClInclude Include="raven_part\nest\buffers\framebuffer.h" />
     <ClInclude Include="raven_part\nest\buffers\index_buffer.h" />
     <ClInclude Include="raven_part\nest\buffers\staging_buffer.h" />
+    <ClInclude Include="raven_part\nest\buffers\uniform_buffer.h" />
     <ClInclude Include="raven_part\nest\buffers\vertex_buffer.h" />
     <ClInclude Include="raven_part\nest\command_buffer_controller\command_buffer_controller.h" />
+    <ClInclude Include="raven_part\nest\descriptor\descriptor.h" />
     <ClInclude Include="raven_part\nest\pipeline\pipeline.h" />
     <ClInclude Include="raven_part\nest\pools\command_pool.h" />
     <ClInclude Include="raven_part\nest\interfaces\interfaces.h" />
+    <ClInclude Include="raven_part\nest\pools\descriptor_pool.h" />
     <ClInclude Include="raven_part\nest\render_pass\render_pass.h" />
     <ClInclude Include="raven_part\nest\shaders\base_shader.h" />
     <ClInclude Include="raven_part\nest\shaders\shader_module.h" />
@@ -381,6 +388,7 @@
     <ClInclude Include="raven_part\nest\windowing\base_window.h" />
     <ClInclude Include="raven_part\nest\windowing\base_window_layout.h" />
     <ClInclude Include="raven_part\nest\spinal_cord\vulkan_spinal_cord.h" />
+    <ClInclude Include="raven_part\objects\base_cube.h" />
     <ClInclude Include="raven_part\objects\base_object.h" />
     <ClInclude Include="raven_part\renderer\renderer.h" />
     <ClInclude Include="third_party_services\include\imgui\imconfig.h" />

@@ -16,7 +16,7 @@ class renderer
     nest::render_pass rend{chain};
     nest::swapchain chain{vulkan_backend, rend};
     
-
+    //TODO: Make nest part of vulkan threading
     std::vector<VkSemaphore> image_sems{MAX_FRAMES_IN_FLIGHT};
     std::vector<VkSemaphore> finish_sems{MAX_FRAMES_IN_FLIGHT};
     std::vector<VkFence> fences{MAX_FRAMES_IN_FLIGHT};

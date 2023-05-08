@@ -1,6 +1,6 @@
 ﻿#pragma once
-#ifndef HARPY_COMMAND_POOL_POOL
-#define HARPY_COMMAND_POOL_POOL
+#ifndef HARPY_POOLS_COMMAND
+#define HARPY_POOLS_COMMAND
 #include <utilities/harpy_little_error.h>
 #include <interfaces/interfaces.h>
 

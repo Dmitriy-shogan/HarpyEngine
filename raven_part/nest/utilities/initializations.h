@@ -2,6 +2,8 @@
 #ifndef HARPY_INITS
 #define HARPY_INITS
 
+//TODO: create move and copy operators for all classes;
+//TODO: reassign libraries where they are needed and only leave everywhere-use-libraries here
 //STL libraries
 #include <iostream>
 #include <fstream>

@@ -4,6 +4,7 @@
 #include <utilities/harpy_little_error.h>
 #include <utilities/utilities.h>
 #include <pools/command_pool.h>
+#include "spinal_cord/vulkan_spinal_cord.h"
 
 namespace harpy::nest::buffers
 {
@@ -15,9 +16,8 @@ namespace harpy::nest::buffers
         long buffer_size{};
 
         //TODO:: think about removing ph_device and graphics queue from here. There are used only one-two times
-        VkPhysicalDevice& ph_device;
         pools::command_pool& pool;
-        VkQueue& graphics_queue;
+        vulkan_spinal_cord& vulkan_backend;
 
 
         void create_buffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties) {
@@ -48,7 +48,7 @@ namespace harpy::nest::buffers
 
         uint32_t find_memory_types (uint32_t typeFilter, VkMemoryPropertyFlags properties) {
             VkPhysicalDeviceMemoryProperties memProperties;
-            vkGetPhysicalDeviceMemoryProperties(ph_device, &memProperties);
+            vkGetPhysicalDeviceMemoryProperties(vulkan_backend.get_vk_physical_device(), &memProperties);
 
             for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
                 if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
@@ -58,7 +58,7 @@ namespace harpy::nest::buffers
 
             throw std::runtime_error("failed to find suitable memory type!");
         }
-        void copy_buffer(VkBuffer& dest, VkCommandPool& pool, VkQueue graph_queue)
+        void copy_buffer(VkBuffer& dest, VkCommandPool& pool)
         {
             VkCommandBufferAllocateInfo alloc_info{};
             alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -88,15 +88,15 @@ namespace harpy::nest::buffers
             submit_info.commandBufferCount = 1;
             submit_info.pCommandBuffers = &com_buf;
 
-            vkQueueSubmit(graph_queue, 1, &submit_info, VK_NULL_HANDLE);
-            vkQueueWaitIdle(graph_queue);
+            vkQueueSubmit(vulkan_backend.get_vk_graphics_queue(), 1, &submit_info, VK_NULL_HANDLE);
+            vkQueueWaitIdle(vulkan_backend.get_vk_graphics_queue());
 
             vkFreeCommandBuffers(this->pool.get_vk_device(), pool, 1, &com_buf);
         }
         
     public:
-        base_buffer(pools::command_pool& pool, VkPhysicalDevice& ph_device, VkQueue& graphics_queue)
-        : ph_device(ph_device), pool(pool), graphics_queue(graphics_queue) {}
+        base_buffer(pools::command_pool& pool, vulkan_spinal_cord& cord)
+        : pool(pool), vulkan_backend(cord) {}
 
         virtual void init() = 0;
 

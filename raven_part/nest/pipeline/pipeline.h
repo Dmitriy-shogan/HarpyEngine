@@ -4,6 +4,7 @@
 #include <utilities/harpy_little_error.h>
 #include <shaders/base_shader.h>
 #include <render_pass/render_pass.h>
+#include <descriptor/descriptor.h>
 
 namespace harpy::nest
 {
@@ -18,7 +19,7 @@ namespace harpy::nest
 
         pipeline(render_pass& rend) : rend(rend){}
         
-        void init()
+        void init(descriptor& desc)
         {
 
             shaders::shader_module vertex{rend.get_vk_device()};
@@ -121,8 +122,8 @@ namespace harpy::nest
     
             VkPipelineLayoutCreateInfo pipeline_layout_info{};
             pipeline_layout_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-            pipeline_layout_info.setLayoutCount = 0; // Optional
-            pipeline_layout_info.pSetLayouts = nullptr; // Optional
+            pipeline_layout_info.setLayoutCount = 1;
+            pipeline_layout_info.pSetLayouts = &desc.get_vk_descriptor_set_layout();
             pipeline_layout_info.pushConstantRangeCount = 0; // Optional
             pipeline_layout_info.pPushConstantRanges = nullptr; // Optional
 
