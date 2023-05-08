@@ -1,11 +1,10 @@
 ﻿#pragma once
 #ifndef HARPY_GUI
 #define HARPY_GUI
-#include <nest/vision/base_window_layout.h>
+#include <nest/windowing/base_window_layout.h>
 #include<imgui/imgui_impl_glfw.h>
 #include<imgui/imgui_impl_vulkan.h>
 
-#include "vulkan_levels/soft_level_vulkan.h"
 
 namespace harpy::gui {
 
@@ -31,7 +30,7 @@ namespace harpy::gui {
         ImGuiContext* context{nullptr};
         static bool is_initialised;
     public:
-        base_gui_layout(harpy_nest::soft_level_vulkan* soft_level)
+        /*base_gui_layout(harpy_nest::soft_level_vulkan* soft_level)
         {
             using namespace ImGui;
             if (!is_initialised)
@@ -80,12 +79,12 @@ namespace harpy::gui {
 
                     vkDestroyDescriptorPool(_device, imguiPool, nullptr);
                     ImGui_ImplVulkan_Shutdown();
-                    });*/
+                    });#1#
 
                 
                 is_initialised = true;
             }
-        }
+        }*/
     
     };
     

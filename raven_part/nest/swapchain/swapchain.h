@@ -5,6 +5,8 @@
 
 #include <buffers/framebuffer.h>
 
+#include "spinal_cord/vulkan_spinal_cord.h"
+
 namespace harpy::nest
 {
     struct swapchain_support_details  {
@@ -15,7 +17,7 @@ namespace harpy::nest
     
     class swapchain : public interfaces::IStrong_component
     {
-        hard_level_vulkan& vulkan_backend;
+        vulkan_spinal_cord& vulkan_backend;
         render_pass& rend;
         
         VkSwapchainKHR chain{nullptr};
@@ -59,7 +61,7 @@ namespace harpy::nest
 
             return swapchain_details.formats[0];
         }
-        VkPresentModeKHR medium_level_vulkan::choose_swap_present_mode()
+        VkPresentModeKHR choose_swap_present_mode()
         {
             for (const auto& availablePresentMode : swapchain_details.presentModes) {
                 if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
@@ -103,7 +105,7 @@ namespace harpy::nest
         
     public:
         
-        swapchain(hard_level_vulkan& vulkan_backend, render_pass& rend): vulkan_backend(vulkan_backend), rend(rend){}
+        swapchain(vulkan_spinal_cord& vulkan_backend, render_pass& rend): vulkan_backend(vulkan_backend), rend(rend){}
         
         VkDevice& get_vk_device() override {return vulkan_backend.get_vk_device();}
 
@@ -141,7 +143,7 @@ namespace harpy::nest
             create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
             //not indices, shit name, needed to be changed
-            auto indices = hard_level_vulkan::find_queue_families(
+            auto indices = vulkan_spinal_cord::find_queue_families(
                 vulkan_backend.get_vk_physical_device(),
                 vulkan_backend.get_vk_surface()
                 );
@@ -172,6 +174,7 @@ namespace harpy::nest
             vkGetSwapchainImagesKHR(vulkan_backend.get_vk_device(), chain, &image_count, images.data());
             
             init_image_views();
+            rend.init();
             
             framebuffs.resize(image_views.size(), {rend});
             for(int f = 0;auto& i : framebuffs)

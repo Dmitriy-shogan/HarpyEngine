@@ -13,7 +13,8 @@ namespace harpy::nest::buffers
         VkBuffer buffer{};
         VkDeviceMemory buffer_mem{};
         long buffer_size{};
-        
+
+        //TODO:: think about removing ph_device and graphics queue from here. There are used only one-two times
         VkPhysicalDevice& ph_device;
         pools::command_pool& pool;
         VkQueue& graphics_queue;

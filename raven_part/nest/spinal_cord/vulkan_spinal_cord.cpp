@@ -1,9 +1,9 @@
-﻿#include "..//hard_level_vulkan.h"
+﻿#include "vulkan_spinal_cord.h"
 
 using namespace harpy::nest;
 using namespace harpy::utilities;
 
- hard_level_vulkan::needed_queues_families hard_level_vulkan::find_queue_families(VkPhysicalDevice& ph_device, VkSurfaceKHR& surface)
+ vulkan_spinal_cord::needed_queues_families vulkan_spinal_cord::find_queue_families(VkPhysicalDevice& ph_device, VkSurfaceKHR& surface)
  {
     needed_queues_families result{};
 
@@ -36,7 +36,7 @@ using namespace harpy::utilities;
     return result;
 }
 
-bool hard_level_vulkan::check_device_extension_support() const
+bool vulkan_spinal_cord::check_device_extension_support() const
 {
     uint32_t extensionCount;
     vkEnumerateDeviceExtensionProperties(ph_device, nullptr, &extensionCount, nullptr);
@@ -53,7 +53,7 @@ bool hard_level_vulkan::check_device_extension_support() const
     return requiredExtensions.empty();
 }
 
-std::vector<const char*> hard_level_vulkan::get_required_extensions()
+std::vector<const char*> vulkan_spinal_cord::get_required_extensions()
 {
     uint32_t glfwExtensionCount = 0;
     const char** glfw_extensions{nullptr};
@@ -69,7 +69,7 @@ std::vector<const char*> hard_level_vulkan::get_required_extensions()
     return extensions;
 }
 
-void hard_level_vulkan::init_instance()
+void vulkan_spinal_cord::init_instance()
 {
     //First checking validation support
     //code goes here
@@ -116,7 +116,7 @@ void hard_level_vulkan::init_instance()
     
 }
 
-bool hard_level_vulkan::is_device_suitable(VkPhysicalDevice phys_device)
+bool vulkan_spinal_cord::is_device_suitable(VkPhysicalDevice phys_device)
 {
      VkPhysicalDeviceProperties deviceProperties;
      VkPhysicalDeviceFeatures deviceFeatures;
@@ -127,7 +127,7 @@ bool hard_level_vulkan::is_device_suitable(VkPhysicalDevice phys_device)
 }
 
 
-void hard_level_vulkan::init_ph_device()
+void vulkan_spinal_cord::init_ph_device()
 {
     uint32_t device_count = 0;
     vkEnumeratePhysicalDevices(instance, &device_count, nullptr);
@@ -149,7 +149,7 @@ void hard_level_vulkan::init_ph_device()
     }
 }
 
-void hard_level_vulkan::init_device_and_queues()
+void vulkan_spinal_cord::init_device_and_queues()
 {
     auto indices = find_queue_families(ph_device, connected_window_layout.get_VK_surface());
 
@@ -198,7 +198,7 @@ void hard_level_vulkan::init_device_and_queues()
 
 
 
-hard_level_vulkan::~hard_level_vulkan()
+vulkan_spinal_cord::~vulkan_spinal_cord()
 {
      base_valid.clean_up_debug();
     vkDestroyDevice(device, nullptr);
@@ -206,22 +206,13 @@ hard_level_vulkan::~hard_level_vulkan()
     vkDestroyInstance(instance, nullptr);
 }
 
-void hard_level_vulkan::init_default_hard()
-{
-     
-    init_debug();
-    init_ph_device();
-    init_device_and_queues();
-    
-}
-
-void hard_level_vulkan::init_debug()
+void vulkan_spinal_cord::init_debug()
 {
     if (!instance) throw harpy_little_error("Can't init debug before initiating instance");
     base_valid.init_debug_messenger();
 }
 
-void hard_level_vulkan::connect_window(windowing::base_window_layout& win, bool do_init = true)
+void vulkan_spinal_cord::connect_window(windowing::base_window_layout& win, bool do_init = true)
 {
     connected_window_layout = win;
     if (do_init)

@@ -3,7 +3,7 @@
 #define HARPY_HARD_VULKAN
 
 #include <utilities/harpy_little_error.h>
-#include <vulkan_levels/hard/validation_layers.hpp>
+#include "validation_layers.h"
 #include <windowing/base_window_layout.h>
 
 
@@ -13,7 +13,7 @@ namespace harpy::nest {
     //TODO: remove std::runtime_exception and use harpy_little_error exceptions
    
     
-    class hard_level_vulkan
+    class vulkan_spinal_cord
     {
     protected:
         enum needed_queues_bits
@@ -55,15 +55,18 @@ namespace harpy::nest {
         
         void init_ph_device();
         void init_device_and_queues();
-
-        void init_default_hard();
-
         void init_debug();
     public:
-        hard_level_vulkan(windowing::base_window_layout& window_layout) : connected_window_layout(window_layout){} 
+        vulkan_spinal_cord(windowing::base_window_layout& window_layout) : connected_window_layout(window_layout){} 
         
 
         void init_instance();
+        void init()
+        {
+            init_debug();
+            init_ph_device();
+            init_device_and_queues();
+        }
 
         //for later
         static bool is_device_suitable(VkPhysicalDevice phys_device);
@@ -82,7 +85,7 @@ namespace harpy::nest {
         VkQueue& get_vk_graphics_queue(){return graphics_queue;}
         windowing::base_window_layout& get_window_layout(){return connected_window_layout;}
 
-        virtual ~hard_level_vulkan();
+        virtual ~vulkan_spinal_cord();
     };
     
 }

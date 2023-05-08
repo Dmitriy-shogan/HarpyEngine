@@ -1,21 +1,21 @@
 ﻿#include "harpy_little_error.h"
 
-int harpy_nest::harpy_little_error::log_number = 1;
-std::string harpy_nest::harpy_little_error::todays_date{std::format("{:%F}", std::chrono::zoned_time{std::chrono::current_zone(), std::chrono::system_clock::now()})};
+int harpy::utilities::harpy_little_error::log_number = 1;
+std::string harpy::utilities::harpy_little_error::todays_date{std::format("{:%F}", std::chrono::zoned_time{std::chrono::current_zone(), std::chrono::system_clock::now()})};
 
-harpy_nest::harpy_little_error::harpy_little_error(std::string&& error): runtime_error(error), severity(error_severity::error)
+harpy::utilities::harpy_little_error::harpy_little_error(std::string&& error): runtime_error(error), severity(error_severity::error)
 {}
 
-harpy_nest::harpy_little_error::harpy_little_error(const std::string& error): runtime_error(error), severity(error_severity::error)
+harpy::utilities::harpy_little_error::harpy_little_error(const std::string& error): runtime_error(error), severity(error_severity::error)
 {}
 
-harpy_nest::harpy_little_error::harpy_little_error(error_severity severity, std::string&& error): runtime_error(error), severity(severity)
+harpy::utilities::harpy_little_error::harpy_little_error(error_severity severity, std::string&& error): runtime_error(error), severity(severity)
 {}
 
-harpy_nest::harpy_little_error::harpy_little_error(error_severity severity, const std::string& error): runtime_error(error), severity(severity)
+harpy::utilities::harpy_little_error::harpy_little_error(error_severity severity, const std::string& error): runtime_error(error), severity(severity)
 {}
 
-void harpy_nest::harpy_little_error::log_this()
+void harpy::utilities::harpy_little_error::log_this()
 {
     using namespace std;
     ofstream log(todays_date + " log№" + to_string(log_number) + ".txt", ios_base::app);
@@ -69,7 +69,7 @@ void harpy_nest::harpy_little_error::log_this()
     log.close();
 }
 
-void harpy_nest::harpy_little_error::show()
+void harpy::utilities::harpy_little_error::show()
 {
     std::string sever;
     switch (INTCAST(severity))

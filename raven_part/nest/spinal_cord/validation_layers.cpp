@@ -1,16 +1,16 @@
-﻿#include "validation_layers.hpp"
+﻿#include "validation_layers.h"
 
 
-harpy_nest::validation_layers::validation_layers(VkInstance* instance): connected_instance(instance) {}
+harpy::nest::validation_layers::validation_layers(VkInstance* instance): connected_instance(instance) {}
 
-void harpy_nest::validation_layers::init_debug_messenger()
+void harpy::nest::validation_layers::init_debug_messenger()
 {
     setupDebugMessenger();
 }
 
 
 
-void harpy_nest::validation_layers::basic_debug_init(VkDebugUtilsMessengerCreateInfoEXT& createInfo)
+void harpy::nest::validation_layers::basic_debug_init(VkDebugUtilsMessengerCreateInfoEXT& createInfo)
 {
     createInfo = {};
     createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
@@ -19,7 +19,7 @@ void harpy_nest::validation_layers::basic_debug_init(VkDebugUtilsMessengerCreate
     createInfo.pfnUserCallback = basic_debug_callback;
 }
 
-VkBool32 harpy_nest::validation_layers::basic_debug_callback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+VkBool32 harpy::nest::validation_layers::basic_debug_callback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
                                                              VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
                                                              void* pUserData)
 {
@@ -28,7 +28,7 @@ VkBool32 harpy_nest::validation_layers::basic_debug_callback(VkDebugUtilsMessage
     return VK_FALSE;
 }
 
-VkResult harpy_nest::validation_layers::CreateDebugUtilsMessengerEXT(VkInstance instance,
+VkResult harpy::nest::validation_layers::CreateDebugUtilsMessengerEXT(VkInstance instance,
     const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator,
     VkDebugUtilsMessengerEXT* pDebugMessenger)
 {

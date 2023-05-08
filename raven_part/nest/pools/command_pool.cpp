@@ -1,5 +1,4 @@
 ﻿#include "command_pool.h"
-#include <vulkan_levels/soft_level_vulkan.h>
 
 using namespace harpy::nest;
 void pools::command_pool::init_draw_pool()

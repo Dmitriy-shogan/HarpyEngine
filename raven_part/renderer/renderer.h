@@ -6,11 +6,15 @@
 /*#include <threading/harpy_semaphore.hpp>*/
 #include <utilities/harpy_little_error.h>
 
+#include <objects/base_object.h>
+
 namespace harpy{
 class renderer
 {
     static std::vector<std::vector<interfaces::IDrawable>> draw_objects;
     //std::vector<harpy_semaphore> semaphores;
+    nest::render_pass rend{chain};
+    nest::swapchain chain{vulkan_backend, rend};
     
 
     std::vector<VkSemaphore> image_sems{MAX_FRAMES_IN_FLIGHT};
@@ -20,10 +24,14 @@ class renderer
     size_t frame = 0;
     
     //TEMPORARY
-    base_window_layout window;
+    nest::vulkan_spinal_cord vulkan_backend;
+    nest::windowing::base_window_layout window;
+    objects::base_object object;
+    
+    
+    
     void create_semaphores_fences();
-    vertex_buffer draw_object{&vulkan_backend};
-    index_buffer index{&vulkan_backend};
+    
 public:
     
     /*                      *
@@ -36,8 +44,9 @@ public:
     {
         vulkan_backend.init_instance();
         vulkan_backend.connect_window(window, true);
-        vulkan_backend.init_default_softest();
-        draw_object.init_standard_buffer();
+        vulkan_backend.init();
+        chain.init();
+        object.init_standard_buffer();
         index.init_standard_buffer();
         vulkan_backend.record_com_buf(draw_object);
         fences_in_flight.resize(vulkan_backend.get_swapchain_images().size(), nullptr);

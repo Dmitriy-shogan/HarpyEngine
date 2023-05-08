@@ -4,10 +4,12 @@
 #include <utilities/harpy_little_error.h>
 #include <interfaces/interfaces.h>
 
-#include <vulkan_levels/medium_level_vulkan.h>
 
 namespace harpy::nest
 {
+
+    class swapchain;
+    
     class render_pass : public interfaces::IStrong_component
     {
         VkRenderPass rend{nullptr};
@@ -16,8 +18,8 @@ namespace harpy::nest
         VkFormat& format;
         
     public:
-        render_pass(medium_level_vulkan& vulkan_back) : device(vulkan_back.get_vk_device()), format(vulkan_back.get_vk_surface_format().format) {}
-        
+        render_pass(swapchain& chain);
+
         void init()
         {
             VkAttachmentDescription color_attachment{};

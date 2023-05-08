@@ -19,7 +19,7 @@ namespace harpy::nest::threading
                 semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
                 if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &semaphore) != VK_SUCCESS) {
 
-                    throw harpy_little_error(error_severity::wrong_init, "failed to create semaphores!");
+                    throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create semaphores!");
                 }
             }
             void use()
