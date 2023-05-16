@@ -15,7 +15,7 @@ namespace harpy::nest
         VkRenderPass rend{nullptr};
 
         VkDevice& device;
-        VkFormat& format;
+        VkSurfaceFormatKHR& format;
         
     public:
         render_pass(swapchain& chain);
@@ -23,7 +23,7 @@ namespace harpy::nest
         void init()
         {
             VkAttachmentDescription color_attachment{};
-            color_attachment.format = format;
+            color_attachment.format = format.format;
             color_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
 
             color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
@@ -77,6 +77,13 @@ namespace harpy::nest
 
         VkRenderPass& get_vk_render_pass(){return rend;}
         operator VkRenderPass&(){return rend;}
+
+        render_pass& operator=(render_pass const& rend)
+        {
+            this->rend = rend.rend;
+            device = rend.device;
+            format = rend.format;
+        }
 
         
 

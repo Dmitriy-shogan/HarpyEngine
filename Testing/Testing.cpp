@@ -12,12 +12,39 @@ void long_operation()
     std::this_thread::sleep_for(150ms);
 }
 
+template <typename T>
+class cool_class
+{
+    T something;
+public:
+    T getter(){return something;}
+    void setter(T i){something = i;}
+
+    template <typename E>
+    cool_class<T> operator=(cool_class<E> obj)
+    {
+        this->something = obj.getter();
+        return *this;
+    }    
+};
+
 int main()
 {
     using std::chrono::high_resolution_clock;
     using std::chrono::duration_cast;
     using std::chrono::duration;
     using std::chrono::milliseconds;
+
+    cool_class<int> integer;
+    integer.setter(5);
+
+    cool_class<char> character;
+    character.setter('f');
+
+    integer = character;
+    std::cout<<integer.getter() <<std::endl;
+
+    void* data = &integer;
 
     auto t1 = high_resolution_clock::now();
     long_operation();

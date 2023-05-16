@@ -41,7 +41,7 @@ namespace harpy::nest::shaders
                 throw utilities::harpy_little_error("Can't find correct spv shader file");
             }
 
-            switch(filepath.back())
+            switch(this->filepath.back())
             {
             case 't':
                 {

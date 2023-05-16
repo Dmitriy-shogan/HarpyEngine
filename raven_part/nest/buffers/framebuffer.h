@@ -34,6 +34,11 @@ namespace harpy::nest::buffers
             }
         VkFramebuffer& get_vk_framebuffer(){return buffer;}
         operator VkFramebuffer&(){return buffer;}
+
+        ~framebuffer()
+        {
+            vkDestroyFramebuffer(rend.get_vk_device(), buffer, nullptr);
+        }
     
     };
 }

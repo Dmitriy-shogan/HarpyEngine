@@ -5,10 +5,16 @@
 
 #include "pools/command_pool.h"
 
+namespace harpy::nest
+{
+    class command_buffer_controller;
+}
+
 namespace harpy::nest::buffers
 {
     class command_buffer
     {
+        friend command_buffer_controller;
         VkDevice& device;
         pools::command_pool& pool;
 
@@ -20,6 +26,12 @@ namespace harpy::nest::buffers
 
         VkCommandBuffer& get_vk_command_buffer(){return buffer;}
         operator VkCommandBuffer&(){return buffer;}
+        operator VkCommandBuffer() const {return buffer;}
+
+        command_buffer(command_buffer const& buff) : device(buff.device), pool(buff.pool)
+        {
+            if(buff.buffer) init();
+        }
 
         void init()
         {
@@ -33,6 +45,7 @@ namespace harpy::nest::buffers
                 throw std::runtime_error("failed to allocate command buffers!");
             }
         }
+        
     };
 }
 #endif //HARPY_BUFFERS_COMMAND

@@ -84,11 +84,12 @@ namespace harpy::nest
             rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
             rasterizer.lineWidth = 1.0f;
             rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
-            rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
+            rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
             rasterizer.depthBiasEnable = VK_FALSE;
             rasterizer.depthBiasConstantFactor = 0.0f; // Optional
             rasterizer.depthBiasClamp = 0.0f; // Optional
             rasterizer.depthBiasSlopeFactor = 0.0f; // Optional
+            
 
             VkPipelineMultisampleStateCreateInfo multisampling{};
             multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
@@ -157,6 +158,13 @@ namespace harpy::nest
 
         VkPipeline& get_vk_pipeline(){return pipe;}
         VkPipelineLayout& get_vk_pipeline_layout(){return layout;}
+
+        pipeline& operator=(pipeline const& pipe)
+        {
+            rend = pipe.rend;
+            this->pipe = pipe.pipe;
+            layout = pipe.layout;
+        }
 
         operator VkPipeline&(){return pipe;}
 

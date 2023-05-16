@@ -1,7 +1,6 @@
 #include <renderer/renderer.h>
 
 using namespace harpy;
-//TODO: in all available hpp files rewrite includes to be in <> brackets instead of direct way
 int main()
 {
 	init_glfw();

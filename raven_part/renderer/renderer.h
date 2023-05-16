@@ -8,13 +8,17 @@
 
 #include <objects/base_object.h>
 
+#include <descriptor/descriptor.h>
+
+#include <command_buffer_controller/command_buffer_controller.h>
+
 namespace harpy{
 class renderer
 {
-    static std::vector<std::vector<interfaces::IDrawable>> draw_objects;
-    //std::vector<harpy_semaphore> semaphores;
-    nest::render_pass rend{chain};
+    nest::vulkan_spinal_cord vulkan_backend{window};
     nest::swapchain chain{vulkan_backend, rend};
+    nest::render_pass rend{chain};
+    
     
     //TODO: Make nest part of vulkan threading
     std::vector<VkSemaphore> image_sems{MAX_FRAMES_IN_FLIGHT};
@@ -24,9 +28,16 @@ class renderer
     size_t frame = 0;
     
     //TEMPORARY
-    nest::vulkan_spinal_cord vulkan_backend;
     nest::windowing::base_window_layout window;
-    objects::base_object object;
+    objects::base_object object{vulkan_backend, com_pool};
+    nest::pipeline pipe{chain.get_render_pass()};
+    nest::pools::command_pool com_pool{vulkan_backend.get_vk_device()};
+    nest::pools::descriptor_pool desc_pool{vulkan_backend.get_vk_device()};
+    nest::descriptor desc{vulkan_backend.get_vk_device(), desc_pool};
+    std::vector<nest::buffers::command_buffer> com_bufs{MAX_FRAMES_IN_FLIGHT, {vulkan_backend.get_vk_device(), com_pool}};
+    nest::command_buffer_controller controller{chain, pipe};
+    
+    
     
     
     
@@ -46,33 +57,45 @@ public:
         vulkan_backend.connect_window(window, true);
         vulkan_backend.init();
         chain.init();
-        object.init_standard_buffer();
-        index.init_standard_buffer();
-        vulkan_backend.record_com_buf(draw_object);
-        fences_in_flight.resize(vulkan_backend.get_swapchain_images().size(), nullptr);
+        desc_pool.init();
+        desc.init();
+        pipe.init(desc);
+        com_pool.init(vulkan_backend.find_queue_families(vulkan_backend.get_vk_physical_device(), vulkan_backend.get_vk_surface()));
+        object.init();
+        for(auto& i :com_bufs)
+        {
+            i.init();
+        }
+        desc.populate(object.get_uniform_buffers());
+        
+        fences_in_flight.resize(chain.get_images().size(), nullptr);
         create_semaphores_fences();
     }
+    
     void draw_frame()
     {
-        vkWaitForFences(vulkan_backend.get_device(), 1, &fences_in_flight[frame], VK_TRUE, UINT64_MAX);
+        vkWaitForFences(vulkan_backend.get_vk_device(), 1, &fences_in_flight[frame], VK_TRUE, UINT64_MAX);
         
         uint32_t image_index{};
         
-        VkResult result = vkAcquireNextImageKHR(vulkan_backend.get_device(),
-                    vulkan_backend.get_swapchain(), UINT64_MAX,
+        VkResult result = vkAcquireNextImageKHR(vulkan_backend.get_vk_device(),
+                    chain, UINT64_MAX,
                     image_sems[frame], VK_NULL_HANDLE, &image_index);
 
         if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
-            vulkan_backend.recreate_swapchain();
+            chain.reinit();
             return;
         } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
-            throw harpy_little_error("failed to acquire swap chain image!");
+            throw utilities::harpy_little_error("failed to acquire swap chain image!");
         }
 
-        vkResetFences(vulkan_backend.get_device(), 1, &fences_in_flight[frame]);
+        vkResetFences(vulkan_backend.get_vk_device(), 1, &fences_in_flight[frame]);
 
-        vkResetCommandBuffer(vulkan_backend.get_com_buffers()[frame], 0);
-        vulkan_backend.rec_one_com_buf(vulkan_backend.get_com_buffers()[frame], image_index, draw_object, index);
+        vkResetCommandBuffer(com_bufs[frame], 0);
+        
+        controller.connect(com_bufs[frame], image_index);
+        controller.draw(object.get_vertex_buffer(), object.get_index_buffer(), desc, frame);
+        controller.disconnect();
 
         
         VkSubmitInfo submitInfo{};
@@ -85,14 +108,14 @@ public:
         submitInfo.pWaitDstStageMask = waitStages;
 
         submitInfo.commandBufferCount = 1;
-        submitInfo.pCommandBuffers = &vulkan_backend.get_com_buffers()[frame];
+        submitInfo.pCommandBuffers = &com_bufs[frame].get_vk_command_buffer();
 
         VkSemaphore signalSemaphores[] = {finish_sems[frame]};
         submitInfo.signalSemaphoreCount = 1;
         submitInfo.pSignalSemaphores = signalSemaphores;
 
-        if (vkQueueSubmit(vulkan_backend.get_present_queue(), 1, &submitInfo, fences_in_flight[frame]) != VK_SUCCESS) {
-            throw harpy_little_error(error_severity::wrong_init, "failed to submit draw command buffer!");
+        if (vkQueueSubmit(vulkan_backend.get_vk_present_queue(), 1, &submitInfo, fences_in_flight[frame]) != VK_SUCCESS) {
+            throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to submit draw command buffer!");
         }
 
         VkPresentInfoKHR presentInfo{};
@@ -101,39 +124,44 @@ public:
         presentInfo.waitSemaphoreCount = 1;
         presentInfo.pWaitSemaphores = signalSemaphores;
 
-        VkSwapchainKHR swapChains[] = {vulkan_backend.get_swapchain()};
+        VkSwapchainKHR swapChains[] = {chain};
         presentInfo.swapchainCount = 1;
         presentInfo.pSwapchains = swapChains;
 
         presentInfo.pImageIndices = &image_index;
 
-        result = vkQueuePresentKHR(vulkan_backend.get_graphics_queue(), &presentInfo);
+        result = vkQueuePresentKHR(vulkan_backend.get_vk_graphics_queue(), &presentInfo);
 
         if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || window.get_resize()) {
             window.get_resize() = false;
-            vulkan_backend.recreate_swapchain();
+            chain.reinit();
         } else if (result != VK_SUCCESS) {
-            throw harpy_little_error("failed to present swap chain image!");
+            throw utilities::harpy_little_error("failed to present swap chain image!");
         }
         
         frame = (frame + 1) % MAX_FRAMES_IN_FLIGHT;
     }
     void main_loop()
     {
-        while (!glfwWindowShouldClose(vulkan_backend.get_base_window_layout()->get_glfw_window())) {
+        while (!glfwWindowShouldClose(vulkan_backend.get_window_layout().get_glfw_window())) {
             glfwPollEvents();
             draw_frame();
         }
 
-        vkDeviceWaitIdle(vulkan_backend.get_device());
+        vkDeviceWaitIdle(vulkan_backend.get_vk_device());
     }
 
     void clean_up()
     {
-        std::ranges::for_each(finish_sems, [this](auto& x){ vkDestroySemaphore(vulkan_backend.get_device(), x, nullptr);});
-        std::ranges::for_each(image_sems, [this](auto& x){ vkDestroySemaphore(vulkan_backend.get_device(), x, nullptr);});
-        std::ranges::for_each(fences, [this](auto& x){ vkDestroyFence(vulkan_backend.get_device(), x, nullptr);});
-        std::ranges::for_each(fences_in_flight, [this](auto& x){vkDestroyFence(vulkan_backend.get_device(), x, nullptr);});
+        std::for_each(finish_sems.begin(), finish_sems.end(), [this](auto& x){ vkDestroySemaphore(vulkan_backend.get_vk_device(), x, nullptr);});
+        std::for_each(image_sems.begin(), image_sems.end(), [this](auto& x){ vkDestroySemaphore(vulkan_backend.get_vk_device(), x, nullptr);});
+        std::for_each(fences.begin(), fences.end(), [this](auto& x){ vkDestroyFence(vulkan_backend.get_vk_device(), x, nullptr);});
+        std::for_each(fences_in_flight.begin(), fences_in_flight.end(), [this](auto& x){vkDestroyFence(vulkan_backend.get_vk_device(), x, nullptr);});
+    }
+
+    ~renderer()
+    {
+        
     }
 };
 }

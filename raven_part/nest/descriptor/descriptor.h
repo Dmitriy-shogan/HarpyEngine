@@ -2,12 +2,13 @@
 #ifndef HARPY_DESCRIPTOR
 #define HARPY_DESCRIPTOR
 #include <pools/descriptor_pool.h>
+#include <buffers/uniform_buffer.h>
 
 namespace harpy::nest
 {
     class descriptor
     {
-        VkDescriptorSet set{nullptr};
+        std::vector<VkDescriptorSet> sets;
         VkDescriptorSetLayout layout{nullptr};
         pools::descriptor_pool& pool;
 
@@ -34,16 +35,56 @@ namespace harpy::nest
             layoutInfo.pBindings = &uboLayoutBinding;
 
             if (vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &layout) != VK_SUCCESS) {
-                throw std::runtime_error("failed to create descriptor set layout!");
+                throw utilities::harpy_little_error(utilities::error_severity::wrong_init,
+                    "failed to create descriptor set layout!");
+            }
+            if (!pool)
+            {
+                pool.init();
             }
 
-            
+            std::vector<VkDescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, layout);
+            VkDescriptorSetAllocateInfo allocInfo{};
+            allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+            allocInfo.descriptorPool = pool;
+            allocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+            allocInfo.pSetLayouts = layouts.data();
+
+            sets.resize(MAX_FRAMES_IN_FLIGHT);
+            if (vkAllocateDescriptorSets(device, &allocInfo, sets.data()) != VK_SUCCESS) {
+                throw utilities::harpy_little_error(utilities::error_severity::wrong_init,
+                    "failed to allocate descriptor sets!");
+            }
         }
 
-        VkDescriptorSet& get_vk_descriptor_set(){return set;}
+        void populate(std::vector<buffers::uniform_buffer>& buffers)
+        {
+            for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++){
+                VkDescriptorBufferInfo bufferInfo{};
+                bufferInfo.offset = 0;
+                bufferInfo.range = sizeof(buffers);
+                bufferInfo.buffer = buffers[i];
+            
+                VkWriteDescriptorSet descriptorWrite{};
+                descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                descriptorWrite.dstBinding = 0;
+                descriptorWrite.dstArrayElement = 0;
+                descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+                descriptorWrite.descriptorCount = 1;
+                descriptorWrite.pBufferInfo = &bufferInfo;
+                descriptorWrite.pImageInfo = nullptr; // Optional
+                descriptorWrite.pTexelBufferView = nullptr; // Optional
+                descriptorWrite.dstSet = sets[i];
+
+                vkUpdateDescriptorSets(device, 1, &descriptorWrite, 0, nullptr);
+            }
+        }
+        
+
+        std::vector<VkDescriptorSet>& get_vk_descriptor_set(){return sets;}
         VkDescriptorSetLayout& get_vk_descriptor_set_layout(){return layout;}
 
-        operator VkDescriptorSet&(){return set;}
+        operator std::vector<VkDescriptorSet>&(){return sets;}
 
         ~descriptor()
         {

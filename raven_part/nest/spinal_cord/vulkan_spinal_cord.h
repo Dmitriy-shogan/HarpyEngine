@@ -9,13 +9,12 @@
 
 namespace harpy::nest {
 
-
+    //TODO: make transfer-only queue, if exists one
     //TODO: remove std::runtime_exception and use harpy_little_error exceptions
    
     
     class vulkan_spinal_cord
     {
-    protected:
         enum needed_queues_bits
         {
             skip_bit = -1,
@@ -72,7 +71,7 @@ namespace harpy::nest {
         static bool is_device_suitable(VkPhysicalDevice phys_device);
 
         //Bits isn't realised yet
-        static needed_queues_families find_queue_families(VkPhysicalDevice& ph_device, VkSurfaceKHR& surface);
+        static nest::needed_queues_families find_queue_families(VkPhysicalDevice& ph_device, VkSurfaceKHR& surface);
 
         bool check_device_extension_support() const;
         void connect_window(windowing::base_window_layout& win, bool do_init);

@@ -14,25 +14,24 @@ namespace harpy::nest::buffers
         VkBuffer buffer{};
         VkDeviceMemory buffer_mem{};
         long buffer_size{};
-
-        //TODO:: think about removing ph_device and graphics queue from here. There are used only one-two times
+        
         pools::command_pool& pool;
         vulkan_spinal_cord& vulkan_backend;
 
 
-        void create_buffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties) {
+        virtual void create_buffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties) {
             VkBufferCreateInfo buffer_create_info{};
             buffer_create_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
             buffer_create_info.size = size;
             buffer_create_info.usage = usage;
             buffer_create_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-            if (vkCreateBuffer(pool.get_vk_device(), &buffer_create_info, nullptr, &buffer) != VK_SUCCESS) {
+            if (vkCreateBuffer(vulkan_backend.get_vk_device(), &buffer_create_info, nullptr, &buffer) != VK_SUCCESS) {
                 throw std::runtime_error("failed to create buffer!");
             }
 
             VkMemoryRequirements mem_requirements;
-            vkGetBufferMemoryRequirements(pool.get_vk_device(), buffer, &mem_requirements);
+            vkGetBufferMemoryRequirements(vulkan_backend.get_vk_device(), buffer, &mem_requirements);
 
             VkMemoryAllocateInfo alloc_info{};
             alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -43,10 +42,10 @@ namespace harpy::nest::buffers
                 throw std::runtime_error("failed to allocate buffer memory!");
             }
 
-            vkBindBufferMemory(pool.get_vk_device(), buffer, buffer_mem, 0);
+            vkBindBufferMemory(vulkan_backend.get_vk_device(), buffer, buffer_mem, 0);
         }
 
-        uint32_t find_memory_types (uint32_t typeFilter, VkMemoryPropertyFlags properties) {
+        virtual uint32_t find_memory_types (uint32_t typeFilter, VkMemoryPropertyFlags properties) {
             VkPhysicalDeviceMemoryProperties memProperties;
             vkGetPhysicalDeviceMemoryProperties(vulkan_backend.get_vk_physical_device(), &memProperties);
 
@@ -58,7 +57,7 @@ namespace harpy::nest::buffers
 
             throw std::runtime_error("failed to find suitable memory type!");
         }
-        void copy_buffer(VkBuffer& dest, VkCommandPool& pool)
+        virtual void copy_buffer(VkBuffer& dest, VkCommandPool& pool)
         {
             VkCommandBufferAllocateInfo alloc_info{};
             alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -102,8 +101,8 @@ namespace harpy::nest::buffers
 
         virtual ~base_buffer()
         {
-            vkDestroyBuffer(pool.get_vk_device(), buffer, nullptr);
-            vkFreeMemory(pool.get_vk_device(), buffer_mem, nullptr);
+            if(buffer) vkDestroyBuffer(pool.get_vk_device(), buffer, nullptr);
+            if (buffer_mem) vkFreeMemory(pool.get_vk_device(), buffer_mem, nullptr);
         }
 
         virtual VkBuffer& get_vk_buffer(){return buffer;}

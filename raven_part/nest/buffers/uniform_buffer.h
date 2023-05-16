@@ -22,6 +22,11 @@ namespace harpy::nest::buffers
             vkMapMemory(pool.get_vk_device(), buffer_mem, 0, buffer_size, 0, &data);
         }
 
+        void set_ubo(ubo unif)
+        {
+            memcpy(buffer_mem, &unif, sizeof(ubo));
+        }
+
         void* get_data(){return data;}
         
     };

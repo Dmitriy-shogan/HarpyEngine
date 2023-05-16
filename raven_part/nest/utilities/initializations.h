@@ -71,6 +71,7 @@ namespace harpy::nest
     struct vertex
     {
         glm::vec3 position{};
+        /*glm::vec3 normal{};*/
         glm::vec3 color{};
     };
 
@@ -99,14 +100,20 @@ namespace harpy::nest
     };
 
     static std::array<VkVertexInputAttributeDescription, 2> get_attributes_descriptions() {
+        //TODO: added normals, so rewrite shaders
         std::array<VkVertexInputAttributeDescription, 2> attribute_descriptions{{}};
         attribute_descriptions[0].binding = 0;
         attribute_descriptions[0].location = 0;
         attribute_descriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
         attribute_descriptions[0].offset = offsetof(vertex, position);
 
-        attribute_descriptions[1].binding = 0;
+        /*attribute_descriptions[1].binding = 0;
         attribute_descriptions[1].location = 1;
+        attribute_descriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+        attribute_descriptions[1].offset = offsetof(vertex, normal);*/
+
+        attribute_descriptions[1].binding = 0;
+        attribute_descriptions[1].location = 2;
         attribute_descriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
         attribute_descriptions[1].offset = offsetof(vertex, color);
         
@@ -126,6 +133,7 @@ namespace harpy::nest
     static void change_projection(float angle, float aspect = 16.0f/9.0f, float near = 0.05f, float far = 50.0f)
     {
         projection = glm::perspective(glm::radians(angle), aspect, near, far);
+        projection[1][1] *= -1;
     }
 }
 

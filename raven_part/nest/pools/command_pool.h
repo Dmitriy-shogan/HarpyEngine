@@ -24,11 +24,12 @@ class command_pool : interfaces::IStrong_component
     void init_draw_pool();
     void init_copy_pool();
 public:
-    command_pool(VkDevice& device, needed_queues_families queue_families, command_pool_types type = draw)
-    : device(device), type(type), queue_families(queue_families) {}
+    command_pool(VkDevice& device, command_pool_types type = draw)
+    : device(device), type(type) {}
 
-    void init()
+    void init(needed_queues_families families)
     {
+        queue_families = families;
         switch(type)
         {
         case draw:
@@ -42,6 +43,14 @@ public:
                 break;
             }
         }
+    }
+
+    command_pool& operator=(command_pool const& com_pool)
+    {
+        device = com_pool.device;
+        type = com_pool.type;
+        if(com_pool.pool) init(queue_families);
+        return *this;
     }
 
     VkCommandPool& get_vk_command_pool(){return pool;}

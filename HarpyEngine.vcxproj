@@ -23,6 +23,7 @@
     <ClCompile Include="human_part\image_processor\image_processor.cpp" />
     <ClCompile Include="human_part\sound\base_sound.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="raven_part\mesh\mesh.cpp" />
     <ClCompile Include="raven_part\nest\buffers\base_buffer.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -360,6 +361,7 @@
     <ClInclude Include="human_part\GUI\base_gui_layout.h" />
     <ClInclude Include="human_part\image_processor\image_processor.h" />
     <ClInclude Include="human_part\sound\base_sound.h" />
+    <ClInclude Include="raven_part\mesh\mesh.h" />
     <ClInclude Include="raven_part\nest\buffers\base_buffer.h" />
     <ClInclude Include="raven_part\nest\buffers\command_buffer.h" />
     <ClInclude Include="raven_part\nest\buffers\framebuffer.h" />

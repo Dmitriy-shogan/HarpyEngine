@@ -3,9 +3,9 @@
 using namespace harpy::nest;
 using namespace harpy::utilities;
 
- vulkan_spinal_cord::needed_queues_families vulkan_spinal_cord::find_queue_families(VkPhysicalDevice& ph_device, VkSurfaceKHR& surface)
+needed_queues_families vulkan_spinal_cord::find_queue_families(VkPhysicalDevice& ph_device, VkSurfaceKHR& surface)
  {
-    needed_queues_families result{};
+    ::needed_queues_families result{};
 
     uint32_t queueFamilyCount = 0;
     vkGetPhysicalDeviceQueueFamilyProperties(ph_device, &queueFamilyCount, nullptr);

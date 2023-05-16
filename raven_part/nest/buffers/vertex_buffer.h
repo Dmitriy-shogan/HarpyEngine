@@ -7,23 +7,25 @@ namespace harpy::nest::buffers {
 
   class vertex_buffer : public base_buffer
   {
-   std::vector<vertex> vertices {
-     {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}},
-     {{0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}},
-     {{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}},
-     {{-0.5f, 0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}}
-    };
+   std::vector<vertex> vertices{
+      {{-0.5f, -0.5f, 0.0f}, {0,0,0},{1.0f, 0.0f, 0.0f}},
+      {{0.5f, -0.5f, 0.0f}, {0,0,0},{0.0f, 1.0f, 0.0f}},
+      {{0.5f, 0.5f, 0.0f}, {0,0,0},{0.0f, 0.0f, 1.0f}},
+      {{-0.5f, 0.5f, 0.0f},{0,0,0}, {1.0f, 1.0f, 1.0f}}
+   };;
    
   public:
    vertex_buffer(pools::command_pool& pool, vulkan_spinal_cord& cord)
             : base_buffer(pool, cord) {}
+
+   
 
    void set_vertices(std::vector<vertex> vertices)
    {
     this->vertices = std::move(vertices);
    }
 
-   void init()
+   void init() override
    {
     buffer_size = sizeof(vertices[0]) * vertices.size();
      
@@ -34,8 +36,11 @@ namespace harpy::nest::buffers {
     stage_buf.copy_into_buffer(*this);
    }
 
+   operator VkBuffer&() override {
+    return buffer;
+   }
+
    std::vector<vertex> get_vertices(){return vertices;}
-   
    
 
     

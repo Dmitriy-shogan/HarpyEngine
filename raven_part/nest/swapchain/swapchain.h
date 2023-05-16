@@ -146,7 +146,7 @@ namespace harpy::nest
             auto indices = vulkan_spinal_cord::find_queue_families(
                 vulkan_backend.get_vk_physical_device(),
                 vulkan_backend.get_vk_surface()
-                );
+            );
             uint32_t queueFamilyIndices[] = {indices.graphics_families.value(), indices.present_families.value()};
 
             if (indices.graphics_families != indices.present_families) {
@@ -216,6 +216,7 @@ namespace harpy::nest
         swapchain_support_details& get_vk_swapchain_details(){return swapchain_details;}
         VkSwapchainKHR& get_vk_swapchain(){return chain;}
         operator VkSwapchainKHR&(){return chain;}
+        render_pass& get_render_pass(){return rend;}
 
         ~swapchain() override
         {
