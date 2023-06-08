@@ -19,7 +19,7 @@ namespace harpy::nest
     public:
         descriptor(VkDevice& device, pools::descriptor_pool& pool) : pool(pool), device(device){}
 
-        void init()
+        void init_layout()
         {
             //Initialising layout 
             VkDescriptorSetLayoutBinding uboLayoutBinding{};
@@ -38,11 +38,9 @@ namespace harpy::nest
                 throw utilities::harpy_little_error(utilities::error_severity::wrong_init,
                     "failed to create descriptor set layout!");
             }
-            if (!pool)
-            {
-                pool.init();
-            }
-
+        }
+        void init()
+        {
             std::vector<VkDescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, layout);
             VkDescriptorSetAllocateInfo allocInfo{};
             allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
@@ -62,19 +60,17 @@ namespace harpy::nest
             for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++){
                 VkDescriptorBufferInfo bufferInfo{};
                 bufferInfo.offset = 0;
-                bufferInfo.range = sizeof(buffers);
-                bufferInfo.buffer = buffers[i];
+                bufferInfo.range = sizeof(ubo);
+                bufferInfo.buffer = buffers[i].get_vk_buffer();
             
                 VkWriteDescriptorSet descriptorWrite{};
                 descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                descriptorWrite.dstSet = sets[i];
                 descriptorWrite.dstBinding = 0;
                 descriptorWrite.dstArrayElement = 0;
                 descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
                 descriptorWrite.descriptorCount = 1;
                 descriptorWrite.pBufferInfo = &bufferInfo;
-                descriptorWrite.pImageInfo = nullptr; // Optional
-                descriptorWrite.pTexelBufferView = nullptr; // Optional
-                descriptorWrite.dstSet = sets[i];
 
                 vkUpdateDescriptorSets(device, 1, &descriptorWrite, 0, nullptr);
             }

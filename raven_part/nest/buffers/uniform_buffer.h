@@ -24,7 +24,7 @@ namespace harpy::nest::buffers
 
         void set_ubo(ubo unif)
         {
-            memcpy(buffer_mem, &unif, sizeof(ubo));
+            memcpy(data, &unif, sizeof(ubo));
         }
 
         void* get_data(){return data;}

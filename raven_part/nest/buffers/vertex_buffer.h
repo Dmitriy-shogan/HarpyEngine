@@ -8,10 +8,10 @@ namespace harpy::nest::buffers {
   class vertex_buffer : public base_buffer
   {
    std::vector<vertex> vertices{
-      {{-0.5f, -0.5f, 0.0f}, {0,0,0},{1.0f, 0.0f, 0.0f}},
-      {{0.5f, -0.5f, 0.0f}, {0,0,0},{0.0f, 1.0f, 0.0f}},
-      {{0.5f, 0.5f, 0.0f}, {0,0,0},{0.0f, 0.0f, 1.0f}},
-      {{-0.5f, 0.5f, 0.0f},{0,0,0}, {1.0f, 1.0f, 1.0f}}
+      {{-0.5f, -0.5f,},{1.0f, 0.0f, 0.0f}},
+      {{0.5f, -0.5f},{0.0f, 1.0f, 0.0f}},
+      {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+      {{-0.5f, 0.5f},{1.0f, 1.0f, 1.0f}}
    };;
    
   public:

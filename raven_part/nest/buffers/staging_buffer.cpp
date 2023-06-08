@@ -20,3 +20,5 @@ void harpy::nest::buffers::staging_buffer::copy_into_buffer(index_buffer& buff)
     vkUnmapMemory(pool.get_vk_device(), buffer_mem);
     copy_buffer(buff, pool);
 }
+
+

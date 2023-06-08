@@ -12,6 +12,8 @@
 
 #include <command_buffer_controller/command_buffer_controller.h>
 
+#include <camera/camera_layout.h>
+
 namespace harpy{
 class renderer
 {
@@ -32,10 +34,14 @@ class renderer
     objects::base_object object{vulkan_backend, com_pool};
     nest::pipeline pipe{chain.get_render_pass()};
     nest::pools::command_pool com_pool{vulkan_backend.get_vk_device()};
+    nest::pools::command_pool com_copy_pool{vulkan_backend.get_vk_device(), nest::pools::command_pool_types::copy};
     nest::pools::descriptor_pool desc_pool{vulkan_backend.get_vk_device()};
     nest::descriptor desc{vulkan_backend.get_vk_device(), desc_pool};
     std::vector<nest::buffers::command_buffer> com_bufs{MAX_FRAMES_IN_FLIGHT, {vulkan_backend.get_vk_device(), com_pool}};
     nest::command_buffer_controller controller{chain, pipe};
+    nest::camera::camera_layout camera;
+    nest::ubo ub;
+    
     
     
     
@@ -57,11 +63,12 @@ public:
         vulkan_backend.connect_window(window, true);
         vulkan_backend.init();
         chain.init();
-        desc_pool.init();
-        desc.init();
+        desc.init_layout();
         pipe.init(desc);
         com_pool.init(vulkan_backend.find_queue_families(vulkan_backend.get_vk_physical_device(), vulkan_backend.get_vk_surface()));
         object.init();
+        desc_pool.init();
+        desc.init();
         for(auto& i :com_bufs)
         {
             i.init();
@@ -88,7 +95,12 @@ public:
         } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
             throw utilities::harpy_little_error("failed to acquire swap chain image!");
         }
-
+        //object.rotate(15, 1, 0, 0);
+        ub.model = object.get_model();
+        ub.view = camera.get_view();
+        ub.projection = nest::projection;
+        object.get_uniform_buffers()[frame].set_ubo(ub);
+        
         vkResetFences(vulkan_backend.get_vk_device(), 1, &fences_in_flight[frame]);
 
         vkResetCommandBuffer(com_bufs[frame], 0);

@@ -54,11 +54,6 @@ namespace harpy::nest
 
             VkPipelineVertexInputStateCreateInfo vertex_input_info{};
             vertex_input_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-            vertex_input_info.vertexBindingDescriptionCount = 0;
-            vertex_input_info.pVertexBindingDescriptions = nullptr; // Optional
-            vertex_input_info.vertexAttributeDescriptionCount = 0;
-            vertex_input_info.pVertexAttributeDescriptions = nullptr; // Optional
-
             auto bindingDescription = get_binding_description();
             auto attributeDescriptions = get_attributes_descriptions();
 
@@ -149,7 +144,6 @@ namespace harpy::nest
             pipelineInfo.renderPass = rend;
             pipelineInfo.subpass = 0;
             pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
-            pipelineInfo.basePipelineIndex = -1; // Optional
 
             if (vkCreateGraphicsPipelines(rend.get_vk_device(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &pipe) != VK_SUCCESS) {
                 throw std::runtime_error("failed to create graphics pipeline!");

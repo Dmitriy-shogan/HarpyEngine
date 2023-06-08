@@ -45,14 +45,6 @@ public:
         }
     }
 
-    command_pool& operator=(command_pool const& com_pool)
-    {
-        device = com_pool.device;
-        type = com_pool.type;
-        if(com_pool.pool) init(queue_families);
-        return *this;
-    }
-
     VkCommandPool& get_vk_command_pool(){return pool;}
     VkDevice& get_vk_device() override{return device;}
     command_pool_types get_type() {return type;}

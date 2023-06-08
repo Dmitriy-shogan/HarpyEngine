@@ -18,19 +18,19 @@ namespace harpy::objects
         {
             model = glm::rotate(model, glm::radians(angle),vec);
         };
-        void move(float angle, int x, int y, int z) override
+        void move(int x, int y, int z) override
         {
             model = glm::translate(model,  glm::vec3(x, y, z));
         };
-        void move(float angle, glm::vec3 vec) override
+        void move(glm::vec3 vec) override
         {
             model = glm::translate(model, vec);
         };
-        void scale(float angle, int x, int y, int z) override
+        void scale(int x, int y, int z) override
         {
             model = glm::scale(model, glm::vec3(x, y, z));
         };
-        void scale(float angle, glm::vec3 vec) override
+        void scale(glm::vec3 vec) override
         {
             model = glm::scale(model, vec);
         };

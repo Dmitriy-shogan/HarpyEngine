@@ -62,10 +62,8 @@ namespace harpy::nest
             create_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
             create_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
             
-            VkRenderPassBeginInfo renpass_info;
+            VkRenderPassBeginInfo renpass_info{};
             renpass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            renpass_info.pNext = nullptr;
-
             renpass_info.renderPass = chain.get_render_pass();
             renpass_info.renderArea.offset.x = 0;
             renpass_info.renderArea.offset.y = 0;

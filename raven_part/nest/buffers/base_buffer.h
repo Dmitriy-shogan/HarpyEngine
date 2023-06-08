@@ -66,7 +66,7 @@ namespace harpy::nest::buffers
             alloc_info.commandBufferCount = 1;
 
             VkCommandBuffer com_buf;
-            vkAllocateCommandBuffers(this->pool.get_vk_device(), &alloc_info, &com_buf);
+            vkAllocateCommandBuffers(this->vulkan_backend.get_vk_device(), &alloc_info, &com_buf);
 
             VkCommandBufferBeginInfo begin_info{};
             begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;

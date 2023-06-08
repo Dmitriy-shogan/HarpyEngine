@@ -12,8 +12,8 @@ namespace harpy::nest::buffers
     {
         
     public:
-        staging_buffer(pools::command_pool& pool, vulkan_spinal_cord& cord)
-            : base_buffer(pool, cord)
+        staging_buffer(pools::command_pool& copy_pool, vulkan_spinal_cord& cord)
+            : base_buffer(copy_pool, cord)
         {
         }
 

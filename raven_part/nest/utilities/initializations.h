@@ -70,7 +70,7 @@ namespace harpy::nest
 {
     struct vertex
     {
-        glm::vec3 position{};
+        glm::vec2 position{};
         /*glm::vec3 normal{};*/
         glm::vec3 color{};
     };
@@ -104,7 +104,7 @@ namespace harpy::nest
         std::array<VkVertexInputAttributeDescription, 2> attribute_descriptions{{}};
         attribute_descriptions[0].binding = 0;
         attribute_descriptions[0].location = 0;
-        attribute_descriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+        attribute_descriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
         attribute_descriptions[0].offset = offsetof(vertex, position);
 
         /*attribute_descriptions[1].binding = 0;
@@ -113,7 +113,7 @@ namespace harpy::nest
         attribute_descriptions[1].offset = offsetof(vertex, normal);*/
 
         attribute_descriptions[1].binding = 0;
-        attribute_descriptions[1].location = 2;
+        attribute_descriptions[1].location = 1;
         attribute_descriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
         attribute_descriptions[1].offset = offsetof(vertex, color);
         
@@ -123,9 +123,9 @@ namespace harpy::nest
 
     struct ubo
     {
-        glm::mat4 model;
-        glm::mat4 view;
-        glm::mat4 projection;
+       alignas(16) glm::mat4 model;
+       alignas(16) glm::mat4 view;
+       alignas(16) glm::mat4 projection;
     };
 
     static  glm::mat4  projection{1.0f};

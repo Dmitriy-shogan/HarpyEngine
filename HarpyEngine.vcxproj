@@ -104,6 +104,7 @@
     <ClCompile Include="raven_part\nest\buffers\staging_buffer.cpp" />
     <ClCompile Include="raven_part\nest\buffers\uniform_buffer.cpp" />
     <ClCompile Include="raven_part\nest\buffers\vertex_buffer.cpp" />
+    <ClCompile Include="raven_part\nest\camera\camera_layout.cpp" />
     <ClCompile Include="raven_part\nest\command_buffer_controller\command_buffer_controller.cpp" />
     <ClCompile Include="raven_part\nest\descriptor\descriptor.cpp" />
     <ClCompile Include="raven_part\nest\pipeline\pipeline.cpp">
@@ -369,6 +370,7 @@
     <ClInclude Include="raven_part\nest\buffers\staging_buffer.h" />
     <ClInclude Include="raven_part\nest\buffers\uniform_buffer.h" />
     <ClInclude Include="raven_part\nest\buffers\vertex_buffer.h" />
+    <ClInclude Include="raven_part\nest\camera\camera_layout.h" />
     <ClInclude Include="raven_part\nest\command_buffer_controller\command_buffer_controller.h" />
     <ClInclude Include="raven_part\nest\descriptor\descriptor.h" />
     <ClInclude Include="raven_part\nest\pipeline\pipeline.h" />

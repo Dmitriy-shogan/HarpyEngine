@@ -24,8 +24,6 @@ class base_object
 protected:
     glm::mat4 model{1.0f};
     
-
-    
 public:
     base_object(nest::vulkan_spinal_cord& cord, nest::pools::command_pool& com_pool) : vulkan_backend(cord), pool(com_pool)
     {
@@ -45,7 +43,32 @@ public:
     hbuffers::vertex_buffer& get_vertex_buffer(){return vertices;}
     hbuffers::index_buffer& get_index_buffer(){return indices;}
     std::vector<hbuffers::uniform_buffer>& get_uniform_buffers(){return uniforms;}
-    
+    glm::mat4 get_model(){return model;}
+
+    void rotate(float angle, int x, int y, int z) 
+    {
+        model = glm::rotate(model, glm::radians(angle), glm::vec3(x, y, z));
+    }
+    void rotate(float angle, glm::vec3 vec) 
+    {
+        model = glm::rotate(model, glm::radians(angle),vec);
+    };
+    void move(int x, int y, int z) 
+    {
+        model = glm::translate(model,  glm::vec3(x, y, z));
+    };
+    void move(glm::vec3 vec) 
+    {
+        model = glm::translate(model, vec);
+    };
+    void scale(int x, int y, int z) 
+    {
+        model = glm::scale(model, glm::vec3(x, y, z));
+    };
+    void scale(glm::vec3 vec) 
+    {
+        model = glm::scale(model, vec);
+    };
 };
 
 }
