@@ -40,8 +40,6 @@ class renderer
     std::vector<nest::buffers::command_buffer> com_bufs{MAX_FRAMES_IN_FLIGHT, {vulkan_backend.get_vk_device(), com_pool}};
     nest::command_buffer_controller controller{chain, pipe};
     nest::camera::camera_layout camera;
-    nest::ubo ub;
-    
     
     
     
@@ -92,10 +90,12 @@ public:
         if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
             chain.reinit();
             return;
-        } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
+        }
+        if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
             throw utilities::harpy_little_error("failed to acquire swap chain image!");
         }
         //object.rotate(15, 1, 0, 0);
+        nest::ubo ub{};
         ub.model = object.get_model();
         ub.view = camera.get_view();
         ub.projection = nest::projection;

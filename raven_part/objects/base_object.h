@@ -52,23 +52,23 @@ public:
     void rotate(float angle, glm::vec3 vec) 
     {
         model = glm::rotate(model, glm::radians(angle),vec);
-    };
+    }
     void move(int x, int y, int z) 
     {
         model = glm::translate(model,  glm::vec3(x, y, z));
-    };
+    }
     void move(glm::vec3 vec) 
     {
         model = glm::translate(model, vec);
-    };
+    }
     void scale(int x, int y, int z) 
     {
         model = glm::scale(model, glm::vec3(x, y, z));
-    };
+    }
     void scale(glm::vec3 vec) 
     {
         model = glm::scale(model, vec);
-    };
+    }
 };
 
 }

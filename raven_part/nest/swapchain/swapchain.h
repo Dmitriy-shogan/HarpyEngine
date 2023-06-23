@@ -181,6 +181,7 @@ namespace harpy::nest
             {
                 i.init(extent, image_views[f++]);
             }
+            change_projection(90, static_cast<float>(extent.width)/static_cast<float>(extent.height));
         }
 
         void reinit()

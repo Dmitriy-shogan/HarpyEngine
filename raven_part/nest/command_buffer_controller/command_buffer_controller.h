@@ -17,7 +17,7 @@ namespace harpy::nest
         
         buffers::command_buffer* connected_buffer;
         swapchain& chain;
-        pipeline& pipe;
+        pipeline* pipe;
 
         VkViewport dynamic_viewport;
         VkRect2D dynamic_scissors;
@@ -30,7 +30,7 @@ namespace harpy::nest
         command_buffer_controller(swapchain& chain, pipeline& pipe) :
         connected_buffer(nullptr),
         chain(chain),
-        pipe(pipe)
+        pipe(&pipe)
         {}
 
         //Free block. Free for controller means that we can use this functions even after closing buffer;
@@ -44,9 +44,9 @@ namespace harpy::nest
             clear_color.color = {r, g, b};
         }
 
-        void free_connect_pipeline(pipeline& pipe) const
+        void free_connect_pipeline(pipeline& pipe) 
         {
-            this->pipe = pipe;
+            this->pipe = &pipe;
         }
 
         //Auto disconnect last object, if user tries to connect new
@@ -78,8 +78,10 @@ namespace harpy::nest
                 throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "Can't start writing command buffer!");
 
             vkCmdBeginRenderPass(*connected_buffer, &renpass_info, VK_SUBPASS_CONTENTS_INLINE);
-            vkCmdBindPipeline(*connected_buffer,  VK_PIPELINE_BIND_POINT_GRAPHICS, pipe);
+            vkCmdBindPipeline(*connected_buffer,  VK_PIPELINE_BIND_POINT_GRAPHICS, *pipe);
 
+
+            //TODO: move viewport and scissor construction in counstructor
             dynamic_viewport.x = 0.0f;
             dynamic_viewport.y = 0.0f;
             dynamic_viewport.width = static_cast<float>(chain.get_vk_extent().width);
@@ -100,27 +102,28 @@ namespace harpy::nest
         {
             
             VkDeviceSize offsets[] = {0};
+            VkBuffer vertexBuffers[] = {buff.get_vk_buffer()};
             vkCmdBindVertexBuffers(*connected_buffer,
                 0,
                 1,
-                &buff.get_vk_buffer(),
+                vertexBuffers,
                 offsets);
 
             vkCmdBindIndexBuffer(*connected_buffer,
                 index.get_vk_buffer(),
                 0,
-                VK_INDEX_TYPE_UINT16);
+                VK_INDEX_TYPE_UINT32);
             
             vkCmdBindDescriptorSets(*connected_buffer,
                 VK_PIPELINE_BIND_POINT_GRAPHICS,
-                pipe.get_vk_pipeline_layout(),
+                pipe->get_vk_pipeline_layout(),
                 0,
                 1,
                 &descript.get_vk_descriptor_set()[frame],
                 0, nullptr);
 
             vkCmdDrawIndexed(*connected_buffer,
-                static_cast<uint32_t>(index.get_indices().size()),
+                index.get_indices().size(),
                 1,
                 0,
                 0,

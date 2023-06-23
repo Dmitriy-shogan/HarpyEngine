@@ -1,4 +1,4 @@
-﻿#pragma once
+﻿/*#pragma once
 #ifndef HARPY_GUI
 #define HARPY_GUI
 #include <nest/windowing/base_window_layout.h>
@@ -79,15 +79,15 @@ namespace harpy::gui {
 
                     vkDestroyDescriptorPool(_device, imguiPool, nullptr);
                     ImGui_ImplVulkan_Shutdown();
-                    });#1#
+                    });#2#
 
                 
                 is_initialised = true;
             }
-        }*/
+        }#1#
     
     };
     
 }
 
-#endif //HARPY_GUI
+#endif //HARPY_GUI*/

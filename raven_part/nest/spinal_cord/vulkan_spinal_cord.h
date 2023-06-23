@@ -44,6 +44,7 @@ namespace harpy::nest {
         VkInstance instance = nullptr;
         VkPhysicalDevice ph_device = nullptr;
         VkDevice device = nullptr;
+        //TODO: create queues base class, and parallel into graphics, present and transfer AT LEAST
         VkQueue graphics_queue = nullptr;
         VkQueue present_queue = nullptr;
 

@@ -8,7 +8,7 @@ namespace harpy::nest::buffers
 {
     class uniform_buffer : public base_buffer
     {
-        void* data;
+        void* data{};
     public:
         uniform_buffer(pools::command_pool& pool, vulkan_spinal_cord& cord)
             : base_buffer(pool, cord)
@@ -22,7 +22,7 @@ namespace harpy::nest::buffers
             vkMapMemory(pool.get_vk_device(), buffer_mem, 0, buffer_size, 0, &data);
         }
 
-        void set_ubo(ubo unif)
+        void set_ubo(ubo& unif)
         {
             memcpy(data, &unif, sizeof(ubo));
         }

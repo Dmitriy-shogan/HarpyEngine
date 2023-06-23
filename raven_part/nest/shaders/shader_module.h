@@ -36,7 +36,7 @@ namespace harpy::nest::shaders
             {
                  byte_code = utilities::read_file(filepath);
             }
-            catch(std::runtime_error& error)
+            catch(std::runtime_error&)
             {
                 throw utilities::harpy_little_error("Can't find correct spv shader file");
             }

@@ -78,14 +78,6 @@ namespace harpy::nest
         VkRenderPass& get_vk_render_pass(){return rend;}
         operator VkRenderPass&(){return rend;}
 
-        render_pass& operator=(render_pass const& rend)
-        {
-            this->rend = rend.rend;
-            device = rend.device;
-            format = rend.format;
-        }
-
-        
 
         ~render_pass() override
         {
