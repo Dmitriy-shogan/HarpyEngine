@@ -32,7 +32,7 @@
 //Defines goes here
 #define APP_VERSION VK_MAKE_API_VERSION(0,0,1,0)
 #define ENGINE_VERSION VK_MAKE_API_VERSION (0, 0, 1, 1)
-#define API_VERSION VK_MAKE_API_VERSION(0, 0, 1, 1)
+#define API_VERSION VK_MAKE_API_VERSION(0, 0, 1, 2)
 #define ENGINE_NAME "Harpy's engine"
 
 #define MAX_FRAMES_IN_FLIGHT 2
@@ -55,7 +55,16 @@
 #endif
 
 //Enums go here
-
+//TODO: make all bit-enums like:
+/*
+ * enum cool_bit_enum{
+ * first = 1,
+ * second = 1 << 1,
+ * third = 1 << 2,
+ * ...
+ * n = 1 << n - 1
+ * }
+ */
 
 //Here goes inline functions
 
@@ -93,9 +102,11 @@ namespace harpy::nest
         //Graphic family for displaying
         std::optional<uint32_t> present_families;
 
+        std::optional<uint32_t> transfer_families;
+
         bool is_completed() const
         {
-            return graphics_families.has_value() && present_families.has_value();
+            return graphics_families.has_value() && present_families.has_value() && transfer_families.has_value();
         }
     };
 

@@ -13,6 +13,8 @@ namespace harpy::utilities {
         not_init,
         wrong_init,
         error,
+        missing_file,
+        cant_find_file,
         we_are_fucked,
         harpys_eggs_under_attack = we_are_fucked,
      };

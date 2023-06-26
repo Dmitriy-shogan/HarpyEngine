@@ -16,7 +16,7 @@ namespace harpy::interfaces{
     class IRotatable
     {
     public:
-        void virtual rotate(float angle, int x, int y, int z) = 0;
+        void virtual rotate(float angle, float x, float y, float z) = 0;
         void virtual rotate(float angle, glm::vec3 vec) = 0;
 
         virtual ~IRotatable() = default;
@@ -25,7 +25,7 @@ namespace harpy::interfaces{
     class IScalable
     {
     public:
-        void virtual scale(int x, int y, int z) = 0;
+        void virtual scale(float x, float y, float z) = 0;
         void virtual scale(glm::vec3 vec) = 0;
 
         virtual ~IScalable() = default;
@@ -34,7 +34,7 @@ namespace harpy::interfaces{
     class IMoveable
     {
     public:
-        void virtual move(int x, int y, int z) = 0;
+        void virtual move(float x, float y, float z) = 0;
         void virtual move(glm::vec3 vec) = 0;
 
         virtual ~IMoveable() = default;

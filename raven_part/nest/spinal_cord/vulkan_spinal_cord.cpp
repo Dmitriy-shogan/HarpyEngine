@@ -3,38 +3,7 @@
 using namespace harpy::nest;
 using namespace harpy::utilities;
 
-needed_queues_families vulkan_spinal_cord::find_queue_families(VkPhysicalDevice& ph_device, VkSurfaceKHR& surface)
- {
-    ::needed_queues_families result{};
 
-    uint32_t queueFamilyCount = 0;
-    vkGetPhysicalDeviceQueueFamilyProperties(ph_device, &queueFamilyCount, nullptr);
-
-    std::vector<VkQueueFamilyProperties> queue_families(queueFamilyCount);
-    vkGetPhysicalDeviceQueueFamilyProperties(ph_device, &queueFamilyCount, queue_families.data());
-
-    for(int i = 0; auto f : queue_families)
-    {
-        if (f.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
-            result.graphics_families = i;
-        }
-
-        VkBool32 present_support = false;
-        vkGetPhysicalDeviceSurfaceSupportKHR(ph_device, i, surface, &present_support);
-
-        if (present_support) {
-            result.present_families = i;
-        }
-
-        if (result.is_completed()) {
-            break;
-        }
-
-        i++;
-    }
-
-    return result;
-}
 
 bool vulkan_spinal_cord::check_device_extension_support() const
 {
@@ -149,12 +118,15 @@ void vulkan_spinal_cord::init_ph_device()
     }
 }
 
-void vulkan_spinal_cord::init_device_and_queues()
+void vulkan_spinal_cord::init_devices()
 {
-    auto indices = find_queue_families(ph_device, connected_window_layout.get_VK_surface());
+    indices = find_queue_families(ph_device, connected_window_layout.get_VK_surface());
 
     std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
-    std::set<uint32_t> uniqueQueueFamilies = {indices.graphics_families.value(), indices.graphics_families.value()};
+    std::set<uint32_t> uniqueQueueFamilies = {indices.graphics_families.value(),
+        indices.graphics_families.value(),
+        indices.transfer_families.value()
+    };
 
     float queuePriority = 1.0f;
     
@@ -190,10 +162,6 @@ void vulkan_spinal_cord::init_device_and_queues()
     if (vkCreateDevice(ph_device, &createInfo, nullptr, &device) != VK_SUCCESS) {
         throw std::runtime_error("failed to create logical device!");
     }
-
-    
-    vkGetDeviceQueue(device, indices.present_families.value(), 0, &present_queue);
-     vkGetDeviceQueue(device, indices.graphics_families.value(), 0, &graphics_queue);
 }
 
 

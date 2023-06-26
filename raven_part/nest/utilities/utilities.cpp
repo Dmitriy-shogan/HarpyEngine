@@ -18,41 +18,6 @@ std::ostream& harpy::utilities::operator<<(std::ostream& out, nest::vertex& vert
     return out;
 }
 
-void harpy::utilities::vk_copy_buffer(VkBuffer src, VkBuffer dst, VkDeviceSize size, VkDevice& device,
-    VkCommandPool& pool, VkQueue transfer_queue)
-{
-    VkCommandBufferAllocateInfo allocInfo{};
-    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    allocInfo.commandPool = pool;
-    allocInfo.commandBufferCount = 1;
-
-    VkCommandBuffer commandBuffer;
-    vkAllocateCommandBuffers(device, &allocInfo, &commandBuffer);
-
-    VkCommandBufferBeginInfo beginInfo{};
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-    vkBeginCommandBuffer(commandBuffer, &beginInfo);
-
-    VkBufferCopy copyRegion{};
-    copyRegion.size = size;
-    vkCmdCopyBuffer(commandBuffer, src, dst, 1, &copyRegion);
-
-    vkEndCommandBuffer(commandBuffer);
-
-    VkSubmitInfo submitInfo{};
-    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &commandBuffer;
-
-    vkQueueSubmit(transfer_queue, 1, &submitInfo, VK_NULL_HANDLE);
-    vkQueueWaitIdle(transfer_queue);
-
-    vkFreeCommandBuffers(device, pool, 1, &commandBuffer);
-}
-
 uint32_t harpy::utilities::find_memory_types(VkPhysicalDevice& device, uint32_t typeFilter,
                                              VkMemoryPropertyFlags properties)
 {
@@ -66,4 +31,43 @@ uint32_t harpy::utilities::find_memory_types(VkPhysicalDevice& device, uint32_t 
     }
 
     throw harpy_little_error("failed to find suitable memory type!");
+}
+
+harpy::nest::needed_queues_families harpy::utilities::find_queue_families(VkPhysicalDevice& ph_device,
+    VkSurfaceKHR& surface)
+{
+    nest::needed_queues_families result{};
+
+    uint32_t queueFamilyCount = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(ph_device, &queueFamilyCount, nullptr);
+
+    std::vector<VkQueueFamilyProperties> queue_families(queueFamilyCount);
+    vkGetPhysicalDeviceQueueFamilyProperties(ph_device, &queueFamilyCount, queue_families.data());
+
+    for(int i = 0; auto f : queue_families)
+    {
+        if (f.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
+            result.graphics_families = i;
+        }
+
+        VkBool32 present_support = false;
+        vkGetPhysicalDeviceSurfaceSupportKHR(ph_device, i, surface, &present_support);
+
+        if (present_support) {
+            result.present_families = i;
+        }
+
+        if(f.queueFlags & VK_QUEUE_TRANSFER_BIT)
+        {
+            result.transfer_families = i;
+        }
+
+        if (result.is_completed()) {
+            break;
+        }
+
+        i++;
+    }
+
+    return result;
 }

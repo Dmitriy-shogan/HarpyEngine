@@ -19,8 +19,8 @@ namespace harpy::nest
         swapchain& chain;
         pipeline* pipe;
 
-        VkViewport dynamic_viewport;
-        VkRect2D dynamic_scissors;
+        VkViewport dynamic_viewport{};
+        VkRect2D dynamic_scissors{{},{}};
         
         VkClearValue clear_color{{{0.0f,0.0f,0.0f,1.0f}}};
         bool ended_last = true;
@@ -57,7 +57,22 @@ namespace harpy::nest
                 disconnect();
             }
             connected_buffer = &buff;
-            
+
+            if(dynamic_viewport.height == 0 || dynamic_viewport.width == 0)
+            {
+                dynamic_viewport.x = 0.0f;
+                dynamic_viewport.y = 0.0f;
+                dynamic_viewport.width = static_cast<float>(chain.get_vk_extent().width);
+                dynamic_viewport.height = static_cast<float>(chain.get_vk_extent().height);
+                dynamic_viewport.minDepth = 0.0f;
+                dynamic_viewport.maxDepth = 1.0f;
+            }
+
+            if (dynamic_scissors.extent.width == 0 || dynamic_scissors.extent.height == 0)
+            {
+                dynamic_scissors.offset = {0, 0};
+                dynamic_scissors.extent = chain.get_vk_extent();
+            }
             VkCommandBufferBeginInfo create_info{};
             create_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
             create_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
@@ -80,18 +95,8 @@ namespace harpy::nest
             vkCmdBeginRenderPass(*connected_buffer, &renpass_info, VK_SUBPASS_CONTENTS_INLINE);
             vkCmdBindPipeline(*connected_buffer,  VK_PIPELINE_BIND_POINT_GRAPHICS, *pipe);
 
-
-            //TODO: move viewport and scissor construction in counstructor
-            dynamic_viewport.x = 0.0f;
-            dynamic_viewport.y = 0.0f;
-            dynamic_viewport.width = static_cast<float>(chain.get_vk_extent().width);
-            dynamic_viewport.height = static_cast<float>(chain.get_vk_extent().height);
-            dynamic_viewport.minDepth = 0.0f;
-            dynamic_viewport.maxDepth = 1.0f;
-            vkCmdSetViewport(*connected_buffer, 0, 1, &dynamic_viewport);
             
-            dynamic_scissors.offset = {0, 0};
-            dynamic_scissors.extent = chain.get_vk_extent();
+            vkCmdSetViewport(*connected_buffer, 0, 1, &dynamic_viewport);
             vkCmdSetScissor(*connected_buffer, 0, 1, &dynamic_scissors);
 
             ended_last = false;
@@ -100,7 +105,6 @@ namespace harpy::nest
         
         void draw(buffers::vertex_buffer& buff, buffers::index_buffer& index, descriptor& descript, int frame)
         {
-            
             VkDeviceSize offsets[] = {0};
             VkBuffer vertexBuffers[] = {buff.get_vk_buffer()};
             vkCmdBindVertexBuffers(*connected_buffer,

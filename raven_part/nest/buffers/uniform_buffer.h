@@ -10,8 +10,8 @@ namespace harpy::nest::buffers
     {
         void* data{};
     public:
-        uniform_buffer(pools::command_pool& pool, vulkan_spinal_cord& cord)
-            : base_buffer(pool, cord)
+        uniform_buffer(pools::command_pool& pool, vulkan_spinal_cord& cord, queues::transfer_queue* queue)
+            : base_buffer(pool, cord, queue)
         {
             buffer_size = sizeof(ubo);
         }

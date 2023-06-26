@@ -12,10 +12,11 @@ class base_object
 {
     //TESTING BLOCK
     nest::vulkan_spinal_cord& vulkan_backend;
+    nest::queues::transfer_queue* queue;
     nest::pools::command_pool& pool;
     
-    hbuffers::vertex_buffer vertices{pool, vulkan_backend};
-    hbuffers::index_buffer indices{pool, vulkan_backend};
+    hbuffers::vertex_buffer vertices{pool, vulkan_backend, queue};
+    hbuffers::index_buffer indices{pool, vulkan_backend, queue};
     std::vector<hbuffers::uniform_buffer> uniforms;
     
     
@@ -25,9 +26,15 @@ protected:
     glm::mat4 model{1.0f};
     
 public:
-    base_object(nest::vulkan_spinal_cord& cord, nest::pools::command_pool& com_pool) : vulkan_backend(cord), pool(com_pool)
+    base_object(nest::vulkan_spinal_cord& cord,
+        nest::pools::command_pool& com_pool,
+        nest::queues::transfer_queue* queue)
+    :
+    vulkan_backend(cord),
+    pool(com_pool),
+    queue(queue)
     {
-        uniforms.resize(MAX_FRAMES_IN_FLIGHT, {pool, vulkan_backend});
+        uniforms.resize(MAX_FRAMES_IN_FLIGHT, {pool, vulkan_backend, queue});
     }
 
     void init()

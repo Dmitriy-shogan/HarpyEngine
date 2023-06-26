@@ -18,11 +18,11 @@ harpy::utilities::harpy_little_error::harpy_little_error(error_severity severity
 void harpy::utilities::harpy_little_error::log_this()
 {
     using namespace std;
-    ofstream log(todays_date + " log№" + to_string(log_number) + ".txt", ios_base::app);
+    ofstream log(todays_date + " log№" + to_string(log_number++) + ".txt", ios_base::app);
     if(!log.is_open())
     {
-        ofstream create_file(todays_date + " log.txt");
-        log.open(todays_date + " log.txt");
+        ofstream create_file(todays_date + " log№" + to_string(log_number++) + " log.txt");
+        log.open(todays_date + " log№" + to_string(log_number++) + " log.txt");
         create_file.close();
     }
     string sever;
@@ -83,6 +83,16 @@ void harpy::utilities::harpy_little_error::show()
     case INTCAST(error_severity::just_notate_dude):
         {
             sever = "Notate, man, chill";
+            break;
+        }
+    case INTCAST(error_severity::cant_find_file):
+        {
+            sever = "Missing file, can't find";
+            break;
+        }
+    case INTCAST(error_severity::missing_file):
+        {
+            sever = "File disappeared";
             break;
         }
     case INTCAST(error_severity::message):

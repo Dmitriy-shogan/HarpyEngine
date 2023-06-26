@@ -183,11 +183,16 @@
     </ClCompile>
     <ClCompile Include="raven_part\nest\pools\command_pool.cpp" />
     <ClCompile Include="raven_part\nest\pools\descriptor_pool.cpp" />
+    <ClCompile Include="raven_part\nest\queues\base_queue.cpp" />
+    <ClCompile Include="raven_part\nest\queues\graphics_queue.cpp" />
+    <ClCompile Include="raven_part\nest\queues\present_queue.cpp" />
+    <ClCompile Include="raven_part\nest\queues\transfer_queue.cpp" />
     <ClCompile Include="raven_part\nest\render_pass\render_pass.cpp" />
     <ClCompile Include="raven_part\nest\shaders\base_shader.cpp" />
     <ClCompile Include="raven_part\nest\shaders\shader_module.cpp" />
     <ClCompile Include="raven_part\nest\swapchain\swapchain.cpp" />
-    <ClCompile Include="raven_part\nest\threading\harpy_semaphore.cpp" />
+    <ClCompile Include="raven_part\nest\texturing\base_texture.cpp" />
+    <ClCompile Include="raven_part\nest\threading\semaphore.cpp" />
     <ClCompile Include="raven_part\nest\utilities\delta_timer.cpp" />
     <ClCompile Include="raven_part\nest\utilities\harpy_little_error.cpp" />
     <ClCompile Include="raven_part\nest\utilities\initializations.cpp" />
@@ -345,18 +350,12 @@
     <ClCompile Include="raven_part\objects\base_cube.cpp" />
     <ClCompile Include="raven_part\objects\base_object.cpp" />
     <ClCompile Include="raven_part\renderer\renderer.cpp" />
-    <ClCompile Include="third_party_services\include\imgui\imgui.cpp" />
-    <ClCompile Include="third_party_services\include\imgui\imgui_demo.cpp" />
-    <ClCompile Include="third_party_services\include\imgui\imgui_draw.cpp" />
-    <ClCompile Include="third_party_services\include\imgui\imgui_impl_glfw.cpp" />
-    <ClCompile Include="third_party_services\include\imgui\imgui_impl_vulkan.cpp" />
-    <ClCompile Include="third_party_services\include\imgui\imgui_tables.cpp" />
-    <ClCompile Include="third_party_services\include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Conspect.txt" />
     <Content Include="glsl_to_spiv.bat" />
+    <Content Include="human_part\Note for humans.md" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="human_part\GUI\base_gui_layout.h" />
@@ -377,11 +376,16 @@
     <ClInclude Include="raven_part\nest\pools\command_pool.h" />
     <ClInclude Include="raven_part\nest\interfaces\interfaces.h" />
     <ClInclude Include="raven_part\nest\pools\descriptor_pool.h" />
+    <ClInclude Include="raven_part\nest\queues\base_queue.h" />
+    <ClInclude Include="raven_part\nest\queues\graphics_queue.h" />
+    <ClInclude Include="raven_part\nest\queues\present_queue.h" />
+    <ClInclude Include="raven_part\nest\queues\transfer_queue.h" />
     <ClInclude Include="raven_part\nest\render_pass\render_pass.h" />
     <ClInclude Include="raven_part\nest\shaders\base_shader.h" />
     <ClInclude Include="raven_part\nest\shaders\shader_module.h" />
     <ClInclude Include="raven_part\nest\swapchain\swapchain.h" />
-    <ClInclude Include="raven_part\nest\threading\harpy_semaphore.h" />
+    <ClInclude Include="raven_part\nest\texturing\base_texture.h" />
+    <ClInclude Include="raven_part\nest\threading\semaphore.h" />
     <ClInclude Include="raven_part\nest\utilities\delegate.h" />
     <ClInclude Include="raven_part\nest\utilities\delta_timer.h" />
     <ClInclude Include="raven_part\nest\utilities\property.h" />
@@ -395,14 +399,9 @@
     <ClInclude Include="raven_part\objects\base_cube.h" />
     <ClInclude Include="raven_part\objects\base_object.h" />
     <ClInclude Include="raven_part\renderer\renderer.h" />
-    <ClInclude Include="third_party_services\include\imgui\imconfig.h" />
-    <ClInclude Include="third_party_services\include\imgui\imgui.h" />
-    <ClInclude Include="third_party_services\include\imgui\imgui_impl_glfw.h" />
-    <ClInclude Include="third_party_services\include\imgui\imgui_impl_vulkan.h" />
-    <ClInclude Include="third_party_services\include\imgui\imgui_internal.h" />
-    <ClInclude Include="third_party_services\include\imgui\imstb_rectpack.h" />
-    <ClInclude Include="third_party_services\include\imgui\imstb_textedit.h" />
-    <ClInclude Include="third_party_services\include\imgui\imstb_truetype.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="third_party_services\include" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -438,6 +437,7 @@
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -462,6 +462,9 @@
     <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath);</ExecutablePath>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath); nest/;</IncludePath>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath); nest/;</ExternalIncludePath>
+    <OutDir>HarpyExecutable\</OutDir>
+    <TargetName>HarpyEngine$(Version)</TargetName>
+    <CopyLocalDeploymentContent>true</CopyLocalDeploymentContent>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -518,7 +521,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>nest;game_logic;third_party_services\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>raven_part;raven_part\nest;game_logic;third_party_services\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

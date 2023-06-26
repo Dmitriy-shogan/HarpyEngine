@@ -5,43 +5,44 @@
 
 namespace harpy::nest::threading
 {
-        class harpy_semaphore
+        //TODO: make harpy threading instead of vulkan threading. Fences, semaphores and barriers.
+        class semaphore
         {
-            VkSemaphore semaphore{};
+            VkSemaphore vk_semaphore{nullptr};
             VkDevice device{nullptr};
-            bool free{true};
+            bool is_free{true};
         public:
-            harpy_semaphore() = delete;
-            harpy_semaphore(VkDevice device) : device(device)
+            semaphore() = delete;
+            semaphore(VkDevice device) : device(device)
             {
             
                 VkSemaphoreCreateInfo semaphoreInfo{};
                 semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-                if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &semaphore) != VK_SUCCESS) {
+                if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &vk_semaphore) != VK_SUCCESS) {
 
                     throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create semaphores!");
                 }
             }
             void use()
             {
-                free = false;
+                is_free = false;
             }
-            void make_free()
+            void free()
             {
-                free = true;
+                is_free = true;
             }
-            bool is_free() const
+            bool is_is_free() const
             {
-                return free;
+                return is_free;
             }
-            ~harpy_semaphore()
+            ~semaphore()
             {
-                vkDestroySemaphore(device, semaphore, nullptr);
+                vkDestroySemaphore(device, vk_semaphore, nullptr);
             }
 
             operator VkSemaphore&() 
             {
-                return semaphore;
+                return vk_semaphore;
             }
         };
 }

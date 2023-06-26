@@ -14,6 +14,9 @@
 
 #include <camera/camera_layout.h>
 
+#include "queues/graphics_queue.h"
+#include "queues/present_queue.h"
+
 namespace harpy{
 class renderer
 {
@@ -31,7 +34,10 @@ class renderer
     
     //TEMPORARY
     nest::windowing::base_window_layout window;
-    objects::base_object object{vulkan_backend, com_pool};
+    nest::queues::transfer_queue transfer{vulkan_backend};
+    nest::queues::graphics_queue graphics{vulkan_backend};
+    nest::queues::present_queue present{vulkan_backend};
+    objects::base_object object{vulkan_backend, com_pool, &transfer};
     nest::pipeline pipe{chain.get_render_pass()};
     nest::pools::command_pool com_pool{vulkan_backend.get_vk_device()};
     nest::pools::command_pool com_copy_pool{vulkan_backend.get_vk_device(), nest::pools::command_pool_types::copy};
@@ -40,6 +46,8 @@ class renderer
     std::vector<nest::buffers::command_buffer> com_bufs{MAX_FRAMES_IN_FLIGHT, {vulkan_backend.get_vk_device(), com_pool}};
     nest::command_buffer_controller controller{chain, pipe};
     nest::camera::camera_layout camera;
+    nest::ubo ub{};
+    
     
     
     
@@ -60,10 +68,13 @@ public:
         vulkan_backend.init_instance();
         vulkan_backend.connect_window(window, true);
         vulkan_backend.init();
+        transfer.init();
+        graphics.init();
+        present.init();
         chain.init();
         desc.init_layout();
         pipe.init(desc);
-        com_pool.init(vulkan_backend.find_queue_families(vulkan_backend.get_vk_physical_device(), vulkan_backend.get_vk_surface()));
+        com_pool.init(&transfer);
         object.init();
         desc_pool.init();
         desc.init();
@@ -94,8 +105,8 @@ public:
         if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
             throw utilities::harpy_little_error("failed to acquire swap chain image!");
         }
-        //object.rotate(15, 1, 0, 0);
-        nest::ubo ub{};
+        //camera.move(0.05, 0.05, 0.05);
+        object.rotate(1, 0, 0, 1);
         ub.model = object.get_model();
         ub.view = camera.get_view();
         ub.projection = nest::projection;
@@ -126,7 +137,7 @@ public:
         submitInfo.signalSemaphoreCount = 1;
         submitInfo.pSignalSemaphores = signalSemaphores;
 
-        if (vkQueueSubmit(vulkan_backend.get_vk_present_queue(), 1, &submitInfo, fences_in_flight[frame]) != VK_SUCCESS) {
+        if (vkQueueSubmit(present.get_vk_queue(), 1, &submitInfo, fences_in_flight[frame]) != VK_SUCCESS) {
             throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to submit draw command buffer!");
         }
 
@@ -142,7 +153,7 @@ public:
 
         presentInfo.pImageIndices = &image_index;
 
-        result = vkQueuePresentKHR(vulkan_backend.get_vk_graphics_queue(), &presentInfo);
+        result = vkQueuePresentKHR(graphics.get_vk_queue(), &presentInfo);
 
         if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || window.get_resize()) {
             window.get_resize() = false;

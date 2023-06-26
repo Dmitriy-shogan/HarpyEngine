@@ -21,7 +21,7 @@ namespace harpy::nest::camera
             coordinates += vec;
             view = glm::lookAt(coordinates, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
         }
-        void move(int x, int y, int z) override
+        void move(float x, float y, float z) override
         {
             coordinates += glm::vec3{x, y, z};
             view = glm::lookAt(coordinates, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -31,7 +31,7 @@ namespace harpy::nest::camera
         {
             view = glm::rotate(view, glm::radians(angle), vec);
         }
-        void rotate(float angle, int x, int y, int z) override
+        void rotate(float angle, float x, float y, float z) override
         {
             view = glm::rotate(view, glm::radians(angle), glm::vec3{x,y,z});
         }

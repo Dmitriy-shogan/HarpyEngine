@@ -10,7 +10,7 @@ namespace harpy::objects
         
     public:
         
-        void rotate(float angle, int x, int y, int z) override
+        void rotate(float angle, float x, float y, float z) override
         {
             model = glm::rotate(model, glm::radians(angle), glm::vec3(x, y, z));
         }
@@ -18,7 +18,7 @@ namespace harpy::objects
         {
             model = glm::rotate(model, glm::radians(angle),vec);
         };
-        void move(int x, int y, int z) override
+        void move(float x, float y, float z) override
         {
             model = glm::translate(model,  glm::vec3(x, y, z));
         };
@@ -26,7 +26,7 @@ namespace harpy::objects
         {
             model = glm::translate(model, vec);
         };
-        void scale(int x, int y, int z) override
+        void scale(float x, float y, float z) override
         {
             model = glm::scale(model, glm::vec3(x, y, z));
         };
