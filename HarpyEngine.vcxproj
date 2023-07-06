@@ -101,7 +101,6 @@
     <ClCompile Include="raven_part\nest\buffers\command_buffer.cpp" />
     <ClCompile Include="raven_part\nest\buffers\framebuffer.cpp" />
     <ClCompile Include="raven_part\nest\buffers\index_buffer.cpp" />
-    <ClCompile Include="raven_part\nest\buffers\staging_buffer.cpp" />
     <ClCompile Include="raven_part\nest\buffers\uniform_buffer.cpp" />
     <ClCompile Include="raven_part\nest\buffers\vertex_buffer.cpp" />
     <ClCompile Include="raven_part\nest\camera\camera_layout.cpp" />
@@ -345,18 +344,12 @@
     <ClCompile Include="raven_part\objects\base_cube.cpp" />
     <ClCompile Include="raven_part\objects\base_object.cpp" />
     <ClCompile Include="raven_part\renderer\renderer.cpp" />
-    <ClCompile Include="third_party_services\include\imgui\imgui.cpp" />
-    <ClCompile Include="third_party_services\include\imgui\imgui_demo.cpp" />
-    <ClCompile Include="third_party_services\include\imgui\imgui_draw.cpp" />
-    <ClCompile Include="third_party_services\include\imgui\imgui_impl_glfw.cpp" />
-    <ClCompile Include="third_party_services\include\imgui\imgui_impl_vulkan.cpp" />
-    <ClCompile Include="third_party_services\include\imgui\imgui_tables.cpp" />
-    <ClCompile Include="third_party_services\include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Conspect.txt" />
     <Content Include="glsl_to_spiv.bat" />
+    <Content Include="materials for developers\Roadmap till beta RU.md" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="human_part\GUI\base_gui_layout.h" />
@@ -367,7 +360,6 @@
     <ClInclude Include="raven_part\nest\buffers\command_buffer.h" />
     <ClInclude Include="raven_part\nest\buffers\framebuffer.h" />
     <ClInclude Include="raven_part\nest\buffers\index_buffer.h" />
-    <ClInclude Include="raven_part\nest\buffers\staging_buffer.h" />
     <ClInclude Include="raven_part\nest\buffers\uniform_buffer.h" />
     <ClInclude Include="raven_part\nest\buffers\vertex_buffer.h" />
     <ClInclude Include="raven_part\nest\camera\camera_layout.h" />
@@ -395,14 +387,9 @@
     <ClInclude Include="raven_part\objects\base_cube.h" />
     <ClInclude Include="raven_part\objects\base_object.h" />
     <ClInclude Include="raven_part\renderer\renderer.h" />
-    <ClInclude Include="third_party_services\include\imgui\imconfig.h" />
-    <ClInclude Include="third_party_services\include\imgui\imgui.h" />
-    <ClInclude Include="third_party_services\include\imgui\imgui_impl_glfw.h" />
-    <ClInclude Include="third_party_services\include\imgui\imgui_impl_vulkan.h" />
-    <ClInclude Include="third_party_services\include\imgui\imgui_internal.h" />
-    <ClInclude Include="third_party_services\include\imgui\imstb_rectpack.h" />
-    <ClInclude Include="third_party_services\include\imgui\imstb_textedit.h" />
-    <ClInclude Include="third_party_services\include\imgui\imstb_truetype.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="third_party_services\include\" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
