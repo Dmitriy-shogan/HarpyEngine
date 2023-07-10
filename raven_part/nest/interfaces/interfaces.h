@@ -1,7 +1,7 @@
 ﻿#pragma once
 #ifndef HARPY_INTERFACES
 #define HARPY_INTERFACES
-
+#include <utilities/initializations.h>
 namespace harpy::interfaces{
 
     //I just really love how the second letter looks big with I before it

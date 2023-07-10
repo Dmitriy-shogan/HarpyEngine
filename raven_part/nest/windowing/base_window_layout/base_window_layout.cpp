@@ -1,7 +1,8 @@
-﻿#include "..//base_window_layout.h"
+﻿#include "../base_window_layout.h"
 
+#include <renderer_context/renderer_context.h>
 
-void harpy::nest::windowing::base_window_layout::init_window()
+void harpy::nest::base_window_layout::init_window()
 {
     glfw_window = glfwCreateWindow(800, 600, "Cool title", nullptr, nullptr);
     
@@ -9,37 +10,43 @@ void harpy::nest::windowing::base_window_layout::init_window()
     glfwSetFramebufferSizeCallback(glfw_window, base_framebuffer_resize);
 }
 
-void harpy::nest::windowing::base_window_layout::init_surface(VkInstance& instance)
+void harpy::nest::base_window_layout::init_surface()
 {
-    if (glfwCreateWindowSurface(instance, glfw_window, nullptr, &surface) != VK_SUCCESS) {
+    if (glfwCreateWindowSurface(r_context->spinal_cord->instance, glfw_window, nullptr, &surface) != VK_SUCCESS) {
         throw std::runtime_error("failed to create window surface!");
     }
 }
 
-void harpy::nest::windowing::base_window_layout::init_all(VkInstance& instance)
+void harpy::nest::base_window_layout::init(renderer_context * r_context)
 {
+	//this->cord = cord;
+	this->r_context = r_context;
     init_window();
-    init_surface(instance);
+    init_surface();
 }
 
-GLFWwindow*& harpy::nest::windowing::base_window_layout::get_glfw_window() 
+GLFWwindow*& harpy::nest::base_window_layout::get_glfw_window()
 {return glfw_window;}
 
-VkSurfaceKHR& harpy::nest::windowing::base_window_layout::get_VK_surface()
+VkSurfaceKHR& harpy::nest::base_window_layout::get_VK_surface()
 {
     return surface;
 }
 
-harpy::nest::windowing::base_window_layout::~base_window_layout()
+harpy::nest::base_window_layout::~base_window_layout()
 {
-    glfwDestroyWindow(glfw_window);
+	if (!r_context) return;
+	if(surface)
+	vkDestroySurfaceKHR(r_context->spinal_cord->instance, surface, nullptr);
+	if(glfw_window)
+	glfwDestroyWindow(glfw_window);
 }
 
-void harpy::nest::windowing::base_window_layout::base_framebuffer_resize(GLFWwindow* window, int width, int height)
+void harpy::nest::base_window_layout::base_framebuffer_resize(GLFWwindow* window, int width, int height)
 {
     auto app = reinterpret_cast<base_window_layout*>(glfwGetWindowUserPointer(window));
     app->resized = true;
 }
 
-bool& harpy::nest::windowing::base_window_layout::get_resize()
+bool& harpy::nest::base_window_layout::get_resize()
 { return resized; }

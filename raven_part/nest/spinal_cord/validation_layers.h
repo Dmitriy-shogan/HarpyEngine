@@ -2,7 +2,7 @@
 #ifndef HARPY_VALIDATION_LAYERS
 #define HARPY_VALIDATION_LAYERS
 #include<utilities/initializations.h>
-
+#include <vector>
 
 namespace harpy::nest {
 class validation_layers

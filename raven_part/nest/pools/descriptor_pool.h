@@ -2,7 +2,7 @@
 #ifndef HARPY_POOLS_DESCRIPTOR
 #define HARPY_POOLS_DESCRIPTOR
 #include <utilities/harpy_little_error.h>
-
+#include <utilities/utilities.h>
 namespace harpy::nest::pools
 {
     class descriptor_pool

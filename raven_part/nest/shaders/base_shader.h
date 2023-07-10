@@ -2,7 +2,7 @@
 #ifndef HARPY_BASE_SHADER
 #define HARPY_BASE_SHADER
 #include <shaders/shader_module.h>
-
+#include <utilities/utilities.h>
 namespace harpy::nest::shaders
 {
     class base_shader

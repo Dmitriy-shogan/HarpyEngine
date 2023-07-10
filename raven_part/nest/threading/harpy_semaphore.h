@@ -2,7 +2,7 @@
 #ifndef HARPY_THREADING_SEMAPHORE
 #define HARPY_THREADING_SEMAPHORE
 #include <utilities/harpy_little_error.h>
-
+#include <utilities/utilities.h>
 namespace harpy::nest::threading
 {
         class harpy_semaphore

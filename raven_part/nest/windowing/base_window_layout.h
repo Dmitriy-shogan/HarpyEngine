@@ -1,21 +1,25 @@
 ﻿#pragma once
 #ifndef HARPY_WINDOW_LAYOUT
 #define HARPY_WINDOW_LAYOUT
-#include <utilities/initializations.h>
+//#include <utilities/initializations.h>
+#include "../spinal_cord/vulkan_spinal_cord.h"
+#include <renderer_context/renderer_context.h>
+#include <memory>
+using namespace harpy::nest;
+namespace harpy::nest{
 
-
-namespace harpy::nest::windowing{
-
-    class hard_level_vulkan;
-    class base_window_layout
+    //class hard_level_vulkan;
+    struct base_window_layout
     {
-        friend hard_level_vulkan;
+        //friend hard_level_vulkan;
+    	nest::renderer_context * r_context;
+        //std::shared_ptr<vulkan_spinal_cord> cord;
         GLFWwindow* glfw_window{nullptr};
         VkSurfaceKHR surface {nullptr};
         bool resized {false};
 
         void init_window();
-        void init_surface(VkInstance& instance);
+        void init_surface();
 
        
         
@@ -23,7 +27,7 @@ namespace harpy::nest::windowing{
 
         GLFWwindow*& get_glfw_window();
         VkSurfaceKHR& get_VK_surface();
-        void init_all(VkInstance& instance);
+        void init(renderer_context * r_context);
         
 
         base_window_layout() = default;

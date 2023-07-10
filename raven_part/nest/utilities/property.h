@@ -2,7 +2,9 @@
 #define HARPY_PROPERTY
 
 #include <utilities/harpy_little_error.h>
-
+#include <utilities/utilities.h>
+#include <exception>
+#include <functional>
 #define st ::std::
 
 namespace harpy::utilities

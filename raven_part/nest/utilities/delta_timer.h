@@ -3,7 +3,8 @@
 #define HARPY_DELTA_TIMER
 #include <utilities/harpy_little_error.h>
 #include <utilities/property.h>
-
+#include <utilities/utilities.h>
+#include <functional>
 
 namespace harpy::utilities {
     

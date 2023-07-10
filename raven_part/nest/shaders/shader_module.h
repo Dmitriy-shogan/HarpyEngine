@@ -2,7 +2,7 @@
 #ifndef HARPY_SHADERS_MODULE
 #define HARPY_SHADERS_MODULE
 #include <utilities/harpy_little_error.h>
-
+#include <utilities/utilities.h>
 
 namespace harpy::nest::shaders
 {

@@ -8,17 +8,21 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
-#include <vector>
+
 #include <optional>
 #include <string>
+#include <vector>
 #include <set>
 #include <cstdint>
 #include <stdexcept>
 #include <chrono>
 #include <ctime>
-#include <format>
+//#include <format>
 #include <functional>
 #include <array>
+//libfmt
+#include <fmt/core.h>
+#include <fmt/ranges.h>
 
 //GLFW libraries
 #define GLFW_INCLUDE_VULKAN
@@ -95,6 +99,7 @@ namespace harpy::nest
 
         bool is_completed() const
         {
+
             return graphics_families.has_value() && present_families.has_value();
         }
     };

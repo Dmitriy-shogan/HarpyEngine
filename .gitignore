@@ -1,0 +1,16 @@
+CMakeFiles
+CMake
+Makefile
+cmake_install.cmake
+CMakeCache.txt
+build
+.project
+.cproject
+.settings
+Testing
+
+libharpy_engine_library.a
+harpy_engine_binary
+
+harpy_engine.layout
+harpy_engine.cbp
