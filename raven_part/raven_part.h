@@ -11,13 +11,15 @@
 #include <mutex>
 #include <vector>
 #include <memory>
+#include <atomic>
+
 #include <ECS/Entity.h>
 //using namespace harpy::human_part::ECS;
 namespace harpy::raven_part{
 	struct object_source{
 		std::mutex lock;
-		bool consumed;
-		std::shared_ptr<std::vector<human_part::ECS::Entity>> entities;
+		std::atomic_flag consumed;
+		std::shared_ptr<std::vector<human_part::ECS::Entity*>> entities;
 		object_source() = default;
 	};
 }

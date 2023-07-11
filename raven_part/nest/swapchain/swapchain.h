@@ -24,8 +24,10 @@ namespace harpy::nest
     	renderer_context * r_context;
         VkSwapchainKHR chain = nullptr;
 
+        std::vector<VkFramebuffer> fbs;
         std::vector<VkImageView> image_views;
         std::vector<VkImage> images;
+        std::vector<VkSemaphore> image_sems;
 
         VkSurfaceFormatKHR surface_format{};
         VkPresentModeKHR present_mode{};
@@ -35,6 +37,7 @@ namespace harpy::nest
         VkExtent2D choose_swap_extent();
         VkSurfaceFormatKHR choose_swapchain_format ();
         VkPresentModeKHR choose_swap_present_mode();
+
 
 
         void init_image_views();

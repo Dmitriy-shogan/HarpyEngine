@@ -20,7 +20,6 @@
 #include <memory>
 #include <atomic>
 #include <queue>
-
 using namespace harpy::nest;
 using namespace harpy::raven_part;
 namespace harpy::nest
@@ -43,7 +42,7 @@ namespace harpy::nest
 
 		public:
 			RSRPool(renderer_context* r_context);
-			std::pair<nest::render_shared_resources,size_t> grab();
+			std::pair<nest::render_shared_resources*,uint32_t> lock_and_grab();
 			void acquire(size_t index);
 			~RSRPool(){
 
@@ -78,9 +77,23 @@ namespace harpy::nest
 		nest::RendererResourceStorage storage;
 		nest::RendererObjectMapper mapper;
 
-		void render_task(std::queue<harpy::human_part::ECS::Entity*>* queue,
-				nest::render_shared_resources rsr,
-				VkQueue * vk_queue);
+		std::queue<harpy::human_part::ECS::Entity*> queue;
+
+		void render_task(
+				std::pair<render_shared_resources*, uint32_t> rsr,
+				std::pair<VkQueue, uint32_t> vk_queue
+				);
+		void blending(
+				std::pair<render_shared_resources*, uint32_t> rsr,
+				std::pair<VkQueue, uint32_t> vk_queue,
+				std::vector<std::pair<render_shared_resources*, uint32_t>>* rendered_rsrs,
+				VkFramebuffer swapchain_fb,
+				VkSemaphore image_sem
+				);
+		void present(
+				std::pair<VkQueue, uint32_t> vk_queue,
+				std::pair<render_shared_resources*, uint32_t> rsr,
+				uint32_t image_index);
 
 		void init_swapchain();
 		void init_render_pass();
@@ -91,8 +104,14 @@ namespace harpy::nest
 		void init_renderer_object_mapper();
 
 	public:
-		renderer_context(std::shared_ptr<vulkan_spinal_cord> cord, std::unique_ptr<base_window_layout> connected_window_layout);
-		void render_loop(harpy::raven_part::object_source& source, std::atomic_bool cond);
+		renderer_context(
+				std::shared_ptr<vulkan_spinal_cord> cord,
+				std::unique_ptr<base_window_layout> connected_window_layout
+				);
+		void render_loop(
+				harpy::raven_part::object_source& source,
+				std::atomic_flag cond
+				);
 		VkPipelineLayout getPipelineLayout() const {
 					return pipeline_layout;
 				}

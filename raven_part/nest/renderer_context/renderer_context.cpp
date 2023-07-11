@@ -12,6 +12,10 @@
 #include <memory>
 #include <mutex>
 #include <atomic>
+#include <utility>
+#include <string.h>
+#include <algorithm>
+
 using namespace harpy::raven_part;
 renderer_context::renderer_context(std::shared_ptr<vulkan_spinal_cord> cord, std::unique_ptr<base_window_layout> connected_window_layout) : swapchain(this){
 			this->spinal_cord = cord;
@@ -174,108 +178,256 @@ void renderer_context::init_swapchain(){
 	//connected_window_layout.init_all(instance);
 }
 
+void renderer_context::init_rsr_pool(){
+	afsdfsd
+}
 
-void renderer_context::render_loop(harpy::raven_part::object_source& source, std::atomic_bool cond){
-	while(cond){
+void renderer_context::init_renderer_resource_storage(){
+	sdada
+}
+
+void renderer_context::init_renderer_object_mapper(){
+	sadasd
+}
+
+//primitive
+void renderer_context::render_loop(harpy::raven_part::object_source& source, std::atomic_flag cond){
+	size_t frame = 0;
+	uint32_t image_index{};
+	std::vector<std::pair<render_shared_resources*, uint32_t>> rendered_rsrs;
+	std::pair<VkQueue, uint32_t> present_queue = spinal_cord->get_queue_supervisor().grab_presentation_queue((VkQueueFlags)0, connected_window_layout->surface);
+
+
+	uint32_t effective_rsr_cnt = std::max((uint32_t)RSR_ABSURD_LIMIT, (uint32_t)queues_cnt, (uint32_t)(DEV_MEM_RENDER_PERSENTAGE * DEV_MEM_SIZE / RSR_GPU_MEM_COST));
+
+	while(cond.test_and_set(std::memory_order_acquire)){
+		//SPINLOCK
+		rendered_rsrs.empty();
+		while (source.consumed.test_and_set(std::memory_order_acquire)){}
+
 		source.lock.lock();
-		std::shared_ptr<std::vector<human_part::ECS::Entity>> entities = source.entities;
-		source.consumed = true;
+		std::shared_ptr<std::vector<human_part::ECS::Entity*>> entities = source.entities;
+		size_t ptr_size = sizeof(human_part::ECS::Entity*);
+		source.consumed.test_and_set();
 		source.lock.unlock();
-
-		for (int i = 0; i < rsr_pool.size(); ++i) {
-			render_task
+		uint32_t task_cnt = std::min((uint32_t)task_pool.size(), effective_rsr_cnt);
+		uint32_t tgt_per_task = std::ceil((float)source.entities->size() / (float)task_cnt);
+		spinal_cord->queue_supervisor.lock.lock();
+		rsr_pool.lock.lock();
+		for (uint32_t i = 0; i < task_cnt; ++i) {
+			std::pair<VkQueue, uint32_t> vk_queue = spinal_cord->queue_supervisor.grab(VK_QUEUE_GRAPHICS_BIT);
+			vkQueueWaitIdle(vk_queue.first);
+			std::pair<render_shared_resources*, uint32_t> rsr = rsr_pool.lock_and_grab();
+			rsr.wait();//vkWaitSemaphores(spinal_cord->device, )
+			rsr.reset();//vkResetCommandBuffer(com_bufs[frame], 0);
+				//reset sems
+			//copy to subqueues
+			std::memcpy(
+					entities->data() + ptr_size * i * tgt_per_task,
+					rsr.first->queue.data(),
+					ptr_size * std::min(i * tgt_per_task,  (uint32_t)(rsr.first->queue.size()) - i * tgt_per_task));
+			task_pool.start(render_task,{rsr,vk_queue});
+			rendered_rsrs.push_back(rsr);
 		}
+		std::pair<VkQueue, uint32_t> blender_vk_queue = spinal_cord->queue_supervisor.grab(VK_QUEUE_GRAPHICS_BIT);
+		vkQueueWaitIdle(blender_vk_queue.first);
+		std::pair<render_shared_resources*, uint32_t> blender_rsr = rsr_pool.lock_and_grab();
+		blender_rsr.wait();
+		blender_rsr.reset();
+		spinal_cord->queue_supervisor.lock.unlock();
+		rsr_pool.lock.unlock();
 
 		VkResult result = vkAcquireNextImageKHR(spinal_cord->device,
-					*swapchain, UINT64_MAX,
-					image_sems[frame], VK_NULL_HANDLE, &image_index);
+					swapchain, UINT32_MAX,
+					swapchain.image_sems[frame], VK_NULL_HANDLE, &image_index);
 
 		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
-			chain->reinit();
-			for(auto& i : framebuffs)
-				vkDestroyFramebuffer(vulkan_backend->get_vk_device(), i, nullptr);
+			swapchain.reinit();
+			//rsr_pool.fb_resize();
+			//for(auto& i : framebuffs)
+			//	vkDestroyFramebuffer(vulkan_backend->get_vk_device(), i, nullptr);
 			return;
 		}
 		if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
 			throw utilities::harpy_little_error("failed to acquire swap chain image!");
 		}
 
+		blending(blender_rsr, blender_vk_queue, &rendered_rsrs, swapchain.fbs[image_index], swapchain.image_sems[frame]);
+
+		present(present_queue,blender_rsr,image_index);
+
+
+		frame = (frame + 1) % swapchain.image_sems.size();
+
 
 
 	}
+	vkDeviceWaitIdle(spinal_cord->device);
 }
 
 void renderer_context::render_task(
-		std::queue<harpy::human_part::ECS::Entity*>* queue,
-		nest::render_shared_resources rsr,
-		VkQueue * vk_queue
+		std::pair<render_shared_resources*, uint32_t> rsr,
+		std::pair<VkQueue, uint32_t> vk_queue
 		)
 {
-	//vkWaitForFences(vulkan_backend->get_vk_device(), 1, &fences_in_flight[frame], VK_TRUE, UINT64_MAX);
 
-	uint32_t image_index{};
-
-
+	VkCommandBufferBeginInfo beginInfo = {};
+	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
 
-	//object.rotate(15, 1, 0, 0);
-	nest::ubo ub{};
-	ub.model = object.get_model();
-	ub.view = camera.get_view();
-	ub.projection = nest::projection;
-	object.get_uniform_buffers()[frame].set_ubo(ub);
+	// Привязка framebuffer
+	VkRenderPassBeginInfo renderPassBeginInfo = {};
+	renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	renderPassBeginInfo.renderPass = render_pass; // VkRenderPass, связанный с framebuffer
+	renderPassBeginInfo.framebuffer = rsr.first->fb; // VkFramebuffer для привязки
+	renderPassBeginInfo.renderArea.offset = { 0, 0 };
+	renderPassBeginInfo.renderArea.extent = { swapchain.extent.width, swapchain.extent.height };
 
-	vkResetFences(vulkan_backend->get_vk_device(), 1, &fences_in_flight[frame]);
+	vkBeginCommandBuffer(rsr.first->cmd, &beginInfo);
+	vkCmdBeginRenderPass(rsr.first->cmd, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-	vkResetCommandBuffer(com_bufs[frame], 0);
+	for object_mappings:
+		vkCmdBindDescriptorSets(rsr.first->cmd);
+		vkCmdPushConstants();
+		vkCmdBindVertexBuffers(commandBuffer, 0, 1, &object.vertexBuffer, &offset);
+		vkCmdBindIndexBuffer(commandBuffer, object.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
 
-	controller.connect(com_bufs[frame], image_index);
-	controller.draw(object.get_vertex_buffer(), object.get_index_buffer(), desc, frame);
-	controller.disconnect();
+
+		vkCmdBindPipeline(rsr.first->cmd);
+
+		vkCmdDrawIndexed(rsr.first->cmd);
+
+	vkCmdEndRenderPass(rsr.first->cmd);
+	vkEndCommandBuffer(rsr.first->cmd);
+
+
 
 
 	VkSubmitInfo submitInfo{};
 	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-	VkSemaphore waitSemaphores[] = {image_sems[frame]};
+	//VkSemaphore waitSemaphores[] = {image_sems[frame]};
 	VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
-	submitInfo.waitSemaphoreCount = 1;
-	submitInfo.pWaitSemaphores = waitSemaphores;
+	submitInfo.waitSemaphoreCount = 0;
+	submitInfo.pWaitSemaphores = VK_NULL_HANDLE;//waitSemaphores;
 	submitInfo.pWaitDstStageMask = waitStages;
 
 	submitInfo.commandBufferCount = 1;
-	submitInfo.pCommandBuffers = &com_bufs[frame].get_vk_command_buffer();
+	submitInfo.pCommandBuffers = &rsr.first->cmd;
 
-	VkSemaphore signalSemaphores[] = {finish_sems[frame]};
+
 	submitInfo.signalSemaphoreCount = 1;
-	submitInfo.pSignalSemaphores = signalSemaphores;
+	submitInfo.pSignalSemaphores = &rsr.first->sem;
 
-	if (vkQueueSubmit(vulkan_backend->get_vk_present_queue(), 1, &submitInfo, fences_in_flight[frame]) != VK_SUCCESS) {
+	if (vkQueueSubmit(vk_queue.first, 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
 		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to submit draw command buffer!");
 	}
+
+
+
+}
+
+
+void renderer_context::blending(
+		std::pair<render_shared_resources*, uint32_t> rsr,
+		std::pair<VkQueue, uint32_t> vk_queue,
+		std::vector<std::pair<render_shared_resources*, uint32_t>>* rendered_rsrs,
+		VkFramebuffer swapchain_fb,
+		VkSemaphore image_sem
+		)
+{
+
+	VkCommandBufferBeginInfo beginInfo = {};
+		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+
+
+		// Привязка framebuffer
+		VkRenderPassBeginInfo renderPassBeginInfo = {};
+		renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+		renderPassBeginInfo.renderPass = render_pass; // VkRenderPass, связанный с framebuffer
+		renderPassBeginInfo.framebuffer = swapchain_fb; // VkFramebuffer для привязки
+		renderPassBeginInfo.renderArea.offset = { 0, 0 };
+		renderPassBeginInfo.renderArea.extent = { swapchain.extent.width, swapchain.extent.height };
+
+		vkBeginCommandBuffer(rsr.first->cmd, &beginInfo);
+		vkCmdBeginRenderPass(rsr.first->cmd, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+
+		vkCmdBindDescriptorSets(rsr.first->cmd);
+		vkCmdPushConstants();
+		vkCmdBindVertexBuffers(commandBuffer, 0, 1, &object.vertexBuffer, &offset);
+		vkCmdBindIndexBuffer(commandBuffer, object.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+
+
+		vkCmdBindPipeline(rsr.first->cmd);
+
+		vkCmdDrawIndexed(rsr.first->cmd);
+
+		vkCmdEndRenderPass(rsr.first->cmd);
+		vkEndCommandBuffer(rsr.first->cmd);
+
+
+
+
+		VkSubmitInfo submitInfo{};
+		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+
+		std::vector<VkSemaphore> waitSemaphores;
+		waitSemaphores.reserve(rendered_rsrs->size() + 1);
+		for (int i = 0; i < rendered_rsrs->size(); ++i) {
+			waitSemaphores.push_back((*rendered_rsrs)[i].first->sem);
+		}
+		waitSemaphores.push_back(image_sem);
+
+		std::vector<VkSemaphore> signalSemaphores;
+		waitSemaphores.reserve(rendered_rsrs->size() + 2);
+		for (int i = 0; i < rendered_rsrs->size(); ++i) {
+			signalSemaphores.push_back((*rendered_rsrs)[i].first->sem2);
+		}
+		signalSemaphores.push_back(rsr.first->sem);
+		signalSemaphores.push_back(rsr.first->sem2);
+
+		VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+		submitInfo.waitSemaphoreCount = waitSemaphores.size();
+		submitInfo.pWaitSemaphores = waitSemaphores.data();
+		submitInfo.pWaitDstStageMask = waitStages;
+
+		submitInfo.commandBufferCount = 1;
+		submitInfo.pCommandBuffers = &rsr.first->cmd;
+
+
+		submitInfo.signalSemaphoreCount = signalSemaphores.size();
+		submitInfo.pSignalSemaphores = signalSemaphores.data();
+
+		if (vkQueueSubmit(vk_queue.first, 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
+			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to submit draw command buffer!");
+		}
+}
+
+
+void renderer_context::present(
+		std::pair<VkQueue, uint32_t> present_queue,
+		std::pair<render_shared_resources*, uint32_t> rsr,
+		//VkSemaphore image_sem,
+		uint32_t image_index){
 
 	VkPresentInfoKHR presentInfo{};
 	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 
 	presentInfo.waitSemaphoreCount = 1;
-	presentInfo.pWaitSemaphores = signalSemaphores;
+	presentInfo.pWaitSemaphores = &rsr.first->sem;
 
-	VkSwapchainKHR swapChains[] = {*chain};
 	presentInfo.swapchainCount = 1;
-	presentInfo.pSwapchains = swapChains;
+	presentInfo.pSwapchains = &this->swapchain.chain;
 
 	presentInfo.pImageIndices = &image_index;
+	//should i use present queue?
+	VkResult result = vkQueuePresentKHR(present_queue.first, &presentInfo);
 
-	result = vkQueuePresentKHR(vulkan_backend->get_vk_graphics_queue(), &presentInfo);
-
-	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || window.get_resize()) {
-		window.get_resize() = false;
-		chain->reinit();
+	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || connected_window_layout.get()->get_resize()) {
+		connected_window_layout.get()->get_resize() = false;
+		swapchain.reinit();
 	} else if (result != VK_SUCCESS) {
 		throw utilities::harpy_little_error("failed to present swap chain image!");
 	}
-
-	frame = (frame + 1) % MAX_FRAMES_IN_FLIGHT;
 }
-
-

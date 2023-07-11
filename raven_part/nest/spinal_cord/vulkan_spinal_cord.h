@@ -42,8 +42,9 @@ namespace harpy::nest {
             queue_supervisor(vulkan_spinal_cord * cord);
             std::vector<VkDeviceQueueCreateInfo> * pre_init_get_queues();
             void init();
-            std::pair<VkQueue *, uint32_t> grab(VkQueueFlags flags);
-            std::pair<VkQueue *, uint32_t> grab_presentation_queue(VkQueueFlags flags, VkSurfaceKHR surface);
+            std::pair<VkQueue, uint32_t> grab(VkQueueFlags flags);
+            std::pair<VkQueue, uint32_t> lock_and_grab(VkQueueFlags flags);
+            std::pair<VkQueue, uint32_t> grab_presentation_queue(VkQueueFlags flags, VkSurfaceKHR surface);
             void free(uint32_t index);
 
             ~queue_supervisor();

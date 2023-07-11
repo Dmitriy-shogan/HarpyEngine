@@ -28,7 +28,7 @@ void vulkan_spinal_cord::queue_supervisor::init(){
 
 
 }
-std::pair<VkQueue*, uint32_t> vulkan_spinal_cord::queue_supervisor::grab(VkQueueFlags flags){
+std::pair<VkQueue, uint32_t> vulkan_spinal_cord::queue_supervisor::lock_and_grab(VkQueueFlags flags){
 	const std::lock_guard<std::mutex> _(lock);
 
 	//TODO uneffective
@@ -43,7 +43,21 @@ std::pair<VkQueue*, uint32_t> vulkan_spinal_cord::queue_supervisor::grab(VkQueue
 	return std::make_pair(nullptr, -1);
 }
 
-std::pair<VkQueue*, uint32_t> vulkan_spinal_cord::queue_supervisor::grab_presentation_queue(VkQueueFlags flags, VkSurfaceKHR surface){
+std::pair<VkQueue, uint32_t> vulkan_spinal_cord::queue_supervisor::grab(VkQueueFlags flags){
+
+	//TODO uneffective
+	for (uint32_t i = 0; i < free_queues.size(); ++i) {
+		uint32_t k = free_queues.front();
+		free_queues.pop();
+		if ((familyProperties[vk_queue_family[k]].queueFlags & flags == flags)){
+			return std::make_pair(&vk_queues[k], k);
+		}
+		free_queues.push(k);
+	}
+	return std::make_pair(nullptr, -1);
+}
+
+std::pair<VkQueue, uint32_t> vulkan_spinal_cord::queue_supervisor::grab_presentation_queue(VkQueueFlags flags, VkSurfaceKHR surface){
 	const std::lock_guard<std::mutex> _(lock);
 
 	//TODO uneffective
