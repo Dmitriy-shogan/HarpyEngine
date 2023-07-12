@@ -148,6 +148,24 @@ void render_shared_resources::init_command_buffer(){
 
 }
 
+void render_shared_resources::wait(){
+	VkSemaphore semaphores[] = {sem,sem2};
+	VkSemaphoreWaitInfo waitInfo{};
+	waitInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO;
+	waitInfo.semaphoreCount = 2;
+	waitInfo.pSemaphores = semaphores;
+	waitInfo.pValues = nullptr;
+
+	if (vkWaitSemaphores(r_context->spinal_cord->device,&waitInfo,UINT64_MAX) != VK_SUCCESS)
+		throw utilities::harpy_little_error("failed to wait RSR semaphores!");
+}
+
+void render_shared_resources::reset(){
+	if (vkResetCommandBuffer(cmd, 0) != VK_SUCCESS)
+		throw utilities::harpy_little_error("failed to reset cmd RSR!");
+
+	queue.empty();
+}
 
 render_shared_resources::~render_shared_resources(){
 	if(cmd)

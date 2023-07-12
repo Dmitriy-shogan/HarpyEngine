@@ -10,15 +10,15 @@ swapchain::swapchain(renderer_context * r_context): r_context(r_context){
 }
 
 swapchain::~swapchain()
-        {
+{
 
-            for(auto& i : image_views)
-            vkDestroyImageView(r_context->spinal_cord->get_vk_device(), i, nullptr);
-			if(chain)
-            vkDestroySwapchainKHR(r_context->spinal_cord->get_vk_device(), chain, nullptr);
+	for(auto& i : image_views)
+	vkDestroyImageView(r_context->spinal_cord->get_vk_device(), i, nullptr);
+	if(chain)
+	vkDestroySwapchainKHR(r_context->spinal_cord->get_vk_device(), chain, nullptr);
 
 
-        }
+}
 
 void swapchain::init()
 {
@@ -58,18 +58,10 @@ void swapchain::init()
 	create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
 	//not indices, shit name, needed to be changed
-	//std::pair<VkQueue, uint32_t> queue = r_context->spinal_cord->get_queue_supervisor().grab_presentation_queue((VkQueueFlags)0, r_context->connected_window_layout->surface);
-	//uint32_t queueFamilyIndices[] = {indices.graphics_families.value(), indices.present_families.value()};
-
-//	if (indices.graphics_families != indices.present_families) {
-//		create_info.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-//		create_info.queueFamilyIndexCount = 2;
-//		create_info.pQueueFamilyIndices = queueFamilyIndices;
-//	} else {
 	create_info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
 	create_info.queueFamilyIndexCount = 0; // Optional
 	create_info.pQueueFamilyIndices = nullptr; // Optional
-	//}
+
 	create_info.preTransform = swapchain_details.capabilities.currentTransform;
 	create_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
 
@@ -203,11 +195,5 @@ void swapchain::init_image_views()
 
 	}
 
-
-
-
 }
-
-
-
 

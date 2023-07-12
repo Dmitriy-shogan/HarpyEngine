@@ -48,6 +48,8 @@
 #define SHADER_PATH_BASE_TESSALATION_CONTROL "shaders/base/tess_control/base.tesc"
 #define SHADER_PATH_BASE_TESSALATION_EVAL "shaders/base/tess_eval/base.tese"
 
+#define SHADER_PATH_BLENDER_VERTEX_DUMMY "shaders/base/vertex/service/blender.vert"
+#define SHADER_PATH_BLENDER_FRAGMENT "shaders/base/fragment/service/base.frag"
 
 
 #define INTCAST(x) static_cast<int>(x)
@@ -88,21 +90,6 @@ namespace harpy::nest
         
         return res;
     }
-
-    struct needed_queues_families
-    {
-        //Graphic family for render itself
-        std::optional<uint32_t> graphics_families;
-
-        //Graphic family for displaying
-        std::optional<uint32_t> present_families;
-
-        bool is_completed() const
-        {
-
-            return graphics_families.has_value() && present_families.has_value();
-        }
-    };
 
     static std::array<VkVertexInputAttributeDescription, 2> get_attributes_descriptions() {
         //TODO: added normals, so rewrite shaders

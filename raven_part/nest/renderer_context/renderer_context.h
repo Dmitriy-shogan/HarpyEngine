@@ -35,6 +35,12 @@ namespace harpy::nest
 	struct renderer_context{
 
 
+
+		struct blender_push_constants{
+			uint32_t layers_cnt;
+		};
+
+
 		struct RSRPool{
 			std::mutex lock;
 			std::queue<size_t> queue;
@@ -66,13 +72,24 @@ namespace harpy::nest
 		std::unique_ptr<base_window_layout> connected_window_layout;
 
 
-		VkRenderPass render_pass;
-
-
+		VkRenderPass render_pass = nullptr;
 		VkDescriptorSetLayout descriptor_set_layout = nullptr;
 		VkPipelineLayout pipeline_layout = nullptr;
 		struct RSRPool rsr_pool{this};
-		VkDescriptorPool desc_pool = nullptr;
+		VkDescriptorPool blender_desc_pool = nullptr;
+
+
+		VkDescriptorSetLayout blender_descriptor_set_layout = nullptr;
+		VkRenderPass blender_render_pass = nullptr;
+		VkPipeline blender_pipeline = nullptr;
+		VkViewport blender_dynamic_viewport{};
+		VkRect2D blender_dynamic_scissors{};
+		VkPipelineLayout blender_pipeline_layout = nullptr;
+		VkDescriptorSet blender_set = nullptr;
+		VkSampler blender_sampler = nullptr;
+
+		struct blender_push_constants blender_push_constants{};
+
 
 		nest::RendererResourceStorage storage;
 		nest::RendererObjectMapper mapper;
@@ -100,6 +117,7 @@ namespace harpy::nest
 		void init_layouts();
 		void init_rsr_pool();
 		void init_descriptor_pool();
+		void init_blender();
 		void init_renderer_resource_storage();
 		void init_renderer_object_mapper();
 

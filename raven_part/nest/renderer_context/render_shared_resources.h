@@ -47,6 +47,8 @@ namespace harpy::nest
 		void init_images();
 		void init_sem();
 		void init_command_buffer();
+		void wait();
+		void reset();
 		//void init_framebuffer();
 
 
