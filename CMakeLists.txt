@@ -15,8 +15,8 @@ MACRO(HEADER_DIRECTORIES PATH1 return_list)
 ENDMACRO()
 
 
-
-
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib/)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib/)
 
 #HEADER_DIRECTORIES(${CMAKE_SOURCE_DIR}/human_part header_dir_list)
 
@@ -49,10 +49,14 @@ set(third_party_lib_list
     "third_party_services/debug_libs/"
     "third_party_services/dlls/"
     )
-
+    
 set(link_flags 
     "GL"
     "glfw"
+    "vulkan"
+    )
+set(local_link_flags 
+    "${PROJECT_NAME}_library"
     )
 
 ############################################################
@@ -73,6 +77,7 @@ FILE(GLOB_RECURSE tmp_lib_src_list ${CMAKE_SOURCE_DIR}/raven_part/*.cpp)
 list (APPEND lib_src_list ${tmp_lib_src_list})
 FILE(GLOB_RECURSE tmp_lib_src_list ${CMAKE_SOURCE_DIR}/human_part/*.cpp)
 list (APPEND lib_src_list ${tmp_lib_src_list})
+list (APPEND lib_src_list "harpy.cpp")
 message(STATUS "[INFO] ${lib_src_list}")
 
 add_library(${PROJECT_NAME}_library STATIC ${lib_src_list})
@@ -86,15 +91,16 @@ add_library(${PROJECT_NAME}_library STATIC ${lib_src_list})
 
 add_executable(${PROJECT_NAME}_binary Main.cpp) 
 
-target_link_libraries(${PROJECT_NAME}_binary
-    PRIVATE 
-        ${PROJECT_NAME}_library
-)
 target_link_directories(${PROJECT_NAME}_binary
     PRIVATE 
-       ${third_party_lib_list}
+       "libs/" ${third_party_lib_list}
 )
-target_link_libraries(${PROJECT_NAME}_binary PRIVATE ${link_flags})
+
+target_link_libraries(${PROJECT_NAME}_binary
+    PRIVATE 
+        ${local_link_flags} ${link_flags}
+)
+
 
 
 

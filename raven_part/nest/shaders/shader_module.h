@@ -21,10 +21,11 @@ namespace harpy::nest::shaders
         VkDevice& device;
 
         std::string filepath;
+        
+
+    public:
         VkShaderModule module{nullptr};
         shader_type type;
-        
-    public:
         shader_module(VkDevice& device) : device(device), type(none){}
 
         void init(std::string filepath)

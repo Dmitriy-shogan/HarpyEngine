@@ -8,6 +8,7 @@
 
 #include <mutex>
 #include <queue>
+#include <iostream>
 namespace harpy::nest {
 
     //TODO: make transfer-only queue, if exists one
@@ -32,20 +33,23 @@ namespace harpy::nest {
             std::queue<uint32_t> free_queues;
             std::vector<VkQueue> vk_queues;
             std::vector<uint32_t> vk_queue_family;
-
+            std::vector<VkCommandBuffer> vk_queue_buffer;
 
             std::vector<VkQueueFamilyProperties> familyProperties;
+            std::vector<std::vector<float>> priorities;
+            std::vector<VkCommandPool> pools;
             //std::vector<bool> isPresentationSupported;
             std::vector<uint32_t> familyTypes= {VK_QUEUE_GRAPHICS_BIT,VK_QUEUE_TRANSFER_BIT,VK_QUEUE_COMPUTE_BIT};
 
         public:
             queue_supervisor(vulkan_spinal_cord * cord);
-            std::vector<VkDeviceQueueCreateInfo> * pre_init_get_queues();
+            std::vector<VkDeviceQueueCreateInfo> pre_init_get_queues();
             void init();
-            std::pair<VkQueue, uint32_t> grab(VkQueueFlags flags);
-            std::pair<VkQueue, uint32_t> lock_and_grab(VkQueueFlags flags);
-            std::pair<VkQueue, uint32_t> grab_presentation_queue(VkQueueFlags flags, VkSurfaceKHR surface);
+            std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> grab(VkQueueFlags flags);
+            std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> lock_grab(VkQueueFlags flags);
+            std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> grab_presentation_queue(VkQueueFlags flags, VkSurfaceKHR surface);
             void free(uint32_t index);
+            void lock_free(uint32_t index);
 
             ~queue_supervisor();
 
@@ -69,27 +73,38 @@ namespace harpy::nest {
         
 
         void init_instance();
+
         void init_ph_device();
+
         void init_device_and_queues();
+
         void init_debug();
+
         void init_queue_supervisor();
 
         vulkan_spinal_cord(){
         	init_instance();
+        	//std::cout<<"init_instance succ"<<std::endl;
         	init_debug();
+        	//std::cout<<"init_debug succ"<<std::endl;
         	init_ph_device();
+        	//std::cout<<"init_ph_device succ"<<std::endl;
         	init_device_and_queues();
+        	//std::cout<<"init_device_and_queues succ"<<std::endl;
         	init_queue_supervisor();
+        	//std::cout<<"init_queue_supervisor succ"<<std::endl;
+
+        	std::cout<<"spinal_cord created succ"<<std::endl;
 
         }
     public:
         
 
         static std::shared_ptr<vulkan_spinal_cord> getInstance() {
-                if(!p_instance)
-                    throw harpy::utilities::harpy_little_error("Failed to get spinal cord instance");
-                return p_instance;
-            }
+			if(!p_instance)
+				throw harpy::utilities::harpy_little_error("Failed to get spinal cord instance");
+			return p_instance;
+		}
 
 
         static void init()

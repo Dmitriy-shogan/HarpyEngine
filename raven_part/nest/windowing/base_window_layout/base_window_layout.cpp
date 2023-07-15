@@ -20,9 +20,13 @@ void harpy::nest::base_window_layout::init_surface()
 void harpy::nest::base_window_layout::init(renderer_context * r_context)
 {
 	//this->cord = cord;
+	std::cout<<"aaaa"<<std::endl;
 	this->r_context = r_context;
+	std::cout<<"initialising base_window_layout started"<<std::endl;
     init_window();
+    std::cout<<"init init_window succ"<<std::endl;
     init_surface();
+    std::cout<<"init init_surface succ"<<std::endl;
 }
 
 GLFWwindow*& harpy::nest::base_window_layout::get_glfw_window()

@@ -21,7 +21,7 @@ void render_shared_resources::init_images(){
 	VkImageCreateInfo imageCreateInfo = {};
 	imageCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 	imageCreateInfo.imageType = VK_IMAGE_TYPE_2D;
-
+	imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	imageCreateInfo.extent = { r_context->swapchain.extent.width, r_context->swapchain.extent.height, 1 };
 	imageCreateInfo.mipLevels = 1;
 	imageCreateInfo.arrayLayers = 1;
@@ -29,7 +29,7 @@ void render_shared_resources::init_images(){
 	imageCreateInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
 	//VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 	imageCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-	imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+
 
 	VkMemoryRequirements memoryRequirements;
 	VkMemoryAllocateInfo allocateInfo = {};
@@ -39,7 +39,7 @@ void render_shared_resources::init_images(){
 	imageview_create_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 
 	imageview_create_info.viewType = VK_IMAGE_VIEW_TYPE_2D;
-	imageview_create_info.format = r_context->swapchain.surface_format.format;
+	//imageview_create_info.format = //r_context->swapchain.surface_format.format;
 
 	imageview_create_info.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
 	imageview_create_info.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
@@ -55,53 +55,74 @@ void render_shared_resources::init_images(){
 	//	  COLOR_BUFFER
 	//	========================
 	imageCreateInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
-	imageCreateInfo.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+	imageCreateInfo.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+	//imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	imageview_create_info.format = VK_FORMAT_R8G8B8A8_UNORM;
 
-	vkGetImageMemoryRequirements(r_context->spinal_cord->device, color_image, &memoryRequirements);
-	allocateInfo.allocationSize = memoryRequirements.size;
-	allocateInfo.memoryTypeIndex = harpy::utilities::find_memory_types(r_context->spinal_cord->ph_device, memoryRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-	imageview_create_info.image = color_image;
 	imageview_create_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-
+	std::cout<<"init start"<<std::endl;
 	if (vkCreateImage(r_context->spinal_cord->device, &imageCreateInfo, nullptr, &color_image) != VK_SUCCESS)
 		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create image for RSR!");
+	std::cout<<"init vkCreateImage"<<std::endl;
+	vkGetImageMemoryRequirements(r_context->spinal_cord->device, color_image, &memoryRequirements);
+	allocateInfo.memoryTypeIndex = harpy::utilities::find_memory_types(r_context->spinal_cord->ph_device, memoryRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+	allocateInfo.allocationSize = memoryRequirements.size;
 
 	if (vkAllocateMemory(r_context->spinal_cord->device, &allocateInfo, nullptr, &color_image_memory) != VK_SUCCESS)
 		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to allocate image for RSR!");
-
+	std::cout<<"init vkAllocateMemory"<<std::endl;
 	if (vkBindImageMemory(r_context->spinal_cord->device, color_image, color_image_memory, 0) != VK_SUCCESS)
 		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to bind image for RSR!");
+	std::cout<<"init vkBindImageMemory"<<std::endl;
+	imageview_create_info.image = color_image;
 
 	if (vkCreateImageView(r_context->spinal_cord->device, &imageview_create_info, nullptr, &color_image_view) != VK_SUCCESS)
 			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create image views!");
-
+	std::cout<<"init vkCreateImageView"<<std::endl;
 	//	========================
 	//	  DEPTH_AND_STENSIL_BUFFER
 	//	========================
 
 	imageCreateInfo.format = VK_FORMAT_D24_UNORM_S8_UINT;
-	imageCreateInfo.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+	imageCreateInfo.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+	//imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+	imageview_create_info.format = VK_FORMAT_D24_UNORM_S8_UINT;
 
-	vkGetImageMemoryRequirements(r_context->spinal_cord->device, depth_and_stencil_image, &memoryRequirements);
-	allocateInfo.allocationSize = memoryRequirements.size;
-	allocateInfo.memoryTypeIndex = harpy::utilities::find_memory_types(r_context->spinal_cord->ph_device, memoryRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-	imageview_create_info.image = depth_and_stencil_image;
-	imageview_create_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
-
+	std::cout<<"init start2"<<std::endl;
 	if (vkCreateImage(r_context->spinal_cord->device, &imageCreateInfo, nullptr, &depth_and_stencil_image) != VK_SUCCESS)
 		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create image for RSR!");
-
+	std::cout<<"init vkCreateImage"<<std::endl;
+	vkGetImageMemoryRequirements(r_context->spinal_cord->device, depth_and_stencil_image, &memoryRequirements);
+	allocateInfo.memoryTypeIndex = harpy::utilities::find_memory_types(r_context->spinal_cord->ph_device, memoryRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+	allocateInfo.allocationSize = memoryRequirements.size;
 	if (vkAllocateMemory(r_context->spinal_cord->device, &allocateInfo, nullptr, &depth_and_stencil_image_memory) != VK_SUCCESS)
 		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to allocate image for RSR!");
-
+	std::cout<<"init vkAllocateMemory"<<std::endl;
 	if (vkBindImageMemory(r_context->spinal_cord->device, depth_and_stencil_image, depth_and_stencil_image_memory, 0) != VK_SUCCESS)
 		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to bind image for RSR!");
+	std::cout<<"init vkBindImageMemory"<<std::endl;
+	imageview_create_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+	imageview_create_info.image = depth_and_stencil_image;
 
 	if (vkCreateImageView(r_context->spinal_cord->device, &imageview_create_info, nullptr, &depth_and_stencil_image_view) != VK_SUCCESS)
 			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create image views!");
+	std::cout<<"init vkCreateImageView"<<std::endl;
 
+
+	imageview_create_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	imageview_create_info.image = depth_and_stencil_image;
+
+	if (vkCreateImageView(r_context->spinal_cord->device, &imageview_create_info, nullptr, &depth_image_view) != VK_SUCCESS)
+			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create image views!");
+	std::cout<<"init vkCreateImageView"<<std::endl;
+
+
+	imageview_create_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
+	imageview_create_info.image = depth_and_stencil_image;
+
+	if (vkCreateImageView(r_context->spinal_cord->device, &imageview_create_info, nullptr, &stencil_image_view) != VK_SUCCESS)
+			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create image views!");
+	std::cout<<"init vkCreateImageView"<<std::endl;
 
 
 
@@ -122,56 +143,98 @@ void render_shared_resources::init_images(){
 }
 void render_shared_resources::init_sem(){
 	VkSemaphoreCreateInfo semaphoreInfo{};
+
+//	VkSemaphoreTypeCreateInfo semaphoreTypeCreateInfo = {};
+//	semaphoreTypeCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO_KHR;
+//	semaphoreTypeCreateInfo.pNext = nullptr;
+//	semaphoreTypeCreateInfo.semaphoreType = VK_SEMAPHORE_TYPE_TIMELINE;
+//	semaphoreTypeCreateInfo.initialValue = 0;
+
 	semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+//	semaphoreInfo.pNext = &semaphoreTypeCreateInfo;
 	if (vkCreateSemaphore(r_context->spinal_cord->device, &semaphoreInfo, nullptr, &sem) != VK_SUCCESS)
-							throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create semaphores!");
+							throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create semaphore!");
 
+	if (vkCreateSemaphore(r_context->spinal_cord->device, &semaphoreInfo, nullptr, &sem2) != VK_SUCCESS)
+								throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create semaphore!");
+
+//	VkSemaphoreSignalInfo signal{};
+//	signal.sType = VK_STRUCTURE_TYPE_SEMAPHORE_SIGNAL_INFO;
+//	signal.value = 1;
+//	signal.semaphore = sem;
+//	if (vkSignalSemaphore(r_context->spinal_cord->device, &signal) != VK_SUCCESS)
+//		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to signal semaphore!");
+//	signal.semaphore = sem2;
+//	if (vkSignalSemaphore(r_context->spinal_cord->device, &signal) != VK_SUCCESS)
+//		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to signal semaphore!");
+
+//	curr_sem_val = 0;
+//	curr_sem2_val = 0;
+
+	VkFenceCreateInfo fenceInfo{};
+	fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+
+	if (vkCreateFence(r_context->spinal_cord->device, &fenceInfo, nullptr, &fence1) != VK_SUCCESS)
+							throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create fence!");
+
+	if (vkCreateFence(r_context->spinal_cord->device, &fenceInfo, nullptr, &fence2) != VK_SUCCESS)
+								throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create fence!");
+
+	VkFence fences[] = {fence1,fence2};
+	if (vkResetFences(r_context->spinal_cord->device, 2, fences) != VK_SUCCESS)
+								throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to reset fence!");
 }
 
-void render_shared_resources::init_command_buffer(){
-	VkCommandBufferAllocateInfo allocInfo{};
-	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-	allocInfo.commandPool = command_pool;
-	allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	allocInfo.commandBufferCount = 1;
 
-	if (vkAllocateCommandBuffers(r_context->spinal_cord->device, &allocInfo, &cmd) != VK_SUCCESS) {
-		throw std::runtime_error("failed to allocate command buffers!");
-	}
-
-
-	VkCommandBufferBeginInfo create_info{};
-	create_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-	create_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-	if(vkBeginCommandBuffer(cmd, &create_info) != VK_SUCCESS)
-					throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "Can't start writing command buffer!");
-
-}
 
 void render_shared_resources::wait(){
-	VkSemaphore semaphores[] = {sem,sem2};
-	VkSemaphoreWaitInfo waitInfo{};
-	waitInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO;
-	waitInfo.semaphoreCount = 2;
-	waitInfo.pSemaphores = semaphores;
-	waitInfo.pValues = nullptr;
+	VkFence fences[] = {fence1,fence2};
+	if(wait_needed){
+		if (vkWaitForFences(r_context->spinal_cord->device, 2, fences, VK_TRUE, UINT64_MAX) != VK_SUCCESS)
+			throw utilities::harpy_little_error("failed to wait RSR fences!");
+	}
+	wait_needed = true;
+//	VkSemaphore semaphores[] = {sem,sem2};
+//	uint64_t values[] = {++curr_sem_val, ++curr_sem2_val};
+//	VkSemaphoreWaitInfo waitInfo{};
+//	waitInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO;
+//	waitInfo.semaphoreCount = 2;
+//	waitInfo.pSemaphores = semaphores;
+//	waitInfo.pValues = values;
+//
+//	if (vkWaitSemaphores(r_context->spinal_cord->device,&waitInfo,UINT64_MAX) != VK_SUCCESS)
+//		throw utilities::harpy_little_error("failed to wait RSR semaphores!");
 
-	if (vkWaitSemaphores(r_context->spinal_cord->device,&waitInfo,UINT64_MAX) != VK_SUCCESS)
-		throw utilities::harpy_little_error("failed to wait RSR semaphores!");
+//	VkSemaphoreSignalInfo signal{};
+//	signal.sType = VK_STRUCTURE_TYPE_SEMAPHORE_SIGNAL_INFO;
+//	signal.value = 0;
+//	signal.semaphore = sem;
+//	if (vkSignalSemaphore(r_context->spinal_cord->device, &signal) != VK_SUCCESS)
+//		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to signal semaphore!");
+//	signal.semaphore = sem2;
+//	if (vkSignalSemaphore(r_context->spinal_cord->device, &signal) != VK_SUCCESS)
+//		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to signal semaphore!");
 }
 
 void render_shared_resources::reset(){
-	if (vkResetCommandBuffer(cmd, 0) != VK_SUCCESS)
-		throw utilities::harpy_little_error("failed to reset cmd RSR!");
+	VkFence fences[] = {fence1,fence2};
+//	VkSemaphoreSignalInfo signal{};
+//	signal.sType = VK_STRUCTURE_TYPE_SEMAPHORE_SIGNAL_INFO;
+//	signal.value = 0;
+//	signal.semaphore = sem;
+//	if (vkSignalSemaphore(r_context->spinal_cord->device, &signal) != VK_SUCCESS)
+//		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to signal semaphore!");
+//	signal.semaphore = sem2;
+//	if (vkSignalSemaphore(r_context->spinal_cord->device, &signal) != VK_SUCCESS)
+//		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to signal semaphore!");
 
+	if (vkResetFences(r_context->spinal_cord->device, 2, fences) != VK_SUCCESS)
+			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to signal semaphore!");
 	queue.empty();
 }
 
 render_shared_resources::~render_shared_resources(){
-	if(cmd)
-	vkEndCommandBuffer(cmd);
-	if(cmd)
-	vkFreeCommandBuffers(r_context->spinal_cord->device, command_pool, 1, &(this->cmd));
+
 	if(fb)
 	vkDestroyFramebuffer(r_context->spinal_cord->device,this->fb,nullptr);
 
@@ -193,5 +256,8 @@ render_shared_resources::~render_shared_resources(){
 	if(sem)
 	vkDestroySemaphore(r_context->spinal_cord->device,sem,nullptr);
 }
+
+
+
 
 

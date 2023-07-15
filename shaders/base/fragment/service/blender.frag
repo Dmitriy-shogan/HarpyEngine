@@ -11,7 +11,7 @@
 
 
 layout(set = 0, binding = 0) uniform sampler2D colors[]; //I delete Sampler2D directive
-layout(set = 0, binding = 1) uniform sampler2D depths[]; //I delete Sampler2D directive
+layout(set = 1, binding = 0) uniform sampler2D depths[]; //I delete Sampler2D directive
 
 layout(push_constant) uniform PushConstants {
   int layers_cnt;
@@ -19,10 +19,12 @@ layout(push_constant) uniform PushConstants {
 
 
 
-layout(location = 0) in vec2 texCoord;
-layout(location = 1) in vec3 fragColor;
 
-layout(location = 2) out vec4 outColor;
+layout(location = 2) in vec3 fragColor;
+layout(location = 3) in vec2 fragPosition;
+
+layout(location = 4) out vec4 outColor;
+
 
 float maxDepth = FLT_MIN;
 
@@ -30,8 +32,8 @@ void main() {
     outColor = vec4(fragColor, 1.0);
     
     for (int i = 0; i < pushConstants.layers_cnt; i++) {
-        vec4 color = texture(colors[i], texCoord); 
-        float depth = texture(depths[i], texCoord).r; 
+        vec4 color = texture(colors[i], fragPosition); 
+        float depth = texture(depths[i], fragPosition).r; 
         if (maxDepth < depth){
             maxDepth = depth;
             outColor.r = min(outColor.r * color.a + color.r, FLT_MAX);

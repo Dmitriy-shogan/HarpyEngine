@@ -9,6 +9,7 @@
 #define RAVEN_PART_NEST_RENDERER_CONTEXT_RENDER_SHARED_RESOURCES_H_
 
 #include <spinal_cord/vulkan_spinal_cord.h>
+#include <renderer_context/RendererObjectMapper.h>
 #include <ECS/Entity.h>
 #include <vector>
 #include <memory>
@@ -20,53 +21,59 @@ namespace harpy::nest
 
 	struct render_shared_resources{
 		bool updated;
-		VkCommandPool command_pool;
+
 
 		renderer_context* r_context;
 
-		std::vector<harpy::human_part::ECS::Entity*> queue;
-		VkCommandBuffer cmd = nullptr;
+		std::vector<std::pair<harpy::human_part::ECS::Entity*, renderer_mappings>> queue{};
 
 		//color buffer
-		VkDeviceMemory color_image_memory;
+		VkDeviceMemory color_image_memory = nullptr;
 		VkImage color_image = nullptr;
 		VkImageView color_image_view = nullptr;
 
 		//depth x stencil buffer
-		VkDeviceMemory depth_and_stencil_image_memory;
+		VkDeviceMemory depth_and_stencil_image_memory = nullptr;
 		VkImage depth_and_stencil_image = nullptr;
 		VkImageView depth_and_stencil_image_view = nullptr;
-
+		VkImageView depth_image_view = nullptr;
+		VkImageView stencil_image_view = nullptr;
 
 		VkFramebuffer fb = nullptr;
 
 
-		VkSemaphore sem; //for signalising that render finished or blending finished
-		VkSemaphore sem2; //rsr used in blending (blocks next frame when post rendering-RSRs on blending)
+		VkSemaphore sem = nullptr; //for signalising that render finished or blending finished
+		VkSemaphore sem2 = nullptr; //rsr used in blending (blocks next frame when post rendering-RSRs on blending)
+		VkFence fence1 = nullptr;
+		VkFence fence2 = nullptr;
+
+		bool wait_needed = false;
 
 		void init_images();
 		void init_sem();
-		void init_command_buffer();
 		void wait();
 		void reset();
 		//void init_framebuffer();
 
 
 	public:
-		render_shared_resources(renderer_context* r_context, VkCommandPool command_pool){
+		render_shared_resources(renderer_context* r_context){
+			std::cout<<"render_shared_resources RSR"<<std::endl;
 			updated = false;
-			this->command_pool = command_pool;
 			this->r_context = r_context;
-			init_command_buffer();
-			init_sem();
-			init_images();
 			//init_framebuffer();
 
 		}
 
-		VkCommandBuffer getCmd() const {
-				return cmd;
-			}
+		void init(){
+			std::cout<<"init RSR"<<std::endl;
+			init_sem();
+			std::cout<<"init_sem succ"<<std::endl;
+			init_images();
+			std::cout<<"init_images succ"<<std::endl;
+			std::cout<<"init RSR succ"<<std::endl;
+		}
+
 
 		VkFramebuffer getFb() const {
 				return fb;

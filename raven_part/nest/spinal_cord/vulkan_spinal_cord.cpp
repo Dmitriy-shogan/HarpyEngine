@@ -3,9 +3,16 @@
 #include <vector>
 #include <set>
 #include <string>
+#include <thread>
 
 using namespace harpy::nest;
 using namespace harpy::utilities;
+
+const std::chrono::milliseconds sleepDuration(1);
+std::shared_ptr<vulkan_spinal_cord> vulkan_spinal_cord::p_instance = nullptr;
+
+
+
 
 vulkan_spinal_cord::queue_supervisor::queue_supervisor(vulkan_spinal_cord * cord){
 	this->cord = cord;
@@ -13,14 +20,38 @@ vulkan_spinal_cord::queue_supervisor::queue_supervisor(vulkan_spinal_cord * cord
 void vulkan_spinal_cord::queue_supervisor::init(){
 	int k = 0;
 	VkQueue tmp_queue;
+	VkCommandBuffer tmp_queue_buf;
+	pools.resize(familyProperties.size(), nullptr);
 	for (int j = 0; j < familyProperties.size(); ++j) {
+
+		VkCommandPoolCreateInfo create_info{};
+		create_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+		create_info.queueFamilyIndex = j;
+		create_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+		if (vkCreateCommandPool(cord->device, &create_info, nullptr, &pools[j]) != VK_SUCCESS) {
+			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to init command pool!");
+		}
+
 		for (int i = 0; i < familyProperties[j].queueCount; ++i) {
 
 			vkGetDeviceQueue(cord->device, j, i, &tmp_queue);
 			vk_queues.push_back(tmp_queue);
 			vk_queue_family.push_back(j);
 			free_queues.push(k);
+
+			VkCommandBufferAllocateInfo allocInfo{};
+			allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+			allocInfo.commandPool = pools[j];
+			allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+			allocInfo.commandBufferCount = 1;
+
+			if (vkAllocateCommandBuffers(cord->device, &allocInfo, &tmp_queue_buf) != VK_SUCCESS) {
+				throw std::runtime_error("failed to allocate command buffers!");
+			}
+			vk_queue_buffer.push_back(tmp_queue_buf);
+
 			k++;
+
 		}
 
 		//isPresentationSupported.push_back(isSupported);
@@ -28,75 +59,106 @@ void vulkan_spinal_cord::queue_supervisor::init(){
 
 
 }
-std::pair<VkQueue, uint32_t> vulkan_spinal_cord::queue_supervisor::lock_and_grab(VkQueueFlags flags){
-	const std::lock_guard<std::mutex> _(lock);
-
-	//TODO uneffective
-	for (uint32_t i = 0; i < free_queues.size(); ++i) {
-		uint32_t k = free_queues.front();
-		free_queues.pop();
-		if ((familyProperties[vk_queue_family[k]].queueFlags & flags == flags)){
-			return std::make_pair(&vk_queues[k], k);
+std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vulkan_spinal_cord::queue_supervisor::lock_grab(VkQueueFlags flags){
+	std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> res_pair;
+	while (true){
+		lock.lock();
+		//TODO uneffective
+		for (uint32_t i = 0; i < free_queues.size(); ++i) {
+			uint32_t k = free_queues.front();
+			free_queues.pop();
+			if ((familyProperties[vk_queue_family[k]].queueFlags & flags == flags)){
+				res_pair = std::make_pair(std::make_pair(vk_queues[k], vk_queue_buffer[k]), k);
+				lock.unlock();
+				return res_pair;
+			}
+			free_queues.push(k);
 		}
-		free_queues.push(k);
+		lock.unlock();
+
+		std::this_thread::sleep_for(sleepDuration);
 	}
-	return std::make_pair(nullptr, -1);
+	//return std::make_pair(std::make_pair(nullptr,nullptr), -1);
 }
 
-std::pair<VkQueue, uint32_t> vulkan_spinal_cord::queue_supervisor::grab(VkQueueFlags flags){
+std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vulkan_spinal_cord::queue_supervisor::grab(VkQueueFlags flags){
 
-	//TODO uneffective
-	for (uint32_t i = 0; i < free_queues.size(); ++i) {
-		uint32_t k = free_queues.front();
-		free_queues.pop();
-		if ((familyProperties[vk_queue_family[k]].queueFlags & flags == flags)){
-			return std::make_pair(&vk_queues[k], k);
+	while(true){
+		//TODO uneffective
+		for (uint32_t i = 0; i < free_queues.size(); ++i) {
+			uint32_t k = free_queues.front();
+			free_queues.pop();
+			if ((familyProperties[vk_queue_family[k]].queueFlags & flags == flags)){
+				return std::make_pair(std::make_pair(vk_queues[k], vk_queue_buffer[k]), k);
+			}
+			free_queues.push(k);
 		}
-		free_queues.push(k);
+
+		std::this_thread::sleep_for(sleepDuration);
 	}
-	return std::make_pair(nullptr, -1);
+	//return std::make_pair(std::make_pair(nullptr,nullptr), -1);
 }
 
-std::pair<VkQueue, uint32_t> vulkan_spinal_cord::queue_supervisor::grab_presentation_queue(VkQueueFlags flags, VkSurfaceKHR surface){
-	const std::lock_guard<std::mutex> _(lock);
-
-	//TODO uneffective
-	for (uint32_t i = 0; i < free_queues.size(); ++i) {
-		uint32_t k = free_queues.front();
-		free_queues.pop();
-		if ((familyProperties[vk_queue_family[k]].queueFlags & flags == flags)){
-			VkBool32 isSupported = false;
-			if (vkGetPhysicalDeviceSurfaceSupportKHR(cord->ph_device, vk_queue_family[k], surface, &isSupported)!=VK_SUCCESS)throw harpy_little_error("Information about device presentation abilities is unavailable");
-			if (isSupported) return std::make_pair(&vk_queues[k], k);
+std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vulkan_spinal_cord::queue_supervisor::grab_presentation_queue(VkQueueFlags flags, VkSurfaceKHR surface){
+	std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> res_pair;
+	while(true){
+		lock.lock();
+		//TODO uneffective
+		for (uint32_t i = 0; i < free_queues.size(); ++i) {
+			uint32_t k = free_queues.front();
+			free_queues.pop();
+			if ((familyProperties[vk_queue_family[k]].queueFlags & flags == flags)){
+				VkBool32 isSupported = false;
+				if (vkGetPhysicalDeviceSurfaceSupportKHR(cord->ph_device, vk_queue_family[k], surface, &isSupported)!=VK_SUCCESS)throw harpy_little_error("Information about device presentation abilities is unavailable");
+				if (isSupported){
+					res_pair = std::make_pair(std::make_pair(vk_queues[k], vk_queue_buffer[k]), k);
+					lock.unlock();
+					return res_pair;
+				}
+			}
+			free_queues.push(k);
 		}
-		free_queues.push(k);
+		lock.unlock();
+		std::this_thread::sleep_for(sleepDuration);
 	}
-	return std::make_pair(nullptr, -1);
+	//return std::make_pair(std::make_pair(nullptr,nullptr), -1);
 }
 
 
 void vulkan_spinal_cord::queue_supervisor::free(uint32_t index){
+	free_queues.push(index);
+}
+
+void vulkan_spinal_cord::queue_supervisor::lock_free(uint32_t index){
 	const std::lock_guard<std::mutex> _(lock);
 	free_queues.push(index);
 }
 
 
-
 vulkan_spinal_cord::queue_supervisor::~queue_supervisor(){
 	lock.lock();
 	if (free_queues.size() != vk_queues.size()) throw harpy::utilities::harpy_little_error("Trying to destruct queue_supervisor with VkQueues, which in use");
-	delete &free_queues;
-	delete &vk_queue_family;
 
-	//for (int i = 0; i < vk_queues.size(); ++i) {
+
+	for (int i = 0; i < vk_queues.size(); ++i) {
 		//am i shouldn't destroy queues?
-	//}
-	delete &familyProperties;
-	delete &vk_queues;
-	delete &lock;
+		//if(cmd)
+		vkFreeCommandBuffers(cord->device, pools[vk_queue_family[i]], 1, &vk_queue_buffer[i]);
+	}
+
+	for (int j = 0; j < pools.size(); ++j) {
+		vkDestroyCommandPool(cord->device, pools[j], nullptr);
+	}
+//	delete &free_queues;
+//	delete &vk_queue_family;
+//	delete &familyProperties;
+//	delete &vk_queues;
+//	delete &vk_queue_buffer;
+//	delete &pools;
+//	delete &lock;
 };
 
-std::vector<VkDeviceQueueCreateInfo> * vulkan_spinal_cord::queue_supervisor::pre_init_get_queues(){
+std::vector<VkDeviceQueueCreateInfo> vulkan_spinal_cord::queue_supervisor::pre_init_get_queues(){
 
 
 	uint32_t queueFamilyCount = 0;
@@ -107,19 +169,22 @@ std::vector<VkDeviceQueueCreateInfo> * vulkan_spinal_cord::queue_supervisor::pre
 
 	std::vector<VkDeviceQueueCreateInfo> logdev_queue_infos(familyProperties.size());
 
+	priorities.resize(familyProperties.size());
+
 	for(uint32_t j = 0; j<familyProperties.size(); j++)
 	{
+
+		priorities[j].resize(familyProperties[j].queueCount,1.0f);
 		logdev_queue_infos[j] = {};
 		logdev_queue_infos[j].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 		logdev_queue_infos[j].queueFamilyIndex = j;
 		logdev_queue_infos[j].queueCount = familyProperties[j].queueCount;
-		float queuePriority = 1.0f;
-		logdev_queue_infos[j].pQueuePriorities = &queuePriority;
+		logdev_queue_infos[j].pQueuePriorities = priorities[j].data();//&queuePriority;
 
 	}
 
 
-	return &logdev_queue_infos;
+	return logdev_queue_infos;
 }
 
 
@@ -142,18 +207,23 @@ bool vulkan_spinal_cord::check_device_extension_support() const
 
 std::vector<const char*> vulkan_spinal_cord::get_required_extensions()
 {
-    uint32_t glfwExtensionCount = 0;
-    const char** glfw_extensions{nullptr};
-    glfw_extensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+    //uint32_t glfwExtensionCount = 0;
+    //const char** glfw_extensions{nullptr};
+    //glfw_extensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
-    std::vector<const char*> extensions(glfw_extensions, glfw_extensions + glfwExtensionCount);
+	uint32_t cnt;
+	std::vector<const char*> extentionsRequired;
+	const char **glfwExts = glfwGetRequiredInstanceExtensions(&cnt);
+	for (uint32_t i=0; i<cnt; i++) extentionsRequired.push_back(glfwExts[i]);
+
+    //extensions(glfw_extensions, glfw_extensions + glfwExtensionCount);
 
     if constexpr (VALIDATION_LAYERS)
     {
-        extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+    	extentionsRequired.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
     }
 
-    return extensions;
+    return extentionsRequired;
 }
 
 void vulkan_spinal_cord::init_instance()
@@ -169,10 +239,10 @@ void vulkan_spinal_cord::init_instance()
     app_info.apiVersion = API_VERSION;
     app_info.engineVersion = ENGINE_VERSION;
     app_info.pEngineName = ENGINE_NAME;
-
+    app_info.pNext=nullptr;
     VkInstanceCreateFlags create_flags{};
     
-    VkInstanceCreateInfo create_info;
+    VkInstanceCreateInfo create_info{};
     create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     create_info.pApplicationInfo = &app_info;
     create_info.flags = create_flags;
@@ -201,6 +271,7 @@ void vulkan_spinal_cord::init_instance()
         throw std::runtime_error("failed to create instance!");
     }
     
+
 }
 
 bool vulkan_spinal_cord::is_device_suitable(VkPhysicalDevice phys_device)
@@ -239,21 +310,36 @@ void vulkan_spinal_cord::init_ph_device()
 void vulkan_spinal_cord::init_device_and_queues()
 {
 
-    std::vector<VkDeviceQueueCreateInfo> * queueCreateInfos = queue_supervisor.pre_init_get_queues();
+    std::vector<VkDeviceQueueCreateInfo> queueCreateInfos = queue_supervisor.pre_init_get_queues();
     
 
     VkPhysicalDeviceFeatures deviceFeatures{};
+    vkGetPhysicalDeviceFeatures(ph_device, &deviceFeatures);
+
+
+    VkPhysicalDeviceFeatures2 deviceFeatures2{};
+
+	deviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+
+	VkPhysicalDeviceDescriptorIndexingFeatures descriptorIndexingFeatures = {};
+	descriptorIndexingFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES;
+	descriptorIndexingFeatures.pNext = nullptr;
+	deviceFeatures2.pNext = &descriptorIndexingFeatures;
+
+	vkGetPhysicalDeviceFeatures2(ph_device, &deviceFeatures2);
+
 
     VkDeviceCreateInfo createInfo{};
     createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 
-    createInfo.queueCreateInfoCount = static_cast<uint32_t>((*queueCreateInfos).size());
-    createInfo.pQueueCreateInfos = (*queueCreateInfos).data();
+    createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
+    createInfo.pQueueCreateInfos = queueCreateInfos.data();
 
-    createInfo.pEnabledFeatures = &deviceFeatures;
+    createInfo.pEnabledFeatures = nullptr;//&deviceFeatures;
 
     createInfo.enabledExtensionCount = static_cast<uint32_t>(device_extensions.size());
     createInfo.ppEnabledExtensionNames = device_extensions.data();
+    createInfo.pNext = &deviceFeatures2;
 
     if constexpr (VALIDATION_LAYERS) {
         createInfo.enabledLayerCount = static_cast<uint32_t>(base_valid.layers.size());
@@ -298,3 +384,4 @@ void vulkan_spinal_cord::init_debug()
 void vulkan_spinal_cord::init_queue_supervisor(){
 	this->queue_supervisor.init();
 };
+

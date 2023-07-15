@@ -77,7 +77,7 @@ void swapchain::init()
 	images.resize(image_count);
 	vkGetSwapchainImagesKHR(r_context->spinal_cord->get_vk_device(), chain, &image_count, images.data());
 
-	init_image_views();
+
 
 	change_projection(90, static_cast<float>(extent.width)/static_cast<float>(extent.height));
 }
@@ -169,14 +169,22 @@ void swapchain::init_image_views()
 
 	VkFramebufferCreateInfo framebuffer_info{};
 	framebuffer_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-	framebuffer_info.renderPass = r_context->render_pass;
+	framebuffer_info.renderPass = r_context->blender_render_pass;
 	framebuffer_info.attachmentCount = 1;
 	framebuffer_info.width = r_context->swapchain.get_vk_extent().width;
 	framebuffer_info.height = r_context->swapchain.get_vk_extent().height;
 	framebuffer_info.layers = 1;
 
 	VkSemaphoreCreateInfo semaphoreInfo{};
-    semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+//	VkSemaphoreTypeCreateInfo semaphoreTypeCreateInfo = {};
+//	semaphoreTypeCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO_KHR;
+//	semaphoreTypeCreateInfo.pNext = nullptr;
+//	semaphoreTypeCreateInfo.semaphoreType = VK_SEMAPHORE_TYPE_TIMELINE;
+//	semaphoreTypeCreateInfo.initialValue = 0;
+
+	semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+	//semaphoreInfo.pNext = &semaphoreTypeCreateInfo;
 
 	for(int f = 0; f < images.size(); f++)
 	{
@@ -192,6 +200,7 @@ void swapchain::init_image_views()
 
 		if (vkCreateSemaphore(r_context->spinal_cord->device, &semaphoreInfo, nullptr, &image_sems[f]) != VK_SUCCESS)
 			        	throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create semaphores!");
+		//image_sems[f].second = 0;
 
 	}
 

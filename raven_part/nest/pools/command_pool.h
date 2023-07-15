@@ -18,7 +18,6 @@ class command_pool : interfaces::IStrong_component
     VkDevice& device;
     command_pool_types type;
 
-    needed_queues_families queue_families;
     VkCommandPool pool{nullptr};
 
     void init_draw_pool();
@@ -27,9 +26,9 @@ public:
     command_pool(VkDevice& device, command_pool_types type = draw)
     : device(device), type(type) {}
 
-    void init(needed_queues_families families)
+    void init()
     {
-        queue_families = families;
+
         switch(type)
         {
         case draw:

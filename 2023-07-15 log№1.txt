@@ -1,0 +1,8 @@
+[03:07:22.981154460] {Error}: Can't find correct spv shader file
+[03:07:22.981233358] {Message}: Everything went fine on first try
+[04:49:50.742517889] {Error}: failed to allocate descriptor set!
+[04:49:50.743235819] {Message}: Everything went fine on first try
+[04:51:16.924902714] {Error}: failed to allocate descriptor set!
+[04:51:16.924980129] {Message}: Everything went fine on first try
+[04:51:26.696703868] {Error}: failed to allocate descriptor set!
+[04:51:26.696786634] {Message}: Everything went fine on first try

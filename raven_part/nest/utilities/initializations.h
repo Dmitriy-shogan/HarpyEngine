@@ -36,7 +36,7 @@
 //Defines goes here
 #define APP_VERSION VK_MAKE_API_VERSION(0,0,1,0)
 #define ENGINE_VERSION VK_MAKE_API_VERSION (0, 0, 1, 1)
-#define API_VERSION VK_MAKE_API_VERSION(0, 0, 1, 1)
+#define API_VERSION VK_API_VERSION_1_3 //VK_MAKE_API_VERSION(0, 0, 1, 1)
 #define ENGINE_NAME "Harpy's engine"
 
 #define MAX_FRAMES_IN_FLIGHT 2
@@ -49,17 +49,17 @@
 #define SHADER_PATH_BASE_TESSALATION_EVAL "shaders/base/tess_eval/base.tese"
 
 #define SHADER_PATH_BLENDER_VERTEX_DUMMY "shaders/base/vertex/service/blender.vert"
-#define SHADER_PATH_BLENDER_FRAGMENT "shaders/base/fragment/service/base.frag"
+#define SHADER_PATH_BLENDER_FRAGMENT "shaders/base/fragment/service/blender.frag"
 
 
 #define INTCAST(x) static_cast<int>(x)
 
-#ifdef ENABLE_VALIDATION_LAYERS
+//#ifdef ENABLE_VALIDATION_LAYERS
+//#define VALIDATION_LAYERS true
+//#else
+//#define VALIDATION_LAYERS false
+//#endif
 #define VALIDATION_LAYERS true
-#else
-#define VALIDATION_LAYERS true
-#endif
-
 //Enums go here
 
 

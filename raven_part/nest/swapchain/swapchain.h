@@ -29,6 +29,7 @@ namespace harpy::nest
         std::vector<VkImage> images;
         std::vector<VkSemaphore> image_sems;
 
+
         VkSurfaceFormatKHR surface_format{};
         VkPresentModeKHR present_mode{};
         VkExtent2D extent{};
@@ -40,13 +41,15 @@ namespace harpy::nest
 
 
 
-        void init_image_views();
         
+
     public:
         
         swapchain(renderer_context * r_context);
-        
+        //stage1
         void init();
+        //stage2
+        void init_image_views();
         void reinit();
 
         VkDevice& get_vk_device();

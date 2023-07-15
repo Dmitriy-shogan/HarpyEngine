@@ -7,12 +7,13 @@
 #include <memory>
 using namespace harpy::nest;
 namespace harpy::nest{
-
+	struct renderer_context;
     //class hard_level_vulkan;
     struct base_window_layout
     {
         //friend hard_level_vulkan;
-    	nest::renderer_context * r_context;
+    	//nest::renderer_context * r_context;
+    	renderer_context * r_context;
         //std::shared_ptr<vulkan_spinal_cord> cord;
         GLFWwindow* glfw_window{nullptr};
         VkSurfaceKHR surface {nullptr};

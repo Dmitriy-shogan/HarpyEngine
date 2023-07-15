@@ -1,6 +1,5 @@
-#include <renderer/renderer.h>
+#include "harpy.h"
 
-using namespace harpy;
 int main()
 {
 
@@ -8,17 +7,15 @@ int main()
 	init_glfw();
 	try
 	{
-		//system("glsl_to_spiv.bat");
-		renderer render;
-		//render.main_loop();
-		//render.clean_up();
+		harpy::init();
+		harpy::run();
 	}
-	catch (utilities::harpy_little_error& exp)
+	catch (harpy::utilities::harpy_little_error& exp)
 	{
 		exp.show();
 		exp.log_this();
 	}
-	utilities::harpy_little_error logger(utilities::error_severity::message, "Everything went fine on first try");
+	harpy::utilities::harpy_little_error logger(harpy::utilities::error_severity::message, "Everything went fine on first try");
 	logger.show();
 	logger.log_this();
 }

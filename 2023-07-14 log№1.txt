@@ -1,0 +1,10 @@
+[19:14:03.153373291] {Wrong initialised}: failed to allocate image for RSR!
+[19:14:03.153460756] {Message}: Everything went fine on first try
+[19:14:58.834793808] {Wrong initialised}: failed to allocate image for RSR!
+[19:14:58.834881974] {Message}: Everything went fine on first try
+[19:39:31.330588773] {Error}: failed to find suitable memory type!
+[19:39:31.330667010] {Message}: Everything went fine on first try
+[19:41:41.741450636] {Error}: failed to find suitable memory type!
+[19:41:41.741547198] {Message}: Everything went fine on first try
+[19:48:48.919663542] {Error}: failed to find suitable memory type!
+[19:48:48.919753210] {Message}: Everything went fine on first try

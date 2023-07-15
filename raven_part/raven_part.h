@@ -13,7 +13,10 @@
 #include <memory>
 #include <atomic>
 
-#include <ECS/Entity.h>
+
+#include <ECS/ECS.h>
+#include <spinal_cord/vulkan_spinal_cord.h>
+#include <renderer_context/renderer_context.h>
 //using namespace harpy::human_part::ECS;
 namespace harpy::raven_part{
 	struct object_source{
