@@ -39,13 +39,14 @@ void swapchain::init()
 
 	uint32_t image_count {
 		std::min(
-				std::min((uint32_t)swapchain_details.capabilities.minImageCount + 1, (uint32_t)3),
+				std::max((uint32_t)swapchain_details.capabilities.minImageCount + 1, (uint32_t)3),
 				(uint32_t)swapchain_details.capabilities.maxImageCount
 				)};
 
 	if (swapchain_details.capabilities.maxImageCount > 0 && image_count > swapchain_details.capabilities.maxImageCount) {
 		image_count = swapchain_details.capabilities.maxImageCount;
 	}
+
 
 	VkSwapchainCreateInfoKHR create_info{};
 	create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
@@ -55,7 +56,7 @@ void swapchain::init()
 	create_info.imageFormat = surface_format.format;
 	create_info.imageColorSpace = surface_format.colorSpace;
 	create_info.imageArrayLayers = 1;
-	create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+	create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 
 	//not indices, shit name, needed to be changed
 	create_info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
@@ -127,7 +128,7 @@ VkExtent2D swapchain::choose_swap_extent()
 VkSurfaceFormatKHR swapchain::choose_swapchain_format ()
 {
 	for (const auto& available_format : swapchain_details.formats) {
-		if (available_format.format == VK_FORMAT_B8G8R8A8_SRGB && available_format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
+		if (available_format.format == VK_FORMAT_B8G8R8A8_SRGB && available_format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR ) {
 			return available_format;
 		}
 	}
@@ -167,13 +168,14 @@ void swapchain::init_image_views()
 	create_info.subresourceRange.baseArrayLayer = 0;
 	create_info.subresourceRange.layerCount = 1;
 
-	VkFramebufferCreateInfo framebuffer_info{};
-	framebuffer_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-	framebuffer_info.renderPass = r_context->blender_render_pass;
-	framebuffer_info.attachmentCount = 1;
-	framebuffer_info.width = r_context->swapchain.get_vk_extent().width;
-	framebuffer_info.height = r_context->swapchain.get_vk_extent().height;
-	framebuffer_info.layers = 1;
+
+//	VkFramebufferCreateInfo framebuffer_info{};
+//	framebuffer_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+//	framebuffer_info.renderPass = r_context->blender_render_pass;
+//	framebuffer_info.attachmentCount = 1;
+//	framebuffer_info.width = r_context->swapchain.get_vk_extent().width;
+//	framebuffer_info.height = r_context->swapchain.get_vk_extent().height;
+//	framebuffer_info.layers = 1;
 
 	VkSemaphoreCreateInfo semaphoreInfo{};
 
@@ -192,11 +194,11 @@ void swapchain::init_image_views()
 		if (vkCreateImageView(r_context->spinal_cord->device, &create_info, nullptr, &image_views[f]) != VK_SUCCESS) {
 			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create image views!");
 		}
-		framebuffer_info.pAttachments = &image_views[f];
-
-		if (vkCreateFramebuffer(r_context->spinal_cord->device, &framebuffer_info, nullptr, &fbs[f]) != VK_SUCCESS) {
-			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to init framebuffer!");
-		}
+//		framebuffer_info.pAttachments = &image_views[f];
+//
+//		if (vkCreateFramebuffer(r_context->spinal_cord->device, &framebuffer_info, nullptr, &fbs[f]) != VK_SUCCESS) {
+//			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to init framebuffer!");
+//		}
 
 		if (vkCreateSemaphore(r_context->spinal_cord->device, &semaphoreInfo, nullptr, &image_sems[f]) != VK_SUCCESS)
 			        	throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create semaphores!");

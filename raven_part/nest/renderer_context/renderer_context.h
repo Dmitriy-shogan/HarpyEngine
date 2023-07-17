@@ -141,13 +141,15 @@ namespace harpy::nest
 
 		VkDescriptorSetLayout blender_descriptor_set_layout1 = nullptr;
 		VkDescriptorSetLayout blender_descriptor_set_layout2 = nullptr;
-		VkRenderPass blender_render_pass = nullptr;
+		VkDescriptorSetLayout blender_descriptor_set_layout_out = nullptr;
+		//VkRenderPass blender_render_pass = nullptr;
 		VkPipeline blender_pipeline = nullptr;
-		VkViewport blender_dynamic_viewport{};
-		VkRect2D blender_dynamic_scissors{};
+		//VkViewport blender_dynamic_viewport{};
+		//VkRect2D blender_dynamic_scissors{};
 		VkPipelineLayout blender_pipeline_layout = nullptr;
 		VkDescriptorSet blender_set1 = nullptr;
 		VkDescriptorSet blender_set2 = nullptr;
+		VkDescriptorSet blender_set_out = nullptr;
 		VkSampler blender_sampler = nullptr;
 		VkClearValue clear_color{{0.0f,0.0f,0.0f,1.0f}};
 		VkClearValue clear_depth_stencil = {{1.0f, 0}};
@@ -168,7 +170,8 @@ namespace harpy::nest
 				std::pair<render_shared_resources*, uint32_t> rsr,
 				std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vk_queue,
 				std::vector<std::pair<render_shared_resources*, uint32_t>>* rendered_rsrs,
-				VkFramebuffer swapchain_fb,
+				VkImage swapchain_image,
+				VkImageView swapchain_image_view,
 				VkSemaphore image_sem
 				);
 		void present(

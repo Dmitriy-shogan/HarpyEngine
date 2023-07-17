@@ -10946,6 +10946,7 @@ VKAPI_ATTR void VKAPI_CALL vkSetHdrMetadataEXT(
 VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkDebugUtilsMessengerEXT)
 #define VK_EXT_DEBUG_UTILS_SPEC_VERSION   2
 #define VK_EXT_DEBUG_UTILS_EXTENSION_NAME "VK_EXT_debug_utils"
+#define VK_KHR_SHARED_PRESENTABLE_IMAGE_NAME "VK_KHR_shared_presentable_image"
 typedef VkFlags VkDebugUtilsMessengerCallbackDataFlagsEXT;
 
 typedef enum VkDebugUtilsMessageSeverityFlagBitsEXT {

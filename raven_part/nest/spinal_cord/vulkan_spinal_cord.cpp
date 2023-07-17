@@ -223,6 +223,7 @@ std::vector<const char*> vulkan_spinal_cord::get_required_extensions()
     	extentionsRequired.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
     }
 
+
     return extentionsRequired;
 }
 
@@ -248,6 +249,7 @@ void vulkan_spinal_cord::init_instance()
     create_info.flags = create_flags;
 
     const auto extensions = get_required_extensions();
+
     create_info.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
     create_info.ppEnabledExtensionNames = extensions.data();
 

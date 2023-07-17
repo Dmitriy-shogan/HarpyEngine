@@ -49,7 +49,7 @@
 #define SHADER_PATH_BASE_TESSALATION_EVAL "shaders/base/tess_eval/base.tese"
 
 #define SHADER_PATH_BLENDER_VERTEX_DUMMY "shaders/base/vertex/service/blender.vert"
-#define SHADER_PATH_BLENDER_FRAGMENT "shaders/base/fragment/service/blender.frag"
+#define SHADER_PATH_BLENDER_FRAGMENT "shaders/base/compute/service/blender.frag"
 
 
 #define INTCAST(x) static_cast<int>(x)

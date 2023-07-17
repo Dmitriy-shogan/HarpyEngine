@@ -30,11 +30,13 @@ namespace harpy::nest
 		//color buffer
 		VkDeviceMemory color_image_memory = nullptr;
 		VkImage color_image = nullptr;
+		VkImageLayout color_image_layout = VK_IMAGE_LAYOUT_UNDEFINED;
 		VkImageView color_image_view = nullptr;
 
 		//depth x stencil buffer
 		VkDeviceMemory depth_and_stencil_image_memory = nullptr;
 		VkImage depth_and_stencil_image = nullptr;
+		VkImageLayout depth_and_stencil_image_layout = VK_IMAGE_LAYOUT_UNDEFINED;
 		VkImageView depth_and_stencil_image_view = nullptr;
 		VkImageView depth_image_view = nullptr;
 		VkImageView stencil_image_view = nullptr;

@@ -56,7 +56,7 @@ void renderer_context::init_render_pass()
     color_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
 
     color_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    color_attachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    color_attachment.finalLayout = VK_IMAGE_LAYOUT_GENERAL;
 
 
     VkAttachmentDescription depth_and_spencil_attachment{};
@@ -70,16 +70,16 @@ void renderer_context::init_render_pass()
     depth_and_spencil_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
 
     depth_and_spencil_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    depth_and_spencil_attachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    depth_and_spencil_attachment.finalLayout = VK_IMAGE_LAYOUT_GENERAL;
 
 
     VkAttachmentReference color_attachment_ref{};
     color_attachment_ref.attachment = 0;
-    color_attachment_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    color_attachment_ref.layout = VK_IMAGE_LAYOUT_GENERAL;
 
     VkAttachmentReference depth_and_spencil_attachment_ref{};
     depth_and_spencil_attachment_ref.attachment = 1;
-    depth_and_spencil_attachment_ref.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    depth_and_spencil_attachment_ref.layout = VK_IMAGE_LAYOUT_GENERAL;
 
     VkSubpassDescription subpass{};
     subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
@@ -141,56 +141,6 @@ void renderer_context::init_render_pass()
 
 
 void renderer_context::init_blender(){
-	VkAttachmentDescription color_attachment{};
-	    color_attachment.format = swapchain.surface_format.format;
-	    color_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
-
-	    color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	    color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-
-	    color_attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-	    color_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-
-	    color_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-	    color_attachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-
-
-
-	    VkAttachmentReference color_attachment_ref{};
-	    color_attachment_ref.attachment = 0;
-	    color_attachment_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-	    VkSubpassDescription subpass{};
-	    subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-	    subpass.colorAttachmentCount = 1;
-	    subpass.pColorAttachments = &color_attachment_ref;
-
-
-
-	    VkSubpassDependency dependency{};
-		dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-		dependency.dstSubpass = 0;
-
-		dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-		dependency.srcAccessMask = 0;
-
-		dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-		dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-
-	    VkRenderPassCreateInfo render_pass_create_info{};
-	    render_pass_create_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-	    render_pass_create_info.dependencyCount = 1;
-	    render_pass_create_info.pDependencies = &dependency;
-	    render_pass_create_info.subpassCount = 1;
-	    render_pass_create_info.pSubpasses = &subpass;
-
-
-	    VkAttachmentDescription attachments[] = {color_attachment};
-		render_pass_create_info.attachmentCount = 1;
-		render_pass_create_info.pAttachments = attachments;
-
-		if(vkCreateRenderPass(this->spinal_cord->device, &render_pass_create_info, nullptr, &this->blender_render_pass) != VK_SUCCESS)
-		        throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "Blender's Render pass hasn't been properly initialised");
 
 		std::cout<<"init vkCreateRenderPass"<<std::endl;
 		VkDescriptorSetLayoutBinding colorLayoutBinding{};
@@ -199,7 +149,7 @@ void renderer_context::init_blender(){
 		colorLayoutBinding.descriptorCount = effective_rsr_cnt;
 		colorLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 		colorLayoutBinding.pImmutableSamplers = nullptr;
-		colorLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+		colorLayoutBinding.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
 
 
 
@@ -209,8 +159,15 @@ void renderer_context::init_blender(){
 		depthLayoutBinding.descriptorCount = effective_rsr_cnt;
 		depthLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 		depthLayoutBinding.pImmutableSamplers = nullptr;
-		depthLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+		depthLayoutBinding.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
 
+		VkDescriptorSetLayoutBinding outLayoutBinding{};
+		outLayoutBinding.binding = 0;
+		//depthLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+		outLayoutBinding.descriptorCount = 1;
+		outLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+		outLayoutBinding.pImmutableSamplers = nullptr;
+		outLayoutBinding.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
 
 		VkDescriptorBindingFlags bindingFlags = VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT |
 			VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT |
@@ -240,6 +197,11 @@ void renderer_context::init_blender(){
 		layoutInfo2.pBindings = &depthLayoutBinding;
 		layoutInfo2.pNext = &extendedInfo2;
 
+		VkDescriptorSetLayoutCreateInfo layoutInfo3{};
+		layoutInfo3.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+		layoutInfo3.bindingCount = 1;
+		layoutInfo3.pBindings = &outLayoutBinding;
+
 
 		if (vkCreateDescriptorSetLayout(this->spinal_cord->device, &layoutInfo1, nullptr, &this->blender_descriptor_set_layout1) != VK_SUCCESS) {
 			throw utilities::harpy_little_error(utilities::error_severity::wrong_init,
@@ -249,17 +211,22 @@ void renderer_context::init_blender(){
 			throw utilities::harpy_little_error(utilities::error_severity::wrong_init,
 				"failed to create descriptor set layout!");
 		}
+
+		if (vkCreateDescriptorSetLayout(this->spinal_cord->device, &layoutInfo3, nullptr, &this->blender_descriptor_set_layout_out) != VK_SUCCESS) {
+				throw utilities::harpy_little_error(utilities::error_severity::wrong_init,
+					"failed to create descriptor set layout!");
+			}
 		std::cout<<"init vkCreateDescriptorSetLayout"<<std::endl;
 		VkPushConstantRange pushConstantRange{};
-		pushConstantRange.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+		pushConstantRange.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
 		pushConstantRange.offset = 0;
 		pushConstantRange.size = sizeof(blender_push_constants);
 
-		VkDescriptorSetLayout layouts[] = {blender_descriptor_set_layout1,blender_descriptor_set_layout2};
+		VkDescriptorSetLayout layouts[] = {blender_descriptor_set_layout1,blender_descriptor_set_layout2, blender_descriptor_set_layout_out};
 
 		VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
 		pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-		pipelineLayoutInfo.setLayoutCount = 2;
+		pipelineLayoutInfo.setLayoutCount = 3;
 		pipelineLayoutInfo.pSetLayouts = layouts;
 		pipelineLayoutInfo.pushConstantRangeCount = 1;
 		pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
@@ -271,126 +238,26 @@ void renderer_context::init_blender(){
 
 
 
-
-
-		VkViewport blender_dynamic_viewport;
-		VkRect2D blender_dynamic_scissors;
-
-
-
-		shaders::shader_module vertex{spinal_cord->device};
 		shaders::shader_module fragment{spinal_cord->device};
-		std::cout<<"init shaders 11"<<std::endl;
-		vertex.init(SHADER_PATH_BLENDER_VERTEX_DUMMY);
 		fragment.init(SHADER_PATH_BLENDER_FRAGMENT);
 		std::cout<<"init shaders succ"<<std::endl;
-		VkPipelineShaderStageCreateInfo create_vertex_info{};
-		create_vertex_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-		create_vertex_info.stage = VK_SHADER_STAGE_VERTEX_BIT;
 
-		create_vertex_info.module = vertex;
-		create_vertex_info.pName = "main";
 
 		VkPipelineShaderStageCreateInfo create_fragment_info{};
 		create_fragment_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-		create_fragment_info.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+		create_fragment_info.stage = VK_SHADER_STAGE_COMPUTE_BIT;
 		create_fragment_info.module = fragment.module;
 		create_fragment_info.pName = "main";
 
-		VkPipelineShaderStageCreateInfo shaderStages[] = {create_vertex_info,create_fragment_info}; //create_vertex_info
-		VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
-		vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 
-		auto bindingDescription = get_binding_description();
-		auto attributeDescriptions = get_attributes_descriptions();
-
-		vertexInputInfo.vertexBindingDescriptionCount = 1;
-		vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
-		vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
-		vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
-
-		VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
-		inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-		inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-		inputAssembly.primitiveRestartEnable = VK_FALSE;
-
-		VkPipelineViewportStateCreateInfo viewportState{};
-		viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-		viewportState.viewportCount = 1;
-		viewportState.scissorCount = 1;
-
-		VkPipelineRasterizationStateCreateInfo rasterizer{};
-		rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-		rasterizer.depthClampEnable = VK_FALSE;
-		rasterizer.rasterizerDiscardEnable = VK_FALSE;
-		rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
-		rasterizer.lineWidth = 1.0f;
-		rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
-		rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
-		rasterizer.depthBiasEnable = VK_FALSE; //IDK should i use it
-
-		VkPipelineMultisampleStateCreateInfo multisampling{};
-		multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-		multisampling.sampleShadingEnable = VK_FALSE;
-		multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-
-		VkPipelineColorBlendAttachmentState colorBlendAttachment{};
-		colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-		colorBlendAttachment.blendEnable = VK_TRUE;
-
-		VkPipelineColorBlendStateCreateInfo colorBlending{};
-		colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-		colorBlending.logicOpEnable = VK_FALSE;
-		colorBlending.logicOp = VK_LOGIC_OP_COPY;
-		colorBlending.attachmentCount = 1;
-		colorBlending.pAttachments = &colorBlendAttachment;
-		colorBlending.blendConstants[0] = 0.0f;
-		colorBlending.blendConstants[1] = 0.0f;
-		colorBlending.blendConstants[2] = 0.0f;
-		colorBlending.blendConstants[3] = 0.0f;
-
-
-
-		VkPipelineDepthStencilStateCreateInfo depthStencil = {};
-		depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-		depthStencil.depthTestEnable = VK_FALSE;
-		depthStencil.depthWriteEnable = VK_FALSE;
-		//depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
-		depthStencil.stencilTestEnable = VK_FALSE;
-
-
-		std::vector<VkDynamicState> dynamicStates = {
-			VK_DYNAMIC_STATE_VIEWPORT,
-			VK_DYNAMIC_STATE_SCISSOR
-		};
-		VkPipelineDynamicStateCreateInfo dynamicState{};
-		dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-		dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
-		dynamicState.pDynamicStates = dynamicStates.data();
-
-
-
-
-		VkGraphicsPipelineCreateInfo pipelineInfo{};
-		pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+		VkComputePipelineCreateInfo pipelineInfo{};
+		pipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
 		pipelineInfo.flags = 0;
-		pipelineInfo.stageCount = 2;
-		pipelineInfo.pStages = shaderStages;
-		pipelineInfo.pVertexInputState = &vertexInputInfo;
-		pipelineInfo.pInputAssemblyState = &inputAssembly;
-		pipelineInfo.pViewportState = &viewportState;
-		pipelineInfo.pRasterizationState = &rasterizer;
-		pipelineInfo.pMultisampleState = &multisampling;
-		pipelineInfo.pColorBlendState = &colorBlending;
-		pipelineInfo.pDepthStencilState = &depthStencil;
-		pipelineInfo.pDynamicState = &dynamicState;
+		pipelineInfo.stage = create_fragment_info;
 		pipelineInfo.layout = blender_pipeline_layout;
-		pipelineInfo.renderPass = blender_render_pass;
-		pipelineInfo.subpass = 0;
 		pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-
-		if (vkCreateGraphicsPipelines(this->spinal_cord->device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &blender_pipeline) != VK_SUCCESS) {
+		if (vkCreateComputePipelines(this->spinal_cord->device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &blender_pipeline) != VK_SUCCESS) {
 			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create graphics pipeline!");
 		}
 		std::cout<<"init vkCreateGraphicsPipelines"<<std::endl;
@@ -428,7 +295,7 @@ void renderer_context::init_descriptor_pool()
 	poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
 	poolInfo.poolSizeCount = 1;
 	poolInfo.pPoolSizes = &pool_size;
-	poolInfo.maxSets = static_cast<uint32_t>(2);
+	poolInfo.maxSets = static_cast<uint32_t>(3);
 
 	if (vkCreateDescriptorPool(this->spinal_cord->device, &poolInfo, nullptr, &blender_desc_pool) != VK_SUCCESS) {
 		throw utilities::harpy_little_error(utilities::error_severity::wrong_init,
@@ -554,13 +421,11 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::object_sou
 			throw utilities::harpy_little_error("failed to acquire swap chain image!");
 		}
 		std::cout<<"probe9"<<std::endl;
-		blending(blender_rsr, blender_vk_queue, &rendered_rsrs, swapchain.fbs[image_index], swapchain.image_sems[frame]);
+		blending(blender_rsr, blender_vk_queue, &rendered_rsrs, swapchain.images[image_index], swapchain.image_views[image_index], swapchain.image_sems[frame]);
 		std::cout<<"probe10"<<std::endl;
 		present(present_queue,blender_rsr,image_index);
 		std::cout<<"probe11"<<std::endl;
-		//for (uint32_t i = 0; i < rendered_rsrs.size(); ++i) {
-		//	rsr_pool.acquire(rendered_rsrs[i].second);
-		//}
+
 		rsr_pool.lock_free(blender_rsr.second);
 
 
@@ -621,15 +486,6 @@ void renderer_context::render_task(
 	VkSubmitInfo submitInfo{};
 	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-	//uint64_t signal_value = 1;
-//	VkTimelineSemaphoreSubmitInfo timelineSemaphoreSubmitInfo = {};
-//	timelineSemaphoreSubmitInfo.sType = VK_STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO;
-//	timelineSemaphoreSubmitInfo.waitSemaphoreValueCount = 0;
-//	timelineSemaphoreSubmitInfo.pWaitSemaphoreValues = VK_NULL_HANDLE;
-//	timelineSemaphoreSubmitInfo.signalSemaphoreValueCount = 1;
-//	timelineSemaphoreSubmitInfo.pSignalSemaphoreValues = rsr.first->curr_sem_val + 1;
-
-	//VkSemaphore waitSemaphores[] = {image_sems[frame]};
 	VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
 	submitInfo.waitSemaphoreCount = 0;
 	submitInfo.pWaitSemaphores = VK_NULL_HANDLE;//waitSemaphores;
@@ -637,7 +493,6 @@ void renderer_context::render_task(
 
 	submitInfo.commandBufferCount = 1;
 	submitInfo.pCommandBuffers = &vk_queue.first.second;
-	//submitInfo.pNext = &timelineSemaphoreSubmitInfo;
 
 
 	submitInfo.signalSemaphoreCount = 1;
@@ -646,6 +501,8 @@ void renderer_context::render_task(
 	if (vkQueueSubmit(vk_queue.first.first, 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
 		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to submit draw command buffer!");
 	}
+	rsr.first->color_image_layout = VK_IMAGE_LAYOUT_GENERAL;
+	rsr.first->depth_and_stencil_image_layout = VK_IMAGE_LAYOUT_GENERAL;
 
 	rsr_pool.free(rsr.second);
 
@@ -656,7 +513,8 @@ void renderer_context::blending(
 		std::pair<render_shared_resources*, uint32_t> rsr,
 		std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vk_queue,
 		std::vector<std::pair<render_shared_resources*, uint32_t>>* rendered_rsrs,
-		VkFramebuffer swapchain_fb,
+		VkImage swapchain_image,
+		VkImageView swapchain_image_view,
 		VkSemaphore image_sem
 		)
 {
@@ -668,51 +526,44 @@ void renderer_context::blending(
 		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
 
-		VkRenderPassBeginInfo renderPassBeginInfo = {};
-		renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-		renderPassBeginInfo.renderPass = blender_render_pass;
-		renderPassBeginInfo.framebuffer = swapchain_fb;
-		renderPassBeginInfo.renderArea.offset = { 0, 0 };
-		renderPassBeginInfo.renderArea.extent = { swapchain.extent.width, swapchain.extent.height };
-		renderPassBeginInfo.pClearValues = &clear_color;
-		renderPassBeginInfo.clearValueCount = 1;
-
 		if (vkBeginCommandBuffer(vk_queue.first.second, &beginInfo) != VK_SUCCESS)
 			throw utilities::harpy_little_error("failed to begin command buffer!");
 		std::cout<<"probe blending2"<<std::endl;
-		vkCmdBeginRenderPass(vk_queue.first.second, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
-		std::cout<<"probe blending3"<<std::endl;
-		VkDescriptorSet sets[] = {blender_set1,blender_set2};
-		if (blender_set1 && vkFreeDescriptorSets(spinal_cord->device, blender_desc_pool, 2, sets) != VK_SUCCESS)
-			throw utilities::harpy_little_error("failed to free descriptor set!");
+		if (blender_set1){
+			VkDescriptorSet sets[] = {blender_set1,blender_set2,blender_set_out};
+			if (blender_set1 && vkFreeDescriptorSets(spinal_cord->device, blender_desc_pool, 3, sets) != VK_SUCCESS)
+				throw utilities::harpy_little_error("failed to free descriptor set!");
+		}
 		std::cout<<"probe blending4"<<std::endl;
-//		if (blender_set2 && vkFreeDescriptorSets(spinal_cord->device, blender_desc_pool, 1, &blender_set2) != VK_SUCCESS)
-//			throw utilities::harpy_little_error("failed to free descriptor set!");
-//		std::cout<<"probe blending5"<<std::endl;
 
-		VkDescriptorSetLayout layouts[] = {blender_descriptor_set_layout1, blender_descriptor_set_layout2};
-		VkDescriptorSetAllocateInfo allocInfo1{};
-		allocInfo1.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-		allocInfo1.descriptorPool = blender_desc_pool;
-		allocInfo1.descriptorSetCount = 2;
-		allocInfo1.pSetLayouts = layouts;
+		VkDescriptorSetAllocateInfo allocInfo{};
+		allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+		allocInfo.descriptorPool = blender_desc_pool;
+		allocInfo.descriptorSetCount = 1;
+		allocInfo.pSetLayouts = &blender_descriptor_set_layout_out;
 
-//		VkDescriptorSetAllocateInfo allocInfo2{};
-//		allocInfo2.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-//		allocInfo2.descriptorPool = blender_desc_pool;
-//		allocInfo2.descriptorSetCount = 1;
-//		allocInfo2.pSetLayouts = &blender_descriptor_set_layout2;
+		if (vkAllocateDescriptorSets(this->spinal_cord->device, &allocInfo, &blender_set_out) != VK_SUCCESS)
+			throw utilities::harpy_little_error("failed to allocate descriptor set!");
 
+
+		std::cout<<"probe blending5"<<std::endl;
 		VkDescriptorSetVariableDescriptorCountAllocateInfo variableDescriptorCountInfo{};
 		uint32_t sizes[] = {rendered_rsrs->size(),rendered_rsrs->size()};
 		variableDescriptorCountInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO;
 		variableDescriptorCountInfo.descriptorSetCount = 2;
 		variableDescriptorCountInfo.pDescriptorCounts = sizes;
 
-		allocInfo1.pNext = &variableDescriptorCountInfo;
+		VkDescriptorSetLayout layouts[] = {blender_descriptor_set_layout1, blender_descriptor_set_layout2};
+		allocInfo.descriptorSetCount = 2;
+		allocInfo.pSetLayouts = layouts;
+		allocInfo.pNext = &variableDescriptorCountInfo;
 
-		if (vkAllocateDescriptorSets(this->spinal_cord->device, &allocInfo1, &blender_set1) != VK_SUCCESS)
+		VkDescriptorSet sets2[2] = {blender_set1,blender_set2};
+
+		if (vkAllocateDescriptorSets(this->spinal_cord->device, &allocInfo, sets2) != VK_SUCCESS)
 			throw utilities::harpy_little_error("failed to allocate descriptor set!");
+		blender_set1 = sets2[0];
+		blender_set2 = sets2[1];
 		std::cout<<"probe blending6"<<std::endl;
 //		if (vkAllocateDescriptorSets(this->spinal_cord->device, &allocInfo2, &blender_set2) != VK_SUCCESS)
 //			throw utilities::harpy_little_error("failed to allocate descriptor set!");
@@ -720,6 +571,7 @@ void renderer_context::blending(
 
 		std::vector<VkDescriptorImageInfo> color_buffer(rendered_rsrs->size());
 		std::vector<VkDescriptorImageInfo> depth_buffer(rendered_rsrs->size());
+
 
 		for (uint32_t i = 0; i < rendered_rsrs->size(); i++) {
 			color_buffer[i].imageView = (*rendered_rsrs)[i].first->color_image_view;
@@ -730,6 +582,11 @@ void renderer_context::blending(
 			depth_buffer[i].imageLayout = VK_IMAGE_LAYOUT_GENERAL;
 			depth_buffer[i].sampler = blender_sampler;
 		}
+
+		VkDescriptorImageInfo out_buffer{};
+		out_buffer.imageView = rsr.first->color_image_view;
+		out_buffer.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
+		//out_buffer.sampler = blender_sampler;
 
 		std::cout<<rendered_rsrs->size()<<std::endl;
 		VkWriteDescriptorSet color_buffer_write_descriptor_set = {};
@@ -751,25 +608,116 @@ void renderer_context::blending(
 		depth_and_stencil_buffer_write_descriptor_set.descriptorCount = rendered_rsrs->size();
 		depth_and_stencil_buffer_write_descriptor_set.pImageInfo = depth_buffer.data();
 
-		VkWriteDescriptorSet writeDescriptorSets[] = {color_buffer_write_descriptor_set, depth_and_stencil_buffer_write_descriptor_set};
+
+		VkWriteDescriptorSet out_descriptor_set = {};
+		out_descriptor_set.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		out_descriptor_set.dstSet = blender_set_out;
+		out_descriptor_set.dstBinding = 0;
+		out_descriptor_set.dstArrayElement = 0;
+		out_descriptor_set.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+		out_descriptor_set.descriptorCount = 1;
+		out_descriptor_set.pImageInfo = &out_buffer;
+
+		VkWriteDescriptorSet writeDescriptorSets[] = {color_buffer_write_descriptor_set, depth_and_stencil_buffer_write_descriptor_set,out_descriptor_set};
 		std::cout<<"probe blending8"<<std::endl;
-		vkUpdateDescriptorSets(spinal_cord->device, 2, writeDescriptorSets, 0, nullptr);
-		VkDescriptorSet sets2[] = {blender_set1, blender_set2};
+		vkUpdateDescriptorSets(spinal_cord->device, 3, writeDescriptorSets, 0, nullptr);
+
+		VkDescriptorSet sets3[] = {blender_set1, blender_set2, blender_set_out};
 		std::cout<<"probe blending9"<<std::endl;
-		vkCmdBindDescriptorSets(vk_queue.first.second, VK_PIPELINE_BIND_POINT_GRAPHICS, blender_pipeline_layout, 0, 2, sets2, 0, nullptr);
+		vkCmdBindDescriptorSets(vk_queue.first.second, VK_PIPELINE_BIND_POINT_COMPUTE, blender_pipeline_layout, 0, 3, sets3, 0, nullptr);
 		std::cout<<"probe blending10"<<std::endl;
+
 		blender_push_constants.layers_cnt = rendered_rsrs->size();
 		std::cout<<"probe blending11"<<std::endl;
-		vkCmdPushConstants(vk_queue.first.second, blender_pipeline_layout, VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(blender_push_constants), &blender_push_constants);
-			//vkCmdBindVertexBuffers(commandBuffer, 0, 1, &object.vertexBuffer, &offset);
-		//vkCmdBindIndexBuffer(commandBuffer, object.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+		vkCmdPushConstants(vk_queue.first.second, blender_pipeline_layout, VK_SHADER_STAGE_COMPUTE_BIT, 0, sizeof(blender_push_constants), &blender_push_constants);
 
 		std::cout<<"probe blending12"<<std::endl;
-		vkCmdBindPipeline(vk_queue.first.second, VK_PIPELINE_BIND_POINT_GRAPHICS, blender_pipeline);
+		vkCmdBindPipeline(vk_queue.first.second, VK_PIPELINE_BIND_POINT_COMPUTE, blender_pipeline);
+
+		VkImageMemoryBarrier imageBarrier = {};
+		imageBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+		imageBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		imageBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		imageBarrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		imageBarrier.subresourceRange.baseMipLevel = 0;
+		imageBarrier.subresourceRange.levelCount = 1;
+		imageBarrier.subresourceRange.baseArrayLayer = 0;
+		imageBarrier.subresourceRange.layerCount = 1;
+
+		if (rsr.first->color_image_layout != VK_IMAGE_LAYOUT_GENERAL){
+			imageBarrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+			imageBarrier.newLayout = VK_IMAGE_LAYOUT_GENERAL;
+			imageBarrier.image = rsr.first->color_image;
+
+			vkCmdPipelineBarrier(
+				vk_queue.first.second,
+				VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+				VK_PIPELINE_STAGE_TRANSFER_BIT,
+				0,
+				0, nullptr,
+				0, nullptr,
+				1, &imageBarrier
+			);
+
+
+		}
+
+
 		std::cout<<"probe blending13"<<std::endl;
-		vkCmdDraw(vk_queue.first.second,0,0,0,0);
-		std::cout<<"probe blending14"<<std::endl;
-		vkCmdEndRenderPass(vk_queue.first.second);
+		vkCmdDispatch(vk_queue.first.second,swapchain.extent.width,swapchain.extent.height,1);
+
+
+
+
+		imageBarrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		imageBarrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+		imageBarrier.image = swapchain_image;
+
+		vkCmdPipelineBarrier(
+			vk_queue.first.second,
+			VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+			VK_PIPELINE_STAGE_TRANSFER_BIT,
+			0,
+			0, nullptr,
+			0, nullptr,
+			1, &imageBarrier
+		);
+
+		VkImageCopy imageCopy{};
+		imageCopy.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		imageCopy.srcSubresource.layerCount = 1;
+		imageCopy.srcOffset = { 0, 0, 0 };
+		imageCopy.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		imageCopy.dstSubresource.layerCount = 1;
+		imageCopy.dstOffset = { 0, 0, 0 };
+		imageCopy.extent = { swapchain.extent.width, swapchain.extent.height, 1 };
+
+
+		vkCmdCopyImage(
+			vk_queue.first.second,
+		    rsr.first->color_image,
+			VK_IMAGE_LAYOUT_GENERAL,
+			swapchain_image,
+			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+		    1,
+		    &imageCopy
+		);
+
+
+		imageBarrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+		imageBarrier.newLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+		imageBarrier.image = swapchain_image;
+
+		vkCmdPipelineBarrier(
+			vk_queue.first.second,
+			VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+			VK_PIPELINE_STAGE_TRANSFER_BIT,
+			0,
+			0, nullptr,
+			0, nullptr,
+			1, &imageBarrier
+		);
+
 
 		std::cout<<"probe blending15"<<std::endl;
 		if (vkEndCommandBuffer(vk_queue.first.second) != VK_SUCCESS)
@@ -798,25 +746,12 @@ void renderer_context::blending(
 		signalSemaphores.push_back(rsr.first->sem);
 		signalSemaphores.push_back(rsr.first->sem2);
 
-
-
-//		VkTimelineSemaphoreSubmitInfo timelineSemaphoreSubmitInfo = {};
-//		timelineSemaphoreSubmitInfo.sType = VK_STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO;
-//		timelineSemaphoreSubmitInfo.waitSemaphoreValueCount = waitSemaphores.size();
-//		timelineSemaphoreSubmitInfo.pWaitSemaphoreValues = wait_values.data();
-//		timelineSemaphoreSubmitInfo.signalSemaphoreValueCount = signalSemaphores.size();
-//		timelineSemaphoreSubmitInfo.pSignalSemaphoreValues = signal_values.data();
-
-
-
 		submitInfo.waitSemaphoreCount = waitSemaphores.size();
 		submitInfo.pWaitSemaphores = waitSemaphores.data();
 		submitInfo.pWaitDstStageMask = waitStages.data();
 
 		submitInfo.commandBufferCount = 1;
 		submitInfo.pCommandBuffers = &vk_queue.first.second;
-		//submitInfo.pNext = &timelineSemaphoreSubmitInfo;
-
 
 		submitInfo.signalSemaphoreCount = signalSemaphores.size();
 		submitInfo.pSignalSemaphores = signalSemaphores.data();
@@ -824,8 +759,7 @@ void renderer_context::blending(
 		if (vkQueueSubmit(vk_queue.first.first, 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
 			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to submit draw command buffer!");
 		}
-
-
+		rsr.first->color_image_layout = VK_IMAGE_LAYOUT_GENERAL;
 
 		std::cout<<"probe blending18"<<std::endl;
 }
