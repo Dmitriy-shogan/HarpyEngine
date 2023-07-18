@@ -43,16 +43,22 @@ namespace harpy::nest
 
 		VkFramebuffer fb = nullptr;
 
+		VkDescriptorPool blender_desc_pool = nullptr;
+		VkDescriptorSet blender_set1 = nullptr;
+		VkDescriptorSet blender_set2 = nullptr;
+		VkDescriptorSet blender_set_out = nullptr;
+
 
 		VkSemaphore sem = nullptr; //for signalising that render finished or blending finished
-		VkSemaphore sem2 = nullptr; //rsr used in blending (blocks next frame when post rendering-RSRs on blending)
+		//VkSemaphore sem2 = nullptr; //rsr used in blending (blocks next frame when post rendering-RSRs on blending)
 		VkFence fence1 = nullptr;
-		VkFence fence2 = nullptr;
+		VkFence blender_fence = nullptr;
 
 		bool wait_needed = false;
 
 		void init_images();
 		void init_sem();
+		void init_blender_pool();
 		void wait();
 		void reset();
 		//void init_framebuffer();
@@ -72,6 +78,7 @@ namespace harpy::nest
 			init_sem();
 			std::cout<<"init_sem succ"<<std::endl;
 			init_images();
+			init_blender_pool();
 			std::cout<<"init_images succ"<<std::endl;
 			std::cout<<"init RSR succ"<<std::endl;
 		}

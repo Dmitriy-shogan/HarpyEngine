@@ -24,7 +24,7 @@ namespace harpy::human_part::ECS{
 	public:
 		uint32_t mapping_id;
 		static constexpr std::string name = "Renderer";
-		Renderer(harpy::nest::renderer_context* r_context, harpy::nest::renderer_mappings mappings);
+		Renderer();
 		~Renderer();
 		std::string Name() override {return name;}
 	};

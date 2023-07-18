@@ -25,10 +25,10 @@
 using namespace harpy::nest;
 using namespace harpy::raven_part;
 
-const std::chrono::milliseconds sleepDuration(1);
+const std::chrono::milliseconds sleepDuration(1000);
 
 namespace harpy::raven_part{
-	struct object_source;
+	struct scene_source;
 }
 
 namespace harpy::nest
@@ -81,20 +81,20 @@ namespace harpy::nest
 				}
 			}
 
-			std::pair<nest::render_shared_resources*,uint32_t> grab(){
-				while(true){
-					if (queue.size() > 0){
-						uint32_t k = queue.front();
-						queue.pop();
-						return std::make_pair(&RSRs[k],k);
-					}
-					std::this_thread::sleep_for(sleepDuration);
-				}
-			}
+//			std::pair<nest::render_shared_resources*,uint32_t> grab(){
+//				while(true){
+//					if (queue.size() > 0){
+//						uint32_t k = queue.front();
+//						queue.pop();
+//						return std::make_pair(&RSRs[k],k);
+//					}
+//					std::this_thread::sleep_for(sleepDuration);
+//				}
+//			}
 
-			void free(size_t index){
-				queue.push(index);
-			}
+//			void free(size_t index){
+//				queue.push(index);
+//			}
 
 			void init(uint32_t rsr_cnt){
 				std::cout<<"bbb"<<std::endl;
@@ -134,9 +134,9 @@ namespace harpy::nest
 
 		VkRenderPass render_pass = nullptr;
 		//VkDescriptorSetLayout descriptor_set_layout = nullptr;
-		VkPipelineLayout pipeline_layout = nullptr;
+		//VkPipelineLayout pipeline_layout = nullptr;
 		struct RSRPool rsr_pool{this};
-		VkDescriptorPool blender_desc_pool = nullptr;
+
 
 
 		VkDescriptorSetLayout blender_descriptor_set_layout1 = nullptr;
@@ -147,9 +147,7 @@ namespace harpy::nest
 		//VkViewport blender_dynamic_viewport{};
 		//VkRect2D blender_dynamic_scissors{};
 		VkPipelineLayout blender_pipeline_layout = nullptr;
-		VkDescriptorSet blender_set1 = nullptr;
-		VkDescriptorSet blender_set2 = nullptr;
-		VkDescriptorSet blender_set_out = nullptr;
+
 		VkSampler blender_sampler = nullptr;
 		VkClearValue clear_color{{0.0f,0.0f,0.0f,1.0f}};
 		VkClearValue clear_depth_stencil = {{1.0f, 0}};
@@ -164,7 +162,8 @@ namespace harpy::nest
 
 		void render_task(
 				std::pair<render_shared_resources*, uint32_t> rsr,
-				std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vk_queue
+				std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vk_queue,
+				uint32_t view_id
 				);
 		void blending(
 				std::pair<render_shared_resources*, uint32_t> rsr,
@@ -182,7 +181,7 @@ namespace harpy::nest
 		void init_swapchain();
 		void init_render_pass();
 		void init_rsr_pool();
-		void init_descriptor_pool();
+		//void init_descriptor_pool();
 		void init_blender();
 		void init_renderer_resource_storage();
 		void init_renderer_object_mapper();
@@ -193,14 +192,37 @@ namespace harpy::nest
 				std::unique_ptr<base_window_layout> connected_window_layout
 				);
 		void render_loop(
-				std::shared_ptr<harpy::raven_part::object_source> source,
+				std::shared_ptr<harpy::raven_part::scene_source> source,
 				std::atomic_flag* cond
 				);
 
 		void init();
-		VkPipelineLayout getPipelineLayout() const {
-					return pipeline_layout;
-				}
+
+
+		uint32_t register_view(raven_part::resource_types::View view){
+			storage.views.push_back(view);
+			return storage.views.size()-1;
+		}
+
+		uint32_t register_shape(raven_part::resource_types::Shape shape){
+			storage.shapes.push_back(shape);
+			return storage.shapes.size()-1;
+		}
+
+		uint32_t register_material(raven_part::resource_types::Material material){
+					storage.materials.push_back(material);
+					return storage.materials.size()-1;
+		}
+
+
+
+		void register_renderer(human_part::ECS::Renderer* renderer, renderer_mappings mappings){
+			//std::vector<harpy::human_part::ECS::Component*> components = entity->get_components_by_name(human_part::ECS::Renderer::name);
+			//for (int i = 0; i < components.size(); ++i) {
+			renderer->mapping_id = mapper.register_mapping(mappings);
+			//}
+		}
+
 
 		VkRenderPass getRenderPass() const {
 					return render_pass;

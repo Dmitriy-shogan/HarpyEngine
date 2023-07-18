@@ -19,11 +19,12 @@
 #include <renderer_context/renderer_context.h>
 //using namespace harpy::human_part::ECS;
 namespace harpy::raven_part{
-	struct object_source{
+	struct scene_source{
 		std::mutex lock;
 		std::atomic_flag consumed;
 		std::shared_ptr<std::vector<human_part::ECS::Entity*>> entities;
-		object_source() = default;
+		uint32_t view_id;
+		scene_source() = default;
 	};
 }
 

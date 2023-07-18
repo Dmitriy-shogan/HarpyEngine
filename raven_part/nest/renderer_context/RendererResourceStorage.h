@@ -11,18 +11,18 @@
 #include <vector>
 #include <resource_types/View.h>
 #include <resource_types/Material.h>
-#include <resource_types/Object.h>
 #include <resource_types/Pipeline.h>
 #include <resource_types/Shader.h>
+#include <resource_types/Shape.h>
 
 namespace harpy::nest
 {
 	struct RendererResourceStorage{
-		std::vector<raven_part::resource_types::View> views;
-		std::vector<raven_part::resource_types::Shader> shaders;
-		std::vector<raven_part::resource_types::Material> materials;
-		std::vector<raven_part::resource_types::Pipeline> pipelines;
-		std::vector<raven_part::resource_types::Object> objects;
+		std::vector<raven_part::resource_types::View> views{};
+		//std::vector<raven_part::resource_types::Shader> shaders;
+		std::vector<raven_part::resource_types::Material> materials{};
+//		/std::vector<raven_part::resource_types::Pipeline> pipelines;
+		std::vector<raven_part::resource_types::Shape> shapes{};
 
 
 	};

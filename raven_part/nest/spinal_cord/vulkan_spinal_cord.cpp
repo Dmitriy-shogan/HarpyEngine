@@ -8,7 +8,7 @@
 using namespace harpy::nest;
 using namespace harpy::utilities;
 
-const std::chrono::milliseconds sleepDuration(1);
+const std::chrono::milliseconds sleepDuration(1000);
 std::shared_ptr<vulkan_spinal_cord> vulkan_spinal_cord::p_instance = nullptr;
 
 
@@ -81,23 +81,23 @@ std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vulkan_spinal_cord::que
 	//return std::make_pair(std::make_pair(nullptr,nullptr), -1);
 }
 
-std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vulkan_spinal_cord::queue_supervisor::grab(VkQueueFlags flags){
-
-	while(true){
-		//TODO uneffective
-		for (uint32_t i = 0; i < free_queues.size(); ++i) {
-			uint32_t k = free_queues.front();
-			free_queues.pop();
-			if ((familyProperties[vk_queue_family[k]].queueFlags & flags == flags)){
-				return std::make_pair(std::make_pair(vk_queues[k], vk_queue_buffer[k]), k);
-			}
-			free_queues.push(k);
-		}
-
-		std::this_thread::sleep_for(sleepDuration);
-	}
-	//return std::make_pair(std::make_pair(nullptr,nullptr), -1);
-}
+//std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vulkan_spinal_cord::queue_supervisor::grab(VkQueueFlags flags){
+//
+//	while(true){
+//		//TODO uneffective
+//		for (uint32_t i = 0; i < free_queues.size(); ++i) {
+//			uint32_t k = free_queues.front();
+//			free_queues.pop();
+//			if ((familyProperties[vk_queue_family[k]].queueFlags & flags == flags)){
+//				return std::make_pair(std::make_pair(vk_queues[k], vk_queue_buffer[k]), k);
+//			}
+//			free_queues.push(k);
+//		}
+//
+//		std::this_thread::sleep_for(sleepDuration);
+//	}
+//	//return std::make_pair(std::make_pair(nullptr,nullptr), -1);
+//}
 
 std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vulkan_spinal_cord::queue_supervisor::grab_presentation_queue(VkQueueFlags flags, VkSurfaceKHR surface){
 	std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> res_pair;
@@ -125,12 +125,12 @@ std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vulkan_spinal_cord::que
 }
 
 
-void vulkan_spinal_cord::queue_supervisor::free(uint32_t index){
-	free_queues.push(index);
-}
+//void vulkan_spinal_cord::queue_supervisor::free(uint32_t index){
+//	free_queues.push(index);
+//}
 
 void vulkan_spinal_cord::queue_supervisor::lock_free(uint32_t index){
-	const std::lock_guard<std::mutex> _(lock);
+	std::lock_guard<std::mutex> _(lock);
 	free_queues.push(index);
 }
 

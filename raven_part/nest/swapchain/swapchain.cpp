@@ -38,10 +38,11 @@ void swapchain::init()
 	extent = choose_swap_extent();
 
 	uint32_t image_count {
-		std::min(
-				std::max((uint32_t)swapchain_details.capabilities.minImageCount + 1, (uint32_t)3),
+		//std::min(
+				//(uint32_t)5,//std::max((uint32_t)swapchain_details.capabilities.minImageCount + 1, (uint32_t)3),
 				(uint32_t)swapchain_details.capabilities.maxImageCount
-				)};
+				//)
+	};
 
 	if (swapchain_details.capabilities.maxImageCount > 0 && image_count > swapchain_details.capabilities.maxImageCount) {
 		image_count = swapchain_details.capabilities.maxImageCount;
@@ -187,7 +188,7 @@ void swapchain::init_image_views()
 
 	semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 	//semaphoreInfo.pNext = &semaphoreTypeCreateInfo;
-
+	std::cout<<"images count: "<<images.size()<<std::endl;
 	for(int f = 0; f < images.size(); f++)
 	{
 		create_info.image = images[f];

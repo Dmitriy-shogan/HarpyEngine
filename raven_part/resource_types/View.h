@@ -12,9 +12,21 @@
 
 namespace harpy::raven_part::resource_types{
 
+	struct CameraPushConstants{
+
+	};
+
 	struct View{
 		std::shared_ptr<vulkan_spinal_cord> cord;
+		VkViewport viewport{};
+		VkRect2D scissor{};
 
+
+		VkPipeline cameraGraphicsPipeline;
+
+		CameraPushConstants cameraPushConstants;
+
+		//set0
 		VkDescriptorSet desc_set;
 	};
 }

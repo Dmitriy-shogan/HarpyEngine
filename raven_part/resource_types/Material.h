@@ -14,7 +14,10 @@ namespace harpy::raven_part::resource_types{
 
 	struct Material{
 		std::shared_ptr<vulkan_spinal_cord> cord;
+		VkPipeline pipeline;
+		VkPipelineLayout pipelineLayout;
 
+		//set1
 		VkDescriptorSet desc_set;
 	};
 }

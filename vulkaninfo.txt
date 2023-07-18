@@ -31,8 +31,8 @@ Instance Extensions: count = 23
 	VK_KHR_xlib_surface                    : extension revision 6
 	VK_LUNARG_direct_driver_loading        : extension revision 1
 
-Layers: count = 9
-=================
+Layers: count = 10
+==================
 VK_LAYER_INTEL_nullhw (INTEL NULL HW) Vulkan version 1.1.73, layer version 1:
 	Layer Extensions: count = 0
 	Devices: count = 2
@@ -41,6 +41,24 @@ VK_LAYER_INTEL_nullhw (INTEL NULL HW) Vulkan version 1.1.73, layer version 1:
 
 		GPU id = 1 (llvmpipe (LLVM 15.0.7, 256 bits))
 		Layer-Device Extensions: count = 0
+
+VK_LAYER_KHRONOS_validation (Khronos Validation Layer) Vulkan version 1.3.250, layer version 1:
+	Layer Extensions: count = 3
+		VK_EXT_debug_report        : extension revision 9
+		VK_EXT_debug_utils         : extension revision 1
+		VK_EXT_validation_features : extension revision 2
+	Devices: count = 2
+		GPU id = 0 (NVIDIA GeForce GTX 1080)
+		Layer-Device Extensions: count = 3
+			VK_EXT_debug_marker     : extension revision 4
+			VK_EXT_tooling_info     : extension revision 1
+			VK_EXT_validation_cache : extension revision 1
+
+		GPU id = 1 (llvmpipe (LLVM 15.0.7, 256 bits))
+		Layer-Device Extensions: count = 3
+			VK_EXT_debug_marker     : extension revision 4
+			VK_EXT_tooling_info     : extension revision 1
+			VK_EXT_validation_cache : extension revision 1
 
 VK_LAYER_MESA_device_select (Linux device selection layer) Vulkan version 1.3.211, layer version 1:
 	Layer Extensions: count = 0
@@ -1191,7 +1209,7 @@ VkPhysicalDeviceMemoryProperties:
 memoryHeaps: count = 3
 	memoryHeaps[0]:
 		size   = 8589934592 (0x200000000) (8.00 GiB)
-		budget = 8118403072 (0x1e3e50000) (7.56 GiB)
+		budget = 8204779520 (0x1e90b0000) (7.64 GiB)
 		usage  = 0 (0x00000000) (0.00 B)
 		flags: count = 1
 			MEMORY_HEAP_DEVICE_LOCAL_BIT
@@ -1203,8 +1221,8 @@ memoryHeaps: count = 3
 			None
 	memoryHeaps[2]:
 		size   = 257949696 (0x0f600000) (246.00 MiB)
-		budget = 247922688 (0x0ec70000) (236.44 MiB)
-		usage  = 10027008 (0x00990000) (9.56 MiB)
+		budget = 247267328 (0x0ebd0000) (235.81 MiB)
+		usage  = 10682368 (0x00a30000) (10.19 MiB)
 		flags: count = 1
 			MEMORY_HEAP_DEVICE_LOCAL_BIT
 memoryTypes: count = 11

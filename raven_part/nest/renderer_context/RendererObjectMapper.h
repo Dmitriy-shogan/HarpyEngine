@@ -18,10 +18,10 @@ namespace harpy::nest
 {
 
     struct renderer_mappings {
-        uint32_t shader_id;
+        //uint32_t shader_id;
         uint32_t material_id;
         uint32_t pipeline_id;
-        uint32_t object_id;
+        uint32_t shape_id;
     };
 
     struct RendererObjectMapper {
