@@ -22,6 +22,7 @@ namespace harpy{
 
 	std::pair<VkBuffer,VkDeviceMemory> createVertexBuffer(std::shared_ptr<vulkan_spinal_cord> cord, VkCommandBuffer copy_buf, VkQueue copy_queue);
 	std::pair<VkBuffer,VkDeviceMemory> createIndexBuffer(std::shared_ptr<vulkan_spinal_cord> cord, VkCommandBuffer copy_buf, VkQueue copy_queue);
+	std::pair<VkBuffer,VkDeviceMemory> createVertexBuffer2(std::shared_ptr<vulkan_spinal_cord> cord, VkCommandBuffer copy_buf, VkQueue copy_queue);
 	std::pair<VkPipeline,VkPipelineLayout> createGraphicsPipeline(std::shared_ptr<vulkan_spinal_cord> cord,VkDescriptorSetLayout descriptorSetLayout, VkRenderPass renderpass);
 	VkDescriptorSetLayout createDescriptorSetLayout(std::shared_ptr<vulkan_spinal_cord> cord);
 	VkDescriptorPool createDescriptorPool(std::shared_ptr<vulkan_spinal_cord> cord);
@@ -73,6 +74,14 @@ namespace harpy{
 		shape.indexBuffer = createIndexBuffer(cord, transfer_queue.first.second, transfer_queue.first.first).first;
 		shape.indexType = VK_INDEX_TYPE_UINT16;
 
+
+		raven_part::resource_types::Shape shape2{};
+		shape2.vertexBuffer = createVertexBuffer2(cord, transfer_queue.first.second, transfer_queue.first.first).first;
+
+		shape2.indices_size = indices.size();
+		shape2.indexBuffer = createIndexBuffer(cord, transfer_queue.first.second, transfer_queue.first.first).first;
+		shape2.indexType = VK_INDEX_TYPE_UINT16;
+
 		VkDescriptorSetLayout descriptor_set_layout = createDescriptorSetLayout(cord);
 		VkDescriptorPool pool = createDescriptorPool(cord);
 		std::vector<VkDescriptorSet> sets = createDescriptorSets(cord, pool, descriptor_set_layout, ubo.first[0]);
@@ -86,24 +95,38 @@ namespace harpy{
 		renderer_mappings mappings{};
 		uint32_t view_id = r_context_ptr->register_view(view);
 		mappings.shape_id = r_context_ptr->register_shape(shape);
+
+
 		mappings.material_id = r_context_ptr->register_material(material);
+		std::cout<<"mappings.shape_id"<<std::endl;
+		std::cout<<mappings.shape_id<<std::endl;
+		renderer_mappings mappings2{};
+		mappings2.material_id = mappings.material_id;
+		mappings2.shape_id = r_context_ptr->register_shape(shape2);
+		std::cout<<mappings2.shape_id<<std::endl;
+
 
 		human_part::ECS::Entity* entity1 = new human_part::ECS::Entity();
 		human_part::ECS::Renderer* rend = new human_part::ECS::Renderer();
 		entity1->add_component(rend);
-
 		r_context_ptr->register_renderer(rend, mappings);
 
-		std::vector<human_part::ECS::Entity*> entities{entity1};
+		human_part::ECS::Entity* entity2 = new human_part::ECS::Entity();
+		human_part::ECS::Renderer* rend2 = new human_part::ECS::Renderer();
+		entity2->add_component(rend2);
+
+		r_context_ptr->register_renderer(rend2, mappings2);
+
+		std::vector<human_part::ECS::Entity*> entities{entity1,entity2};
 		std::shared_ptr<harpy::raven_part::scene_source> obj_str_ptr = std::make_shared<harpy::raven_part::scene_source>();
 		obj_str_ptr->view_id = view_id;
 		obj_str_ptr->consumed.test_and_set();
-		std::cout<<"еще нет"<<std::endl;
+
 //		std::async(std::launch::async, [obj_str_ptr,entities]() {
 //			physics(obj_str_ptr,entities);
 //		    });
 		std::thread t(physics,obj_str_ptr,entities);
-		std::cout<<"уже да"<<std::endl;
+		//std::cout<<"уже да"<<std::endl;
 		std::thread t1(render, std::move(r_context_ptr), obj_str_ptr);
 		t1.join();
 		std::cout<<"дычапщха"<<std::endl;

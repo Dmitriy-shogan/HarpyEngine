@@ -5,6 +5,11 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <glm/gtx/string_cast.hpp>
+
+#include <fmt/core.h>
+#include <fmt/ranges.h>
+
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
@@ -106,12 +111,11 @@ struct UniformBufferObject {
 };
 
 const std::vector<Vertex> vertices = {
-    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-    {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-    {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-    {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+    {{-5.5f, -5.5f}, {1.0f, 0.0f, 0.0f}},
+    {{5.5f, -5.5f}, {0.0f, 1.0f, 0.0f}},
+    {{5.5f, 5.5f}, {0.0f, 0.0f, 1.0f}},
+    {{-5.5f, 5.5f}, {1.0f, 1.0f, 1.0f}}
 };
-
 const std::vector<uint16_t> indices = {
     0, 1, 2, 2, 3, 0
 };
@@ -514,10 +518,11 @@ private:
         colorAttachmentRef.attachment = 0;
         colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
+        VkAttachmentReference refs[] = {colorAttachmentRef,colorAttachmentRef};
         VkSubpassDescription subpass{};
         subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-        subpass.colorAttachmentCount = 1;
-        subpass.pColorAttachments = &colorAttachmentRef;
+        subpass.colorAttachmentCount = 2;
+        subpass.pColorAttachments = refs;
 
         VkSubpassDependency dependency{};
         dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
@@ -984,7 +989,10 @@ private:
         ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
         ubo.proj = glm::perspective(glm::radians(90.0f), swapChainExtent.width / static_cast<float>(swapChainExtent.height), 0.1f, 10.0f);
         ubo.proj[1][1] *= -1;
-
+        std::cout << "UBO:" << std::endl;
+        std::cout << glm::to_string(ubo.model) << std::endl;
+        std::cout << glm::to_string(ubo.view) << std::endl;
+        std::cout << glm::to_string(ubo.proj) << std::endl;
         memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
     }
 
@@ -1255,7 +1263,7 @@ private:
     }
 };
 
-/*int main() {
+int main() {
     HelloTriangleApplication app;
 
     try {
@@ -1266,4 +1274,4 @@ private:
     }
 
     return EXIT_SUCCESS;
-}*/
+}

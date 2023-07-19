@@ -2,6 +2,9 @@
 #extension GL_EXT_nonuniform_qualifier : require
 
 
+
+#define FLT_MAX_NORM 3.402823466e+38
+#define FLT_MIN_NORM 1.175494351e-38
 #define FLT_MAX 3.402823466e+38
 #define FLT_MIN 1.175494351e-38
 #define DBL_MAX 1.7976931348623158e+308
@@ -25,7 +28,7 @@ ivec2 fragPosition;
 vec4 outColor;
 
 
-float maxDepth = FLT_MIN;
+float maxDepth = 1.1;
 
 void main() {
     fragPosition = ivec2(gl_GlobalInvocationID.xy);
@@ -34,18 +37,19 @@ void main() {
     for (int i = 0; i < pushConstants.layers_cnt; i++) {
         vec4 color = texture(colors[i], fragPosition); 
         float depth = texture(depths[i], fragPosition).r; 
-        if (maxDepth < depth){
+        if (maxDepth > depth){
             maxDepth = depth;
-            outColor.r = min(outColor.r * color.a + color.r, FLT_MAX);
-            outColor.g = min(outColor.g * color.a + color.g, FLT_MAX);
-            outColor.b = min(outColor.b * color.a + color.b, FLT_MAX);
+            outColor.r = min(outColor.r * (1-color.a) + color.r, FLT_MAX_NORM);
+            outColor.g = min(outColor.g * (1-color.a) + color.g, FLT_MAX_NORM);
+            outColor.b = min(outColor.b * (1-color.a) + color.b, FLT_MAX_NORM);
+            outColor.a = color.a;
         }else{
-            outColor.r = min(outColor.r + color.r * outColor.a, FLT_MAX);
-            outColor.g = min(outColor.g + color.g * outColor.a, FLT_MAX);
-            outColor.b = min(outColor.b + color.b * outColor.a, FLT_MAX);  
+            outColor.r = min(outColor.r + color.r * (1-outColor.a), FLT_MAX_NORM);
+            outColor.g = min(outColor.g + color.g * (1-outColor.a), FLT_MAX_NORM);
+            outColor.b = min(outColor.b + color.b * (1-outColor.a), FLT_MAX_NORM);  
         }
         
-        outColor.a = min(color.a + outColor.a, FLT_MAX);
+        //outColor.a = min(color.a + outColor.a, FLT_MAX_NORM);
         
     }
     imageStore(outColors, fragPosition, outColor);

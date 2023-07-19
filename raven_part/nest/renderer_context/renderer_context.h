@@ -150,7 +150,7 @@ namespace harpy::nest
 
 		VkSampler blender_sampler = nullptr;
 		VkClearValue clear_color{{0.0f,0.0f,0.0f,1.0f}};
-		VkClearValue clear_depth_stencil = {{1.0f, 0}};
+		VkClearValue clear_depth_stencil = {{1.0f, 1}};
 
 		struct blender_push_constants blender_push_constants{};
 

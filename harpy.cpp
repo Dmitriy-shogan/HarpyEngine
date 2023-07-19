@@ -52,11 +52,18 @@ namespace harpy{
 	};
 
 	const std::vector<Vertex> vertices = {
-	    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-	    {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-	    {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-	    {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+	    {{-5.5f, -5.5f}, {1.0f, 0.0f, 0.0f}},
+	    {{5.5f, -5.5f}, {0.0f, 1.0f, 0.0f}},
+	    {{5.5f, 5.5f}, {0.0f, 0.0f, 1.0f}},
+	    {{-5.5f, 5.5f}, {1.0f, 1.0f, 1.0f}}
 	};
+
+	const std::vector<Vertex> vertices2 = {
+		    {{-3.5f, -3.5f}, {0.0f, 0.0f, 0.5f}},
+		    {{3.5f, -3.5f}, {0.0f, 0.0f, 0.5f}},
+		    {{3.5f, 3.5f}, {0.0f, 0.0f, 0.5f}},
+		    {{-3.5f, 3.5f}, {0.0f, 0.0f, 0.5f}}
+		};
 
 
 
@@ -67,6 +74,7 @@ void physics(std::shared_ptr<harpy::raven_part::scene_source> obj_str_ptr, std::
 			obj_str_ptr->consumed.clear();
 			obj_str_ptr->entities = std::make_shared<std::vector<human_part::ECS::Entity*>>();
 			obj_str_ptr->entities->push_back(entities[0]);
+			obj_str_ptr->entities->push_back(entities[1]);
 			obj_str_ptr->lock.unlock();
 			std::this_thread::sleep_for(sleepDuration);
 		}
@@ -146,7 +154,7 @@ VkDescriptorSetLayout createDescriptorSetLayout(std::shared_ptr<vulkan_spinal_co
        rasterizer.depthClampEnable = VK_FALSE;
        rasterizer.rasterizerDiscardEnable = VK_FALSE;
        rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
-       rasterizer.lineWidth = 1.0f;
+       rasterizer.lineWidth = 10.0f;
        rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
        rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
        rasterizer.depthBiasEnable = VK_FALSE;
@@ -173,7 +181,8 @@ VkDescriptorSetLayout createDescriptorSetLayout(std::shared_ptr<vulkan_spinal_co
 
        VkPipelineColorBlendAttachmentState colorBlendAttachment{};
 		colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-		colorBlendAttachment.blendEnable = VK_TRUE;
+		colorBlendAttachment.blendEnable = VK_FALSE;
+
 
 		VkPipelineColorBlendStateCreateInfo colorBlending{};
 		colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
@@ -187,12 +196,26 @@ VkDescriptorSetLayout createDescriptorSetLayout(std::shared_ptr<vulkan_spinal_co
 		colorBlending.blendConstants[3] = 0.0f;
 
 
+
+
+//		VkStencilOpState stencilOpState = {};
+//		stencilOpState.failOp = VK_STENCIL_OP_KEEP; // Операция при неудачном стенсильном тесте
+//		stencilOpState.passOp = VK_STENCIL_OP_REPLACE; // Операция при успешном стенсильном тесте и прохождении глубинного теста
+//		stencilOpState.depthFailOp = VK_STENCIL_OP_KEEP; // Операция при успешном стенсильном тесте, но не прохождении глубинного теста
+//		stencilOpState.compareOp = VK_COMPARE_OP_ALWAYS; // Операция сравнения для стенсильного теста
+//		stencilOpState.compareMask = 0xFF; // Маска сравнения для стенсильного теста
+//		stencilOpState.writeMask = 0xFF; // Маска записи для стенсильного буфера
+//		stencilOpState.reference = 0x01; // Значение ссылки для стенсильного теста
+
+
 		VkPipelineDepthStencilStateCreateInfo depthStencil = {};
 		depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
 		depthStencil.depthTestEnable = VK_TRUE;
 		depthStencil.depthWriteEnable = VK_TRUE;
 		depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
-		depthStencil.stencilTestEnable = VK_TRUE;
+		depthStencil.stencilTestEnable = VK_FALSE;
+		//depthStencil.front = stencilOpState;
+		//depthStencil.back = stencilOpState;
 
 
        std::vector<VkDynamicState> dynamicStates = {
@@ -262,6 +285,31 @@ VkDescriptorSetLayout createDescriptorSetLayout(std::shared_ptr<vulkan_spinal_co
 	   vkFreeMemory(cord->device, stagingBufferMemory, nullptr);
 	   return std::make_pair(vertexBuffer, vertexBufferMemory);
    }
+
+
+   std::pair<VkBuffer,VkDeviceMemory> createVertexBuffer2(std::shared_ptr<vulkan_spinal_cord> cord, VkCommandBuffer copy_buf, VkQueue copy_queue) {
+   	   VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
+
+   	   VkBuffer vertexBuffer;
+   	   VkDeviceMemory vertexBufferMemory;
+
+   	   VkBuffer stagingBuffer;
+   	   VkDeviceMemory stagingBufferMemory;
+   	   createBuffer(cord, bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
+
+   	   void* data;
+   	   vkMapMemory(cord->device, stagingBufferMemory, 0, bufferSize, 0, &data);
+   		   memcpy(data, vertices2.data(), (size_t) bufferSize);
+   	   vkUnmapMemory(cord->device, stagingBufferMemory);
+
+   	   createBuffer(cord,bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBuffer, vertexBufferMemory);
+
+   	   copyBuffer(cord, copy_buf, copy_queue, stagingBuffer, vertexBuffer, bufferSize);
+
+   	   vkDestroyBuffer(cord->device, stagingBuffer, nullptr);
+   	   vkFreeMemory(cord->device, stagingBufferMemory, nullptr);
+   	   return std::make_pair(vertexBuffer, vertexBufferMemory);
+      }
 
    std::pair<VkBuffer,VkDeviceMemory> createIndexBuffer(std::shared_ptr<vulkan_spinal_cord> cord, VkCommandBuffer copy_buf, VkQueue copy_queue) {
 	   VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();

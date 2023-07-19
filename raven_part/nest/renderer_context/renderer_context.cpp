@@ -50,7 +50,7 @@ renderer_context::~renderer_context(){
 void renderer_context::init_render_pass()
 {
     VkAttachmentDescription color_attachment{};
-    color_attachment.format = VK_FORMAT_R8G8B8A8_UNORM;
+    color_attachment.format = VK_FORMAT_B8G8R8A8_UNORM;
     color_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
 
     color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
@@ -64,6 +64,7 @@ void renderer_context::init_render_pass()
 
 
     VkAttachmentDescription depth_and_spencil_attachment{};
+
     depth_and_spencil_attachment.format = VK_FORMAT_D24_UNORM_S8_UINT;
     depth_and_spencil_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
 
@@ -79,11 +80,11 @@ void renderer_context::init_render_pass()
 
     VkAttachmentReference color_attachment_ref{};
     color_attachment_ref.attachment = 0;
-    color_attachment_ref.layout = VK_IMAGE_LAYOUT_GENERAL;
+    color_attachment_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
     VkAttachmentReference depth_and_spencil_attachment_ref{};
     depth_and_spencil_attachment_ref.attachment = 1;
-    depth_and_spencil_attachment_ref.layout = VK_IMAGE_LAYOUT_GENERAL;
+    depth_and_spencil_attachment_ref.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
     VkSubpassDescription subpass{};
     subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
@@ -99,18 +100,30 @@ void renderer_context::init_render_pass()
     render_pass_create_info.subpassCount = 1;
     render_pass_create_info.pSubpasses = &subpass;
 
-    VkSubpassDependency dependency{};
-    dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-    dependency.dstSubpass = 0;
+    VkSubpassDependency dependency1{};
+    dependency1.srcSubpass = VK_SUBPASS_EXTERNAL;
+    dependency1.dstSubpass = 0;
 
-    dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    dependency.srcAccessMask = 0;
+    dependency1.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependency1.srcAccessMask = 0;
 
-    dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    dependency1.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependency1.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 
-    render_pass_create_info.dependencyCount = 1;
-    render_pass_create_info.pDependencies = &dependency;
+    VkSubpassDependency dependency2{};
+    dependency2.srcSubpass = VK_SUBPASS_EXTERNAL;
+	dependency2.dstSubpass = 0;
+
+	dependency2.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+	dependency2.srcAccessMask = 0;
+
+	dependency2.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+	dependency2.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+
+	VkSubpassDependency deps[] = {dependency1,dependency2};
+    render_pass_create_info.dependencyCount = 2;
+    render_pass_create_info.pDependencies = deps;
+
 
     if(vkCreateRenderPass(this->spinal_cord->device, &render_pass_create_info, nullptr, &this->render_pass) != VK_SUCCESS)
         throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "Render pass hasn't been properly initialised");
@@ -340,7 +353,13 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 		source->lock.unlock();
 		//std::cout<<"probe3"<<std::endl;
 		if (task_cnt == 0) continue;
+
+
+		std::cout<<"(int32_t)(entities->size())"<<std::endl;
+		std::cout<<(int32_t)(entities->size())<<std::endl;
 		uint32_t tgt_per_task = std::ceil((float)source->entities->size() / (float)task_cnt);
+		std::cout<<"tgt_per_task"<<std::endl;
+		std::cout<<tgt_per_task<<std::endl;
 		//if (tgt_per_task == 0) continue;
 		//std::cout<<"probe3.1"<<std::endl;
 
@@ -352,8 +371,9 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 		//rendered_rsrs.resize(task_cnt);
 		for (uint32_t i = 0; i < task_cnt; ++i) {
 			int32_t cnt = std::max(std::min((int32_t)tgt_per_task,  (int32_t)(entities->size()) - (int32_t)(i * tgt_per_task)),(int32_t)0);
+			std::cout<<"cnt: "<<cnt<<std::endl;
 			if(!cnt) continue;
-			//std::cout<<"probe4.0 "<<i<<std::endl;
+
 			std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vk_queue = spinal_cord->queue_supervisor.lock_grab(VK_QUEUE_GRAPHICS_BIT);
 			std::cout<<"got queue "<<vk_queue.second<<std::endl;
 			//std::cout<<"probe4.0.1"<<std::endl;
@@ -371,22 +391,22 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 
 
 
-			//std::cout<<"probe4.3 "<<cnt<<std::endl;
+			std::cout<<"probe4.3 "<<cnt<<std::endl;
 			rsr.first->queue.resize(cnt);
 			//std::cout<<"probe4.4"<<std::endl;
 			for (int k = 0; k < cnt; ++k) {
-				//std::cout<<"probe4.5"<<std::endl;
+				std::cout<<"probe4.5"<<std::endl;
 				rsr.first->queue[k].first = (*entities)[i * tgt_per_task + k];
-				//std::cout<<"probe4.6"<<std::endl;
+				std::cout<<"probe4.6"<<std::endl;
 				harpy::human_part::ECS::Entity* e = ((*entities)[i * tgt_per_task + k]);
-				//std::cout<<"probe4.6.1"<<std::endl;
+				std::cout<<e<<std::endl;
 				std::vector<harpy::human_part::ECS::Component*> comps = e->get_components_by_name(harpy::human_part::ECS::Renderer::name);
-				//std::cout<<"probe4.7"<<std::endl;
+				std::cout<<"probe4.7"<<std::endl;
 				uint32_t mappings_id = dynamic_cast<harpy::human_part::ECS::Renderer*>(comps[0])->mapping_id;
-				//std::cout<<"probe4.8"<<std::endl;
+				std::cout<<"probe4.8"<<std::endl;
 				rsr.first->queue[k].second = mapper.mappings[mappings_id];
 			}
-			//std::cout<<"probe4.9"<<std::endl;
+			std::cout<<"probe4.9"<<std::endl;
 			/*std::memcpy(
 					entities->data() + ptr_size * i * tgt_per_task,
 					rsr.first->queue.data(),
@@ -400,7 +420,8 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 			rendered_rsrs.push_back(rsr);
 			//rendered_rsrs[i] = rsr;
 		}
-		//std::cout<<"probe5"<<std::endl;
+		std::cout<<"rendered_rsrs.size()"<<std::endl;
+		std::cout<<rendered_rsrs.size()<<std::endl;
 		std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> blender_vk_queue = spinal_cord->queue_supervisor.lock_grab(VK_QUEUE_COMPUTE_BIT | VK_QUEUE_TRANSFER_BIT);
 		std::cout<<"got blender queue "<<blender_vk_queue.second<<std::endl;
 		std::cout<<"probe5.1"<<std::endl;
@@ -538,8 +559,9 @@ void renderer_context::render_task(
 //    DRAW
 //=====================
 
-	   vkCmdDrawIndexed(vk_queue.first.second, object.indices_size, 1, 0, 0, 0);
-	   //std::cout<<"probe render_task2.5"<<std::endl;
+	   vkCmdDrawIndexed(vk_queue.first.second, static_cast<uint32_t>(object.indices_size), 1, 0, 0, 0);
+
+	   std::cout<<static_cast<uint32_t>(object.indices_size)<<std::endl;
 //=====================
 //    EFFECT
 //=====================
