@@ -11,6 +11,7 @@
 #include <ECS/Component.h>
 #include <ECS/components/Renderer.h>
 #include <ECS/components/Transform.h>
+#include <ECS/components/Camera.h>
 
 
 

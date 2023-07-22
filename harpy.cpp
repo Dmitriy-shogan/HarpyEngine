@@ -15,35 +15,7 @@ namespace harpy{
 
 
 
-	struct Vertex {
-	    glm::vec2 pos;
-	    glm::vec3 color;
 
-	    static VkVertexInputBindingDescription getBindingDescription() {
-	        VkVertexInputBindingDescription bindingDescription{};
-	        bindingDescription.binding = 0;
-	        bindingDescription.stride = sizeof(Vertex);
-	        bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-
-	        return bindingDescription;
-	    }
-
-	    static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions() {
-	        std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{};
-
-	        attributeDescriptions[0].binding = 0;
-	        attributeDescriptions[0].location = 0;
-	        attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
-	        attributeDescriptions[0].offset = offsetof(Vertex, pos);
-
-	        attributeDescriptions[1].binding = 0;
-	        attributeDescriptions[1].location = 1;
-	        attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-	        attributeDescriptions[1].offset = offsetof(Vertex, color);
-
-	        return attributeDescriptions;
-	    }
-	};
 
 	struct UniformBufferObject {
 	    alignas(16) glm::mat4 model;
@@ -51,30 +23,28 @@ namespace harpy{
 	    alignas(16) glm::mat4 proj;
 	};
 
-	const std::vector<Vertex> vertices = {
-	    {{-5.5f, -5.5f}, {1.0f, 0.0f, 0.0f}},
-	    {{5.5f, -5.5f}, {0.0f, 1.0f, 0.0f}},
-	    {{5.5f, 5.5f}, {0.0f, 0.0f, 1.0f}},
-	    {{-5.5f, 5.5f}, {1.0f, 1.0f, 1.0f}}
-	};
 
-	const std::vector<Vertex> vertices2 = {
-		    {{-3.5f, -3.5f}, {0.0f, 0.0f, 0.5f}},
-		    {{3.5f, -3.5f}, {0.0f, 0.0f, 0.5f}},
-		    {{3.5f, 3.5f}, {0.0f, 0.0f, 0.5f}},
-		    {{-3.5f, 3.5f}, {0.0f, 0.0f, 0.5f}}
-		};
+
+
+
 
 
 
 
 void physics(std::shared_ptr<harpy::raven_part::scene_source> obj_str_ptr, std::vector<human_part::ECS::Entity*> entities){
+	int ang = 0;
 		while(true){
+			ang += 1;
+			ang = ang % 360;
+			float angleRadians = glm::radians(ang / 1.0);
+			glm::mat4 r_mat = glm::rotate(glm::mat4(1.0f), angleRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+
 			obj_str_ptr->lock.lock();
 			obj_str_ptr->consumed.clear();
 			obj_str_ptr->entities = std::make_shared<std::vector<human_part::ECS::Entity*>>();
 			obj_str_ptr->entities->push_back(entities[0]);
 			obj_str_ptr->entities->push_back(entities[1]);
+				dynamic_cast<harpy::human_part::ECS::Transform*>(obj_str_ptr->camera->get_components_by_name(harpy::human_part::ECS::Transform::name)[0])->rot_mat = r_mat;
 			obj_str_ptr->lock.unlock();
 			std::this_thread::sleep_for(sleepDuration);
 		}
@@ -277,7 +247,7 @@ VkDescriptorSetLayout createDescriptorSetLayout(std::shared_ptr<vulkan_spinal_co
 		   memcpy(data, vertices.data(), (size_t) bufferSize);
 	   vkUnmapMemory(cord->device, stagingBufferMemory);
 
-	   createBuffer(cord,bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBuffer, vertexBufferMemory);
+	   createBuffer(cord,bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBuffer, vertexBufferMemory);
 
 	   copyBuffer(cord, copy_buf, copy_queue, stagingBuffer, vertexBuffer, bufferSize);
 
@@ -302,7 +272,7 @@ VkDescriptorSetLayout createDescriptorSetLayout(std::shared_ptr<vulkan_spinal_co
    		   memcpy(data, vertices2.data(), (size_t) bufferSize);
    	   vkUnmapMemory(cord->device, stagingBufferMemory);
 
-   	   createBuffer(cord,bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBuffer, vertexBufferMemory);
+   	   createBuffer(cord,bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT  | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBuffer, vertexBufferMemory);
 
    	   copyBuffer(cord, copy_buf, copy_queue, stagingBuffer, vertexBuffer, bufferSize);
 

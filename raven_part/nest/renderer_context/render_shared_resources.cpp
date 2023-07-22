@@ -124,8 +124,6 @@ void render_shared_resources::init_images(){
 			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create image views!");
 	std::cout<<"init vkCreateImageView"<<std::endl;
 
-
-
 	VkImageView attachments[] = {color_image_view, depth_and_stencil_image_view};
 	VkFramebufferCreateInfo framebuffer_info{};
 	framebuffer_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -155,49 +153,51 @@ void render_shared_resources::init_sem(){
 	if (vkCreateSemaphore(r_context->spinal_cord->device, &semaphoreInfo, nullptr, &sem) != VK_SUCCESS)
 							throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create semaphore!");
 
-//	if (vkCreateSemaphore(r_context->spinal_cord->device, &semaphoreInfo, nullptr, &sem2) != VK_SUCCESS)
-//								throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create semaphore!");
-
-//	VkSemaphoreSignalInfo signal{};
-//	signal.sType = VK_STRUCTURE_TYPE_SEMAPHORE_SIGNAL_INFO;
-//	signal.value = 1;
-//	signal.semaphore = sem;
-//	if (vkSignalSemaphore(r_context->spinal_cord->device, &signal) != VK_SUCCESS)
-//		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to signal semaphore!");
-//	signal.semaphore = sem2;
-//	if (vkSignalSemaphore(r_context->spinal_cord->device, &signal) != VK_SUCCESS)
-//		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to signal semaphore!");
-
-//	curr_sem_val = 0;
-//	curr_sem2_val = 0;
-
 	VkFenceCreateInfo fenceInfo{};
 	fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
 
 	if (vkCreateFence(r_context->spinal_cord->device, &fenceInfo, nullptr, &fence1) != VK_SUCCESS)
 							throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create fence!");
-
-//	if (vkCreateFence(r_context->spinal_cord->device, &fenceInfo, nullptr, &blender_fence) != VK_SUCCESS)
-//								throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create fence!");
-
 	VkFence fences[] = {fence1};
 	if (vkResetFences(r_context->spinal_cord->device, 1, fences) != VK_SUCCESS)
 								throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to reset fence!");
 }
 
 
+
+
+void render_shared_resources::reinit_vertex_tmp(VkDescriptorPool vert_desc_pool, VkDescriptorSetLayout layout){
+
+	std::cout<<"probe camera_perform 1"<<std::endl;
+	if (vert_desc){
+		VkDescriptorSet sets[] = {vert_desc};
+		if (vkFreeDescriptorSets(r_context->spinal_cord->device, vert_desc_pool, 1, sets) != VK_SUCCESS)
+			throw utilities::harpy_little_error("failed to free descriptor set!");
+	}
+	std::cout<<"probe camera_perform 2"<<std::endl;
+	VkDescriptorSetAllocateInfo allocInfo{};
+	allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+	allocInfo.descriptorPool = vert_desc_pool;
+	allocInfo.descriptorSetCount = 1;
+	allocInfo.pSetLayouts = &layout;
+	std::cout<<"probe camera_perform 2.1"<<std::endl;
+	if (vkAllocateDescriptorSets(r_context->spinal_cord->device, &allocInfo, &vert_desc) != VK_SUCCESS)
+		throw utilities::harpy_little_error("failed to allocate descriptor set!");
+	std::cout<<"probe camera_perform 3"<<std::endl;
+}
+
 void render_shared_resources::init_blender_pool()
 	{
 
 	VkDescriptorPoolSize pool_size{};
-	pool_size.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	pool_size.type = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE; //IDK i changed it from uniform buffer
 	pool_size.descriptorCount = static_cast<uint32_t>(1);
 
 	VkDescriptorPoolCreateInfo poolInfo{};
 	poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
 	poolInfo.poolSizeCount = 1;
 	poolInfo.pPoolSizes = &pool_size;
-	poolInfo.maxSets = static_cast<uint32_t>(3);
+	poolInfo.maxSets = static_cast<uint32_t>(effective_rsr_cnt * 3);
 	poolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
 
 	if (vkCreateDescriptorPool(r_context->spinal_cord->device, &poolInfo, nullptr, &blender_desc_pool) != VK_SUCCESS) {
@@ -205,7 +205,8 @@ void render_shared_resources::init_blender_pool()
 				"failed to create descriptor pool!");
 	}
 
-	}
+}
+
 
 
 void render_shared_resources::wait(){
@@ -222,43 +223,18 @@ void render_shared_resources::wait(){
 			throw utilities::harpy_little_error("failed to wait RSR fences!");
 	}
 	wait_needed = true;
-//	VkSemaphore semaphores[] = {sem,sem2};
-//	uint64_t values[] = {++curr_sem_val, ++curr_sem2_val};
-//	VkSemaphoreWaitInfo waitInfo{};
-//	waitInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO;
-//	waitInfo.semaphoreCount = 2;
-//	waitInfo.pSemaphores = semaphores;
-//	waitInfo.pValues = values;
-//
-//	if (vkWaitSemaphores(r_context->spinal_cord->device,&waitInfo,UINT64_MAX) != VK_SUCCESS)
-//		throw utilities::harpy_little_error("failed to wait RSR semaphores!");
 
-//	VkSemaphoreSignalInfo signal{};
-//	signal.sType = VK_STRUCTURE_TYPE_SEMAPHORE_SIGNAL_INFO;
-//	signal.value = 0;
-//	signal.semaphore = sem;
-//	if (vkSignalSemaphore(r_context->spinal_cord->device, &signal) != VK_SUCCESS)
-//		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to signal semaphore!");
-//	signal.semaphore = sem2;
-//	if (vkSignalSemaphore(r_context->spinal_cord->device, &signal) != VK_SUCCESS)
-//		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to signal semaphore!");
 }
 
 void render_shared_resources::reset(){
 	VkFence fences[] = {fence1};
-//	VkSemaphoreSignalInfo signal{};
-//	signal.sType = VK_STRUCTURE_TYPE_SEMAPHORE_SIGNAL_INFO;
-//	signal.value = 0;
-//	signal.semaphore = sem;
-//	if (vkSignalSemaphore(r_context->spinal_cord->device, &signal) != VK_SUCCESS)
-//		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to signal semaphore!");
-//	signal.semaphore = sem2;
-//	if (vkSignalSemaphore(r_context->spinal_cord->device, &signal) != VK_SUCCESS)
-//		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to signal semaphore!");
+
 
 	if (vkResetFences(r_context->spinal_cord->device, 1, fences) != VK_SUCCESS)
 			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to signal semaphore!");
+	std::cout<<"Y"<<std::endl;
 	queue.clear();
+	std::cout<<"z"<<std::endl;
 }
 
 render_shared_resources::~render_shared_resources(){

@@ -8,26 +8,54 @@
 #ifndef RAVEN_PART_RESOURCE_TYPES_VIEW_H_
 #define RAVEN_PART_RESOURCE_TYPES_VIEW_H_
 
-#include <spinal_cord/vulkan_spinal_cord.h>
+
+#include <shaders/shader_module.h>
+
+#include <bias/vertex.h>
+#include <ECS/ECS.h>
+#include <resource_types/Shape.h>
+
+namespace harpy::nest{
+	struct renderer_context;
+}
 
 namespace harpy::raven_part::resource_types{
-
-	struct CameraPushConstants{
-
-	};
-
 	struct View{
-		std::shared_ptr<vulkan_spinal_cord> cord;
+		enum CameraType{
+			PRESPECTIVE,
+			ORTHOGRAPHIC
+		};
+
+		struct CameraPushConstants{
+			glm::mat4 transform;
+			glm::vec4 translate;
+
+		};
+
+		renderer_context* r_context;
 		VkViewport viewport{};
 		VkRect2D scissor{};
 
 
-		VkPipeline cameraGraphicsPipeline;
+		void init(renderer_context* r_context);
 
-		CameraPushConstants cameraPushConstants;
+		void view_perform(VkCommandBuffer cmd);
+		void camera_perform(
+				VkCommandBuffer cmd,
+				VkDescriptorSet desc_set,
+				std::pair<VkBuffer, VkDeviceSize> vert_tmp,//buffer,offset
+				Shape* shape,
+				human_part::ECS::Transform* camera,
+				human_part::ECS::Transform* object);
 
 		//set0
-		VkDescriptorSet desc_set;
+
+		VkDescriptorSetLayout desc_set_layout;
+
+		VkPipeline cameraGraphicsPipeline;
+		VkPipelineLayout cameraPipelineLayout;
+
+		CameraType cameraType;
 	};
 }
 

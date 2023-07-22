@@ -26,6 +26,11 @@
 #include <string.h>
 #include <memory>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/string_cast.hpp>
+
 using namespace harpy::nest;
 namespace harpy::utilities {
     
@@ -38,6 +43,7 @@ namespace harpy::utilities {
     //void vk_copy_buffer(VkBuffer src, VkBuffer dst, VkDeviceSize size, VkDevice& device, std::shared_ptr<pools::command_pool>  pool, VkQueue transfer_queue);
 
     uint32_t find_memory_types (VkPhysicalDevice& device, uint32_t typeFilter, VkMemoryPropertyFlags properties);
+    VkDeviceSize align_to(VkDeviceSize val, uint32_t bound);
 };
 
 

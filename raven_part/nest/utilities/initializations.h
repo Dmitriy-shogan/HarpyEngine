@@ -51,6 +51,10 @@
 #define SHADER_PATH_BLENDER_VERTEX_DUMMY "shaders/base/vertex/service/blender.vert"
 #define SHADER_PATH_BLENDER_FRAGMENT "shaders/base/compute/service/blender.frag"
 
+#define SHADER_PATH_CAMERA_PRESPECTIVE_VERTEX "shaders/base/compute/service/camera_perespective.comp"
+#define SHADER_PATH_CAMERA_ORTHOGRAPHIC_VERTEX "shaders/base/compute/service/camera_orthographic.comp"
+
+
 
 #define INTCAST(x) static_cast<int>(x)
 

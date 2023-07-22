@@ -10,14 +10,29 @@
 
 #include <raven_part.h>
 #include <human_part.h>
+#include <bias/vertex.h>
 #include <memory>
 #include <future>
 
 namespace harpy{
 	extern std::unique_ptr<harpy::nest::renderer_context> r_context_ptr;
-	const std::chrono::milliseconds sleepDuration(1);
+	const std::chrono::milliseconds sleepDuration(100);
 	const std::vector<uint16_t> indices = {
 		    0, 1, 2, 2, 3, 0
+		};
+
+	const std::vector<Vertex> vertices = {
+	    {{-5.5f, -5.5f,0.0f}, {1.0f, 0.0f, 0.0f}},
+	    {{5.5f, -5.5f,0.0f}, {0.0f, 1.0f, 0.0f}},
+	    {{5.5f, 5.5f,0.0f}, {0.0f, 0.0f, 1.0f}},
+	    {{-5.5f, 5.5f,0.0f}, {1.0f, 1.0f, 1.0f}}
+	};
+
+	const std::vector<Vertex> vertices2 = {
+		    {{-3.5f, -3.5f,1.0f}, {0.0f, 0.0f, 0.5f}},
+		    {{3.5f, -3.5f,1.0f}, {0.0f, 0.0f, 0.5f}},
+		    {{3.5f, 3.5f,1.0f}, {0.0f, 0.0f, 0.5f}},
+		    {{-3.5f, 3.5f,1.0f}, {0.0f, 0.0f, 0.5f}}
 		};
 
 	std::pair<VkBuffer,VkDeviceMemory> createVertexBuffer(std::shared_ptr<vulkan_spinal_cord> cord, VkCommandBuffer copy_buf, VkQueue copy_queue);
@@ -46,6 +61,7 @@ namespace harpy{
 		r_context_ptr->init();
 
 		raven_part::resource_types::View view{};
+		view.cameraType = raven_part::resource_types::View::CameraType::ORTHOGRAPHIC;
 		view.viewport.x = 0.0f;
 		view.viewport.y = 0.0f;
 		view.viewport.width = static_cast<float>(r_context_ptr->swapchain.extent.width);
@@ -69,7 +85,7 @@ namespace harpy{
 
 		raven_part::resource_types::Shape shape{};
 		shape.vertexBuffer = createVertexBuffer(cord, transfer_queue.first.second, transfer_queue.first.first).first;
-
+		shape.vert_size = vertices.size();
 		shape.indices_size = indices.size();
 		shape.indexBuffer = createIndexBuffer(cord, transfer_queue.first.second, transfer_queue.first.first).first;
 		shape.indexType = VK_INDEX_TYPE_UINT16;
@@ -77,7 +93,7 @@ namespace harpy{
 
 		raven_part::resource_types::Shape shape2{};
 		shape2.vertexBuffer = createVertexBuffer2(cord, transfer_queue.first.second, transfer_queue.first.first).first;
-
+		shape2.vert_size = vertices2.size();
 		shape2.indices_size = indices.size();
 		shape2.indexBuffer = createIndexBuffer(cord, transfer_queue.first.second, transfer_queue.first.first).first;
 		shape2.indexType = VK_INDEX_TYPE_UINT16;
@@ -108,18 +124,30 @@ namespace harpy{
 
 		human_part::ECS::Entity* entity1 = new human_part::ECS::Entity();
 		human_part::ECS::Renderer* rend = new human_part::ECS::Renderer();
+		human_part::ECS::Transform* tr1 = new human_part::ECS::Transform();
 		entity1->add_component(rend);
+		entity1->add_component(tr1);
 		r_context_ptr->register_renderer(rend, mappings);
 
 		human_part::ECS::Entity* entity2 = new human_part::ECS::Entity();
 		human_part::ECS::Renderer* rend2 = new human_part::ECS::Renderer();
+		human_part::ECS::Transform* tr2 = new human_part::ECS::Transform();
 		entity2->add_component(rend2);
-
+		entity2->add_component(tr2);
 		r_context_ptr->register_renderer(rend2, mappings2);
+
+
+
+		human_part::ECS::Entity* cam = new human_part::ECS::Entity();
+		human_part::ECS::Transform* tr3 = new human_part::ECS::Transform();
+		human_part::ECS::Camera* cm = new human_part::ECS::Camera();
+		cm->view_id = r_context_ptr->register_view(view);
+		cam->add_component(tr3);
+		cam->add_component(cm);
 
 		std::vector<human_part::ECS::Entity*> entities{entity1,entity2};
 		std::shared_ptr<harpy::raven_part::scene_source> obj_str_ptr = std::make_shared<harpy::raven_part::scene_source>();
-		obj_str_ptr->view_id = view_id;
+		obj_str_ptr->camera = cam;
 		obj_str_ptr->consumed.test_and_set();
 
 //		std::async(std::launch::async, [obj_str_ptr,entities]() {

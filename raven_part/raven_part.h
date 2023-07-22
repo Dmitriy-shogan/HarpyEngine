@@ -23,7 +23,7 @@ namespace harpy::raven_part{
 		std::mutex lock;
 		std::atomic_flag consumed;
 		std::shared_ptr<std::vector<human_part::ECS::Entity*>> entities;
-		uint32_t view_id;
+		human_part::ECS::Entity* camera;
 		scene_source() = default;
 	};
 }

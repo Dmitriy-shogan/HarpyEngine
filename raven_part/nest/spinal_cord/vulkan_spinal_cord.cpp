@@ -21,18 +21,20 @@ void vulkan_spinal_cord::queue_supervisor::init(){
 	int k = 0;
 	VkQueue tmp_queue;
 	VkCommandBuffer tmp_queue_buf;
-	pools.resize(familyProperties.size(), nullptr);
+	//pools.resize(familyProperties.size(), nullptr);
+	VkCommandPool tmp;
 	for (int j = 0; j < familyProperties.size(); ++j) {
 
-		VkCommandPoolCreateInfo create_info{};
-		create_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-		create_info.queueFamilyIndex = j;
-		create_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-		if (vkCreateCommandPool(cord->device, &create_info, nullptr, &pools[j]) != VK_SUCCESS) {
-			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to init command pool!");
-		}
-
 		for (int i = 0; i < familyProperties[j].queueCount; ++i) {
+
+			VkCommandPoolCreateInfo create_info{};
+			create_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+			create_info.queueFamilyIndex = j;
+			create_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+			if (vkCreateCommandPool(cord->device, &create_info, nullptr, &tmp) != VK_SUCCESS) {
+				throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to init command pool!");
+			}
+			pools.push_back(tmp);
 
 			vkGetDeviceQueue(cord->device, j, i, &tmp_queue);
 			vk_queues.push_back(tmp_queue);
@@ -41,7 +43,7 @@ void vulkan_spinal_cord::queue_supervisor::init(){
 
 			VkCommandBufferAllocateInfo allocInfo{};
 			allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-			allocInfo.commandPool = pools[j];
+			allocInfo.commandPool = tmp;
 			allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 			allocInfo.commandBufferCount = 1;
 
@@ -140,10 +142,10 @@ vulkan_spinal_cord::queue_supervisor::~queue_supervisor(){
 	if (free_queues.size() != vk_queues.size()) throw harpy::utilities::harpy_little_error("Trying to destruct queue_supervisor with VkQueues, which in use");
 
 
-	for (int i = 0; i < vk_queues.size(); ++i) {
+	for (int i = 0; i < pools.size(); ++i) {
 		//am i shouldn't destroy queues?
 		//if(cmd)
-		vkFreeCommandBuffers(cord->device, pools[vk_queue_family[i]], 1, &vk_queue_buffer[i]);
+		vkFreeCommandBuffers(cord->device, pools[i], 1, &vk_queue_buffer[i]);
 	}
 
 	for (int j = 0; j < pools.size(); ++j) {
@@ -278,10 +280,7 @@ void vulkan_spinal_cord::init_instance()
 
 bool vulkan_spinal_cord::is_device_suitable(VkPhysicalDevice phys_device)
 {
-     VkPhysicalDeviceProperties deviceProperties;
-     VkPhysicalDeviceFeatures deviceFeatures;
-     vkGetPhysicalDeviceProperties(phys_device, &deviceProperties);
-     vkGetPhysicalDeviceFeatures(phys_device, &deviceFeatures); 
+
 
      return deviceFeatures.geometryShader;
 }
@@ -307,6 +306,10 @@ void vulkan_spinal_cord::init_ph_device()
     if (ph_device == VK_NULL_HANDLE) {
         throw harpy_little_error("failed to find a suitable GPU!");
     }
+
+
+	vkGetPhysicalDeviceProperties(ph_device, &deviceProperties);
+	vkGetPhysicalDeviceFeatures(ph_device, &deviceFeatures);
 }
 
 void vulkan_spinal_cord::init_device_and_queues()

@@ -72,3 +72,8 @@ uint32_t harpy::utilities::find_memory_types(VkPhysicalDevice& device, uint32_t 
 
     throw harpy_little_error("failed to find suitable memory type!");
 }
+
+
+VkDeviceSize harpy::utilities::align_to(VkDeviceSize val, uint32_t bound){
+	return (val + bound -1) & ~(bound-1);
+}

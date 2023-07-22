@@ -62,6 +62,10 @@ namespace harpy::nest {
         };
         VkInstance instance = nullptr;
         VkPhysicalDevice ph_device = nullptr;
+        VkPhysicalDeviceProperties deviceProperties;
+		VkPhysicalDeviceFeatures deviceFeatures;
+
+
         VkDevice device = nullptr;
 
         struct queue_supervisor queue_supervisor{this};
@@ -113,7 +117,7 @@ namespace harpy::nest {
         }
 
         //for later
-        static bool is_device_suitable(VkPhysicalDevice phys_device);
+        bool is_device_suitable(VkPhysicalDevice phys_device);
 
 
         bool check_device_extension_support() const;
