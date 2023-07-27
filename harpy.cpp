@@ -33,18 +33,30 @@ namespace harpy{
 
 void physics(std::shared_ptr<harpy::raven_part::scene_source> obj_str_ptr, std::vector<human_part::ECS::Entity*> entities){
 	int ang = 0;
+	glm::vec3 axisX(1.0f, 0.0f, 0.0f);
+	glm::vec3 axisY(0.0f, 1.0f, 0.0f);
 		while(true){
 			ang += 1;
 			ang = ang % 360;
 			float angleRadians = glm::radians(ang / 1.0);
-			glm::mat4 r_mat = glm::rotate(glm::mat4(1.0f), angleRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+			//glm::mat4 r_mat = glm::mat4(1.0f), angleRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 			obj_str_ptr->lock.lock();
 			obj_str_ptr->consumed.clear();
 			obj_str_ptr->entities = std::make_shared<std::vector<human_part::ECS::Entity*>>();
 			obj_str_ptr->entities->push_back(entities[0]);
-			obj_str_ptr->entities->push_back(entities[1]);
-				dynamic_cast<harpy::human_part::ECS::Transform*>(obj_str_ptr->camera->get_components_by_name(harpy::human_part::ECS::Transform::name)[0])->rot_mat = r_mat;
+			//obj_str_ptr->entities->push_back(entities[1]);
+
+			dynamic_cast<harpy::human_part::ECS::Transform*>(obj_str_ptr->camera->get_components_by_name(harpy::human_part::ECS::Transform::name)[0])->rot = glm::angleAxis(angleRadians, axisX);
+
+			dynamic_cast<harpy::human_part::ECS::Transform*>((*obj_str_ptr->entities)[0]->get_components_by_name(harpy::human_part::ECS::Transform::name)[0])->rot = glm::angleAxis(angleRadians, axisY);
+
+
+			//harpy::human_part::ECS::Transform* tr1 = dynamic_cast<harpy::human_part::ECS::Transform*>((*obj_str_ptr->entities)[0]->get_components_by_name(harpy::human_part::ECS::Transform::name)[0]);
+			//tr1->pos_mat = glm::rotate(tr1->pos_mat, glm::radians(1.0f), axis);
+			//harpy::human_part::ECS::Transform* tr2 = dynamic_cast<harpy::human_part::ECS::Transform*>((*obj_str_ptr->entities)[1]->get_components_by_name(harpy::human_part::ECS::Transform::name)[0]);
+			//tr2->pos_mat = glm::rotate(tr2->pos_mat, glm::radians(1.0f), axis);
+
 			obj_str_ptr->lock.unlock();
 			std::this_thread::sleep_for(sleepDuration);
 		}
@@ -125,7 +137,7 @@ VkDescriptorSetLayout createDescriptorSetLayout(std::shared_ptr<vulkan_spinal_co
        rasterizer.rasterizerDiscardEnable = VK_FALSE;
        rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
        rasterizer.lineWidth = 10.0f;
-       rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
+       rasterizer.cullMode = VK_CULL_MODE_NONE;
        rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
        rasterizer.depthBiasEnable = VK_FALSE;
 

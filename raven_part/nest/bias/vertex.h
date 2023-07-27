@@ -9,9 +9,16 @@
 #define RAVEN_PART_NEST_BIAS_VERTEX_H_
 #include <spinal_cord/vulkan_spinal_cord.h>
 
-struct Vertex {
+struct __attribute__((packed)) Vertex {
 	    glm::vec3 pos;
+	    float __fill = 1337.0f;
 	    glm::vec3 color;
+	    float __fill2 = 1488.0f;
+
+	    Vertex(glm::vec3 pos, glm::vec3 color){
+	    	this->pos = pos;
+	    	this->color = color;
+	    }
 
 	    static VkVertexInputBindingDescription getBindingDescription() {
 	        VkVertexInputBindingDescription bindingDescription{};
@@ -37,6 +44,8 @@ struct Vertex {
 
 	        return attributeDescriptions;
 	    }
+
+
 	};
 
 

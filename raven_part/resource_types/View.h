@@ -32,10 +32,12 @@ namespace harpy::raven_part::resource_types{
 
 		};
 
+
+
 		renderer_context* r_context;
 		VkViewport viewport{};
 		VkRect2D scissor{};
-
+		glm::vec2 view_field;
 
 		void init(renderer_context* r_context);
 

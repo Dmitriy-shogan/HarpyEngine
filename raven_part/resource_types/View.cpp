@@ -147,9 +147,19 @@ namespace harpy::raven_part::resource_types{
 		vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_COMPUTE, cameraPipelineLayout, 0, 1, sets3, 0, nullptr);
 		std::cout<<"probe camera_perform 5"<<std::endl;
 		CameraPushConstants cameraPushConstants;
-		human_part::ECS::Transform * relative = object->relative_to(camera);
-		cameraPushConstants.transform = relative->rot_mat4();
-		cameraPushConstants.translate = relative->pos_vec4();
+
+
+//		human_part::ECS::Transform * relative = object->relative_to(camera);
+//		cameraPushConstants.transform = relative->rot_mat4() * (glm::mat4(1.0f) * (1.0f/relative->pos_vec4().length()));
+		//object->pos_mat * (-camera->pos_mat)
+		cameraPushConstants.transform = glm::scale(glm::mat4(1.0f),glm::vec3(1.0f/view_field.x, 1.0f/view_field.y, 1.0f)) * (camera->pos_mat4_reversed() * object->pos_mat4());
+		cameraPushConstants.translate = glm::vec4(0.0f,0.0f,0.0f,0.0f); //relative->pos_vec4();
+		std::cout<<glm::to_string(object->pos_mat4())<<std::endl;
+		std::cout<<glm::to_string(camera->pos)<<std::endl;
+		std::cout<<glm::to_string(glm::mat4_cast(camera->rot))<<std::endl;
+		std::cout<<glm::to_string(camera->pos_mat4_reversed())<<std::endl;
+		std::cout<<glm::to_string(glm::scale(glm::mat4(1.0f),glm::vec3(1.0f/view_field.x, 1.0f/view_field.y, 1.0f)))<<std::endl;
+
 		std::cout<<glm::to_string(cameraPushConstants.transform)<<std::endl;
 		std::cout<<glm::to_string(cameraPushConstants.translate)<<std::endl;
 		std::cout<<"probe camera_perform 6"<<std::endl;

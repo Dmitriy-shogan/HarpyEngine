@@ -16,41 +16,38 @@ namespace harpy::human_part::ECS{
 	public:
 		static constexpr std::string name = "Transform";
 
-		glm::mat4 rot_mat;
-		glm::vec4 pos_vec;
+		//glm::mat4 pos_mat;
+		glm::quat rot;
+		glm::vec3 pos;
 
-		Transform(glm::vec4 pos_vec, glm::mat4 rot_mat){
-			this->rot_mat = rot_mat;
-			this->pos_vec = pos_vec;
+		Transform(glm::vec3 pos_vec, glm::quat rot){
+			pos = pos_vec;
+			this->rot = rot;
 		};
 
-		Transform(glm::vec4 pos_vec){
-			this->rot_mat = glm::mat4(1);
-			this->pos_vec = pos_vec;
+		Transform(glm::vec3 pos_vec){
+			pos = pos_vec;
+			this->rot = glm::quat{0.0f,0.0f,0.0f,1.0f};
 		};
 
 		Transform(){
-			this->rot_mat = glm::mat4(1);
-			this->pos_vec = glm::vec4(0);
+			pos = glm::vec3(0.0f);
+			this->rot = glm::quat{0.0f,0.0f,0.0f,1.0f};
 		};
 
 		~Transform(){};
 		std::string Name() override {return name;}
 
 
-		glm::mat4 rot_mat4(){
-			return rot_mat;
+		glm::mat4 pos_mat4(){
+			return glm::mat4_cast(rot) * glm::translate(glm::mat4(1.0f), pos);
 		}
 
-		glm::vec4 pos_vec4(){
-			return pos_vec;
+		glm::mat4 pos_mat4_reversed(){
+			return glm::mat4_cast(-rot) * glm::translate(glm::mat4(1.0f), -pos);
 		}
 
-		Transform * relative_to(Transform* camera){
-			glm::mat4 res_rot = camera->rot_mat4() * rot_mat;
-			glm::vec4 res_pos = camera->rot_mat4() * (pos_vec - camera->pos_vec4());
-			return new Transform(res_pos,res_rot);
-		}
+
 
 
 	};

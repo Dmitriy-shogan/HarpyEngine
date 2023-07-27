@@ -25,6 +25,7 @@ layout(set = 0, binding = 1) buffer Out{
 
 void main() {
     uint i = gl_GlobalInvocationID.x;
-    vertices_out[i].position = (pushConstants.transform * vec4(vertices_in[i].position, 0.0) + pushConstants.translate).xyz;
+    vertices_out[i].position = (pushConstants.transform * vec4(vertices_in[i].position, 1.0)).xyz;
+    vertices_out[i].position.z = min(1.0, 1.0 - 1.0/vertices_out[i].position.z); 
     vertices_out[i].color = vertices_in[i].color;
 }

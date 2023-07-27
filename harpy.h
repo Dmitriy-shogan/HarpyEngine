@@ -22,17 +22,17 @@ namespace harpy{
 		};
 
 	const std::vector<Vertex> vertices = {
-	    {{-5.5f, -5.5f,0.0f}, {1.0f, 0.0f, 0.0f}},
-	    {{5.5f, -5.5f,0.0f}, {0.0f, 1.0f, 0.0f}},
-	    {{5.5f, 5.5f,0.0f}, {0.0f, 0.0f, 1.0f}},
-	    {{-5.5f, 5.5f,0.0f}, {1.0f, 1.0f, 1.0f}}
+	    {{-0.9f, 0.1717f,0.0f}, {1.0f, 0.0f, 0.0f}},
+	    {{0.9f, 0.1717f,0.0f}, {0.0f, 1.0f, 0.0f}},
+	    {{0.9f, -0.1717f,0.0f}, {0.0f, 0.0f, 1.0f}},
+	    {{-0.9f, -0.1717f,0.0f}, {1.0f, 1.0f, 1.0f}}
 	};
 
 	const std::vector<Vertex> vertices2 = {
-		    {{-3.5f, -3.5f,1.0f}, {0.0f, 0.0f, 0.5f}},
-		    {{3.5f, -3.5f,1.0f}, {0.0f, 0.0f, 0.5f}},
-		    {{3.5f, 3.5f,1.0f}, {0.0f, 0.0f, 0.5f}},
-		    {{-3.5f, 3.5f,1.0f}, {0.0f, 0.0f, 0.5f}}
+		    {{0.0f, 0.0f,1.0f}, {0.0f, 0.0f, 0.5f}},
+		    {{0.5f, 0.0f,1.0f}, {0.0f, 0.0f, 0.5f}},
+		    {{0.5f, 0.5f,1.0f}, {0.0f, 0.0f, 0.5f}},
+		    {{0.0f, 0.5f,1.0f}, {0.0f, 0.0f, 0.5f}}
 		};
 
 	std::pair<VkBuffer,VkDeviceMemory> createVertexBuffer(std::shared_ptr<vulkan_spinal_cord> cord, VkCommandBuffer copy_buf, VkQueue copy_queue);
@@ -61,6 +61,7 @@ namespace harpy{
 		r_context_ptr->init();
 
 		raven_part::resource_types::View view{};
+		view.view_field = glm::vec2{1.0f,1.0f};
 		view.cameraType = raven_part::resource_types::View::CameraType::ORTHOGRAPHIC;
 		view.viewport.x = 0.0f;
 		view.viewport.y = 0.0f;
@@ -139,7 +140,7 @@ namespace harpy{
 
 
 		human_part::ECS::Entity* cam = new human_part::ECS::Entity();
-		human_part::ECS::Transform* tr3 = new human_part::ECS::Transform();
+		human_part::ECS::Transform* tr3 = new human_part::ECS::Transform(glm::vec3{0.0f,0.0f,-2.0f});
 		human_part::ECS::Camera* cm = new human_part::ECS::Camera();
 		cm->view_id = r_context_ptr->register_view(view);
 		cam->add_component(tr3);
@@ -149,7 +150,6 @@ namespace harpy{
 		std::shared_ptr<harpy::raven_part::scene_source> obj_str_ptr = std::make_shared<harpy::raven_part::scene_source>();
 		obj_str_ptr->camera = cam;
 		obj_str_ptr->consumed.test_and_set();
-
 //		std::async(std::launch::async, [obj_str_ptr,entities]() {
 //			physics(obj_str_ptr,entities);
 //		    });
