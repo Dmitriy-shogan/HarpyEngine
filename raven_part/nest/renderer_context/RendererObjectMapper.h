@@ -14,8 +14,33 @@
 #include <vector>
 #include <mutex>
 
+#include <human_part.h>
+#include <utilities/initializations.h>
+#include <resource_types/Material.h>
+#include <resource_types/Shape.h>
+#include <resource_types/View.h>
+
 namespace harpy::nest
 {
+
+	struct RendererResourceStorage{
+		std::vector<harpy::raven_part::resource_types::View> views{};
+		std::vector<harpy::raven_part::resource_types::Material> materials{};
+		std::vector<harpy::raven_part::resource_types::Shape> shapes{};
+
+		void r_init(std::shared_ptr<harpy::nest::renderer_context> r_context);
+
+		uint32_t get_vert_max();
+
+		uint32_t register_view(raven_part::resource_types::View view);
+
+		uint32_t register_shape(raven_part::resource_types::Shape shape);
+
+		uint32_t register_material(raven_part::resource_types::Material material);
+
+
+	};
+
 
     struct renderer_mappings {
         //uint32_t shader_id;
@@ -32,7 +57,12 @@ namespace harpy::nest
     public:
         RendererObjectMapper(){
 
-        };
+        }
+
+
+        void register_renderer(human_part::ECS::Renderer* renderer, renderer_mappings mappings){
+        			renderer->mapping_id = register_mapping(mappings);
+        		}
 
         uint32_t register_mapping(renderer_mappings mapping) {
             if (!recycle_queue.empty()) {

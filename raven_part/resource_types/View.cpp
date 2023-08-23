@@ -12,7 +12,7 @@
 
 namespace harpy::raven_part::resource_types{
 
-	void View::init(renderer_context* r_context){
+	void View::init(std::shared_ptr<harpy::nest::renderer_context> r_context){
 		this->r_context = r_context;
 
 		shaders::shader_module compute{r_context->spinal_cord->device};

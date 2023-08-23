@@ -30,7 +30,7 @@ namespace harpy::raven_part::resource_types{
 		//set4
 		VkDescriptorSet desc_set;
 
-		void init(renderer_context* r_context){};
+		void init(std::shared_ptr<harpy::nest::renderer_context> r_context){};
 
 		void perform(VkCommandBuffer cmd);
 	};

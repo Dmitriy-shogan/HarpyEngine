@@ -33,6 +33,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <gltf/tiny_gltf.h>
+
 //Defines goes here
 #define APP_VERSION VK_MAKE_API_VERSION(0,0,1,0)
 #define ENGINE_VERSION VK_MAKE_API_VERSION (0, 0, 1, 1)

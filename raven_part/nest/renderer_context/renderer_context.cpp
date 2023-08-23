@@ -259,10 +259,13 @@ void renderer_context::init_swapchain(){
 
 
 void renderer_context::init_vert_tmp_buf(){
-	VkDeviceSize bufferSize = utilities::align_to((VkDeviceSize)sizeof(Vertex) * (VkDeviceSize)storage.get_vert_max(), spinal_cord->deviceProperties.limits.minStorageBufferOffsetAlignment) * effective_rsr_cnt;
+	VkDeviceSize bufferSize1 = utilities::align_to((VkDeviceSize)sizeof(Vertex) * (VkDeviceSize)tmp_storage->get_vert_max(), spinal_cord->deviceProperties.limits.minStorageBufferOffsetAlignment) * effective_rsr_cnt;
+	if (bufferSize1 < bufferSize){
+		if (RENDERER_MEMORY_OPTI_POLICY == RENDERER_MEMORY_OPTI_POLICY_PASSIVE) return;
+	}
+	bufferSize = bufferSize1;
 	std::cout<<"bufferSize"<<std::endl;
 	std::cout<<sizeof(Vertex)<<std::endl;
-	std::cout<<storage.get_vert_max()<<std::endl;
 
 	VkDescriptorPoolSize pool_size{};
 	pool_size.type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
@@ -330,20 +333,31 @@ void render_task_fake(
 }
 //primitive
 void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_source> source, std::atomic_flag* cond){
+
+
+	tmp_storage = &source->storage;
+	tmp_mapper = &source->mapper;
+
+	std::cout<<"renderloop"<<std::endl;
 	size_t frame = 0;
 	uint32_t image_index{};
 	uint32_t thread_cnt = std::min((uint32_t)std::thread::hardware_concurrency(), effective_rsr_cnt);
+	std::cout<<"renderloop1"<<std::endl;
+
+	source->lock.lock();
 	init_vert_tmp_buf();
-	VkDeviceSize size_aligned = utilities::align_to((VkDeviceSize)sizeof(Vertex) * (VkDeviceSize)storage.get_vert_max(), spinal_cord->deviceProperties.limits.minStorageBufferOffsetAlignment);//storage.get_vert_max();
+	VkDeviceSize size_aligned = utilities::align_to((VkDeviceSize)sizeof(Vertex) * (VkDeviceSize)tmp_storage->get_vert_max(), spinal_cord->deviceProperties.limits.minStorageBufferOffsetAlignment);//storage.get_vert_max();
+	source->lock.unlock();
+
 	std::vector<std::pair<render_shared_resources*, uint32_t>> rendered_rsrs{};
+	std::cout<<"renderloop2"<<std::endl;
 	std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> present_queue = spinal_cord->get_queue_supervisor().grab_presentation_queue((VkQueueFlags)0, connected_window_layout->surface);
 	std::vector<std::thread> threads{};
-
+	std::cout<<"renderloop3"<<std::endl;
 
 
 	while(cond->test_and_set(std::memory_order_acquire)){
-		//should i waip present queue? in vulkan-guide there is no vkQueueWaitIdle(present_queue);
-
+		//should i wait present queue? in vulkan-guide there is no vkQueueWaitIdle(present_queue);
 
 		rendered_rsrs.clear();
 		threads.clear();
@@ -355,7 +369,7 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 		human_part::ECS::Entity* src_camera = source->camera;
 		size_t ptr_size = sizeof(human_part::ECS::Entity*);
 		source->consumed.test_and_set();
-		source->lock.unlock();
+
 
 		if (thread_cnt == 0) continue;
 
@@ -372,7 +386,7 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 		std::cout<<"tgt_per_task"<<std::endl;
 		std::cout<<tgt_per_task<<std::endl;
 
-		mapper.lock.lock();
+		tmp_mapper->lock.lock();
 
 		renderer_context * context_ptr = this;
 
@@ -400,7 +414,7 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 				harpy::human_part::ECS::Transform* transform = dynamic_cast<harpy::human_part::ECS::Transform*>(e->get_components_by_name(harpy::human_part::ECS::Transform::name)[0]);
 				harpy::human_part::ECS::Renderer* renderer = dynamic_cast<harpy::human_part::ECS::Renderer*>(e->get_components_by_name(harpy::human_part::ECS::Renderer::name)[0]);
 
-				rsr.first->queue[k].second = mapper.mappings[renderer->mapping_id];
+				rsr.first->queue[k].second = tmp_mapper->mappings[renderer->mapping_id];
 				rsr.first->queue[k].first = transform;
 			}
 			std::cout<<"probe 4"<<std::endl;
@@ -426,7 +440,7 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 		std::pair<render_shared_resources*, uint32_t> blender_rsr = rsr_pool.lock_grab();
 		blender_rsr.first->wait();
 		blender_rsr.first->reset();
-		mapper.lock.unlock();
+		tmp_mapper->lock.unlock();
 
 		VkResult result = vkAcquireNextImageKHR(spinal_cord->device,
 					swapchain, UINT32_MAX,
@@ -449,6 +463,8 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 		for (int i = 0; i < threads.size(); ++i) {
 			threads[i].join();
 		}
+
+		source->lock.unlock();
 
 		blending(blender_rsr, blender_vk_queue, &rendered_rsrs, swapchain.images[image_index], swapchain.image_views[image_index], swapchain.image_sems[frame]);
 
@@ -494,7 +510,11 @@ void renderer_context::render_task(
 
 
 
-	resource_types::View view = storage.views[(*camera).second];
+	resource_types::View view = tmp_storage->views[(*camera).second];
+	std::cout<<"(*camera).second"<<std::endl;
+	std::cout<<(*camera).second<<std::endl;
+
+
 	vert_desc_pool_lock.lock();
 	rsr.first->reinit_vertex_tmp(vert_desc_pool, view.desc_set_layout);
 	vert_desc_pool_lock.unlock();
@@ -507,8 +527,8 @@ void renderer_context::render_task(
 		std::pair<harpy::human_part::ECS::Transform*, renderer_mappings> entity = rsr.first->queue[i];
 
 
-		resource_types::Shape shape = storage.shapes[entity.second.shape_id];
-		resource_types::Material material = storage.materials[entity.second.material_id];
+		resource_types::Shape shape = tmp_storage->shapes[entity.second.shape_id];
+		resource_types::Material material = tmp_storage->materials[entity.second.material_id];
 		std::cout<<"probe render_task 4"<<std::endl;
 //=====================
 //    SHAPE
@@ -841,30 +861,6 @@ void renderer_context::init(){
 }
 
 
-uint32_t renderer_context::register_view(raven_part::resource_types::View view){
-	view.init(this);
-	storage.views.push_back(view);
-	return storage.views.size()-1;
-}
 
-uint32_t renderer_context::register_shape(raven_part::resource_types::Shape shape){
-	shape.init(this);
-	storage.shapes.push_back(shape);
-	return storage.shapes.size()-1;
-}
-
-uint32_t renderer_context::register_material(raven_part::resource_types::Material material){
-	material.init(this);
-	storage.materials.push_back(material);
-	return storage.materials.size()-1;
-}
-
-uint32_t renderer_context::RendererResourceStorage::get_vert_max(){
-	uint32_t max = 0;
-	for (int i = 0; i < shapes.size(); ++i) {
-		max = std::max((uint32_t)shapes[i].vert_size, max);
-	}
-	return max;
-}
 
 

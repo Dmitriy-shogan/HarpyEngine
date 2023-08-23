@@ -17,14 +17,34 @@
 #include <ECS/ECS.h>
 #include <spinal_cord/vulkan_spinal_cord.h>
 #include <renderer_context/renderer_context.h>
+
 //using namespace harpy::human_part::ECS;
+
+namespace nest{
+	struct RendererResourceStorage;
+}
+
 namespace harpy::raven_part{
+
 	struct scene_source{
 		std::mutex lock;
 		std::atomic_flag consumed;
 		std::shared_ptr<std::vector<human_part::ECS::Entity*>> entities;
+
+		struct nest::RendererResourceStorage storage{};
+		nest::RendererObjectMapper mapper{};
+
 		human_part::ECS::Entity* camera;
 		scene_source() = default;
+
+		void r_init(std::shared_ptr<harpy::nest::renderer_context> r_context){
+			storage.r_init(r_context);
+		};
+
+
+		void load_scene(tinygltf::Scene scene){
+
+		}
 	};
 }
 

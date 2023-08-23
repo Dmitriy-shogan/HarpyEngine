@@ -8,6 +8,12 @@
 #ifndef RAVEN_PART_NEST_RENDERER_CONTEXT_RENDERER_CONTEXT_H_
 #define RAVEN_PART_NEST_RENDERER_CONTEXT_RENDERER_CONTEXT_H_
 
+#define RENDERER_MEMORY_OPTI_POLICY_PASSIVE 0
+#define RENDERER_MEMORY_OPTI_POLICY_AGRESSIVE 1
+
+#define RENDERER_MEMORY_OPTI_POLICY RENDERER_MEMORY_OPTI_POLICY_PASSIVE
+
+
 #include <spinal_cord/vulkan_spinal_cord.h>
 #include "RendererObjectMapper.h"
 #include <swapchain/swapchain.h>
@@ -46,13 +52,7 @@ namespace harpy::nest
 
 	struct renderer_context{
 
-		struct RendererResourceStorage{
-				std::vector<resource_types::View> views{};
-				std::vector<resource_types::Material> materials{};
-				std::vector<resource_types::Shape> shapes{};
 
-				uint32_t get_vert_max();
-				};
 
 		struct blender_push_constants{
 			uint32_t layers_cnt;
@@ -137,10 +137,13 @@ namespace harpy::nest
 
 		struct blender_push_constants blender_push_constants{};
 
-		struct RendererResourceStorage storage;
-		nest::RendererObjectMapper mapper;
+		VkDeviceSize bufferSize = 0;
 
 		std::queue<harpy::human_part::ECS::Entity*> queue;
+
+
+		struct nest::RendererResourceStorage* tmp_storage;
+		nest::RendererObjectMapper* tmp_mapper;
 
 		void render_task(
 				std::pair<render_shared_resources*, uint32_t> rsr,
@@ -181,17 +184,11 @@ namespace harpy::nest
 
 		void init();
 
-		uint32_t register_view(raven_part::resource_types::View view);
-
-		uint32_t register_shape(raven_part::resource_types::Shape shape);
-
-		uint32_t register_material(raven_part::resource_types::Material material);
 
 
 
-		void register_renderer(human_part::ECS::Renderer* renderer, renderer_mappings mappings){
-			renderer->mapping_id = mapper.register_mapping(mappings);
-		}
+
+
 
 
 		VkRenderPass getRenderPass() const {
