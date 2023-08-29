@@ -9,20 +9,17 @@
 #define HUMAN_PART_ECS_COMPONENTS_RENDERER_H_
 
 #include <ECS/Component.h>
-#include <renderer_context/RendererObjectMapper.h>
+
 #include <cstdint>
 
-namespace harpy::nest{
-	struct renderer_context;
-	struct renderer_mappings;
-}
+
 
 namespace harpy::human_part::ECS{
 
 	class Renderer: public Component {
 
 	public:
-		uint32_t mapping_id;
+		std::vector<uint32_t> mappings;
 		static constexpr std::string name = "Renderer";
 		Renderer();
 		~Renderer();

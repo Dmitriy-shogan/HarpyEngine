@@ -15,6 +15,7 @@
 namespace harpy::human_part::ECS{
 class Entity {
 		std::map<std::string,std::vector<Component *>,std::less<std::string>> components{};
+		uint32_t parent_id;
 	public:
 		Entity();
 		//map indexing by const string Component.Name

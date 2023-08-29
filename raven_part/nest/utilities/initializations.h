@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <map>
 #include <cstdint>
 #include <stdexcept>
 #include <chrono>
@@ -34,6 +35,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <gltf/tiny_gltf.h>
+#include <toml++/toml.h>
+
 
 //Defines goes here
 #define APP_VERSION VK_MAKE_API_VERSION(0,0,1,0)
@@ -55,6 +58,18 @@
 
 #define SHADER_PATH_CAMERA_PRESPECTIVE_VERTEX "shaders/base/compute/service/camera_perespective.comp"
 #define SHADER_PATH_CAMERA_ORTHOGRAPHIC_VERTEX "shaders/base/compute/service/camera_orthographic.comp"
+
+
+
+#define RENDERER_MEMORY_OPTI_POLICY_PASSIVE 0
+#define RENDERER_MEMORY_OPTI_POLICY_AGRESSIVE 1
+
+#define RENDERER_MEMORY_OPTI_POLICY RENDERER_MEMORY_OPTI_POLICY_PASSIVE
+
+#define PRELOAD_STRATEGY_FULL 0
+#define PRELOAD_STRATEGY_PART 1
+
+#define PRELOAD_STRATEGY PRELOAD_STRATEGY_FULL
 
 
 

@@ -30,7 +30,14 @@ namespace harpy::raven_part::resource_types{
 		//set4
 		VkDescriptorSet desc_set;
 
-		void init(std::shared_ptr<harpy::nest::renderer_context> r_context){};
+		void init(std::shared_ptr<harpy::nest::renderer_context> r_context){
+
+			vertexBuffer = createVertexBuffer2(cord, transfer_queue.first.second, transfer_queue.first.first).first;
+			vert_size = vertices2.size();
+			indices_size = indices.size();
+			indexBuffer = createIndexBuffer(cord, transfer_queue.first.second, transfer_queue.first.first).first;
+			indexType = VK_INDEX_TYPE_UINT16;
+		};
 
 		void perform(VkCommandBuffer cmd);
 	};

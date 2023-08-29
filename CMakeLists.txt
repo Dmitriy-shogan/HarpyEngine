@@ -4,7 +4,7 @@ set (CMAKE_CXX_STANDARD 20)
 
 #INLUDE FOLDERS RECURSIVE SEARCH MACRO
 MACRO(HEADER_DIRECTORIES PATH1 return_list)
-    FILE(GLOB_RECURSE new_list ${PATH1}/*.h)
+    FILE(GLOB_RECURSE new_list ${PATH1}/*.h ${PATH1}/*.hpp)
     SET(dir_list "${PATH1}")
     FOREACH(file_path ${new_list})
         GET_FILENAME_COMPONENT(dir_path ${file_path} PATH)

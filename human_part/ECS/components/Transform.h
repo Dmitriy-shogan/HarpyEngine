@@ -19,10 +19,12 @@ namespace harpy::human_part::ECS{
 		//glm::mat4 pos_mat;
 		glm::quat rot;
 		glm::vec3 pos;
+		glm::vec3 scale;
 
-		Transform(glm::vec3 pos_vec, glm::quat rot){
+		Transform(glm::vec3 pos_vec, glm::quat rot, glm::vec3 scale){
 			pos = pos_vec;
 			this->rot = rot;
+			this->scale = scale; //not used now
 		};
 
 		Transform(glm::vec3 pos_vec){

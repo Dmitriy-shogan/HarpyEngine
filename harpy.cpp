@@ -10,11 +10,7 @@
 #include <spinal_cord/vulkan_spinal_cord.h>
 
 namespace harpy{
-	std::unique_ptr<harpy::nest::renderer_context> r_context_ptr;
-
-
-
-
+	std::shared_ptr<harpy::nest::renderer_context> r_context_ptr;
 
 
 	struct UniformBufferObject {
@@ -24,18 +20,11 @@ namespace harpy{
 	};
 
 
-
-
-
-
-
-
-
-void physics(std::shared_ptr<harpy::raven_part::scene_source> obj_str_ptr, std::vector<human_part::ECS::Entity*> entities){
+void physics(std::shared_ptr<harpy::raven_part::scene_source> obj_str_ptr, std::atomic_flag* phys_cond){ //, std::vector<human_part::ECS::Entity*> entities
 	int ang = 0;
 	glm::vec3 axisX(1.0f, 0.0f, 0.0f);
 	glm::vec3 axisY(0.0f, 1.0f, 0.0f);
-		while(true){
+		while(phys_cond->test_and_set(std::memory_order_acquire)){
 			ang += 1;
 			ang = ang % 360;
 			float angleRadians = glm::radians(ang / 1.0);
@@ -473,9 +462,10 @@ VkDescriptorSetLayout createDescriptorSetLayout(std::shared_ptr<vulkan_spinal_co
    }
 
 
-   void render(std::unique_ptr<harpy::nest::renderer_context> r_context_ptr, std::shared_ptr<harpy::raven_part::scene_source> obj_str_ptr){
-   		std::atomic_flag rend_cond{true};
-   		r_context_ptr->render_loop(obj_str_ptr, &rend_cond);
+   void render(std::shared_ptr<harpy::nest::renderer_context> r_context_ptr, std::shared_ptr<harpy::raven_part::scene_source> obj_str_ptr, std::atomic_flag* rend_cond){
+	   std::cout<<"void render"<<std::endl;
+
+	   r_context_ptr->render_loop(obj_str_ptr, rend_cond);
    	}
 
 
