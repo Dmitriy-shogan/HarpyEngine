@@ -8,7 +8,6 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
-
 #include <optional>
 #include <string>
 #include <vector>
@@ -18,6 +17,7 @@
 #include <stdexcept>
 #include <chrono>
 #include <ctime>
+#include <any>
 //#include <format>
 #include <functional>
 #include <array>
@@ -66,10 +66,10 @@
 
 #define RENDERER_MEMORY_OPTI_POLICY RENDERER_MEMORY_OPTI_POLICY_PASSIVE
 
-#define PRELOAD_STRATEGY_FULL 0
-#define PRELOAD_STRATEGY_PART 1
-
-#define PRELOAD_STRATEGY PRELOAD_STRATEGY_FULL
+//#define PRELOAD_STRATEGY_FULL 0
+//#define PRELOAD_STRATEGY_PART 1
+//
+//#define PRELOAD_STRATEGY PRELOAD_STRATEGY_FULL
 
 
 

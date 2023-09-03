@@ -422,8 +422,6 @@ VkDescriptorSetLayout createDescriptorSetLayout(std::shared_ptr<vulkan_spinal_co
 	   VkCommandBufferBeginInfo beginInfo{};
 	   beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
-
-
 	   vkBeginCommandBuffer(copy_buf, &beginInfo);
 
 	   VkBufferCopy copyRegion{};
@@ -440,10 +438,7 @@ VkDescriptorSetLayout createDescriptorSetLayout(std::shared_ptr<vulkan_spinal_co
 	   vkQueueSubmit(transferQueue, 1, &submitInfo, VK_NULL_HANDLE);
 	   vkQueueWaitIdle(transferQueue);
 
-
    }
-
-
 
 
    void updateUniformBuffer(VkExtent2D extent, std::vector<void*> uniformBuffersMapped) {

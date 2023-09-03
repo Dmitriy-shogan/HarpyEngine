@@ -77,3 +77,139 @@ uint32_t harpy::utilities::find_memory_types(VkPhysicalDevice& device, uint32_t 
 VkDeviceSize harpy::utilities::align_to(VkDeviceSize val, uint32_t bound){
 	return (val + bound -1) & ~(bound-1);
 }
+
+
+
+uint32_t getChannelCountForFormat(VkFormat format) {
+
+    switch (format) {
+        case VK_FORMAT_R8_UINT:
+        case VK_FORMAT_R8_SINT:
+        case VK_FORMAT_R16_UINT:
+        case VK_FORMAT_R16_SINT:
+        case VK_FORMAT_R16_SFLOAT:
+        case VK_FORMAT_R32_UINT:
+        case VK_FORMAT_R32_SINT:
+        case VK_FORMAT_R32_SFLOAT:
+            return 1;
+
+        case VK_FORMAT_R8G8_UINT:
+		case VK_FORMAT_R8G8_SINT:
+		case VK_FORMAT_R16G16_UINT:
+		case VK_FORMAT_R16G16_SINT:
+		case VK_FORMAT_R16G16_SFLOAT:
+		case VK_FORMAT_R32G32_UINT:
+		case VK_FORMAT_R32G32_SINT:
+		case VK_FORMAT_R32G32_SFLOAT:
+			return  2;
+
+		case VK_FORMAT_R8G8B8_UINT:
+		case VK_FORMAT_R8G8B8_SINT:
+		case VK_FORMAT_R16G16B16_UINT:
+		case VK_FORMAT_R16G16B16_SINT:
+		case VK_FORMAT_R16G16B16_SFLOAT:
+		case VK_FORMAT_R32G32B32_UINT:
+		case VK_FORMAT_R32G32B32_SINT:
+		case VK_FORMAT_R32G32B32_SFLOAT:
+			return 3;
+
+		case VK_FORMAT_R8G8B8A8_UINT:
+		case VK_FORMAT_R8G8B8A8_SINT:
+		case VK_FORMAT_R16G16B16A16_UINT:
+		case VK_FORMAT_R16G16B16A16_SINT:
+		case VK_FORMAT_R16G16B16A16_SFLOAT:
+		case VK_FORMAT_R32G32B32A32_UINT:
+		case VK_FORMAT_R32G32B32A32_SINT:
+		case VK_FORMAT_R32G32B32A32_SFLOAT:
+			return 4;
+
+        default:
+        	throw harpy::utilities::harpy_little_error("unstated channels count");
+    }
+    return -1;
+}
+
+    bool isFloat(VkFormat format){
+    	switch (format) {
+			case VK_FORMAT_R16_SFLOAT:
+			case VK_FORMAT_R32_SFLOAT:
+				return true;
+
+			case VK_FORMAT_R16G16_SFLOAT:
+			case VK_FORMAT_R32G32_SFLOAT:
+				return true;
+
+			case VK_FORMAT_R16G16B16_SFLOAT:
+			case VK_FORMAT_R32G32B32_SFLOAT:
+				return true;
+
+			case VK_FORMAT_R16G16B16A16_SFLOAT:
+			case VK_FORMAT_R32G32B32A32_SFLOAT:
+				return true;
+
+			default:
+				return false;
+		}
+    	return false;
+    }
+
+    bool isUInt(VkFormat format){
+		switch (format) {
+			case VK_FORMAT_R8_UINT:
+			case VK_FORMAT_R16_UINT:
+			case VK_FORMAT_R32_UINT:
+				return true;
+
+			case VK_FORMAT_R8G8B8_UINT:
+			case VK_FORMAT_R16G16B16_UINT:
+			case VK_FORMAT_R32G32B32_UINT:
+				return true;
+
+			case VK_FORMAT_R8G8B8_UINT:
+			case VK_FORMAT_R16G16B16_UINT:
+			case VK_FORMAT_R32G32B32_UINT:
+				return true;
+
+			case VK_FORMAT_R8G8B8A8_UINT:
+			case VK_FORMAT_R16G16B16A16_UINT:
+			case VK_FORMAT_R32G32B32A32_UINT:
+				return true;
+
+			default:
+				return false;
+		}
+		return false;
+    }
+
+    bool isSInt(VkFormat format){
+    		switch (format) {
+    			case VK_FORMAT_R8_SINT:
+    			case VK_FORMAT_R16_SINT:
+    			case VK_FORMAT_R32_SINT:
+    				return true;
+
+    			case VK_FORMAT_R8G8B8_SINT:
+    			case VK_FORMAT_R16G16B16_SINT:
+    			case VK_FORMAT_R32G32B32_SINT:
+    				return true;
+
+    			case VK_FORMAT_R8G8B8_SINT:
+    			case VK_FORMAT_R16G16B16_SINT:
+    			case VK_FORMAT_R32G32B32_SINT:
+    				return true;
+
+    			case VK_FORMAT_R8G8B8A8_SINT:
+    			case VK_FORMAT_R16G16B16A16_SINT:
+    			case VK_FORMAT_R32G32B32A32_SINT:
+    				return true;
+
+    			default:
+    				return false;
+    		}
+    		return false;
+        }
+
+    return channelCount;
+}
+
+

@@ -10,15 +10,40 @@
 #include <spinal_cord/vulkan_spinal_cord.h>
 
 struct __attribute__((packed)) Vertex {
-	    glm::vec3 pos;
-	    float __fill = 1337.0f;
-	    glm::vec3 color;
-	    float __fill2 = 1488.0f;
 
-	    Vertex(glm::vec3 pos, glm::vec3 color){
-	    	this->pos = pos;
-	    	this->color = color;
-	    }
+	    glm::vec3 POSITION;
+	    float __fill = 1.0f;
+	    glm::vec3 NORMAL;
+	    float __fill2 = 1.0f;
+	    glm::vec4 TANGENT;
+	    glm::vec4 CUSTOM;
+
+	    glm::vec2 TEXCOORD_0;
+	    double __fill3 = 1.0f;
+	    glm::vec2 TEXCOORD_1;
+	    double __fill4 = 1.0f;
+	    glm::vec2 TEXCOORD_2;
+	    double __fill5 = 1.0f;
+	    glm::vec2 TEXCOORD_3;
+	    double __fill6 = 1.0f;
+
+	    glm::vec4 COLOR_0;
+		glm::vec4 COLOR_1;
+		glm::vec4 COLOR_2;
+		glm::vec4 COLOR_3;
+
+		glm::vec4 JOINTS_0;
+		glm::vec4 JOINTS_1;
+		glm::vec4 JOINTS_2;
+		glm::vec4 JOINTS_3;
+
+		glm::vec4 WEIGHTS_0;
+		glm::vec4 WEIGHTS_1;
+		glm::vec4 WEIGHTS_2;
+		glm::vec4 WEIGHTS_3;
+
+
+
 
 	    static VkVertexInputBindingDescription getBindingDescription() {
 	        VkVertexInputBindingDescription bindingDescription{};
@@ -29,23 +54,169 @@ struct __attribute__((packed)) Vertex {
 	        return bindingDescription;
 	    }
 
-	    static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions() {
-	        std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{};
+	    static std::array<VkVertexInputAttributeDescription, 20> getAttributeDescriptions() {
+	    	//GREATER OFFSET SEQUENCE MATTER
 
-	        attributeDescriptions[0].binding = 0;
-	        attributeDescriptions[0].location = 0;
-	        attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-	        attributeDescriptions[0].offset = offsetof(Vertex, pos);
+	        std::array<VkVertexInputAttributeDescription, 20> attributeDescriptions{};
+	        uint32_t i;
 
-	        attributeDescriptions[1].binding = 0;
-	        attributeDescriptions[1].location = 1;
-	        attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-	        attributeDescriptions[1].offset = offsetof(Vertex, color);
+	        attributeDescriptions[i].binding = 0;
+	        attributeDescriptions[i].location = i;
+	        attributeDescriptions[i].format = VK_FORMAT_R32G32B32_SFLOAT;
+	        attributeDescriptions[i].offset = offsetof(Vertex, POSITION);
+	        i++;
+
+	        attributeDescriptions[i].binding = 0;
+			attributeDescriptions[i].location = i;
+			attributeDescriptions[i].format = VK_FORMAT_R32G32B32_SFLOAT;
+			attributeDescriptions[i].offset = offsetof(Vertex, NORMAL);
+			i++;
+
+	        attributeDescriptions[i].binding = 0;
+	        attributeDescriptions[i].location = i;
+	        attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_SFLOAT;
+	        attributeDescriptions[i].offset = offsetof(Vertex, TANGENT);
+	        i++;
+
+	        attributeDescriptions[i].binding = 0;
+			attributeDescriptions[i].location = i;
+			attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_SFLOAT;
+			attributeDescriptions[i].offset = offsetof(Vertex, CUSTOM);
+			i++;
+
+			//TEXCORD CHANNELS
+
+			attributeDescriptions[i].binding = 0;
+			attributeDescriptions[i].location = i;
+			attributeDescriptions[i].format = VK_FORMAT_R32G32_SFLOAT;
+			attributeDescriptions[i].offset = offsetof(Vertex, TEXCOORD_0);
+			i++;
+
+			attributeDescriptions[i].binding = 0;
+			attributeDescriptions[i].location = i;
+			attributeDescriptions[i].format = VK_FORMAT_R32G32_SFLOAT;
+			attributeDescriptions[i].offset = offsetof(Vertex, TEXCOORD_1);
+			i++;
+
+			attributeDescriptions[i].binding = 0;
+			attributeDescriptions[i].location = i;
+			attributeDescriptions[i].format = VK_FORMAT_R32G32_SFLOAT;
+			attributeDescriptions[i].offset = offsetof(Vertex, TEXCOORD_2);
+			i++;
+
+			attributeDescriptions[i].binding = 0;
+			attributeDescriptions[i].location = i;
+			attributeDescriptions[i].format = VK_FORMAT_R32G32_SFLOAT;
+			attributeDescriptions[i].offset = offsetof(Vertex, TEXCOORD_3);
+			i++;
+
+			//COLOR CHANNELS
+
+			attributeDescriptions[i].binding = 0;
+			attributeDescriptions[i].location = i;
+			attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_SFLOAT;
+			attributeDescriptions[i].offset = offsetof(Vertex, COLOR_0);
+			i++;
+
+			attributeDescriptions[i].binding = 0;
+			attributeDescriptions[i].location = i;
+			attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_SFLOAT;
+			attributeDescriptions[i].offset = offsetof(Vertex, COLOR_1);
+			i++;
+
+			attributeDescriptions[i].binding = 0;
+			attributeDescriptions[i].location = i;
+			attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_SFLOAT;
+			attributeDescriptions[i].offset = offsetof(Vertex, COLOR_2);
+			i++;
+
+			attributeDescriptions[i].binding = 0;
+			attributeDescriptions[i].location = i;
+			attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_SFLOAT;
+			attributeDescriptions[i].offset = offsetof(Vertex, COLOR_3);
+			i++;
+
+			//JOINTS CHANNELS
+
+			attributeDescriptions[i].binding = 0;
+			attributeDescriptions[i].location = i;
+			attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_UINT;
+			attributeDescriptions[i].offset = offsetof(Vertex, JOINTS_0);
+			i++;
+
+			attributeDescriptions[i].binding = 0;
+			attributeDescriptions[i].location = i;
+			attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_UINT;
+			attributeDescriptions[i].offset = offsetof(Vertex, JOINTS_1);
+			i++;
+
+			attributeDescriptions[i].binding = 0;
+			attributeDescriptions[i].location = i;
+			attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_UINT;
+			attributeDescriptions[i].offset = offsetof(Vertex, JOINTS_2);
+			i++;
+
+			attributeDescriptions[i].binding = 0;
+			attributeDescriptions[i].location = i;
+			attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_UINT;
+			attributeDescriptions[i].offset = offsetof(Vertex, JOINTS_3);
+			i++;
+
+
+			//WEIGHTS CHANNELS
+
+			attributeDescriptions[i].binding = 0;
+			attributeDescriptions[i].location = i;
+			attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_SFLOAT;
+			attributeDescriptions[i].offset = offsetof(Vertex, WEIGHTS_0);
+			i++;
+
+			attributeDescriptions[i].binding = 0;
+			attributeDescriptions[i].location = i;
+			attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_SFLOAT;
+			attributeDescriptions[i].offset = offsetof(Vertex, WEIGHTS_1);
+			i++;
+
+			attributeDescriptions[i].binding = 0;
+			attributeDescriptions[i].location = i;
+			attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_SFLOAT;
+			attributeDescriptions[i].offset = offsetof(Vertex, WEIGHTS_2);
+			i++;
+
+			attributeDescriptions[i].binding = 0;
+			attributeDescriptions[i].location = i;
+			attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_SFLOAT;
+			attributeDescriptions[i].offset = offsetof(Vertex, WEIGHTS_3);
+			i++;
 
 	        return attributeDescriptions;
 	    }
 
-
+	    static std::vector<std::string> getGLTFNames(){
+	    	//GREATER OFFSET SEQUENCE MATTER
+	    	return std::vector<std::string>{
+	    		"POSITION",
+				"NORMAL",
+				"TANGENT",
+				"CUSTOM",
+				"TEXCOORD_0",
+				"TEXCOORD_1",
+				"TEXCOORD_2",
+				"TEXCOORD_3",
+				"COLOR_0",
+				"COLOR_1",
+				"COLOR_2",
+				"COLOR_3",
+				"JOINTS_0",
+				"JOINTS_1",
+				"JOINTS_2",
+				"JOINTS_3",
+				"WEIGHTS_0",
+				"WEIGHTS_1",
+				"WEIGHTS_2",
+				"WEIGHTS_3",
+	    	};
+	    }
 	};
 
 

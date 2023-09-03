@@ -44,12 +44,6 @@ namespace harpy::raven_part{
 
 		void load_scene(std::shared_ptr<renderer_context> r_context_ptr, tinygltf::Model model, uint32_t scene_id){
 			const tinygltf::Scene& scene = model.scenes[model.defaultScene];
-			std::map<uint32_t, uint32_t> preload_map;
-			#ifdef PRELOAD_STRATEGY == PRELOAD_STRATEGY_FULL
-				preload_map = preload_resources_full(model);
-			#else
-				preload_map = preload_resources_part(model,scene);
-			#endif
 
 			for (size_t i = 0; i < scene.nodes.size(); ++i) {
 				assert((scene.nodes[i] >= 0) && (scene.nodes[i] < model.nodes.size()));
@@ -154,9 +148,9 @@ namespace harpy::raven_part{
 		}
 
 
-		void load_shape(resource_types::Shape& shape, tinygltf::Model& model, tinygltf::Node& node){
-			shape.indexBuffer = loadIndexBuffer();
-			shape.vertexBuffer = loadVertexBuffer();
+		void load_shape(resource_types::Shape& shape, tinygltf::Model& model, tinygltf::Primitive& node){
+			shape.indexBuffer = harpy::utilities::loadIndexBuffer(cord, copy_buf, copy_queue, prim, model);
+			shape.vertexBuffer = harpy::utilities::loadVertexBuffer(cord, copy_buf, copy_queue, prim, model);
 		}
 
 		void load_material(resource_types::Material& material, tinygltf::Model& model, tinygltf::Node& node){
