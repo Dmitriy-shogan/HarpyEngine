@@ -8,12 +8,27 @@
 #ifndef RAVEN_PART_NEST_UTILITIES_BUFFERS_BUFFER_H_
 #define RAVEN_PART_NEST_UTILITIES_BUFFERS_BUFFER_H_
 
-#import <spinal_cord/vulkan_spinal_cord.h>
+#include <utilities/utilities.h>
+
+namespace harpy::nest{
+	struct vulkan_spinal_cord;
+}
 
 namespace harpy::utilities{
-	std::pair<VkBuffer,VkDeviceMemory> loadVertexBuffer(std::shared_ptr<harpy::nest::vulkan_spinal_cord> cord, VkCommandBuffer copy_buf, VkQueue copy_queue);
-	std::pair<VkBuffer,VkDeviceMemory> loadIndexBuffer(std::shared_ptr<harpy::nest::vulkan_spinal_cord> cord, VkCommandBuffer copy_buf, VkQueue copy_queue);
-
+	std::pair<std::pair<VkBuffer,VkDeviceMemory>, uint32_t> loadVertexBuffer(
+				std::shared_ptr<harpy::nest::vulkan_spinal_cord> cord,
+				VkCommandBuffer copy_buf,
+				VkQueue copy_queue,
+				tinygltf::Primitive prim,
+				tinygltf::Model model
+				);
+	std::pair<std::pair<VkBuffer,VkDeviceMemory>, uint32_t> loadIndexBuffer(
+				std::shared_ptr<harpy::nest::vulkan_spinal_cord> cord,
+				VkCommandBuffer copy_buf,
+				VkQueue copy_queue,
+				tinygltf::Primitive prim,
+				tinygltf::Model model
+			);
 }
 
 

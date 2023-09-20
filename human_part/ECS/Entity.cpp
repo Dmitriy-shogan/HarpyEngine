@@ -10,7 +10,7 @@
 #include <vector>
 #include <iostream>
 
-harpy::human_part::ECS::Entity::Entity() {}
+
 
 void harpy::human_part::ECS::Entity::add_component(harpy::human_part::ECS::Component * c) {
     components[c->Name()].push_back(c);

@@ -26,6 +26,52 @@ namespace nest{
 
 namespace harpy::raven_part{
 
+	struct load_package{
+		std::shared_ptr<harpy::nest::renderer_context> r_context_ptr;
+		VkCommandBuffer copy_buf;
+		VkQueue copy_queue;
+
+		load_package(std::shared_ptr<harpy::nest::renderer_context> r_context_ptr, VkQueue copy_queue, VkCommandBuffer copy_buf){
+			this->copy_buf = copy_buf;
+			this->copy_queue = copy_queue;
+			this->r_context_ptr = r_context_ptr;
+		}
+	};
+
+	struct preload_map{
+		std::map<uint32_t, uint32_t> material_map;
+		std::map<std::map<std::string, int>, uint32_t> shape_map;
+
+		bool isMaterialLoaded(uint32_t gltf_material_id){
+			return material_map.count(gltf_material_id) > 0;
+		}
+
+		bool isShapeLoaded(uint32_t gltf_indice_id, std::map<std::string, int> gltf_shape_attribs){
+			gltf_shape_attribs["__INDICES"] = gltf_indice_id;
+			return shape_map.count(gltf_shape_attribs) > 0;
+		}
+
+		uint32_t getMaterialId(uint32_t gltf_material_id){
+			return material_map[gltf_material_id];
+		}
+
+		uint32_t getShapeId(int32_t gltf_indice_id, std::map<std::string, int> gltf_shape_attribs){
+			gltf_shape_attribs["__INDICES"] = gltf_indice_id;
+			return shape_map[gltf_shape_attribs];
+		}
+
+		void setMaterialId(uint32_t gltf_material_id, uint32_t id){
+			material_map[gltf_material_id] = id;
+		}
+
+		void setShapeId(int32_t gltf_indice_id, std::map<std::string, int> gltf_shape_attribs, uint32_t id){
+			gltf_shape_attribs["__INDICES"] = gltf_indice_id;
+			shape_map[gltf_shape_attribs] = id;
+		}
+
+
+	};
+
 	struct scene_source{
 		std::mutex lock;
 		std::atomic_flag consumed;
@@ -35,23 +81,16 @@ namespace harpy::raven_part{
 		nest::RendererObjectMapper mapper{};
 
 		human_part::ECS::Entity* camera;
-		scene_source() = default;
-
-		void r_init(std::shared_ptr<harpy::nest::renderer_context> r_context){
-			storage.r_init(r_context);
+		void set_camera(human_part::ECS::Entity* camera){
+			this->camera = camera;
 		};
 
+//		void r_init(tinygltf::Model& model, tinygltf::Primitive& prim, load_package pack){
+//			storage.r_init(model, prim, pack);
+//		};
 
-		void load_scene(std::shared_ptr<renderer_context> r_context_ptr, tinygltf::Model model, uint32_t scene_id){
-			const tinygltf::Scene& scene = model.scenes[model.defaultScene];
 
-			for (size_t i = 0; i < scene.nodes.size(); ++i) {
-				assert((scene.nodes[i] >= 0) && (scene.nodes[i] < model.nodes.size()));
-				loadNode(model, model.nodes[scene.nodes[i]]);
-			}
-
-			r_init(r_context_ptr);
-		}
+		void load_scene(std::shared_ptr<harpy::nest::renderer_context> r_context_ptr, tinygltf::Model model, uint32_t scene_id);
 
 		uint32_t create_entity(){
 			entities->push_back(new harpy::human_part::ECS::Entity());
@@ -59,8 +98,7 @@ namespace harpy::raven_part{
 		}
 
 		uint32_t create_entity(uint32_t parent_id){
-					entities->push_back(new harpy::human_part::ECS::Entity());
-					(*entities)[entities->size() - 1]->parent_id = parent_id;
+					entities->push_back(new harpy::human_part::ECS::Entity(parent_id));
 					return entities->size() - 1;
 				}
 
@@ -73,24 +111,24 @@ namespace harpy::raven_part{
 			return id;
 		}
 
-		void loadNode(tinygltf::Model& model, tinygltf::Node& node){
+		void loadNode(tinygltf::Model& model, tinygltf::Node& node, struct preload_map preload_map, struct load_package pack){
 
 			uint32_t entity_id = create_entity();
 			if(has_transform(model, node)){
 				entity_load_transform_component(entity_id, model, node);
 			}
 			if ((node.camera) >= 1 && (node.camera) < model.cameras.size()){
-				entity_load_camera_component(entity_id, model, node);
+				entity_load_camera_component(entity_id, model, node, pack);
 			}
 
 			if ((node.mesh >= 0) && (node.mesh < model.meshes.size())) {
 				//loadMesh(model, );
-				entity_load_renderer_component(entity_id, model, node); //model.meshes[node.mesh]
+				entity_load_renderer_component(entity_id, model, node, preload_map, pack); //model.meshes[node.mesh]
 			}
 
 			for (size_t i = 0; i < node.children.size(); i++) {
 				assert((node.children[i] >= 0) && (node.children[i] < model.nodes.size()));
-				loadNode(model, model.nodes[node.children[i]]);
+				loadNode(model, model.nodes[node.children[i]],preload_map, pack);
 			}
 		}
 
@@ -109,62 +147,39 @@ namespace harpy::raven_part{
 			(*entities)[entity_id]->add_component(tr);
 		}
 
-		void entity_load_renderer_component(uint32_t entity_id, tinygltf::Model& model, tinygltf::Node& node){
+		void entity_load_renderer_component(uint32_t entity_id, tinygltf::Model& model, tinygltf::Node& node, struct preload_map preload_map, struct load_package pack){
 			human_part::ECS::Renderer* rend = new human_part::ECS::Renderer();
+			std::vector<renderer_mappings> mappings{};
 
-			raven_part::resource_types::Shape shape{};
-			load_shape(shape, model, node);
-			raven_part::resource_types::Material material{};
-			load_material(material, model, node);
+			uint32_t prim_count = model.meshes[node.mesh].primitives.size();
+			mappings.resize(prim_count);
 
-			renderer_mappings mappings{};
-			mappings.material_id = preload_map.materials[] //.register_material(material);
-			mappings.shape_id = storage.register_shape(shape);
+			for (int i = 0; i < prim_count; ++i) {
+				tinygltf::Primitive prim = model.meshes[node.mesh].primitives[i];
+				if (preload_map.isMaterialLoaded(prim.material)){
+					mappings[i].material_id = preload_map.getMaterialId(prim.material);
+				}else{
+					raven_part::resource_types::Material material{};
+					material.load(model, prim, pack);
+					mappings[i].material_id = storage.register_material(material);
+					preload_map.setMaterialId(prim.material, mappings[i].material_id);
+				}
+
+				if (preload_map.isShapeLoaded(prim.indices, prim.attributes)){
+					mappings[i].shape_id = preload_map.getShapeId(prim.indices, prim.attributes);
+				}else{
+					raven_part::resource_types::Shape shape{};
+					shape.load(model, prim, pack);
+					mappings[i].shape_id = storage.register_shape(shape);
+					preload_map.setShapeId(prim.indices, prim.attributes, mappings[i].shape_id);
+				}
+			}
 
 			mapper.register_renderer(rend, mappings);
 			(*entities)[entity_id]->add_component(rend);
 		}
 
-		void entity_load_camera_component(uint32_t entity_id, tinygltf::Model& model, tinygltf::Node& node){
-			human_part::ECS::Camera* cm = new human_part::ECS::Camera();
-			tinygltf::Camera* cam = model.cameras[node.camera];
-
-			raven_part::resource_types::View view{};
-			view.view_field = glm::vec2{1.0f,1.0f};
-			view.cameraType = raven_part::resource_types::View::CameraType::ORTHOGRAPHIC;
-			view.viewport.x = 0.0f;
-			view.viewport.y = 0.0f;
-			view.viewport.width = static_cast<float>(r_context_ptr->swapchain.extent.width);
-			view.viewport.height = static_cast<float>(r_context_ptr->swapchain.extent.height);
-			view.viewport.minDepth = 0.0f;
-			view.viewport.maxDepth = 1.0f;
-
-			VkRect2D scissor{};
-			view.scissor.offset = {0, 0};
-			view.scissor.extent = r_context_ptr->swapchain.extent;
-
-			storage.register_view(view);
-			(*entities)[entity_id]->add_component(cm);
-		}
-
-
-		void load_shape(resource_types::Shape& shape, tinygltf::Model& model, tinygltf::Primitive& node){
-			shape.indexBuffer = harpy::utilities::loadIndexBuffer(cord, copy_buf, copy_queue, prim, model);
-			shape.vertexBuffer = harpy::utilities::loadVertexBuffer(cord, copy_buf, copy_queue, prim, model);
-		}
-
-		void load_material(resource_types::Material& material, tinygltf::Model& model, tinygltf::Node& node){
-			aaa
-		}
-
-		VkBuffer loadIndexBuffer(tinygltf::Model& model, tinygltf::Node& node){
-
-			model.meshes[node.mesh].primitives[]
-		}
-
-		void loadMesh(tinygltf::Model& model, tinygltf::Mesh& node){
-
-		}
+		void entity_load_camera_component(uint32_t entity_id, tinygltf::Model& model, tinygltf::Node& node, struct load_package pack);
 
 
 	};

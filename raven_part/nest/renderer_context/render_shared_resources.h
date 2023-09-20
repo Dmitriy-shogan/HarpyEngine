@@ -24,7 +24,7 @@ namespace harpy::nest
 
 		renderer_context* r_context;
 
-		std::vector<std::pair<harpy::human_part::ECS::Transform*, renderer_mappings>> queue{};
+		std::vector<std::pair<harpy::human_part::ECS::Transform*, std::vector<renderer_mappings>>> queue{};
 
 		//color buffer
 		VkDeviceMemory color_image_memory = nullptr;

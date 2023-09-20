@@ -5,14 +5,14 @@
  *      Author: hexi
  */
 
-#include "buffer.h"
 #include <bias/vertex.h>
 #include <bias/indice.h>
+#include <spinal_cord/vulkan_spinal_cord.h>
+
+#include "buffer.h"
+
 
 namespace harpy::utilities{
-
-
-
 
 	struct buffer_parse_context{
 		uint32_t unit_size;
@@ -83,7 +83,7 @@ namespace harpy::utilities{
 	float_t convert_sfloat(uint32_t componentType, char* ptr){
 		switch (componentType) {
 			case TINYGLTF_COMPONENT_TYPE_FLOAT:
-				return *((float_t)ptr);
+				return *((float_t*)ptr);
 				break;
 			default:
 				throw harpy_little_error("unsupported componentType for sfloat");
@@ -93,13 +93,13 @@ namespace harpy::utilities{
 	uint32_t convert_uint(uint32_t componentType, char* ptr){
 		switch (componentType) {
 			case TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT:
-				return *((uint32_t)ptr);
+				return *((uint32_t*)ptr);
 				break;
 			case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
-				return *((uint16_t)ptr);
+				return *((uint16_t*)ptr);
 				break;
 			case TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE:
-				return *((uint8_t)ptr);
+				return *((uint8_t*)ptr);
 				break;
 			default:
 				throw harpy_little_error("unsupported componentType for uint");
@@ -109,10 +109,10 @@ namespace harpy::utilities{
 	uint16_t convert_short(uint32_t componentType, char* ptr){
 			switch (componentType) {
 				case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
-					return *((uint16_t)ptr);
+					return *((uint16_t*)ptr);
 					break;
 				case TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE:
-					return *((uint8_t)ptr);
+					return *((uint8_t*)ptr);
 					break;
 				default:
 					throw harpy_little_error("unsupported componentType for sint");
@@ -139,11 +139,14 @@ namespace harpy::utilities{
 				}
 			}else{
 				if (isFloat(format)) {
-						(*((float_t*)ptr)) = (float_t)default_value;
+					auto t_ptr = ((float_t*)ptr);
+					*t_ptr = std::any_cast<float_t>(default_value);
 				}else if(isUInt(format)){
-						(*((uint32_t*)ptr)) = (uint32_t)default_value;
+					auto t_ptr = ((uint32_t*)ptr);
+					*t_ptr = std::any_cast<uint32_t>(default_value);
 				}else if(isSInt(format)){
-					(*((uint16_t*)ptr)) = (uint16_t)default_value;
+					auto t_ptr = ((uint16_t*)ptr);
+					*t_ptr = std::any_cast<uint16_t>(default_value);
 				}else{
 					throw harpy_little_error("unsupported VkFormat to convert ");
 				}
@@ -172,9 +175,9 @@ namespace harpy::utilities{
 	}
 
 
-	void loadIndice(std::pair<buffer_parse_context, std::shared_ptr<std::ifstream>> s_pair, char* buffer_ptr){
-
-	}
+//	void loadIndice(std::pair<buffer_parse_context, std::shared_ptr<std::ifstream>> s_pair, char* buffer_ptr){
+//
+//	}
 
 
 	uint32_t findMemoryType(std::shared_ptr<vulkan_spinal_cord> cord, uint32_t typeFilter, VkMemoryPropertyFlags properties) {
@@ -279,7 +282,7 @@ namespace harpy::utilities{
 	}
 
 
-	std::pair<VkBuffer,VkDeviceMemory> loadVertexBuffer(
+	std::pair<std::pair<VkBuffer,VkDeviceMemory>, uint32_t> loadVertexBuffer(
 			std::shared_ptr<vulkan_spinal_cord> cord,
 			VkCommandBuffer copy_buf,
 			VkQueue copy_queue,
@@ -296,28 +299,25 @@ namespace harpy::utilities{
 
 		std::vector<std::pair<buffer_parse_context, std::shared_ptr<std::ifstream>>> attrib_sources{};
 
-		for (uint32_t i_attrib : gltfNames.size()){
+
+
+		for (uint32_t i_attrib; i_attrib < gltfNames.size(); ++i_attrib){
 			std::string attrib = gltfNames[i_attrib];
 			tinygltf::Accessor accessor = model.accessors[prim.attributes[attrib]];
 			tinygltf::BufferView buffView = model.bufferViews[accessor.bufferView];
 			tinygltf::Buffer buff = model.buffers[buffView.buffer];
 
 			std::any default_val{};
-			switch (attrib) {
-				case "COLOR_0":
-					default_val = 1.0f;
-					break;
-				case "COLOR_1":
-					default_val = 1.0f;
-					break;
-				case "COLOR_2":
-					default_val = 1.0f;
-					break;
-				case "COLOR_3":
-					default_val = 1.0f;
-					break;
-				default:
-					default_val = 0.0f;;
+			if (attrib == "COLOR_0") {
+				default_val = 1.0f;
+			}else if (attrib == "COLOR_1") {
+				default_val = 1.0f;
+			}else if (attrib == "COLOR_2") {
+				default_val = 1.0f;
+			}else if (attrib == "COLOR_3") {
+				default_val = 1.0f;
+			}else{
+				default_val = 0.0f;
 			}
 
 			std::pair<buffer_parse_context, std::shared_ptr<std::ifstream>> p = std::make_pair(
@@ -345,8 +345,9 @@ namespace harpy::utilities{
 		VkDeviceMemory stagingBufferMemory;
 		createBuffer(cord, bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 
-		char* data;
-		vkMapMemory(cord->device, stagingBufferMemory, 0, bufferSize, 0, &(void*)data);
+		void* r_data;
+		vkMapMemory(cord->device, stagingBufferMemory, 0, bufferSize, 0, &r_data);
+		char* data = (char*)r_data;
 		for (int i_vertex = 0; i_vertex < vert_max_count; ++i_vertex) {
 			for (int i_attrib = 0; i_attrib < attrib_sources.size(); ++i_attrib) {
 				loadPart(attrib_sources[i_attrib], data);
@@ -361,10 +362,15 @@ namespace harpy::utilities{
 
 		vkDestroyBuffer(cord->device, stagingBuffer, nullptr);
 		vkFreeMemory(cord->device, stagingBufferMemory, nullptr);
-		return std::make_pair(vertexBuffer, vertexBufferMemory);
+
+		for (int i = 0; i < attrib_sources.size(); ++i) {
+			attrib_sources[i].second->close();
+		}
+
+		return std::make_pair(std::make_pair(vertexBuffer, vertexBufferMemory), vert_max_count);
    }
 
-	std::pair<VkBuffer,VkDeviceMemory> loadIndexBuffer(
+	std::pair<std::pair<VkBuffer,VkDeviceMemory>, uint32_t> loadIndexBuffer(
 			std::shared_ptr<vulkan_spinal_cord> cord,
 			VkCommandBuffer copy_buf,
 			VkQueue copy_queue,
@@ -405,8 +411,9 @@ namespace harpy::utilities{
 		VkDeviceMemory stagingBufferMemory;
 		createBuffer(cord,bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 
-		char* data;
-		vkMapMemory(cord->device, stagingBufferMemory, 0, bufferSize, 0, &(void*)data);
+		void* r_data;
+		vkMapMemory(cord->device, stagingBufferMemory, 0, bufferSize, 0, &r_data);
+		char* data = (char*)r_data;
 		for (int i_indice = 0; i_indice < ind_max_count; ++i_indice) {
 			loadPart(indices_source, data);
 		}
@@ -419,7 +426,9 @@ namespace harpy::utilities{
 
 		vkDestroyBuffer(cord->device, stagingBuffer, nullptr);
 		vkFreeMemory(cord->device, stagingBufferMemory, nullptr);
-		return std::make_pair(indexBuffer,indexBufferMemory);
+
+		indices_source.second->close();
+		return std::make_pair(std::make_pair(indexBuffer,indexBufferMemory), ind_max_count);
 	}
 
 //	std::pair<std::vector<VkBuffer>, std::pair<std::vector<VkDeviceMemory>, std::vector<void*>>> loadUniformBuffers(std::shared_ptr<vulkan_spinal_cord> cord, VkCommandBuffer copy_buf, VkQueue copy_queue) {

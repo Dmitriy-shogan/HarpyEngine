@@ -8,11 +8,12 @@
 #include "View.h";
 #include <renderer_context/renderer_context.h>
 #include <ECS/components/Transform.h>
+#include <raven_part.h>
 
 
 namespace harpy::raven_part::resource_types{
 
-	void View::init(std::shared_ptr<harpy::nest::renderer_context> r_context){
+	void View::load(tinygltf::Model& model, tinygltf::Primitive& prim, load_package pack){
 		this->r_context = r_context;
 
 		shaders::shader_module compute{r_context->spinal_cord->device};
@@ -111,7 +112,7 @@ namespace harpy::raven_part::resource_types{
 		VkDescriptorBufferInfo in_buffer;
 		VkDescriptorBufferInfo out_buffer;
 
-		in_buffer.buffer = shape->vertexBuffer;
+		in_buffer.buffer = shape->vertexBuffer.first;
 		in_buffer.offset = 0;
 		in_buffer.range = bufferSize;//shape->vert_size; //IDK
 

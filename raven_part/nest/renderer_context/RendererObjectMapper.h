@@ -20,6 +20,10 @@
 #include <resource_types/Shape.h>
 #include <resource_types/View.h>
 
+namespace harpy::raven_part{
+	struct load_package;
+}
+
 namespace harpy::nest
 {
 
@@ -28,7 +32,7 @@ namespace harpy::nest
 		std::vector<harpy::raven_part::resource_types::Material> materials{};
 		std::vector<harpy::raven_part::resource_types::Shape> shapes{};
 
-		void r_init(std::shared_ptr<harpy::nest::renderer_context> r_context);
+		//void r_init(tinygltf::Model& model, tinygltf::Primitive& prim, harpy::raven_part::load_package pack);
 
 		uint32_t get_vert_max();
 
@@ -50,9 +54,9 @@ namespace harpy::nest
     };
 
     struct RendererObjectMapper {
-        std::queue<uint32_t> recycle_queue;
-        std::vector<renderer_mappings> mappings;
-        std::mutex lock;
+        std::queue<uint32_t> recycle_queue{};
+        std::vector<renderer_mappings> mappings{};
+        std::mutex lock{};
 
     public:
         RendererObjectMapper(){
@@ -60,9 +64,13 @@ namespace harpy::nest
         }
 
 
-        void register_renderer(human_part::ECS::Renderer* renderer, renderer_mappings mappings){
-        			renderer->mapping_id = register_mapping(mappings);
-        		}
+        void register_renderer(human_part::ECS::Renderer* renderer, std::vector<renderer_mappings> mappings){
+        	renderer->mappings.resize(mappings.size());
+        		for (uint32_t i = 0; i < mappings.size(); ++i) {
+        			renderer->mappings[i] = register_mapping(mappings[i]);
+				}
+
+        	}
 
         uint32_t register_mapping(renderer_mappings mapping) {
             if (!recycle_queue.empty()) {
@@ -100,6 +108,15 @@ namespace harpy::nest
 			if (map_index < mappings.size()) {
 				recycle_queue.push(map_index);
 			}
+		}
+
+		std::vector<renderer_mappings> demap(std::vector<uint32_t> mappings){
+			std::vector<renderer_mappings> res;
+			res.resize(mappings.size());
+			for (uint32_t i = 0; i < mappings.size(); ++i) {
+				res[i] = this->mappings[i];
+			}
+			return res;
 		}
 
         ~RendererObjectMapper(){

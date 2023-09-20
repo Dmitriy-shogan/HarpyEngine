@@ -38,7 +38,7 @@ namespace harpy::utilities {
     
     std::vector<char> read_file(std::string filepath);
 
-    std::ostream& operator <<(std::ostream& out, nest::vertex& vertex);
+    //std::ostream& operator <<(std::ostream& out, nest::vertex& vertex);
 
     //VERY rude way to copy buffers
     //TODO: make vk_copy_buffer more friendly, make warnings for transfer queue not being transfer

@@ -182,12 +182,6 @@ namespace harpy::nest
 		void init();
 
 
-
-
-
-
-
-
 		VkRenderPass getRenderPass() const {
 					return render_pass;
 				}

@@ -389,7 +389,7 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 		tmp_mapper->lock.lock();
 
 		renderer_context * context_ptr = this;
-
+		//TODO UNEFFECTVE
 		for (uint32_t i = 0; i < thread_cnt; ++i) {
 			int32_t cnt = std::max(std::min((int32_t)tgt_per_task,  (int32_t)(entities->size()) - (int32_t)(i * tgt_per_task)),(int32_t)0);
 			std::cout<<"cnt: "<<cnt<<std::endl;
@@ -414,7 +414,7 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 				harpy::human_part::ECS::Transform* transform = dynamic_cast<harpy::human_part::ECS::Transform*>(e->get_components_by_name(harpy::human_part::ECS::Transform::name)[0]);
 				harpy::human_part::ECS::Renderer* renderer = dynamic_cast<harpy::human_part::ECS::Renderer*>(e->get_components_by_name(harpy::human_part::ECS::Renderer::name)[0]);
 
-				rsr.first->queue[k].second = tmp_mapper->mappings[renderer->mapping_id];
+				rsr.first->queue[k].second = tmp_mapper->demap(renderer->mappings);
 				rsr.first->queue[k].first = transform;
 			}
 			std::cout<<"probe 4"<<std::endl;
@@ -523,50 +523,49 @@ void renderer_context::render_task(
 		throw utilities::harpy_little_error("failed to begin command buffer!");
 
 	for (uint32_t i = 0; i < rsr.first->queue.size(); i++){
+		std::pair<harpy::human_part::ECS::Transform*, std::vector<renderer_mappings>> entity = rsr.first->queue[i];
+		for (int i_prim = 0; i_prim < entity.second.size(); ++i_prim){
 
-		std::pair<harpy::human_part::ECS::Transform*, renderer_mappings> entity = rsr.first->queue[i];
+			resource_types::Shape shape = tmp_storage->shapes[entity.second[i_prim].shape_id];
+			resource_types::Material material = tmp_storage->materials[entity.second[i_prim].material_id];
+			std::cout<<"probe render_task 4"<<std::endl;
+	//=====================
+	//    SHAPE
+	//=====================
+			//shape.perform(vk_queue.first.second);
+	//=====================
+	//    VIEW & CAMERA TRANSPOSE
+	//=====================
+			view.camera_perform(
+					vk_queue.first.second,
+					rsr.first->vert_desc,
+					vert_buf,
+					&shape,
+					(*camera).first,
+					entity.first
+					);
+			std::cout<<"probe render_task 5"<<std::endl;
+			vkCmdBeginRenderPass(vk_queue.first.second, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
+			view.view_perform(vk_queue.first.second);
 
-		resource_types::Shape shape = tmp_storage->shapes[entity.second.shape_id];
-		resource_types::Material material = tmp_storage->materials[entity.second.material_id];
-		std::cout<<"probe render_task 4"<<std::endl;
-//=====================
-//    SHAPE
-//=====================
-		//shape.perform(vk_queue.first.second);
-//=====================
-//    VIEW & CAMERA TRANSPOSE
-//=====================
-		view.camera_perform(
-				vk_queue.first.second,
-				rsr.first->vert_desc,
-				vert_buf,
-				&shape,
-				(*camera).first,
-				entity.first
-				);
-		std::cout<<"probe render_task 5"<<std::endl;
-		vkCmdBeginRenderPass(vk_queue.first.second, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+			VkDeviceSize offsets[] = {vert_buf.second};
+			vkCmdBindVertexBuffers(vk_queue.first.second, 0, 1, &vert_buf.first, offsets);
+			vkCmdBindIndexBuffer(vk_queue.first.second, shape.indexBuffer.first, 0, shape.indexType);
+	//=====================
+	//    MATERIAL
+	//=====================
+			material.perform(vk_queue.first.second, &shape);
+			vkCmdEndRenderPass(vk_queue.first.second);
+	//=====================
+	//    EFFECT
+	//=====================
 
-		view.view_perform(vk_queue.first.second);
+	//	   vkCmdBindPipeline(vk_queue.first.second, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.graphicsPipeline);
+	//
+	//	   vkCmdBindDescriptorSets(vk_queue.first.second, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_layout, 0, 1, &pipeline.desc_set, 0, nullptr);
 
-		VkDeviceSize offsets[] = {vert_buf.second};
-		vkCmdBindVertexBuffers(vk_queue.first.second, 0, 1, &vert_buf.first, offsets);
-		vkCmdBindIndexBuffer(vk_queue.first.second, shape.indexBuffer, 0, shape.indexType);
-//=====================
-//    MATERIAL
-//=====================
-		material.perform(vk_queue.first.second, &shape);
-		vkCmdEndRenderPass(vk_queue.first.second);
-//=====================
-//    EFFECT
-//=====================
-
-//	   vkCmdBindPipeline(vk_queue.first.second, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.graphicsPipeline);
-//
-//	   vkCmdBindDescriptorSets(vk_queue.first.second, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_layout, 0, 1, &pipeline.desc_set, 0, nullptr);
-
-
+		}
 	}
 
 	if (vkEndCommandBuffer(vk_queue.first.second) != VK_SUCCESS)

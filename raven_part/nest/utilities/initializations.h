@@ -2,8 +2,6 @@
 #ifndef HARPY_INITS
 #define HARPY_INITS
 
-//TODO: create move and copy operators for all classes;
-//TODO: reassign libraries where they are needed and only leave everywhere-use-libraries here
 //STL libraries
 #include <iostream>
 #include <fstream>
@@ -18,7 +16,6 @@
 #include <chrono>
 #include <ctime>
 #include <any>
-//#include <format>
 #include <functional>
 #include <array>
 //libfmt
@@ -93,61 +90,12 @@ inline void init_glfw()
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 }
 
-namespace harpy::nest
+
+static void change_projection(float angle, float aspect = 16.0f/9.0f, float near = 0.05f, float far = 50.0f)
 {
-    struct vertex
-    {
-        glm::vec2 position{};
-        /*glm::vec3 normal{};*/
-        glm::vec3 color{};
-    };
-
-    static VkVertexInputBindingDescription get_binding_description()
-    {
-        VkVertexInputBindingDescription res;
-        res.binding = 0;
-        res.stride = sizeof(vertex);
-        res.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-        
-        return res;
-    }
-
-    static std::array<VkVertexInputAttributeDescription, 2> get_attributes_descriptions() {
-        //TODO: added normals, so rewrite shaders
-        std::array<VkVertexInputAttributeDescription, 2> attribute_descriptions{{}};
-        attribute_descriptions[0].binding = 0;
-        attribute_descriptions[0].location = 0;
-        attribute_descriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
-        attribute_descriptions[0].offset = offsetof(vertex, position);
-
-        /*attribute_descriptions[1].binding = 0;
-        attribute_descriptions[1].location = 1;
-        attribute_descriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attribute_descriptions[1].offset = offsetof(vertex, normal);*/
-
-        attribute_descriptions[1].binding = 0;
-        attribute_descriptions[1].location = 1;
-        attribute_descriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attribute_descriptions[1].offset = offsetof(vertex, color);
-        
-
-        return attribute_descriptions;
-    }
-
-    struct ubo
-    {
-       alignas(16) glm::mat4 model;
-       alignas(16) glm::mat4 view;
-       alignas(16) glm::mat4 projection;
-    };
-
-    static  glm::mat4  projection{1.0f};
-
-    static void change_projection(float angle, float aspect = 16.0f/9.0f, float near = 0.05f, float far = 50.0f)
-    {
-        projection = glm::perspective(glm::radians(angle), aspect, near, far);
-        projection[1][1] *= -1;
-    }
+    auto projection = glm::perspective(glm::radians(angle), aspect, near, far);
+    projection[1][1] *= -1;
 }
+
 
 #endif //HARPY_INITS

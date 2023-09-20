@@ -10,8 +10,13 @@
 #include <spinal_cord/vulkan_spinal_cord.h>
 #include <resource_types/Shape.h>
 
+
 namespace harpy::nest{
 	struct renderer_context;
+}
+
+namespace harpy::raven_part{
+	struct load_package;
 }
 
 namespace harpy::raven_part::resource_types{
@@ -23,18 +28,7 @@ namespace harpy::raven_part::resource_types{
 
 		//set1
 		VkDescriptorSet desc_set;
-		void init(std::shared_ptr<harpy::nest::renderer_context> r_context){
-			VkDescriptorSetLayout descriptor_set_layout = createDescriptorSetLayout(cord);
-			VkDescriptorPool pool = createDescriptorPool(cord);
-			std::vector<VkDescriptorSet> sets = createDescriptorSets(cord, pool, descriptor_set_layout, ubo.first[0]);
-
-
-			std::pair<VkPipeline,VkPipelineLayout> pipe = createGraphicsPipeline(cord, descriptor_set_layout, r_context_ptr->render_pass);
-			pipeline = pipe.first;
-			pipelineLayout = pipe.second;
-			desc_set = sets[0];
-
-		};
+		void load(tinygltf::Model& model, tinygltf::Primitive& prim, load_package pack);
 		void perform(VkCommandBuffer cmd, Shape* shape);
 	};
 }

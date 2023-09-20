@@ -6,7 +6,7 @@
  */
 
 #include "RendererObjectMapper.h"
-
+#include <raven_part.h>
 
 uint32_t RendererResourceStorage::register_view(raven_part::resource_types::View view){
 
@@ -26,20 +26,20 @@ uint32_t RendererResourceStorage::register_material(raven_part::resource_types::
 	return materials.size()-1;
 }
 
-void RendererResourceStorage::r_init(std::shared_ptr<harpy::nest::renderer_context> r_context){
-	for (uint32_t i = 0; i < views.size(); ++i) {
-		views[i].init(r_context);
-	}
+//void RendererResourceStorage::r_init(tinygltf::Model& model, tinygltf::Primitive& prim, harpy::raven_part::load_package pack){
+//	for (uint32_t i = 0; i < views.size(); ++i) {
+//		views[i].init(model, prim, pack);
+//	}
+//
+//	for (uint32_t i = 0; i < shapes.size(); ++i) {
+//		shapes[i].init(model, prim, pack);
+//	}
+//
+//	for (uint32_t i = 0; i < materials.size(); ++i) {
+//		materials[i].init(model, prim, pack);
+//	}
 
-	for (uint32_t i = 0; i < shapes.size(); ++i) {
-		shapes[i].init(r_context);
-	}
-
-	for (uint32_t i = 0; i < materials.size(); ++i) {
-		materials[i].init(r_context);
-	}
-
-}
+//}
 
 uint32_t RendererResourceStorage::get_vert_max(){
 	uint32_t max = 0;

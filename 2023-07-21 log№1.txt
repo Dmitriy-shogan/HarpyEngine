@@ -1,4 +1,0 @@
-[15:52:27.664153761] {Error}: Can't find correct spv shader file
-[15:52:27.664225687] {Message}: Everything went fine on first try
-[16:17:23.640049958] {Error}: Can't find correct spv shader file
-[16:17:23.640127955] {Message}: Everything went fine on first try

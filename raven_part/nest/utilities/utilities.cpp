@@ -16,12 +16,7 @@ std::vector<char> harpy::utilities::read_file(std::string filepath)
     return res;
 }
 
-std::ostream& harpy::utilities::operator<<(std::ostream& out, nest::vertex& vertex)
-{
-    out << "Coordinata: " << std::to_string(vertex.position.x) + " " + std::to_string(vertex.position.y) + " " <<std::endl;
-    out << "Color: " << std::to_string(vertex.color.x) + " " + std::to_string(vertex.color.y) + " " + std::to_string(vertex.color.z) << std::endl;
-    return out;
-}
+
 
 //void harpy::utilities::vk_copy_buffer(VkBuffer src, VkBuffer dst, VkDeviceSize size, VkDevice& device,
 //	std::shared_ptr<nest::pools::command_pool>  pool, VkQueue transfer_queue)
@@ -101,7 +96,7 @@ uint32_t getChannelCountForFormat(VkFormat format) {
 		case VK_FORMAT_R32G32_UINT:
 		case VK_FORMAT_R32G32_SINT:
 		case VK_FORMAT_R32G32_SFLOAT:
-			return  2;
+			return 2;
 
 		case VK_FORMAT_R8G8B8_UINT:
 		case VK_FORMAT_R8G8B8_SINT:
@@ -160,9 +155,9 @@ uint32_t getChannelCountForFormat(VkFormat format) {
 			case VK_FORMAT_R32_UINT:
 				return true;
 
-			case VK_FORMAT_R8G8B8_UINT:
-			case VK_FORMAT_R16G16B16_UINT:
-			case VK_FORMAT_R32G32B32_UINT:
+			case VK_FORMAT_R8G8_UINT:
+			case VK_FORMAT_R16G16_UINT:
+			case VK_FORMAT_R32G32_UINT:
 				return true;
 
 			case VK_FORMAT_R8G8B8_UINT:
@@ -188,9 +183,9 @@ uint32_t getChannelCountForFormat(VkFormat format) {
     			case VK_FORMAT_R32_SINT:
     				return true;
 
-    			case VK_FORMAT_R8G8B8_SINT:
-    			case VK_FORMAT_R16G16B16_SINT:
-    			case VK_FORMAT_R32G32B32_SINT:
+    			case VK_FORMAT_R8G8_SINT:
+    			case VK_FORMAT_R16G16_SINT:
+    			case VK_FORMAT_R32G32_SINT:
     				return true;
 
     			case VK_FORMAT_R8G8B8_SINT:
@@ -207,9 +202,7 @@ uint32_t getChannelCountForFormat(VkFormat format) {
     				return false;
     		}
     		return false;
-        }
+    }
 
-    return channelCount;
-}
 
 
