@@ -75,7 +75,7 @@ VkDeviceSize harpy::utilities::align_to(VkDeviceSize val, uint32_t bound){
 
 
 
-uint32_t getChannelCountForFormat(VkFormat format) {
+uint32_t harpy::utilities::getChannelCountForFormat(VkFormat format) {
 
     switch (format) {
         case VK_FORMAT_R8_UINT:
@@ -124,85 +124,85 @@ uint32_t getChannelCountForFormat(VkFormat format) {
     return -1;
 }
 
-    bool isFloat(VkFormat format){
-    	switch (format) {
-			case VK_FORMAT_R16_SFLOAT:
-			case VK_FORMAT_R32_SFLOAT:
-				return true;
+bool harpy::utilities::isFloat(VkFormat format){
+	switch (format) {
+		case VK_FORMAT_R16_SFLOAT:
+		case VK_FORMAT_R32_SFLOAT:
+			return true;
 
-			case VK_FORMAT_R16G16_SFLOAT:
-			case VK_FORMAT_R32G32_SFLOAT:
-				return true;
+		case VK_FORMAT_R16G16_SFLOAT:
+		case VK_FORMAT_R32G32_SFLOAT:
+			return true;
 
-			case VK_FORMAT_R16G16B16_SFLOAT:
-			case VK_FORMAT_R32G32B32_SFLOAT:
-				return true;
+		case VK_FORMAT_R16G16B16_SFLOAT:
+		case VK_FORMAT_R32G32B32_SFLOAT:
+			return true;
 
-			case VK_FORMAT_R16G16B16A16_SFLOAT:
-			case VK_FORMAT_R32G32B32A32_SFLOAT:
-				return true;
+		case VK_FORMAT_R16G16B16A16_SFLOAT:
+		case VK_FORMAT_R32G32B32A32_SFLOAT:
+			return true;
 
-			default:
-				return false;
-		}
-    	return false;
-    }
+		default:
+			return false;
+	}
+	return false;
+}
 
-    bool isUInt(VkFormat format){
+bool harpy::utilities::isUInt(VkFormat format){
+	switch (format) {
+		case VK_FORMAT_R8_UINT:
+		case VK_FORMAT_R16_UINT:
+		case VK_FORMAT_R32_UINT:
+			return true;
+
+		case VK_FORMAT_R8G8_UINT:
+		case VK_FORMAT_R16G16_UINT:
+		case VK_FORMAT_R32G32_UINT:
+			return true;
+
+		case VK_FORMAT_R8G8B8_UINT:
+		case VK_FORMAT_R16G16B16_UINT:
+		case VK_FORMAT_R32G32B32_UINT:
+			return true;
+
+		case VK_FORMAT_R8G8B8A8_UINT:
+		case VK_FORMAT_R16G16B16A16_UINT:
+		case VK_FORMAT_R32G32B32A32_UINT:
+			return true;
+
+		default:
+			return false;
+	}
+	return false;
+}
+
+bool harpy::utilities::isSInt(VkFormat format){
 		switch (format) {
-			case VK_FORMAT_R8_UINT:
-			case VK_FORMAT_R16_UINT:
-			case VK_FORMAT_R32_UINT:
+			case VK_FORMAT_R8_SINT:
+			case VK_FORMAT_R16_SINT:
+			case VK_FORMAT_R32_SINT:
 				return true;
 
-			case VK_FORMAT_R8G8_UINT:
-			case VK_FORMAT_R16G16_UINT:
-			case VK_FORMAT_R32G32_UINT:
+			case VK_FORMAT_R8G8_SINT:
+			case VK_FORMAT_R16G16_SINT:
+			case VK_FORMAT_R32G32_SINT:
 				return true;
 
-			case VK_FORMAT_R8G8B8_UINT:
-			case VK_FORMAT_R16G16B16_UINT:
-			case VK_FORMAT_R32G32B32_UINT:
+			case VK_FORMAT_R8G8B8_SINT:
+			case VK_FORMAT_R16G16B16_SINT:
+			case VK_FORMAT_R32G32B32_SINT:
 				return true;
 
-			case VK_FORMAT_R8G8B8A8_UINT:
-			case VK_FORMAT_R16G16B16A16_UINT:
-			case VK_FORMAT_R32G32B32A32_UINT:
+			case VK_FORMAT_R8G8B8A8_SINT:
+			case VK_FORMAT_R16G16B16A16_SINT:
+			case VK_FORMAT_R32G32B32A32_SINT:
 				return true;
 
 			default:
 				return false;
 		}
 		return false;
-    }
-
-    bool isSInt(VkFormat format){
-    		switch (format) {
-    			case VK_FORMAT_R8_SINT:
-    			case VK_FORMAT_R16_SINT:
-    			case VK_FORMAT_R32_SINT:
-    				return true;
-
-    			case VK_FORMAT_R8G8_SINT:
-    			case VK_FORMAT_R16G16_SINT:
-    			case VK_FORMAT_R32G32_SINT:
-    				return true;
-
-    			case VK_FORMAT_R8G8B8_SINT:
-    			case VK_FORMAT_R16G16B16_SINT:
-    			case VK_FORMAT_R32G32B32_SINT:
-    				return true;
-
-    			case VK_FORMAT_R8G8B8A8_SINT:
-    			case VK_FORMAT_R16G16B16A16_SINT:
-    			case VK_FORMAT_R32G32B32A32_SINT:
-    				return true;
-
-    			default:
-    				return false;
-    		}
-    		return false;
-    }
+}
 
 
 

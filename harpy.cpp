@@ -12,38 +12,53 @@
 namespace harpy{
 	std::shared_ptr<harpy::nest::renderer_context> r_context_ptr;
 
-
-//	struct UniformBufferObject {
-//		    alignas(16) glm::mat4 model;
-//		    alignas(16) glm::mat4 view;
-//		    alignas(16) glm::mat4 proj;
-//		};
-
+void render(
+		std::shared_ptr<harpy::nest::renderer_context> r_context_ptr,
+		std::shared_ptr<harpy::raven_part::scene_source> obj_str_ptr,
+		std::atomic_flag* cond
+		){
+	r_context_ptr->render_loop(obj_str_ptr, cond);
+};
 
 void physics(std::shared_ptr<harpy::raven_part::scene_source> obj_str_ptr, std::atomic_flag* phys_cond){ //, std::vector<human_part::ECS::Entity*> entities
 	glm::vec3 axisX(1.0f, 0.0f, 0.0f);
 	glm::vec3 axisY(0.0f, 1.0f, 0.0f);
-		while(phys_cond->test_and_set(std::memory_order_acquire)){
+	while(phys_cond->test_and_set(std::memory_order_acquire)){
+		obj_str_ptr->lock.lock();
+		obj_str_ptr->consumed.clear();
+		obj_str_ptr->lock.unlock();
+		std::this_thread::sleep_for(sleepDuration);
+	}
+}
 
+void load_dataguide(){
 
-			obj_str_ptr->lock.lock();
-			obj_str_ptr->consumed.clear();
-			//obj_str_ptr->entities = std::make_shared<std::vector<human_part::ECS::Entity*>>();
-			//obj_str_ptr->entities->push_back(entities[0]);
-			//obj_str_ptr->entities->push_back(entities[1]);
+	toml::table tbl;
+	try
+	{
+		tbl = toml::parse_file(HARPY_DATAGUIDE_URI);
+		dataguide.gltf_uri = *tbl["gltf"]["uri"].value<std::string>();
+	}
+	catch (const toml::parse_error& err)
+	{
+		throw harpy::utilities::harpy_little_error("Failed to load dataguide");
+	}
 
-			//dynamic_cast<harpy::human_part::ECS::Transform*>(obj_str_ptr->camera->get_components_by_name(harpy::human_part::ECS::Transform::name)[0])->rot = glm::angleAxis(angleRadians, axisX);
+}
 
-			//dynamic_cast<harpy::human_part::ECS::Transform*>((*obj_str_ptr->entities)[0]->get_components_by_name(harpy::human_part::ECS::Transform::name)[0])->rot = glm::angleAxis(angleRadians, axisY);
+void load_gltf(){
 
+		tinygltf::TinyGLTF loader;
+		std::string err;
+		std::string warn;
 
-			//harpy::human_part::ECS::Transform* tr1 = dynamic_cast<harpy::human_part::ECS::Transform*>((*obj_str_ptr->entities)[0]->get_components_by_name(harpy::human_part::ECS::Transform::name)[0]);
-			//tr1->pos_mat = glm::rotate(tr1->pos_mat, glm::radians(1.0f), axis);
-			//harpy::human_part::ECS::Transform* tr2 = dynamic_cast<harpy::human_part::ECS::Transform*>((*obj_str_ptr->entities)[1]->get_components_by_name(harpy::human_part::ECS::Transform::name)[0]);
-			//tr2->pos_mat = glm::rotate(tr2->pos_mat, glm::radians(1.0f), axis);
+		bool res = loader.LoadASCIIFromFile(&model, &err, &warn, dataguide.gltf_uri);
+		if (!warn.empty()) {
+			std::cout << "WARN: " << warn << std::endl;
+		}
 
-			obj_str_ptr->lock.unlock();
-			std::this_thread::sleep_for(sleepDuration);
+		if (!err.empty()) {
+			throw harpy::utilities::harpy_little_error("Failed to load gltf scene");
 		}
 
 	}
@@ -51,7 +66,22 @@ void physics(std::shared_ptr<harpy::raven_part::scene_source> obj_str_ptr, std::
 
 
 
+void scene_manager::init(std::shared_ptr<renderer_context> r_context_ptr){
+			this->r_context_ptr = r_context_ptr;
+		}
 
+void scene_manager::load_scene(std::shared_ptr<harpy::nest::renderer_context> r_context_ptr, tinygltf::Model model, uint32_t scene_id){
+	scenes[scene_id] = std::make_shared<scene_source>();
+	scenes[scene_id]->load_scene(r_context_ptr, model, scene_id);		}
 
+void scene_manager::start_scene(uint32_t scene_id){
+	if (scenes.count(scene_id) != 0){
+		current_unit = std::make_shared<scene_workaround_unit>(r_context_ptr);
+		current_unit->set_scene(scenes[scene_id]);
+
+		current_unit->start();
+
+	}
+}
 
 }

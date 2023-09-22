@@ -54,6 +54,7 @@ set(link_flags
     "GL"
     "glfw"
     "vulkan"
+    "tinygltf"
     )
 set(local_link_flags 
     "${PROJECT_NAME}_library"
