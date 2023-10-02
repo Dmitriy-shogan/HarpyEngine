@@ -75,15 +75,20 @@ namespace harpy::raven_part{
 	struct scene_source{
 		std::mutex lock;
 		std::atomic_flag consumed;
-		std::shared_ptr<std::vector<human_part::ECS::Entity*>> entities;
+		std::shared_ptr<std::vector<human_part::ECS::Entity*>> entities{};
 
 		struct nest::RendererResourceStorage storage{};
 		nest::RendererObjectMapper mapper{};
 
-		human_part::ECS::Entity* camera;
+		human_part::ECS::Entity* camera = nullptr;
 		void set_camera(human_part::ECS::Entity* camera){
 			this->camera = camera;
 		};
+
+		scene_source(){
+			std::cout<<"scene_source init"<<std::endl;
+			entities = std::make_shared<std::vector<human_part::ECS::Entity*>>();
+		}
 
 //		void r_init(tinygltf::Model& model, tinygltf::Primitive& prim, load_package pack){
 //			storage.r_init(model, prim, pack);
@@ -93,6 +98,8 @@ namespace harpy::raven_part{
 		void load_scene(std::shared_ptr<harpy::nest::renderer_context> r_context_ptr, tinygltf::Model model, uint32_t scene_id);
 
 		uint32_t create_entity(){
+			entities->push_back(nullptr);
+			std::cout<<"OK111"<<std::endl;
 			entities->push_back(new harpy::human_part::ECS::Entity());
 			return entities->size() - 1;
 		}
@@ -112,20 +119,23 @@ namespace harpy::raven_part{
 		}
 
 		void loadNode(tinygltf::Model& model, tinygltf::Node& node, struct preload_map preload_map, struct load_package pack){
-
+			std::cout<<"loadNode 1"<<std::endl;
 			uint32_t entity_id = create_entity();
+			std::cout<<"loadNode 1.1"<<std::endl;
 			if(has_transform(model, node)){
+				std::cout<<"loadNode 1.2"<<std::endl;
 				entity_load_transform_component(entity_id, model, node);
 			}
+			std::cout<<"loadNode 2"<<std::endl;
 			if ((node.camera) >= 1 && (node.camera) < model.cameras.size()){
 				entity_load_camera_component(entity_id, model, node, pack);
 			}
-
+			std::cout<<"loadNode 3"<<std::endl;
 			if ((node.mesh >= 0) && (node.mesh < model.meshes.size())) {
 				//loadMesh(model, );
 				entity_load_renderer_component(entity_id, model, node, preload_map, pack); //model.meshes[node.mesh]
 			}
-
+			std::cout<<"loadNode 4"<<std::endl;
 			for (size_t i = 0; i < node.children.size(); i++) {
 				assert((node.children[i] >= 0) && (node.children[i] < model.nodes.size()));
 				loadNode(model, model.nodes[node.children[i]],preload_map, pack);

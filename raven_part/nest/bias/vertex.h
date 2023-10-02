@@ -58,7 +58,7 @@ namespace harpy::nest{
 				//GREATER OFFSET SEQUENCE MATTER
 
 				std::array<VkVertexInputAttributeDescription, 20> attributeDescriptions{};
-				uint32_t i;
+				uint32_t i = 0;
 
 				attributeDescriptions[i].binding = 0;
 				attributeDescriptions[i].location = i;

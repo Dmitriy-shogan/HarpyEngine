@@ -81,6 +81,7 @@ namespace harpy::utilities{
 
 
 	float_t convert_sfloat(uint32_t componentType, char* ptr){
+		std::cout<<"convert_sfloat"<<std::endl;
 		switch (componentType) {
 			case TINYGLTF_COMPONENT_TYPE_FLOAT:
 				return *((float_t*)ptr);
@@ -93,12 +94,15 @@ namespace harpy::utilities{
 	uint32_t convert_uint(uint32_t componentType, char* ptr){
 		switch (componentType) {
 			case TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT:
+				std::cout<<"TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT"<<std::endl;
 				return *((uint32_t*)ptr);
 				break;
 			case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
+				std::cout<<"TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT"<<std::endl;
 				return *((uint16_t*)ptr);
 				break;
 			case TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE:
+				std::cout<<"TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE"<<std::endl;
 				return *((uint8_t*)ptr);
 				break;
 			default:
@@ -107,6 +111,7 @@ namespace harpy::utilities{
 	}
 
 	uint16_t convert_short(uint32_t componentType, char* ptr){
+			std::cout<<"convert_short"<<std::endl;
 			switch (componentType) {
 				case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
 					return *((uint16_t*)ptr);
@@ -122,29 +127,38 @@ namespace harpy::utilities{
 
 	void convert(uint32_t componentType, uint32_t type, VkFormat format, char* ptr, std::any default_value){
 		//SLOW
-
+		std::cout<<"convert"<<std::endl;
 		uint32_t current_count = tinygltf::GetNumComponentsInType(type);
 
 		for (int i_comp = 0; i_comp < getChannelCountForFormat(format); ++i_comp) {
 
 			if (i_comp<current_count){
+				std::cout<<"i_comp<current_count"<<std::endl;
 				if (isFloat(format)) {
-						(*((float_t*)ptr)) = convert_sfloat(componentType, ptr);
+					std::cout<<"isFloat"<<std::endl;
+					(*((float_t*)ptr)) = convert_sfloat(componentType, ptr);
 				}else if(isUInt(format)){
-						(*((uint32_t*)ptr)) = convert_uint(componentType, ptr);
+					std::cout<<"isUInt"<<std::endl;
+					(*((uint32_t*)ptr)) = (uint32_t)convert_uint(componentType, ptr);
+
 				}else if(isSInt(format)){
+					std::cout<<"isSInt"<<std::endl;
 					(*((uint16_t*)ptr)) = convert_short(componentType, ptr);
 				}else{
 					throw harpy_little_error("unsupported VkFormat to convert ");
 				}
 			}else{
+				std::cout<<"else i_comp<current_count"<<std::endl;
 				if (isFloat(format)) {
+					std::cout<<"isFloat"<<std::endl;
 					auto t_ptr = ((float_t*)ptr);
 					*t_ptr = std::any_cast<float_t>(default_value);
 				}else if(isUInt(format)){
+					std::cout<<"isUInt"<<std::endl;
 					auto t_ptr = ((uint32_t*)ptr);
 					*t_ptr = std::any_cast<uint32_t>(default_value);
 				}else if(isSInt(format)){
+					std::cout<<"isUInt"<<std::endl;
 					auto t_ptr = ((uint16_t*)ptr);
 					*t_ptr = std::any_cast<uint16_t>(default_value);
 				}else{
@@ -161,6 +175,7 @@ namespace harpy::utilities{
 		buffer_ptr = buffer_ptr + s_pair.first.get_buffer_point();
 		s_pair.second->seekg(s_pair.first.get_read_point(), std::ios::beg);
 		s_pair.second->read(buffer_ptr, s_pair.first.unit_size);
+
 		convert(s_pair.first.componentType, s_pair.first.type, s_pair.first.format, buffer_ptr, s_pair.first.default_value);
 		s_pair.first.jump();
 	}
@@ -414,6 +429,7 @@ namespace harpy::utilities{
 		void* r_data;
 		vkMapMemory(cord->device, stagingBufferMemory, 0, bufferSize, 0, &r_data);
 		char* data = (char*)r_data;
+		std::cout<<"for loadPart"<<std::endl;
 		for (int i_indice = 0; i_indice < ind_max_count; ++i_indice) {
 			loadPart(indices_source, data);
 		}

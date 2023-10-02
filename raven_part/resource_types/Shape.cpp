@@ -20,9 +20,11 @@ namespace harpy::raven_part::resource_types{
 
 	void Shape::load(tinygltf::Model& model, tinygltf::Primitive& prim, harpy::raven_part::load_package pack){
 
+		std::cout<<"Shape::load"<<std::endl;
 		auto indexBufferRes = harpy::utilities::loadIndexBuffer(pack.r_context_ptr->spinal_cord, pack.copy_buf, pack.copy_queue, prim, model);
+		std::cout<<"Shape::load1"<<std::endl;
 		auto vertexBufferRes = harpy::utilities::loadVertexBuffer(pack.r_context_ptr->spinal_cord, pack.copy_buf, pack.copy_queue, prim, model);
-
+		std::cout<<"Shape::load2"<<std::endl;
 		vertexBuffer = vertexBufferRes.first;
 		indexBuffer = indexBufferRes.first;
 

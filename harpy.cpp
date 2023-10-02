@@ -11,6 +11,11 @@
 
 namespace harpy{
 	std::shared_ptr<harpy::nest::renderer_context> r_context_ptr;
+	struct dataguide dataguide{};
+	struct harpy_state state{};
+	tinygltf::TinyGLTF GLTFloader;
+	tinygltf::Model model;
+	struct scene_manager sceneManager;
 
 void render(
 		std::shared_ptr<harpy::nest::renderer_context> r_context_ptr,
@@ -47,12 +52,11 @@ void load_dataguide(){
 }
 
 void load_gltf(){
-
-		tinygltf::TinyGLTF loader;
 		std::string err;
 		std::string warn;
 
-		bool res = loader.LoadASCIIFromFile(&model, &err, &warn, dataguide.gltf_uri);
+		bool res = GLTFloader.LoadASCIIFromFile(&model, &err, &warn, dataguide.gltf_uri);
+		std::cout << "Scenes count: " << model.scenes.size() << std::endl;
 		if (!warn.empty()) {
 			std::cout << "WARN: " << warn << std::endl;
 		}
@@ -70,9 +74,10 @@ void scene_manager::init(std::shared_ptr<renderer_context> r_context_ptr){
 			this->r_context_ptr = r_context_ptr;
 		}
 
-void scene_manager::load_scene(std::shared_ptr<harpy::nest::renderer_context> r_context_ptr, tinygltf::Model model, uint32_t scene_id){
+void scene_manager::load_scene(std::shared_ptr<harpy::nest::renderer_context> r_context_ptr, tinygltf::Model& model, uint32_t scene_id){
 	scenes[scene_id] = std::make_shared<scene_source>();
-	scenes[scene_id]->load_scene(r_context_ptr, model, scene_id);		}
+	scenes[scene_id]->load_scene(r_context_ptr, model, scene_id);
+}
 
 void scene_manager::start_scene(uint32_t scene_id){
 	if (scenes.count(scene_id) != 0){

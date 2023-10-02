@@ -86,7 +86,7 @@ namespace harpy{
 
 		void init(std::shared_ptr<renderer_context> r_context_ptr);
 
-		void load_scene(std::shared_ptr<harpy::nest::renderer_context> r_context_ptr, tinygltf::Model model, uint32_t scene_id);
+		void load_scene(std::shared_ptr<harpy::nest::renderer_context> r_context_ptr, tinygltf::Model& model, uint32_t scene_id);
 
 		void start_scene(uint32_t scene_id);
 	};
@@ -94,16 +94,21 @@ namespace harpy{
 	extern std::shared_ptr<harpy::nest::renderer_context> r_context_ptr;
 	const std::chrono::milliseconds sleepDuration(100);
 
-	static struct dataguide dataguide{};
-	static struct harpy_state state{};
-	static tinygltf::Model model;
-	static struct scene_manager sceneManager;
+	extern struct dataguide dataguide;
+	extern struct harpy_state state;
+	extern tinygltf::TinyGLTF GLTFloader;
+	extern tinygltf::Model model;
+	extern struct scene_manager sceneManager;
+
 	void load_dataguide();
 	void load_gltf();
 
 	static void init(){
+		init_glfw();
 		load_dataguide();
 		load_gltf();
+		std::cout << "Scenes count: " << model.scenes.size() << std::endl;
+		std::cout << "INIT GLTF LOADED: " << std::endl;
 		harpy::nest::vulkan_spinal_cord::init();
 
 		std::unique_ptr<harpy::nest::base_window_layout> layout = std::make_unique<harpy::nest::base_window_layout>();
@@ -117,6 +122,8 @@ namespace harpy{
 		std::shared_ptr<vulkan_spinal_cord> cord =  vulkan_spinal_cord::getInstance();
 		//std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> transfer_queue = cord->queue_supervisor.lock_grab(VK_QUEUE_TRANSFER_BIT);
 		sceneManager.load_scene(r_context_ptr, model, model.defaultScene);
+
+		std::cout<<"SCENE LOADED!!!"<<std::endl;
 		sceneManager.start_scene(model.defaultScene);
 		std::cout<<"дычапщха"<<std::endl;
 

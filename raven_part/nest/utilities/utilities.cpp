@@ -177,6 +177,7 @@ bool harpy::utilities::isUInt(VkFormat format){
 }
 
 bool harpy::utilities::isSInt(VkFormat format){
+
 		switch (format) {
 			case VK_FORMAT_R8_SINT:
 			case VK_FORMAT_R16_SINT:

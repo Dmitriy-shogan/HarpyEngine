@@ -4,7 +4,7 @@ int main()
 {
 
 
-	init_glfw();
+
 	try
 	{
 		harpy::init();

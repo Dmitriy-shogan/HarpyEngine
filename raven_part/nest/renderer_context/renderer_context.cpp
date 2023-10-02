@@ -95,17 +95,17 @@ void renderer_context::init_render_pass()
     dependency1.srcAccessMask = 0;
     dependency1.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
     dependency1.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+//
+//    VkSubpassDependency dependency2{};
+//    dependency2.srcSubpass = VK_SUBPASS_EXTERNAL;
+//	dependency2.dstSubpass = 0;
+//	dependency2.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+//	dependency2.srcAccessMask = 0;
+//	dependency2.dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+//	dependency2.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
 
-    VkSubpassDependency dependency2{};
-    dependency2.srcSubpass = VK_SUBPASS_EXTERNAL;
-	dependency2.dstSubpass = 0;
-	dependency2.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	dependency2.srcAccessMask = 0;
-	dependency2.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	dependency2.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-
-	VkSubpassDependency deps[] = {dependency1,dependency2};
-    render_pass_create_info.dependencyCount = 2;
+	VkSubpassDependency deps[] = {dependency1};
+    render_pass_create_info.dependencyCount = 1;
     render_pass_create_info.pDependencies = deps;
 
     if(vkCreateRenderPass(this->spinal_cord->device, &render_pass_create_info, nullptr, &this->render_pass) != VK_SUCCESS)
