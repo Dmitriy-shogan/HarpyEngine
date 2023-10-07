@@ -81,7 +81,6 @@ namespace harpy::utilities{
 
 
 	float_t convert_sfloat(uint32_t componentType, char* ptr){
-		std::cout<<"convert_sfloat"<<std::endl;
 		switch (componentType) {
 			case TINYGLTF_COMPONENT_TYPE_FLOAT:
 				return *((float_t*)ptr);
@@ -94,15 +93,12 @@ namespace harpy::utilities{
 	uint32_t convert_uint(uint32_t componentType, char* ptr){
 		switch (componentType) {
 			case TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT:
-				std::cout<<"TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT"<<std::endl;
 				return *((uint32_t*)ptr);
 				break;
 			case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
-				std::cout<<"TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT"<<std::endl;
 				return *((uint16_t*)ptr);
 				break;
 			case TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE:
-				std::cout<<"TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE"<<std::endl;
 				return *((uint8_t*)ptr);
 				break;
 			default:
@@ -111,7 +107,6 @@ namespace harpy::utilities{
 	}
 
 	uint16_t convert_short(uint32_t componentType, char* ptr){
-			std::cout<<"convert_short"<<std::endl;
 			switch (componentType) {
 				case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
 					return *((uint16_t*)ptr);
@@ -127,38 +122,38 @@ namespace harpy::utilities{
 
 	void convert(uint32_t componentType, uint32_t type, VkFormat format, char* ptr, std::any default_value){
 		//SLOW
-		std::cout<<"convert"<<std::endl;
+		//std::cout<<"convert"<<std::endl;
 		uint32_t current_count = tinygltf::GetNumComponentsInType(type);
 
 		for (int i_comp = 0; i_comp < getChannelCountForFormat(format); ++i_comp) {
 
 			if (i_comp<current_count){
-				std::cout<<"i_comp<current_count"<<std::endl;
+				//std::cout<<"i_comp<current_count"<<std::endl;
 				if (isFloat(format)) {
-					std::cout<<"isFloat"<<std::endl;
+					//std::cout<<"isFloat"<<std::endl;
 					(*((float_t*)ptr)) = convert_sfloat(componentType, ptr);
 				}else if(isUInt(format)){
-					std::cout<<"isUInt"<<std::endl;
+					//std::cout<<"isUInt"<<std::endl;
 					(*((uint32_t*)ptr)) = (uint32_t)convert_uint(componentType, ptr);
 
 				}else if(isSInt(format)){
-					std::cout<<"isSInt"<<std::endl;
+					//std::cout<<"isSInt"<<std::endl;
 					(*((uint16_t*)ptr)) = convert_short(componentType, ptr);
 				}else{
 					throw harpy_little_error("unsupported VkFormat to convert ");
 				}
 			}else{
-				std::cout<<"else i_comp<current_count"<<std::endl;
+				//std::cout<<"else i_comp<current_count"<<std::endl;
 				if (isFloat(format)) {
-					std::cout<<"isFloat"<<std::endl;
+					//std::cout<<"isFloat"<<std::endl;
 					auto t_ptr = ((float_t*)ptr);
 					*t_ptr = std::any_cast<float_t>(default_value);
 				}else if(isUInt(format)){
-					std::cout<<"isUInt"<<std::endl;
+					//std::cout<<"isUInt"<<std::endl;
 					auto t_ptr = ((uint32_t*)ptr);
 					*t_ptr = std::any_cast<uint32_t>(default_value);
 				}else if(isSInt(format)){
-					std::cout<<"isUInt"<<std::endl;
+					//std::cout<<"isSInt"<<std::endl;
 					auto t_ptr = ((uint16_t*)ptr);
 					*t_ptr = std::any_cast<uint16_t>(default_value);
 				}else{
@@ -269,7 +264,7 @@ namespace harpy::utilities{
 		    tinygltf::Accessor accessor = model.accessors[attrib.second];
 			tinygltf::BufferView buffView = model.bufferViews[accessor.bufferView];
 			tinygltf::Buffer buff = model.buffers[buffView.buffer];
-
+			if (buffer_map.find(buff.uri) == buffer_map.end()) continue;
 		    std::shared_ptr<std::ifstream> ifs = std::make_shared<std::ifstream>(std::ifstream{buff.uri, std::ios::ate | std::ios::binary});
 		    if (ifs->tellg() == -1) throw harpy_little_error("failed to open bin gltf file!");
 
@@ -304,6 +299,7 @@ namespace harpy::utilities{
 			tinygltf::Primitive prim,
 			tinygltf::Model model
 			) {
+		std::cout<<"loadVertexBuffer()"<<std::endl;
 		uint32_t vert_max_count = getMaxAttributeCount(model, prim);
 
 		auto attributeDescriptions = Vertex::getAttributeDescriptions();
@@ -318,10 +314,12 @@ namespace harpy::utilities{
 
 		for (uint32_t i_attrib; i_attrib < gltfNames.size(); ++i_attrib){
 			std::string attrib = gltfNames[i_attrib];
+			if (prim.attributes.count(attrib) == 0) continue;
 			tinygltf::Accessor accessor = model.accessors[prim.attributes[attrib]];
 			tinygltf::BufferView buffView = model.bufferViews[accessor.bufferView];
 			tinygltf::Buffer buff = model.buffers[buffView.buffer];
 
+			std::cout<<attrib<<std::endl;
 			std::any default_val{};
 			if (attrib == "COLOR_0") {
 				default_val = 1.0f;
@@ -332,7 +330,7 @@ namespace harpy::utilities{
 			}else if (attrib == "COLOR_3") {
 				default_val = 1.0f;
 			}else{
-				default_val = 0.0f;
+				default_val = 0;
 			}
 
 			std::pair<buffer_parse_context, std::shared_ptr<std::ifstream>> p = std::make_pair(
@@ -362,6 +360,7 @@ namespace harpy::utilities{
 
 		void* r_data;
 		vkMapMemory(cord->device, stagingBufferMemory, 0, bufferSize, 0, &r_data);
+		std::memset(r_data, 0, bufferSize);
 		char* data = (char*)r_data;
 		for (int i_vertex = 0; i_vertex < vert_max_count; ++i_vertex) {
 			for (int i_attrib = 0; i_attrib < attrib_sources.size(); ++i_attrib) {
@@ -392,7 +391,7 @@ namespace harpy::utilities{
 			tinygltf::Primitive prim,
 			tinygltf::Model model
 		) {
-
+		std::cout<<"loadIndexBuffer()"<<std::endl;
 		tinygltf::Accessor accessor = model.accessors[prim.indices];
 		tinygltf::BufferView buffView = model.bufferViews[accessor.bufferView];
 		tinygltf::Buffer buff = model.buffers[buffView.buffer];
@@ -402,7 +401,7 @@ namespace harpy::utilities{
 		VkDeviceSize bufferSize = sizeof(Indice) * ind_max_count;
 
 		std::any default_val{};
-		default_val = 0;
+		default_val = (uint32_t)0;
 
 		std::pair<buffer_parse_context, std::shared_ptr<std::ifstream>> indices_source = std::make_pair(
 		buffer_parse_context{

@@ -80,12 +80,30 @@ namespace harpy::raven_part{
 		struct nest::RendererResourceStorage storage{};
 		nest::RendererObjectMapper mapper{};
 
-		human_part::ECS::Entity* camera = nullptr;
-		void set_camera(human_part::ECS::Entity* camera){
-			this->camera = camera;
+		uint32_t curr_camera = 0;
+		std::vector<human_part::ECS::Entity*> cameras{};
+
+		void set_active_camera(uint32_t id){
+			curr_camera = id;
+		}
+		uint32_t add_camera(human_part::ECS::Entity* camera){
+			this->cameras.push_back(camera);
+			return cameras.size()-1;
 		};
 
+		void remove_camera(human_part::ECS::Entity* camera){
+			for (auto it = cameras.begin(); it != cameras.end(); it++) {
+				cameras.erase(it);
+				return;
+			}
+		};
+
+		void remove_camera(uint32_t id){
+					cameras.erase(cameras.begin() + id);
+				};
+
 		scene_source(){
+			cameras.resize(0);
 			std::cout<<"scene_source init"<<std::endl;
 			entities = std::make_shared<std::vector<human_part::ECS::Entity*>>();
 		}
@@ -98,9 +116,10 @@ namespace harpy::raven_part{
 		void load_scene(std::shared_ptr<harpy::nest::renderer_context> r_context_ptr, tinygltf::Model model, uint32_t scene_id);
 
 		uint32_t create_entity(){
-			entities->push_back(nullptr);
+			std::cout<<"create_entity()"<<std::endl;
 			std::cout<<"OK111"<<std::endl;
 			entities->push_back(new harpy::human_part::ECS::Entity());
+			std::cout<<entities->size()<<std::endl;
 			return entities->size() - 1;
 		}
 
@@ -119,23 +138,26 @@ namespace harpy::raven_part{
 		}
 
 		void loadNode(tinygltf::Model& model, tinygltf::Node& node, struct preload_map preload_map, struct load_package pack){
-			std::cout<<"loadNode 1"<<std::endl;
+
 			uint32_t entity_id = create_entity();
-			std::cout<<"loadNode 1.1"<<std::endl;
+
 			if(has_transform(model, node)){
-				std::cout<<"loadNode 1.2"<<std::endl;
 				entity_load_transform_component(entity_id, model, node);
+			}else{
+				entity_create_transform_component(entity_id);
 			}
-			std::cout<<"loadNode 2"<<std::endl;
-			if ((node.camera) >= 1 && (node.camera) < model.cameras.size()){
+
+			if ((node.camera) >= 0 && (node.camera) < model.cameras.size()){
+				std::cout<<"CAMERA FOUND"<<std::endl;
+				cameras.push_back((*entities)[entity_id]);
 				entity_load_camera_component(entity_id, model, node, pack);
 			}
-			std::cout<<"loadNode 3"<<std::endl;
+
 			if ((node.mesh >= 0) && (node.mesh < model.meshes.size())) {
 				//loadMesh(model, );
 				entity_load_renderer_component(entity_id, model, node, preload_map, pack); //model.meshes[node.mesh]
 			}
-			std::cout<<"loadNode 4"<<std::endl;
+
 			for (size_t i = 0; i < node.children.size(); i++) {
 				assert((node.children[i] >= 0) && (node.children[i] < model.nodes.size()));
 				loadNode(model, model.nodes[node.children[i]],preload_map, pack);
@@ -156,6 +178,11 @@ namespace harpy::raven_part{
 			tr->scale = glm::vec3{node.scale[0],node.scale[1],node.scale[2]};
 			(*entities)[entity_id]->add_component(tr);
 		}
+
+		void entity_create_transform_component(uint32_t entity_id){
+					human_part::ECS::Transform* tr = new human_part::ECS::Transform();
+					(*entities)[entity_id]->add_component(tr);
+				}
 
 		void entity_load_renderer_component(uint32_t entity_id, tinygltf::Model& model, tinygltf::Node& node, struct preload_map preload_map, struct load_package pack){
 			human_part::ECS::Renderer* rend = new human_part::ECS::Renderer();

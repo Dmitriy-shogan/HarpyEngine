@@ -13,8 +13,8 @@
 
 namespace harpy::raven_part::resource_types{
 
-	void View::load(tinygltf::Model& model, tinygltf::Primitive& prim, load_package pack){
-		this->r_context = r_context;
+	void View::load(tinygltf::Model& model, load_package pack){
+		this->r_context = pack.r_context_ptr;
 
 		shaders::shader_module compute{r_context->spinal_cord->device};
 		switch (cameraType) {
@@ -106,7 +106,7 @@ namespace harpy::raven_part::resource_types{
 			human_part::ECS::Transform* camera,
 			human_part::ECS::Transform* object)
 	{
-		std::cout<<"probe camera_perform 0"<<std::endl;
+		//std::cout<<"probe camera_perform 0"<<std::endl;
 		VkDeviceSize bufferSize = sizeof(Vertex) * shape->vert_size;
 
 		VkDescriptorBufferInfo in_buffer;
@@ -142,11 +142,11 @@ namespace harpy::raven_part::resource_types{
 		VkWriteDescriptorSet writeDescriptorSets[] = {in_desc_set_wr,out_desc_set_wr};
 
 		vkUpdateDescriptorSets(r_context->spinal_cord->device, 2, writeDescriptorSets, 0, nullptr);
-		std::cout<<"probe camera_perform 4"<<std::endl;
+		//std::cout<<"probe camera_perform 4"<<std::endl;
 		VkDescriptorSet sets3[] = {desc_set};
 
 		vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_COMPUTE, cameraPipelineLayout, 0, 1, sets3, 0, nullptr);
-		std::cout<<"probe camera_perform 5"<<std::endl;
+		//std::cout<<"probe camera_perform 5"<<std::endl;
 		CameraPushConstants cameraPushConstants;
 
 
@@ -155,15 +155,15 @@ namespace harpy::raven_part::resource_types{
 		//object->pos_mat * (-camera->pos_mat)
 		cameraPushConstants.transform = glm::scale(glm::mat4(1.0f),glm::vec3(1.0f/view_field.x, 1.0f/view_field.y, 1.0f)) * (camera->pos_mat4_reversed() * object->pos_mat4());
 		cameraPushConstants.translate = glm::vec4(0.0f,0.0f,0.0f,0.0f); //relative->pos_vec4();
-		std::cout<<glm::to_string(object->pos_mat4())<<std::endl;
-		std::cout<<glm::to_string(camera->pos)<<std::endl;
-		std::cout<<glm::to_string(glm::mat4_cast(camera->rot))<<std::endl;
-		std::cout<<glm::to_string(camera->pos_mat4_reversed())<<std::endl;
-		std::cout<<glm::to_string(glm::scale(glm::mat4(1.0f),glm::vec3(1.0f/view_field.x, 1.0f/view_field.y, 1.0f)))<<std::endl;
+//		std::cout<<glm::to_string(object->pos_mat4())<<std::endl;
+//		std::cout<<glm::to_string(camera->pos)<<std::endl;
+//		std::cout<<glm::to_string(glm::mat4_cast(camera->rot))<<std::endl;
+//		std::cout<<glm::to_string(camera->pos_mat4_reversed())<<std::endl;
+//		std::cout<<glm::to_string(glm::scale(glm::mat4(1.0f),glm::vec3(1.0f/view_field.x, 1.0f/view_field.y, 1.0f)))<<std::endl;
 
-		std::cout<<glm::to_string(cameraPushConstants.transform)<<std::endl;
-		std::cout<<glm::to_string(cameraPushConstants.translate)<<std::endl;
-		std::cout<<"probe camera_perform 6"<<std::endl;
+//		std::cout<<glm::to_string(cameraPushConstants.transform)<<std::endl;
+//		std::cout<<glm::to_string(cameraPushConstants.translate)<<std::endl;
+//		std::cout<<"probe camera_perform 6"<<std::endl;
 		vkCmdPushConstants(cmd,this->cameraPipelineLayout, VK_SHADER_STAGE_COMPUTE_BIT, 0, sizeof(CameraPushConstants), &cameraPushConstants);
 		vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_COMPUTE, this->cameraGraphicsPipeline);
 

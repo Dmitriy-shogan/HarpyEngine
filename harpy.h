@@ -62,7 +62,6 @@ namespace harpy{
 
 			physics_thread = std::thread(physics,scene_source, &phys_cond);
 			render_thread = std::thread(render, r_context_ptr, scene_source, &rend_cond);
-
 		}
 
 		void stop(){
@@ -86,7 +85,7 @@ namespace harpy{
 
 		void init(std::shared_ptr<renderer_context> r_context_ptr);
 
-		void load_scene(std::shared_ptr<harpy::nest::renderer_context> r_context_ptr, tinygltf::Model& model, uint32_t scene_id);
+		void load_scene(tinygltf::Model& model, uint32_t scene_id);
 
 		void start_scene(uint32_t scene_id);
 	};
@@ -121,7 +120,7 @@ namespace harpy{
 	static void run(){
 		std::shared_ptr<vulkan_spinal_cord> cord =  vulkan_spinal_cord::getInstance();
 		//std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> transfer_queue = cord->queue_supervisor.lock_grab(VK_QUEUE_TRANSFER_BIT);
-		sceneManager.load_scene(r_context_ptr, model, model.defaultScene);
+		sceneManager.load_scene(model, model.defaultScene);
 
 		std::cout<<"SCENE LOADED!!!"<<std::endl;
 		sceneManager.start_scene(model.defaultScene);

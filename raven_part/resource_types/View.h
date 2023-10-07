@@ -45,7 +45,7 @@ namespace harpy::raven_part::resource_types{
 		VkRect2D scissor{};
 		glm::vec2 view_field;
 
-		void load(tinygltf::Model& model, tinygltf::Primitive& prim, harpy::raven_part::load_package pack);
+		void load(tinygltf::Model& model, harpy::raven_part::load_package pack);
 
 		void view_perform(VkCommandBuffer cmd);
 		void camera_perform(

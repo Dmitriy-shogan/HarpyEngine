@@ -37,12 +37,17 @@ void swapchain::init()
 	present_mode = choose_swap_present_mode();
 	extent = choose_swap_extent();
 
-	uint32_t image_count {
-		//std::min(
-				//(uint32_t)5,//std::max((uint32_t)swapchain_details.capabilities.minImageCount + 1, (uint32_t)3),
-				(uint32_t)swapchain_details.capabilities.maxImageCount
-				//)
-	};
+	bool has_limit = swapchain_details.capabilities.maxImageCount > 0;
+	image_count = 3;
+	if (has_limit){
+		image_count = (uint32_t)swapchain_details.capabilities.maxImageCount;
+	}
+//	uint32_t image_count {
+//		//std::min(
+//				//(uint32_t)5,//std::max((uint32_t)swapchain_details.capabilities.minImageCount + 1, (uint32_t)3),
+//
+//				//)
+//	};
 
 	if (swapchain_details.capabilities.maxImageCount > 0 && image_count > swapchain_details.capabilities.maxImageCount) {
 		image_count = swapchain_details.capabilities.maxImageCount;

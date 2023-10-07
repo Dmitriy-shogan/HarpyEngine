@@ -74,7 +74,7 @@ void scene_manager::init(std::shared_ptr<renderer_context> r_context_ptr){
 			this->r_context_ptr = r_context_ptr;
 		}
 
-void scene_manager::load_scene(std::shared_ptr<harpy::nest::renderer_context> r_context_ptr, tinygltf::Model& model, uint32_t scene_id){
+void scene_manager::load_scene(tinygltf::Model& model, uint32_t scene_id){
 	scenes[scene_id] = std::make_shared<scene_source>();
 	scenes[scene_id]->load_scene(r_context_ptr, model, scene_id);
 }
@@ -85,6 +85,8 @@ void scene_manager::start_scene(uint32_t scene_id){
 		current_unit->set_scene(scenes[scene_id]);
 
 		current_unit->start();
+		//ЗАГЛУШКА
+		current_unit->render_thread.join();
 
 	}
 }

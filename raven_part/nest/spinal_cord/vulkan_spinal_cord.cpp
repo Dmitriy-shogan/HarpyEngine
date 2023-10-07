@@ -67,11 +67,18 @@ std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vulkan_spinal_cord::que
 		lock.lock();
 		//TODO uneffective
 		for (uint32_t i = 0; i < free_queues.size(); ++i) {
+
 			uint32_t k = free_queues.front();
+			std::cout<<"queue:"<<k<<std::endl;
 			free_queues.pop();
-			if ((familyProperties[vk_queue_family[k]].queueFlags & flags == flags)){
+			std::cout<<"queue flags:"<<familyProperties[vk_queue_family[k]].queueFlags<<std::endl;
+			std::cout<<"required flags:"<<flags<<std::endl;
+			std::cout<<"flags res:"<<(familyProperties[vk_queue_family[k]].queueFlags & flags)<<std::endl;
+			std::cout<<"flags res:"<<((familyProperties[vk_queue_family[k]].queueFlags & flags) == flags)<<std::endl;
+			if ((familyProperties[vk_queue_family[k]].queueFlags & flags) == flags){
 				res_pair = std::make_pair(std::make_pair(vk_queues[k], vk_queue_buffer[k]), k);
 				lock.unlock();
+				std::cout<<"unlocked"<<std::endl;
 				return res_pair;
 			}
 			free_queues.push(k);
@@ -109,7 +116,7 @@ std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vulkan_spinal_cord::que
 		for (uint32_t i = 0; i < free_queues.size(); ++i) {
 			uint32_t k = free_queues.front();
 			free_queues.pop();
-			if ((familyProperties[vk_queue_family[k]].queueFlags & flags == flags)){
+			if ((familyProperties[vk_queue_family[k]].queueFlags & flags) == flags){
 				VkBool32 isSupported = false;
 				if (vkGetPhysicalDeviceSurfaceSupportKHR(cord->ph_device, vk_queue_family[k], surface, &isSupported)!=VK_SUCCESS)throw harpy_little_error("Information about device presentation abilities is unavailable");
 				if (isSupported){

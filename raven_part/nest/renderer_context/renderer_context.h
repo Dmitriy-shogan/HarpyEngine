@@ -40,8 +40,13 @@ namespace harpy::raven_part{
 
 namespace harpy::nest
 {
+	#ifndef USE_SHARED_RENDER_QUEUE
+		const uint32_t rsr_queues_cnt = RSR_ABSURD_LIMIT;
+	#else
+		const uint32_t rsr_queues_cnt = 2;
+	#endif
 
-	const uint32_t effective_rsr_cnt = 32;//std::max((uint32_t)RSR_ABSURD_LIMIT, (uint32_t)queues_cnt, (uint32_t)(DEV_MEM_RENDER_PERSENTAGE * DEV_MEM_SIZE / RSR_GPU_MEM_COST));
+	const uint32_t effective_rsr_cnt = std::min((uint32_t)RSR_ABSURD_LIMIT, (uint32_t)rsr_queues_cnt); //, (uint32_t)(DEV_MEM_RENDER_PERSENTAGE * DEV_MEM_SIZE / RSR_GPU_MEM_COST));
 	struct render_shared_resources;
 	struct vulkan_spinal_cord;
 	struct base_window_layout;
@@ -156,6 +161,13 @@ namespace harpy::nest
 				VkImageView swapchain_image_view,
 				VkSemaphore image_sem
 				);
+		void copy_render_res(
+				std::pair<render_shared_resources*, uint32_t> rsr,
+				std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vk_queue,
+				std::pair<render_shared_resources*, uint32_t> rendered_rsr,
+				VkImage swapchain_image,
+				VkImageView swapchain_image_view,
+				VkSemaphore image_sem);
 		void present(
 				std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vk_queue,
 				std::pair<render_shared_resources*, uint32_t> rsr,

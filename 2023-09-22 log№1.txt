@@ -1,2 +1,0 @@
-[19:19:54.932922383] {Error}: Failed to load gltf scene
-[19:19:54.933198943] {Message}: Everything went fine on first try

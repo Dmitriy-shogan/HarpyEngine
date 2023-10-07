@@ -23,6 +23,7 @@ namespace harpy::nest
     {
     	renderer_context * r_context;
         VkSwapchainKHR chain = nullptr;
+        uint32_t image_count = -1;
 
         std::vector<VkFramebuffer> fbs;
         std::vector<VkImageView> image_views;

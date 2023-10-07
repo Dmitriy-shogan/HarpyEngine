@@ -83,10 +83,10 @@ void render_shared_resources::init_images(){
 	//	  DEPTH_AND_STENSIL_BUFFER
 	//	========================
 
-	imageCreateInfo.format = VK_FORMAT_D24_UNORM_S8_UINT;
+	imageCreateInfo.format = VK_FORMAT_D32_SFLOAT_S8_UINT;
 	imageCreateInfo.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 	//imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-	imageview_create_info.format = VK_FORMAT_D24_UNORM_S8_UINT;
+	imageview_create_info.format = VK_FORMAT_D32_SFLOAT_S8_UINT;
 
 	std::cout<<"init start2"<<std::endl;
 	if (vkCreateImage(r_context->spinal_cord->device, &imageCreateInfo, nullptr, &depth_and_stencil_image) != VK_SUCCESS)

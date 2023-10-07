@@ -16,12 +16,14 @@ namespace harpy::raven_part{
 				struct preload_map preload_map{};
 				std::cout<<"load_scene 1.1"<<std::endl;
 				std::cout<<model.scenes.size()<<std::endl;
+
 				for (size_t i = 0; i < scene.nodes.size(); ++i) {
 					std::cout<<"load_scene 1.1.1"<<std::endl;
 					assert((scene.nodes[i] >= 0) && (scene.nodes[i] < model.nodes.size()));
 					std::cout<<"load_scene 1.1.2"<<std::endl;
 					loadNode(model, model.nodes[scene.nodes[i]], preload_map, pack);
 				}
+				r_context_ptr->spinal_cord->queue_supervisor.lock_free(transfer_queue.second);
 				std::cout<<"load_scene 2"<<std::endl;
 				//r_init(model, prim, pack);
 			}
@@ -30,6 +32,7 @@ namespace harpy::raven_part{
 				human_part::ECS::Camera* cm = new human_part::ECS::Camera();
 				tinygltf::Camera* cam = &model.cameras[node.camera];
 
+				//TODO setup_camera
 				raven_part::resource_types::View view{};
 				view.view_field = glm::vec2{1.0f,1.0f};
 				view.cameraType = raven_part::resource_types::View::CameraType::ORTHOGRAPHIC;
@@ -44,7 +47,8 @@ namespace harpy::raven_part{
 				view.scissor.offset = {0, 0};
 				view.scissor.extent = pack.r_context_ptr->swapchain.extent;
 
-				storage.register_view(view);
+				view.load(model, pack);
+				cm->view_id = storage.register_view(view);
 				(*entities)[entity_id]->add_component(cm);
 			}
 

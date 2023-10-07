@@ -1,0 +1,3133 @@
+Scenes count: 1
+Scenes count: 1
+INIT GLTF LOADED: 
+spinal_cord created succ
+aaaa
+initialising base_window_layout started
+init init_window succ
+init init_surface succ
+bbb
+init start
+init vkCreateImage
+init vkAllocateMemory
+init vkBindImageMemory
+init vkCreateImageView
+init start2
+init vkCreateImage
+init vkAllocateMemory
+init vkBindImageMemory
+init vkCreateImageView
+init vkCreateImageView
+init vkCreateImageView
+init vkCreateRenderPass
+3768
+images count: 3
+scene_source init
+load_scene 1
+load_scene 1.1
+1
+load_scene 1.1.1
+load_scene 1.1.2
+create_entity()
+OK111
+1
+CAMERA FOUND
+1940
+load_scene 1.1.1
+load_scene 1.1.2
+create_entity()
+OK111
+2
+create_entity()
+OK111
+3
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+4
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+5
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+6
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+7
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+8
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+9
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+10
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+11
+create_entity()
+OK111
+12
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+13
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+14
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+15
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+16
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+17
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+18
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+19
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+20
+create_entity()
+OK111
+21
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+22
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+23
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+24
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+25
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+26
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+27
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+28
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+29
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+30
+create_entity()
+OK111
+31
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+32
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+33
+create_entity()
+OK111
+34
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+35
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+36
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+37
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+38
+create_entity()
+OK111
+39
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+40
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+41
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+42
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+43
+create_entity()
+OK111
+44
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+45
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+46
+create_entity()
+OK111
+47
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+48
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+49
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+50
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+51
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+52
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+53
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+54
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+55
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+56
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+57
+create_entity()
+OK111
+58
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+59
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+60
+create_entity()
+OK111
+61
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+62
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+63
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+64
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+65
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+66
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+67
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+68
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+69
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+70
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+71
+create_entity()
+OK111
+72
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+73
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+74
+create_entity()
+OK111
+75
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+76
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+77
+create_entity()
+OK111
+78
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+79
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+80
+create_entity()
+OK111
+81
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+create_entity()
+OK111
+82
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+3084
+500
+loadIndexBuffer()
+for loadPart
+loadVertexBuffer()
+load_scene 2
+SCENE LOADED!!!
+renderloop
+renderloop1
+bufferSize
+320
+init_vert_tmp_buf() vkCreateDescriptorPool
+init_vert_tmp_buf() vkCreateBuffer
+init_vert_tmp_buf() vkAllocateMemory
+init_vert_tmp_buf() 0x6e900000006e9
+init_vert_tmp_buf() vkBindBufferMemory
+renderloop2
+renderloop3
+render_loop SPINLOCK
+render_loop FINISH
+render_loop source->lock.lock()
+render_loop SOURCE
+render_loop curr_camera: 0
+render_loop cameras size: 1
+render_loop SOURCE1
+render_loop SOURCE2
+1
+render_loop thread_cnt!=0
+render_loop src_camera:0x560bc0137e60
+render_loop camera_comp:0x560bc0137f50
+render_loop transform_comp:0x560bc0137ed0
+render_loop CAMERA
+(int32_t)(entities->size())
+82
+tgt_per_task
+82
+render_loop TASKS PLANING
+cnt: 82
+got queue 0
+0x560bc0052d90
+probe 2
+probe 2.1
+probe 2.2
+Y
+z
+probe 2.5
+probe 3
+probe 3.1
+0
+0x560bc0137e60
+probe 3.1.1
+probe 3.1
+1
+0x560bc013c290
+probe 3.1.1
+probe 3.1
+2
+0x560bc0142a50
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+3
+0x560bc03ca1b0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+4
+0x560bc0445f30
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+5
+0x560bc05845c0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+6
+0x560bc091dfe0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+7
+0x560bc09163d0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+8
+0x560bc09690b0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+9
+0x560bc095d8a0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+10
+0x560bc099c010
+probe 3.1.1
+probe 3.1
+11
+0x560bc057cf00
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+12
+0x560bc09b7fa0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+13
+0x560bc09c6020
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+14
+0x560bc09d68e0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+15
+0x560bc09d8ed0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+16
+0x560bc09e4da0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+17
+0x560bc09dff90
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+18
+0x560bc09dff10
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+19
+0x560bc0a14160
+probe 3.1.1
+probe 3.1
+20
+0x560bc03ca410
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+21
+0x560bc0a34730
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+22
+0x560bc0a1e510
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+23
+0x560bc0a53a30
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+24
+0x560bc0a3fa10
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+25
+0x560bc0a67e80
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+26
+0x560bc0a67a20
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+27
+0x560bc0ab1c50
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+28
+0x560bc0396b00
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+29
+0x560bc03a5c20
+probe 3.1.1
+probe 3.1
+30
+0x560bc095f020
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+31
+0x560bc0aab9a0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+32
+0x560bc039e2c0
+probe 3.1.1
+probe 3.1
+33
+0x560bc0a10c30
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+34
+0x560bc0749640
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+35
+0x560bc0766d00
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+36
+0x560bc0763ba0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+37
+0x560bc0784590
+probe 3.1.1
+probe 3.1
+38
+0x560bc0a6af40
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+39
+0x560bc0783620
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+40
+0x560bc0a3cae0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+41
+0x560bc07a2600
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+42
+0x560bc07b1890
+probe 3.1.1
+probe 3.1
+43
+0x560bc039c6f0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+44
+0x560bc07d2b20
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+45
+0x560bc07d0a70
+probe 3.1.1
+probe 3.1
+46
+0x560bc076c770
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+47
+0x560bc0811ec0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+48
+0x560bc081ea90
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+49
+0x560bc0860ff0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+50
+0x560bc088b6e0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+51
+0x560bc089a160
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+52
+0x560bc08e7380
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+53
+0x560bc0cac260
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+54
+0x560bc0cd6750
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+55
+0x560bc0cc2170
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+56
+0x560bc0d456c0
+probe 3.1.1
+probe 3.1
+57
+0x560bc07a7790
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+58
+0x560bc0cbea40
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+59
+0x560bc0d51960
+probe 3.1.1
+probe 3.1
+60
+0x560bc07b77a0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+61
+0x560bc0d85c30
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+62
+0x560bc0dadf90
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+63
+0x560bc0deda90
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+64
+0x560bc0e09040
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+65
+0x560bc0e36580
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+66
+0x560bc0e4f330
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+67
+0x560bc10767d0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+68
+0x560bc0cf1640
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+69
+0x560bc0eb25b0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+70
+0x560bc0eeaee0
+probe 3.1.1
+probe 3.1
+71
+0x560bc0d450f0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+72
+0x560bc0ef7d80
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+73
+0x560bc0ec17c0
+probe 3.1.1
+probe 3.1
+74
+0x560bc0d542b0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+75
+0x560bc0f0ab40
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+76
+0x560bc0ee0b50
+probe 3.1.1
+probe 3.1
+77
+0x560bc0eebee0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+78
+0x560bc0f388d0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+79
+0x560bc0f4fde0
+probe 3.1.1
+probe 3.1
+80
+0x560bc0f15d50
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 3.1
+81
+0x560bc0f608e0
+probe 3.1.1
+probe 3.1.2
+probe 3.2
+probe 3.2.1
+probe 3.2.2
+probe 3.3
+probe 3.4
+probe 4
+0x6e800000006e8
+render_task()
+views.size: 1
+(*camera).second: 0
+(*camera).second
+0
+probe camera_perform 1
+probe camera_perform 2
+probe camera_perform 2.1
+probe camera_perform 3
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
+probe render_task 4
+probe camera_perform 0
+probe camera_perform 4
+probe camera_perform 5
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec3(0.000000, 0.000000, 0.000000)
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((-1.000000, 0.000000, 0.000000, 0.000000), (0.000000, -1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+mat4x4((1.000000, 0.000000, 0.000000, 0.000000), (0.000000, 1.000000, 0.000000, 0.000000), (0.000000, 0.000000, 1.000000, 0.000000), (0.000000, 0.000000, 0.000000, 1.000000))
+vec4(0.000000, 0.000000, 0.000000, 0.000000)
+probe camera_perform 6
+probe render_task 5
