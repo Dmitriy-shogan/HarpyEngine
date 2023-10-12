@@ -56,9 +56,9 @@ void load_gltf(){
 		std::string warn;
 
 		bool res = GLTFloader.LoadASCIIFromFile(&model, &err, &warn, dataguide.gltf_uri);
-		std::cout << "Scenes count: " << model.scenes.size() << std::endl;
+
 		if (!warn.empty()) {
-			std::cout << "WARN: " << warn << std::endl;
+
 		}
 
 		if (!err.empty()) {

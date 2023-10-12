@@ -106,8 +106,8 @@ namespace harpy{
 		init_glfw();
 		load_dataguide();
 		load_gltf();
-		std::cout << "Scenes count: " << model.scenes.size() << std::endl;
-		std::cout << "INIT GLTF LOADED: " << std::endl;
+
+
 		harpy::nest::vulkan_spinal_cord::init();
 
 		std::unique_ptr<harpy::nest::base_window_layout> layout = std::make_unique<harpy::nest::base_window_layout>();
@@ -122,9 +122,9 @@ namespace harpy{
 		//std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> transfer_queue = cord->queue_supervisor.lock_grab(VK_QUEUE_TRANSFER_BIT);
 		sceneManager.load_scene(model, model.defaultScene);
 
-		std::cout<<"SCENE LOADED!!!"<<std::endl;
+
 		sceneManager.start_scene(model.defaultScene);
-		std::cout<<"дычапщха"<<std::endl;
+
 
 	}
 

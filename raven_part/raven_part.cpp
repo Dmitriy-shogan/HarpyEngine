@@ -12,19 +12,19 @@ namespace harpy::raven_part{
 				const tinygltf::Scene& scene = model.scenes[model.defaultScene];
 				std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> transfer_queue = r_context_ptr->spinal_cord->queue_supervisor.lock_grab(VK_QUEUE_TRANSFER_BIT);
 				struct load_package pack{r_context_ptr, transfer_queue.first.first, transfer_queue.first.second};
-				std::cout<<"load_scene 1"<<std::endl;
+
 				struct preload_map preload_map{};
-				std::cout<<"load_scene 1.1"<<std::endl;
-				std::cout<<model.scenes.size()<<std::endl;
+
+
 
 				for (size_t i = 0; i < scene.nodes.size(); ++i) {
-					std::cout<<"load_scene 1.1.1"<<std::endl;
+
 					assert((scene.nodes[i] >= 0) && (scene.nodes[i] < model.nodes.size()));
-					std::cout<<"load_scene 1.1.2"<<std::endl;
+
 					loadNode(model, model.nodes[scene.nodes[i]], preload_map, pack);
 				}
 				r_context_ptr->spinal_cord->queue_supervisor.lock_free(transfer_queue.second);
-				std::cout<<"load_scene 2"<<std::endl;
+
 				//r_init(model, prim, pack);
 			}
 

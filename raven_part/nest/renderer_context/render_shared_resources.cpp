@@ -60,25 +60,25 @@ void render_shared_resources::init_images(){
 	imageview_create_info.format = VK_FORMAT_B8G8R8A8_UNORM;
 
 	imageview_create_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-	std::cout<<"init start"<<std::endl;
+
 	if (vkCreateImage(r_context->spinal_cord->device, &imageCreateInfo, nullptr, &color_image) != VK_SUCCESS)
 		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create image for RSR!");
-	std::cout<<"init vkCreateImage"<<std::endl;
+
 	vkGetImageMemoryRequirements(r_context->spinal_cord->device, color_image, &memoryRequirements);
 	allocateInfo.memoryTypeIndex = harpy::utilities::find_memory_types(r_context->spinal_cord->ph_device, memoryRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 	allocateInfo.allocationSize = memoryRequirements.size;
 
 	if (vkAllocateMemory(r_context->spinal_cord->device, &allocateInfo, nullptr, &color_image_memory) != VK_SUCCESS)
 		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to allocate image for RSR!");
-	std::cout<<"init vkAllocateMemory"<<std::endl;
+
 	if (vkBindImageMemory(r_context->spinal_cord->device, color_image, color_image_memory, 0) != VK_SUCCESS)
 		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to bind image for RSR!");
-	std::cout<<"init vkBindImageMemory"<<std::endl;
+
 	imageview_create_info.image = color_image;
 
 	if (vkCreateImageView(r_context->spinal_cord->device, &imageview_create_info, nullptr, &color_image_view) != VK_SUCCESS)
 			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create image views!");
-	std::cout<<"init vkCreateImageView"<<std::endl;
+
 	//	========================
 	//	  DEPTH_AND_STENSIL_BUFFER
 	//	========================
@@ -88,25 +88,25 @@ void render_shared_resources::init_images(){
 	//imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 	imageview_create_info.format = VK_FORMAT_D32_SFLOAT_S8_UINT;
 
-	std::cout<<"init start2"<<std::endl;
+
 	if (vkCreateImage(r_context->spinal_cord->device, &imageCreateInfo, nullptr, &depth_and_stencil_image) != VK_SUCCESS)
 		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create image for RSR!");
-	std::cout<<"init vkCreateImage"<<std::endl;
+
 	vkGetImageMemoryRequirements(r_context->spinal_cord->device, depth_and_stencil_image, &memoryRequirements);
 	allocateInfo.memoryTypeIndex = harpy::utilities::find_memory_types(r_context->spinal_cord->ph_device, memoryRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 	allocateInfo.allocationSize = memoryRequirements.size;
 	if (vkAllocateMemory(r_context->spinal_cord->device, &allocateInfo, nullptr, &depth_and_stencil_image_memory) != VK_SUCCESS)
 		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to allocate image for RSR!");
-	std::cout<<"init vkAllocateMemory"<<std::endl;
+
 	if (vkBindImageMemory(r_context->spinal_cord->device, depth_and_stencil_image, depth_and_stencil_image_memory, 0) != VK_SUCCESS)
 		throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to bind image for RSR!");
-	std::cout<<"init vkBindImageMemory"<<std::endl;
+
 	imageview_create_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
 	imageview_create_info.image = depth_and_stencil_image;
 
 	if (vkCreateImageView(r_context->spinal_cord->device, &imageview_create_info, nullptr, &depth_and_stencil_image_view) != VK_SUCCESS)
 			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create image views!");
-	std::cout<<"init vkCreateImageView"<<std::endl;
+
 
 
 	imageview_create_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
@@ -114,7 +114,7 @@ void render_shared_resources::init_images(){
 
 	if (vkCreateImageView(r_context->spinal_cord->device, &imageview_create_info, nullptr, &depth_image_view) != VK_SUCCESS)
 			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create image views!");
-	std::cout<<"init vkCreateImageView"<<std::endl;
+
 
 
 	imageview_create_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
@@ -122,7 +122,7 @@ void render_shared_resources::init_images(){
 
 	if (vkCreateImageView(r_context->spinal_cord->device, &imageview_create_info, nullptr, &stencil_image_view) != VK_SUCCESS)
 			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to create image views!");
-	std::cout<<"init vkCreateImageView"<<std::endl;
+
 
 	VkImageView attachments[] = {color_image_view, depth_and_stencil_image_view};
 	VkFramebufferCreateInfo framebuffer_info{};
@@ -168,22 +168,22 @@ void render_shared_resources::init_sem(){
 
 void render_shared_resources::reinit_vertex_tmp(VkDescriptorPool vert_desc_pool, VkDescriptorSetLayout layout){
 
-	std::cout<<"probe camera_perform 1"<<std::endl;
+
 	if (vert_desc){
 		VkDescriptorSet sets[] = {vert_desc};
 		if (vkFreeDescriptorSets(r_context->spinal_cord->device, vert_desc_pool, 1, sets) != VK_SUCCESS)
 			throw utilities::harpy_little_error("failed to free descriptor set!");
 	}
-	std::cout<<"probe camera_perform 2"<<std::endl;
+
 	VkDescriptorSetAllocateInfo allocInfo{};
 	allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
 	allocInfo.descriptorPool = vert_desc_pool;
 	allocInfo.descriptorSetCount = 1;
 	allocInfo.pSetLayouts = &layout;
-	std::cout<<"probe camera_perform 2.1"<<std::endl;
+
 	if (vkAllocateDescriptorSets(r_context->spinal_cord->device, &allocInfo, &vert_desc) != VK_SUCCESS)
 		throw utilities::harpy_little_error("failed to allocate descriptor set!");
-	std::cout<<"probe camera_perform 3"<<std::endl;
+
 }
 
 void render_shared_resources::init_blender_pool()
@@ -232,9 +232,9 @@ void render_shared_resources::reset(){
 
 	if (vkResetFences(r_context->spinal_cord->device, 1, fences) != VK_SUCCESS)
 			throw utilities::harpy_little_error(utilities::error_severity::wrong_init, "failed to signal semaphore!");
-	std::cout<<"Y"<<std::endl;
+
 	queue.clear();
-	std::cout<<"z"<<std::endl;
+
 }
 
 render_shared_resources::~render_shared_resources(){

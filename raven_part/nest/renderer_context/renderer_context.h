@@ -90,7 +90,7 @@ namespace harpy::nest
 			}
 
 			void init(uint32_t rsr_cnt){
-				std::cout<<"bbb"<<std::endl;
+
 				RSRs.resize(rsr_cnt, {r_context});
 				for (int i = 0; i < rsr_cnt; ++i) {
 					RSRs[i].init();

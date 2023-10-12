@@ -8,7 +8,6 @@ std::vector<char> harpy::utilities::read_file(std::string filepath)
 {
     std::ifstream file(filepath, std::ios::ate | std::ios::binary);
     if (file.tellg() == -1) throw harpy_little_error("failed to open shader file!");
-    std::cout<<file.tellg()<<std::endl;
     std::vector<char> res(file.tellg());
     file.seekg(0);
     file.read(res.data(), res.size());

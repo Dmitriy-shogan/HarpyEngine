@@ -104,7 +104,7 @@ namespace harpy::raven_part{
 
 		scene_source(){
 			cameras.resize(0);
-			std::cout<<"scene_source init"<<std::endl;
+
 			entities = std::make_shared<std::vector<human_part::ECS::Entity*>>();
 		}
 
@@ -116,10 +116,10 @@ namespace harpy::raven_part{
 		void load_scene(std::shared_ptr<harpy::nest::renderer_context> r_context_ptr, tinygltf::Model model, uint32_t scene_id);
 
 		uint32_t create_entity(){
-			std::cout<<"create_entity()"<<std::endl;
-			std::cout<<"OK111"<<std::endl;
+
+
 			entities->push_back(new harpy::human_part::ECS::Entity());
-			std::cout<<entities->size()<<std::endl;
+
 			return entities->size() - 1;
 		}
 
@@ -148,7 +148,7 @@ namespace harpy::raven_part{
 			}
 
 			if ((node.camera) >= 0 && (node.camera) < model.cameras.size()){
-				std::cout<<"CAMERA FOUND"<<std::endl;
+
 				cameras.push_back((*entities)[entity_id]);
 				entity_load_camera_component(entity_id, model, node, pack);
 			}

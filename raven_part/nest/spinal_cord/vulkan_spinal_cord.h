@@ -88,17 +88,17 @@ namespace harpy::nest {
 
         vulkan_spinal_cord(){
         	init_instance();
-        	//std::cout<<"init_instance succ"<<std::endl;
+        	//
         	init_debug();
-        	//std::cout<<"init_debug succ"<<std::endl;
+        	//
         	init_ph_device();
-        	//std::cout<<"init_ph_device succ"<<std::endl;
+        	//
         	init_device_and_queues();
-        	//std::cout<<"init_device_and_queues succ"<<std::endl;
+        	//
         	init_queue_supervisor();
-        	//std::cout<<"init_queue_supervisor succ"<<std::endl;
+        	//
 
-        	std::cout<<"spinal_cord created succ"<<std::endl;
+
 
         }
     public:
