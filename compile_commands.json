@@ -1,0 +1,152 @@
+[
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/nest/renderer_context/RendererObjectMapper.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/nest/renderer_context/RendererObjectMapper.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/nest/renderer_context/RendererObjectMapper.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/nest/renderer_context/render_shared_resources.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/nest/renderer_context/render_shared_resources.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/nest/renderer_context/render_shared_resources.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/nest/renderer_context/renderer_context.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/nest/renderer_context/renderer_context.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/nest/renderer_context/renderer_context.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/nest/shaders/base_shader.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/nest/shaders/base_shader.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/nest/shaders/base_shader.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/nest/shaders/shader_module.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/nest/shaders/shader_module.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/nest/shaders/shader_module.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/nest/spinal_cord/validation_layers.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/nest/spinal_cord/validation_layers.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/nest/spinal_cord/validation_layers.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/nest/spinal_cord/vulkan_spinal_cord.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/nest/spinal_cord/vulkan_spinal_cord.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/nest/spinal_cord/vulkan_spinal_cord.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/nest/swapchain/swapchain.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/nest/swapchain/swapchain.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/nest/swapchain/swapchain.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/nest/threading/harpy_semaphore.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/nest/threading/harpy_semaphore.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/nest/threading/harpy_semaphore.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/nest/utilities/buffers/buffer.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/nest/utilities/buffers/buffer.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/nest/utilities/buffers/buffer.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/nest/utilities/delta_timer.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/nest/utilities/delta_timer.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/nest/utilities/delta_timer.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/nest/utilities/harpy_little_error.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/nest/utilities/harpy_little_error.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/nest/utilities/harpy_little_error.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/nest/utilities/initializations.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/nest/utilities/initializations.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/nest/utilities/initializations.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/nest/utilities/utilities.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/nest/utilities/utilities.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/nest/utilities/utilities.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/nest/windowing/base_window.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/nest/windowing/base_window.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/nest/windowing/base_window.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/nest/windowing/base_window_layout/base_window_layout.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/nest/windowing/base_window_layout/base_window_layout.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/nest/windowing/base_window_layout/base_window_layout.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/raven_part.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/raven_part.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/raven_part.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/resource_types/Material.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/resource_types/Material.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/resource_types/Material.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/resource_types/Shape.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/resource_types/Shape.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/resource_types/Shape.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/raven_part/resource_types/View.cpp.o -c /home/hexi/magic/HarpyEngine/raven_part/resource_types/View.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/raven_part/resource_types/View.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/human_part/ECS/Component.cpp.o -c /home/hexi/magic/HarpyEngine/human_part/ECS/Component.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/human_part/ECS/Component.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/human_part/ECS/Entity.cpp.o -c /home/hexi/magic/HarpyEngine/human_part/ECS/Entity.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/human_part/ECS/Entity.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/human_part/ECS/components/Camera.cpp.o -c /home/hexi/magic/HarpyEngine/human_part/ECS/components/Camera.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/human_part/ECS/components/Camera.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/human_part/ECS/components/Renderer.cpp.o -c /home/hexi/magic/HarpyEngine/human_part/ECS/components/Renderer.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/human_part/ECS/components/Renderer.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/human_part/ECS/components/Transform.cpp.o -c /home/hexi/magic/HarpyEngine/human_part/ECS/components/Transform.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/human_part/ECS/components/Transform.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/human_part/GUI/base_gui_layout.cpp.o -c /home/hexi/magic/HarpyEngine/human_part/GUI/base_gui_layout.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/human_part/GUI/base_gui_layout.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/human_part/image_processor/image_processor.cpp.o -c /home/hexi/magic/HarpyEngine/human_part/image_processor/image_processor.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/human_part/image_processor/image_processor.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/human_part/sound/base_sound.cpp.o -c /home/hexi/magic/HarpyEngine/human_part/sound/base_sound.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/human_part/sound/base_sound.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_library.dir/harpy.cpp.o -c /home/hexi/magic/HarpyEngine/harpy.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/harpy.cpp"
+},
+{
+  "directory": "/home/hexi/magic/HarpyEngine",
+  "command": "/usr/bin/c++  -I/home/hexi/magic/HarpyEngine/third_party_services/include -I/home/hexi/magic/HarpyEngine/raven_part/nest -I/home/hexi/magic/HarpyEngine/raven_part -I/home/hexi/magic/HarpyEngine/human_part -I/home/hexi/magic/HarpyEngine/supply -g -std=gnu++20 -o CMakeFiles/harpy_engine_binary.dir/Main.cpp.o -c /home/hexi/magic/HarpyEngine/Main.cpp",
+  "file": "/home/hexi/magic/HarpyEngine/Main.cpp"
+}
+]

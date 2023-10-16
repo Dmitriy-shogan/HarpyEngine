@@ -31,9 +31,12 @@ namespace harpy::utilities{
 
 		std::any default_value;
 
+		double norm_factor;
+
 		public:
 		buffer_parse_context(
 				std::any default_value,
+				double norm_factor,
 				uint32_t unit_size,
 				uint32_t read_initial_offset,
 				uint32_t read_stride,
@@ -57,6 +60,8 @@ namespace harpy::utilities{
 			this->componentType = componentType;
 			this->format = format;
 			this->default_value = default_value;
+
+			this->norm_factor = norm_factor;
 		}
 
 		uint32_t get_read_point(){
@@ -80,109 +85,144 @@ namespace harpy::utilities{
 	};
 
 
-	std::pair<float_t, uint32_t> convert_sfloat(uint32_t componentType, char* ptr){
+	float_t convert_float(uint32_t componentType, char* ptr){
 		switch (componentType) {
 			case TINYGLTF_COMPONENT_TYPE_FLOAT:
-				return std::make_pair(*((float_t*)ptr), 4);
+				return *((float_t*)ptr);
 				break;
 			default:
 				throw harpy_little_error("unsupported componentType for sfloat");
 		}
 	}
 
-	std::pair<uint32_t, uint32_t> convert_uint(uint32_t componentType, char* ptr){
+	uint32_t convert_uint(uint32_t componentType, char* ptr){
 		switch (componentType) {
 			case TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT:
-				return std::make_pair(*((uint32_t*)ptr), 4);
+				return *((uint32_t*)ptr);
 				break;
 			case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
-				return std::make_pair(*((uint16_t*)ptr), 2);
+				return *((uint16_t*)ptr);
 				break;
 			case TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE:
-				return std::make_pair(*((uint8_t*)ptr), 1);
+				return *((uint8_t*)ptr);
 				break;
 			default:
 				throw harpy_little_error("unsupported componentType for uint");
 		}
 	}
 
-	std::pair<uint16_t, uint32_t> convert_short(uint32_t componentType, char* ptr){
-			switch (componentType) {
-				case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
-					return std::make_pair(*((uint16_t*)ptr), 2);
-					break;
-				case TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE:
-					return std::make_pair(*((uint8_t*)ptr), 1);
-					break;
-				default:
-					throw harpy_little_error("unsupported componentType for sint");
-			}
+	int32_t convert_int(uint32_t componentType, char* ptr){
+		switch (componentType) {
+			case TINYGLTF_COMPONENT_TYPE_INT:
+				return *((int32_t*)ptr);
+				break;
+			case TINYGLTF_COMPONENT_TYPE_SHORT:
+				return *((int16_t*)ptr);
+				break;
+			case TINYGLTF_COMPONENT_TYPE_BYTE:
+				return *((int8_t*)ptr);
+				break;
+			default:
+				throw harpy_little_error("unsupported componentType for uint");
 		}
 
-
-	void convert(uint32_t componentType, uint32_t type, VkFormat format, char* ptr, std::any default_value){
+	}
+	void convert(std::pair<buffer_parse_context, std::shared_ptr<std::ifstream>>& s_pair, char* ptr){
 		//SLOW
-		//
-		uint32_t current_count = tinygltf::GetNumComponentsInType(type);
+		uint32_t current_count = tinygltf::GetNumComponentsInType(s_pair.first.type);
 		char* s_ptr = ptr;
-		for (int i_comp = 0; i_comp < getChannelCountForFormat(format); ++i_comp) {
+		uint32_t comp_size = getVulkanComponentSize(s_pair.first.format);
+		uint32_t comp_count = getChannelCountForFormat(s_pair.first.format);
+		ptr = ptr + comp_size * comp_count;
+		s_ptr = s_ptr + s_pair.first.unit_size;
 
+		for (int32_t i_comp = comp_count - 1; i_comp >= 0 ; --i_comp) {
+			ptr = ptr - comp_size;
+			s_ptr = s_ptr - tinygltf::GetComponentSizeInBytes(s_pair.first.componentType);
 			if (i_comp<current_count){
-				//
-				if (isFloat(format)) {
-					//
-					auto t_ptr = ((float_t*)ptr);
-					std::pair<float_t, uint32_t> conv_res = convert_sfloat(componentType, s_ptr);
-					*t_ptr = conv_res.first;
-					ptr = ptr + 4;
-					s_ptr = s_ptr + conv_res.second;
 
-				}else if(isUInt(format)){
-					//
-					auto t_ptr = ((uint32_t*)ptr);
-					std::pair<uint32_t, uint32_t> conv_res = convert_uint(componentType, s_ptr);
-					*t_ptr = (uint32_t)conv_res.first;
-					ptr = ptr + 4;
-					s_ptr = s_ptr + conv_res.second;
+				if (isFloat(s_pair.first.format)) {
 
-				}else if(isSInt(format)){
-					//
-					auto t_ptr = ((uint16_t*)ptr);
-					std::pair<uint16_t, uint32_t> conv_res = convert_short(componentType, s_ptr);
-					*t_ptr = (uint16_t)conv_res.first;
-					ptr = ptr + 2;
-					s_ptr = s_ptr + conv_res.second;
+					if (comp_size == 1){
+						goto conv_err;
+					}else if(comp_size == 2){
+						goto conv_err;
+					}else if(comp_size == 4){
+						auto t_ptr = ((float_t*)ptr);
+						*t_ptr = convert_float(s_pair.first.componentType, s_ptr) / s_pair.first.norm_factor;
+					}
+
+				}else if(isUInt(s_pair.first.format)){
+					if (comp_size == 1){
+						auto t_ptr = ((uint8_t*)ptr);
+						*t_ptr = convert_uint(s_pair.first.componentType, s_ptr) / s_pair.first.norm_factor;
+					}else if(comp_size == 2){
+						auto t_ptr = ((uint16_t*)ptr);
+						*t_ptr = convert_uint(s_pair.first.componentType, s_ptr) / s_pair.first.norm_factor;
+					}else if(comp_size == 4){
+						auto t_ptr = ((uint32_t*)ptr);
+						*t_ptr = convert_uint(s_pair.first.componentType, s_ptr) / s_pair.first.norm_factor;
+					}
+				}else if(isSInt(s_pair.first.format)){
+					if (comp_size == 1){
+						auto t_ptr = ((int8_t*)ptr);
+						*t_ptr = convert_int(s_pair.first.componentType, s_ptr) / s_pair.first.norm_factor;
+					}else if(comp_size == 2){
+						auto t_ptr = ((int16_t*)ptr);
+						*t_ptr = convert_int(s_pair.first.componentType, s_ptr) / s_pair.first.norm_factor;
+					}else if(comp_size == 4){
+						auto t_ptr = ((int32_t*)ptr);
+						*t_ptr = convert_int(s_pair.first.componentType, s_ptr) / s_pair.first.norm_factor;
+					}
 
 				}else{
-					throw harpy_little_error("unsupported VkFormat to convert ");
+					goto conv_err;
 				}
 			}else{
-				//
-				if (isFloat(format)) {
-					//
-					auto t_ptr = ((float_t*)ptr);
-					*t_ptr = std::any_cast<float_t>(default_value);
-				}else if(isUInt(format)){
-					//
-					auto t_ptr = ((uint32_t*)ptr);
-					*t_ptr = std::any_cast<uint32_t>(default_value);
-				}else if(isSInt(format)){
-					//
-					auto t_ptr = ((uint16_t*)ptr);
-					*t_ptr = std::any_cast<uint16_t>(default_value);
+				if (isFloat(s_pair.first.format)) {
+					if (comp_size == 1){
+						goto conv_err;
+					}else if(comp_size == 2){
+						goto conv_err;
+					}else if(comp_size == 4){
+						auto t_ptr = ((float_t*)ptr);
+						*t_ptr = std::any_cast<float_t>(s_pair.first.default_value) / s_pair.first.norm_factor;
+					}
+
+				}else if(isUInt(s_pair.first.format)){
+					if (comp_size == 1){
+						auto t_ptr = ((uint8_t*)ptr);
+						*t_ptr = std::any_cast<uint32_t>(s_pair.first.default_value) / s_pair.first.norm_factor;
+					}else if(comp_size == 2){
+						auto t_ptr = ((uint16_t*)ptr);
+						*t_ptr = std::any_cast<uint32_t>(s_pair.first.default_value) / s_pair.first.norm_factor;
+					}else if(comp_size == 4){
+						auto t_ptr = ((uint32_t*)ptr);
+						*t_ptr = std::any_cast<uint32_t>(s_pair.first.default_value) / s_pair.first.norm_factor;
+					}
+				}else if(isSInt(s_pair.first.format)){
+					if (comp_size == 1){
+						auto t_ptr = ((int8_t*)ptr);
+						*t_ptr = std::any_cast<int32_t>(s_pair.first.default_value) / s_pair.first.norm_factor;
+					}else if(comp_size == 2){
+						auto t_ptr = ((int16_t*)ptr);
+						*t_ptr = std::any_cast<int32_t>(s_pair.first.default_value) / s_pair.first.norm_factor;
+					}else if(comp_size == 4){
+						auto t_ptr = ((int32_t*)ptr);
+						*t_ptr = std::any_cast<int32_t>(s_pair.first.default_value) / s_pair.first.norm_factor;
+					}
+
 				}else{
-					throw harpy_little_error("unsupported VkFormat to convert ");
+					goto conv_err;
 				}
 			}
 
-//			if ((*(uint32_t*)ptr) != 0){
-//				std::cout<<(void* )ptr<<" --- ";
-//				std::cout<<*(uint32_t*)ptr<<" --- ";
-//				std::cout.write(ptr, 4);
-//				std::cout<<std::endl;
-//			}
 
 		}
+		return;
+
+		conv_err:
+		throw harpy_little_error("unsupported VkFormat to convert ");
 	}
 
 
@@ -190,14 +230,14 @@ namespace harpy::utilities{
 		//std::cout<<"loadPart"<<std::endl;
 		char* buffer_ptr1 = buffer_ptr + s_pair.first.get_buffer_point();
 		uint32_t point = s_pair.first.get_read_point();
-		std::cout<<"point: "<<point<<std::endl;
-		std::cout<<"unit_size: "<<s_pair.first.unit_size<<std::endl;
-		std::cout<<"read stride: "<<s_pair.first.read_stride<<std::endl;
-		std::cout<<"stream: "<<s_pair.second<<std::endl;
-		std::cout<<"buffer_ptr: "<<(void*)buffer_ptr<<std::endl;
-		std::cout<<"buffer_ptr1: "<<(void*)buffer_ptr1<<std::endl;
-		std::cout<<"buff stride: "<<s_pair.first.buffer_stride<<std::endl;
-		std::cout<<std::endl;
+//		std::cout<<"point: "<<point<<std::endl;
+//		std::cout<<"unit_size: "<<s_pair.first.unit_size<<std::endl;
+//		std::cout<<"read stride: "<<s_pair.first.read_stride<<std::endl;
+//		std::cout<<"stream: "<<s_pair.second<<std::endl;
+//		std::cout<<"buffer_ptr: "<<(void*)buffer_ptr<<std::endl;
+//		std::cout<<"buffer_ptr1: "<<(void*)buffer_ptr1<<std::endl;
+//		std::cout<<"buff stride: "<<s_pair.first.buffer_stride<<std::endl;
+//		std::cout<<std::endl;
 
 		s_pair.second->seekg(point, std::ios::beg);
 		s_pair.second->read(buffer_ptr1, s_pair.first.unit_size);
@@ -205,7 +245,7 @@ namespace harpy::utilities{
 
 
 		//std::cout<<buffer_ptr<<std::endl;
-		convert(s_pair.first.componentType, s_pair.first.type, s_pair.first.format, buffer_ptr1, s_pair.first.default_value);
+		convert(s_pair , buffer_ptr1);
 		s_pair.first.jump();
 	}
 
@@ -356,6 +396,8 @@ namespace harpy::utilities{
 
 
 			std::any default_val{};
+
+
 			if (attrib == "COLOR_0") {
 				default_val = 1.0f;
 			}else if (attrib == "COLOR_1") {
@@ -367,6 +409,31 @@ namespace harpy::utilities{
 			}else{
 				default_val = 0;
 			}
+
+			double norm_factor = 0.0f;
+
+			switch (tinygltf::GetNumComponentsInType(accessor.type)) {
+				case 3:
+					norm_factor += std::max(norm_factor, accessor.maxValues[2] - accessor.minValues[2]);
+					/* no break */
+				case 2:
+					norm_factor += std::max(norm_factor, accessor.maxValues[1] - accessor.minValues[1]);
+					/* no break */
+				case 1:
+					norm_factor += std::max(norm_factor, accessor.maxValues[0] - accessor.minValues[0]);
+					/* no break */
+				default:
+					break;
+			}
+
+			if (attrib == "POSITION") {
+
+			}else{
+				norm_factor = 1.0;
+			}
+
+
+
 			uint32_t sz = tinygltf::GetComponentSizeInBytes(accessor.componentType) * tinygltf::GetNumComponentsInType(accessor.type);
 			//std::cout<<"GetComponentSizeInBytes: "<<tinygltf::GetComponentSizeInBytes(accessor.componentType)<<std::endl;
 			//std::cout<<"GetNumComponentsInType: "<<tinygltf::GetNumComponentsInType(accessor.type)<<std::endl;
@@ -374,6 +441,7 @@ namespace harpy::utilities{
 			std::pair<buffer_parse_context, std::shared_ptr<std::ifstream>> p = std::make_pair(
 								buffer_parse_context{
 												default_val,
+												norm_factor,
 												sz,
 												buffView.byteOffset + accessor.byteOffset,
 												buffView.byteStride > 0 ? buffView.byteStride : sz,
@@ -412,7 +480,7 @@ namespace harpy::utilities{
 
 		vkUnmapMemory(cord->device, stagingBufferMemory);
 
-		createBuffer(cord,bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBuffer, vertexBufferMemory);
+		createBuffer(cord,bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBuffer, vertexBufferMemory);
 
 		copyBuffer(cord, copy_buf, copy_queue, stagingBuffer, vertexBuffer, bufferSize);
 
@@ -454,14 +522,15 @@ namespace harpy::utilities{
 //						buffView.byteOffset + accessor.byteOffset,
 //						buffView.byteStride,
 						default_val,
+						1,
 						sz,
 						buffView.byteOffset + accessor.byteOffset,
 						buffView.byteStride > 0 ? buffView.byteStride : sz,
 						0,
-						sizeof(Indice),
+						getVulkanComponentSize(Indice::getScalarIndiceFormat()),
 						accessor.type,
 						accessor.componentType,
-						Indice::getIndiceFormat()
+						Indice::getScalarIndiceFormat()
 		},
 		initialize_buffer_indices_ifstream(model, prim));
 

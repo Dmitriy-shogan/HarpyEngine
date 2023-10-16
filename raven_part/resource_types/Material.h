@@ -29,7 +29,8 @@ namespace harpy::raven_part::resource_types{
 		//set1
 		VkDescriptorSet desc_set;
 		void load(tinygltf::Model& model, tinygltf::Primitive& prim, load_package pack);
-		void perform(VkCommandBuffer cmd, Shape* shape);
+		void r_init(renderer_context* r_context);
+		void perform(VkCommandBuffer cmd, Shape* shape, uint32_t vertex_offset);
 	};
 }
 

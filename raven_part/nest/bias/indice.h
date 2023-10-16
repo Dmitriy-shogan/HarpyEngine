@@ -18,6 +18,10 @@ namespace harpy::nest{
 			return VK_FORMAT_R16G16B16_UINT;
 		}
 
+		static VkFormat getScalarIndiceFormat(){
+			return VK_FORMAT_R16_UINT;
+		}
+
 		static VkIndexType getType(){
 			return VK_INDEX_TYPE_UINT16;
 		}

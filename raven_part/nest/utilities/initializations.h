@@ -30,7 +30,7 @@
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
+#include <glm/gtx/matrix_decompose.hpp>
 #include <gltf/tiny_gltf.h>
 #include <toml++/toml.h>
 
@@ -54,7 +54,7 @@
 #define SHADER_PATH_BLENDER_FRAGMENT "shaders/base/compute/service/blender.frag"
 
 #define SHADER_PATH_CAMERA_PRESPECTIVE_VERTEX "shaders/base/compute/service/camera_perespective.comp"
-#define SHADER_PATH_CAMERA_ORTHOGRAPHIC_VERTEX "shaders/base/compute/service/camera_orthographic.comp"
+#define SHADER_PATH_CAMERA_VERTEX "shaders/base/compute/service/camera_orthographic.comp"
 
 
 

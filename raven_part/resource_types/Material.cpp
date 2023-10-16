@@ -109,21 +109,40 @@ namespace harpy::raven_part::resource_types{
 	//       colorBlending.blendConstants[2] = 0.0f;
 	//       colorBlending.blendConstants[3] = 0.0f;
 
-	       VkPipelineColorBlendAttachmentState colorBlendAttachment{};
-			colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-			colorBlendAttachment.blendEnable = VK_FALSE;
+	       VkPipelineColorBlendAttachmentState colorBlendAttachment = {};
+		   colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+		   colorBlendAttachment.blendEnable = VK_TRUE;
+		   colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+		   colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+		   colorBlendAttachment.colorBlendOp = VK_BLEND_OP_ADD;
+		   colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+		   colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+		   colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;
+
+	       VkPipelineColorBlendStateCreateInfo colorBlending = {};
+	       colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+	       colorBlending.logicOpEnable = VK_FALSE;
+	       colorBlending.logicOp = VK_LOGIC_OP_COPY;
+	       colorBlending.attachmentCount = 1;
+	       colorBlending.pAttachments = &colorBlendAttachment;
 
 
-			VkPipelineColorBlendStateCreateInfo colorBlending{};
-			colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-			colorBlending.logicOpEnable = VK_FALSE;
-			colorBlending.logicOp = VK_LOGIC_OP_COPY;
-			colorBlending.attachmentCount = 1;
-			colorBlending.pAttachments = &colorBlendAttachment;
-			colorBlending.blendConstants[0] = 0.0f;
-			colorBlending.blendConstants[1] = 0.0f;
-			colorBlending.blendConstants[2] = 0.0f;
-			colorBlending.blendConstants[3] = 0.0f;
+
+//	       VkPipelineColorBlendAttachmentState colorBlendAttachment{};
+//			colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+//			colorBlendAttachment.blendEnable = VK_FALSE;
+//
+//
+//			VkPipelineColorBlendStateCreateInfo colorBlending{};
+//			colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+//			colorBlending.logicOpEnable = VK_FALSE;
+//			colorBlending.logicOp = VK_LOGIC_OP_COPY;
+//			colorBlending.attachmentCount = 1;
+//			colorBlending.pAttachments = &colorBlendAttachment;
+//			colorBlending.blendConstants[0] = 0.0f;
+//			colorBlending.blendConstants[1] = 0.0f;
+//			colorBlending.blendConstants[2] = 0.0f;
+//			colorBlending.blendConstants[3] = 0.0f;
 
 
 
@@ -182,6 +201,7 @@ namespace harpy::raven_part::resource_types{
 	       pipelineInfo.pDepthStencilState = &depthStencil;
 	       pipelineInfo.subpass = 0;
 	       pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+
 
 	       if (vkCreateGraphicsPipelines(cord->device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
 	           throw std::runtime_error("failed to create graphics pipeline!");
@@ -245,29 +265,29 @@ namespace harpy::raven_part::resource_types{
 
 
 
-	void Material::perform(VkCommandBuffer cmd, Shape* shape){
+	void Material::perform(VkCommandBuffer cmd, Shape* shape, uint32_t vertex_offset){
 		vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 		if(desc_set)
 		vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &desc_set, 0, nullptr);
 
-		vkCmdDrawIndexed(cmd, shape->indices_size, 1, 0, 0, 0);
+		vkCmdDrawIndexed(cmd, shape->indices_size, 1, 0, vertex_offset, 0);
 	}
 
 	void Material::load(tinygltf::Model& model, tinygltf::Primitive& prim, load_package pack){
+		VkDescriptorSetLayout descriptor_set_layout = createDescriptorSetLayout(pack.r_context_ptr->spinal_cord);
+		VkDescriptorPool pool = createDescriptorPool(pack.r_context_ptr->spinal_cord);
+		std::vector<VkDescriptorSet> sets = createDescriptorSets(pack.r_context_ptr->spinal_cord, pool, descriptor_set_layout, VK_NULL_HANDLE);
 
 
+		std::pair<VkPipeline,VkPipelineLayout> pipe = createGraphicsPipeline(pack.r_context_ptr->spinal_cord, descriptor_set_layout, pack.r_context_ptr->render_pass);
+		pipeline = pipe.first;
+		pipelineLayout = pipe.second;
+		desc_set = sets[0];
 
-				VkDescriptorSetLayout descriptor_set_layout = createDescriptorSetLayout(pack.r_context_ptr->spinal_cord);
-				VkDescriptorPool pool = createDescriptorPool(pack.r_context_ptr->spinal_cord);
-				std::vector<VkDescriptorSet> sets = createDescriptorSets(pack.r_context_ptr->spinal_cord, pool, descriptor_set_layout, VK_NULL_HANDLE);
+	};
+	void Material::r_init(renderer_context* r_context){
 
-
-				std::pair<VkPipeline,VkPipelineLayout> pipe = createGraphicsPipeline(pack.r_context_ptr->spinal_cord, descriptor_set_layout, pack.r_context_ptr->render_pass);
-				pipeline = pipe.first;
-				pipelineLayout = pipe.second;
-				desc_set = sets[0];
-
-			};
+	};
 }
 
 

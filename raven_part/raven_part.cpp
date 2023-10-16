@@ -21,7 +21,7 @@ namespace harpy::raven_part{
 
 					assert((scene.nodes[i] >= 0) && (scene.nodes[i] < model.nodes.size()));
 
-					loadNode(model, model.nodes[scene.nodes[i]], preload_map, pack);
+					loadNode(model, model.nodes[scene.nodes[i]],-1, preload_map, pack);
 				}
 				r_context_ptr->spinal_cord->queue_supervisor.lock_free(transfer_queue.second);
 
@@ -35,13 +35,31 @@ namespace harpy::raven_part{
 				//TODO setup_camera
 				raven_part::resource_types::View view{};
 				view.view_field = glm::vec2{1.0f,1.0f};
-				view.cameraType = raven_part::resource_types::View::CameraType::ORTHOGRAPHIC;
+
 				view.viewport.x = 0.0f;
 				view.viewport.y = 0.0f;
 				view.viewport.width = static_cast<float>(pack.r_context_ptr->swapchain.extent.width);
 				view.viewport.height = static_cast<float>(pack.r_context_ptr->swapchain.extent.height);
 				view.viewport.minDepth = 0.0f;
 				view.viewport.maxDepth = 1.0f;
+
+
+
+
+				if(GLTF_CAMERA_TYPE_PERSPECTIVE){
+						view.cameraType = raven_part::resource_types::View::CameraType::PERSPECTIVE;
+						view.aspectRatio = cam->perspective.aspectRatio;
+						view.focus = 0.5f / glm::tan(cam->perspective.yfov / 2);
+
+				}else if (GLTF_CAMERA_TYPE_ORTHOGRAPHIC){
+						view.cameraType = raven_part::resource_types::View::CameraType::ORTHOGRAPHIC;
+
+				} else if (GLTF_CAMERA_TYPE_ISOMETRIC){
+						view.cameraType = raven_part::resource_types::View::CameraType::ISOMETRIC;
+
+				} else{
+						throw utilities::harpy_little_error("fake camera type");
+				}
 
 				VkRect2D scissor{};
 				view.scissor.offset = {0, 0};

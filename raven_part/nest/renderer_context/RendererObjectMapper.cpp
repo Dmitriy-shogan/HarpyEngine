@@ -26,20 +26,20 @@ uint32_t RendererResourceStorage::register_material(raven_part::resource_types::
 	return materials.size()-1;
 }
 
-//void RendererResourceStorage::r_init(tinygltf::Model& model, tinygltf::Primitive& prim, harpy::raven_part::load_package pack){
-//	for (uint32_t i = 0; i < views.size(); ++i) {
-//		views[i].init(model, prim, pack);
-//	}
-//
-//	for (uint32_t i = 0; i < shapes.size(); ++i) {
-//		shapes[i].init(model, prim, pack);
-//	}
-//
-//	for (uint32_t i = 0; i < materials.size(); ++i) {
-//		materials[i].init(model, prim, pack);
-//	}
+void RendererResourceStorage::r_init(renderer_context* r_context){
+	for (uint32_t i = 0; i < views.size(); ++i) {
+		views[i].r_init(r_context);
+	}
 
-//}
+	for (uint32_t i = 0; i < shapes.size(); ++i) {
+		shapes[i].r_init(r_context);
+	}
+
+	for (uint32_t i = 0; i < materials.size(); ++i) {
+		materials[i].r_init(r_context);
+	}
+
+}
 
 uint32_t RendererResourceStorage::get_vert_max(){
 	uint32_t max = 0;

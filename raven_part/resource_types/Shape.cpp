@@ -31,4 +31,8 @@ namespace harpy::raven_part::resource_types{
 		indexType = harpy::nest::Indice::getType();
 	};
 
+	void Shape::r_init(renderer_context* r_context){
+
+	}
+
 }
