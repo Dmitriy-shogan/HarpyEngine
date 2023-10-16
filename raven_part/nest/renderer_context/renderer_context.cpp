@@ -23,7 +23,11 @@
 #include <thread>
 #include <iostream>
 
-using namespace harpy::raven_part;
+namespace harpy::nest{
+
+
+uint32_t thread_cnt = 0;
+
 
 renderer_context::renderer_context(std::shared_ptr<vulkan_spinal_cord> cord, std::unique_ptr<base_window_layout> connected_window_layout){
 	this->spinal_cord = cord;
@@ -41,13 +45,14 @@ void renderer_context::init_render_pass()
     color_attachment.format = VK_FORMAT_B8G8R8A8_UNORM;
     color_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
 
-    color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    //color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
     color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
 
     color_attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     color_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
 
-    color_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    color_attachment.initialLayout = VK_IMAGE_LAYOUT_GENERAL;
     color_attachment.finalLayout = VK_IMAGE_LAYOUT_GENERAL;
 
 
@@ -56,13 +61,14 @@ void renderer_context::init_render_pass()
     depth_and_spencil_attachment.format = VK_FORMAT_D32_SFLOAT_S8_UINT;
     depth_and_spencil_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
 
-    depth_and_spencil_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    //depth_and_spencil_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    depth_and_spencil_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
     depth_and_spencil_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
 
     depth_and_spencil_attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     depth_and_spencil_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
 
-    depth_and_spencil_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    depth_and_spencil_attachment.initialLayout = VK_IMAGE_LAYOUT_GENERAL;
     depth_and_spencil_attachment.finalLayout = VK_IMAGE_LAYOUT_GENERAL;
 
 
@@ -256,26 +262,36 @@ void renderer_context::init_swapchain(){
 
 
 void renderer_context::init_vert_tmp_buf(){
-	VkDeviceSize bufferSize1 = utilities::align_to((VkDeviceSize)sizeof(Vertex) * (VkDeviceSize)tmp_storage->get_vert_max(), spinal_cord->deviceProperties.limits.minStorageBufferOffsetAlignment) * effective_rsr_cnt;
-	if (bufferSize1 < bufferSize){
+	vert_buf.init(this, effective_rsr_cnt);
+}
+
+void renderer_context::camera_vertex_buffer::init(renderer_context* r_context, uint32_t region_cnt){
+	this->r_context = r_context;
+	regions.reserve(region_cnt);
+
+	uint32_t vert_max = r_context->tmp_storage->get_vert_max();
+
+	size =  (VkDeviceSize)sizeof(Vertex) * (VkDeviceSize)vert_max;//storage.get_vert_max();
+
+	VkDeviceSize bufferSize1 = size * region_cnt;
+	if (bufferSize1 < r_context->bufferSize){
 		if (RENDERER_MEMORY_OPTI_POLICY == RENDERER_MEMORY_OPTI_POLICY_PASSIVE) return;
 	}
-	bufferSize = bufferSize1;
-
+	r_context->bufferSize = bufferSize1;
 
 
 	VkDescriptorPoolSize pool_size{};
-	pool_size.type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-	pool_size.descriptorCount = effective_rsr_cnt*2;
+	pool_size.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+	pool_size.descriptorCount = 1;
 
 	VkDescriptorPoolCreateInfo poolInfo{};
 	poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
 	poolInfo.poolSizeCount = 1;
 	poolInfo.pPoolSizes = &pool_size;
-	poolInfo.maxSets = static_cast<uint32_t>(effective_rsr_cnt);
+	poolInfo.maxSets = static_cast<uint32_t>(1);
 	poolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
 
-	if (vkCreateDescriptorPool(spinal_cord->device, &poolInfo, nullptr, &vert_desc_pool) != VK_SUCCESS) {
+	if (vkCreateDescriptorPool(r_context->spinal_cord->device, &poolInfo, nullptr, &vert_desc_pool) != VK_SUCCESS) {
 		throw utilities::harpy_little_error(utilities::error_severity::wrong_init,
 				"failed to create descriptor pool!");
 	}
@@ -284,28 +300,82 @@ void renderer_context::init_vert_tmp_buf(){
    VkDeviceMemory stagingBufferMemory;
    VkBufferCreateInfo bufferInfo{};
    bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-   bufferInfo.size = bufferSize;
-   bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
+   bufferInfo.size = r_context->bufferSize;
+   bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
    bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-   if (vkCreateBuffer(spinal_cord->device, &bufferInfo, nullptr, &vert_tmp) != VK_SUCCESS) {
+   if (vkCreateBuffer(r_context->spinal_cord->device, &bufferInfo, nullptr, &vert_tmp) != VK_SUCCESS) {
 	   throw std::runtime_error("failed to create buffer!");
    }
 
    VkMemoryRequirements memRequirements;
-   vkGetBufferMemoryRequirements(spinal_cord->device, vert_tmp, &memRequirements);
+   vkGetBufferMemoryRequirements(r_context->spinal_cord->device, vert_tmp, &memRequirements);
 
    VkMemoryAllocateInfo allocInfo{};
    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
    allocInfo.allocationSize = memRequirements.size;
-   allocInfo.memoryTypeIndex = harpy::utilities::find_memory_types(spinal_cord->ph_device,memRequirements.memoryTypeBits, (uint32_t)0);
+   allocInfo.memoryTypeIndex = harpy::utilities::find_memory_types(r_context->spinal_cord->ph_device,memRequirements.memoryTypeBits, (uint32_t)0);
 
-   if (vkAllocateMemory(spinal_cord->device, &allocInfo, nullptr, &vert_tmp_mem) != VK_SUCCESS) {
+   if (vkAllocateMemory(r_context->spinal_cord->device, &allocInfo, nullptr, &vert_tmp_mem) != VK_SUCCESS) {
 	   throw std::runtime_error("failed to allocate buffer memory!");
    }
 
 
-   vkBindBufferMemory(spinal_cord->device, vert_tmp, vert_tmp_mem, 0);
+   vkBindBufferMemory(r_context->spinal_cord->device, vert_tmp, vert_tmp_mem, 0);
+
+
+
+   VkDescriptorSetLayoutBinding outLayoutBinding{};
+   		outLayoutBinding.binding = 0;
+   		outLayoutBinding.descriptorCount = 1;
+   		outLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
+   		outLayoutBinding.pImmutableSamplers = nullptr;
+   		outLayoutBinding.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
+
+   		VkDescriptorSetLayoutBinding bindings[] = {outLayoutBinding};
+   		VkDescriptorSetLayoutCreateInfo layoutInfo3{};
+   		layoutInfo3.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+   		layoutInfo3.bindingCount = 1;
+   		layoutInfo3.pBindings = bindings;
+
+   		if (vkCreateDescriptorSetLayout(r_context->spinal_cord->device, &layoutInfo3, nullptr, &vert_desc_layout) != VK_SUCCESS) {
+   				throw utilities::harpy_little_error(utilities::error_severity::wrong_init,
+   					"failed to create descriptor set layout!");
+   			}
+
+		VkDescriptorSetAllocateInfo descAllocInfo{};
+		descAllocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+		descAllocInfo.descriptorPool = vert_desc_pool;
+		descAllocInfo.descriptorSetCount = 1;
+		descAllocInfo.pSetLayouts = &vert_desc_layout;
+
+
+
+		if (vkAllocateDescriptorSets(r_context->spinal_cord->device, &descAllocInfo, &vert_desc) != VK_SUCCESS)
+			throw utilities::harpy_little_error("failed to allocate descriptor set!");
+		//Заменить множественные дескрипторы на один со смещением
+
+		VkDescriptorBufferInfo out_buffer;
+		out_buffer.buffer = vert_tmp;
+		out_buffer.offset = 0; //regions[i].offset
+		out_buffer.range = r_context->bufferSize;//shape->vert_size;
+
+
+		VkWriteDescriptorSet out_desc_set_wr = {};
+		out_desc_set_wr.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		out_desc_set_wr.dstSet = vert_desc;
+		out_desc_set_wr.dstBinding = 0; //i
+		out_desc_set_wr.dstArrayElement = 0;
+		out_desc_set_wr.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
+		out_desc_set_wr.descriptorCount = 1;
+		out_desc_set_wr.pBufferInfo = &out_buffer;
+
+		vkUpdateDescriptorSets(r_context->spinal_cord->device, 1, &out_desc_set_wr, 0, nullptr);
+
+
+   		for (uint32_t i = 0; i < regions.size(); ++i) {
+			regions.push_back(region{i * size, i * vert_max});
+   		}
 
 }
 
@@ -322,30 +392,75 @@ void renderer_context::init_renderer_resource_storage(){
 void renderer_context::init_renderer_object_mapper(){
 
 }
+
+
+std::optional<transform> renderer_context::calculate_transform(std::shared_ptr<std::vector<human_part::ECS::Entity*>> entities, uint32_t id){
+	transform tr = transform{};
+	harpy::human_part::ECS::Entity* e;
+	harpy::human_part::ECS::Transform* transform_comp;
+
+	while(id != -1){
+		e = ((*entities)[id]);
+
+		auto components = e->get_components_by_name(harpy::human_part::ECS::Transform::name);
+
+		if (components.size() == 0) throw utilities::harpy_little_error("there are no transform component inside render task");
+
+		transform_comp = dynamic_cast<harpy::human_part::ECS::Transform*>(components[0]);
+
+		tr = tr.relative_to(transform_comp->to_transform());
+
+		if(e->get_parent_id().has_value())
+			id = *(e->get_parent_id());
+		else
+			id = -1;
+	}
+	return tr;
+}
+
+std::optional<harpy::nest::render_target> renderer_context::make_target(std::shared_ptr<std::vector<human_part::ECS::Entity*>> entities, uint32_t id){
+	harpy::human_part::ECS::Entity* e = ((*entities)[id]);
+
+	auto components1 = e->get_components_by_name(harpy::human_part::ECS::Renderer::name);
+
+	if (components1.size() == 0) return std::nullopt;
+
+	harpy::human_part::ECS::Renderer* renderer = dynamic_cast<harpy::human_part::ECS::Renderer*>(components1[0]);
+
+	harpy::nest::render_target target{};
+
+	target.mappings = tmp_mapper->demap(renderer->mappings);
+
+	auto transform = calculate_transform(entities, id);
+	if(!transform.has_value()) return std::nullopt;
+	target.transform = *transform;
+
+	return target;
+}
+
+
+
 void render_task_fake(
 		renderer_context* ctx, std::pair<render_shared_resources*, uint32_t> rsr,
-		std::pair<VkBuffer, uint32_t> vert_buf,
+		uint32_t vert_buf_region_index,
 		std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vk_queue,
 		std::pair<harpy::human_part::ECS::Transform*, uint32_t>* camera)
 {
-	ctx->render_task(rsr,vert_buf,vk_queue,camera);
+	ctx->render_task(rsr,vert_buf_region_index,vk_queue,camera);
 }
 //primitive
 void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_source> source, std::atomic_flag* cond){
 
-
-	tmp_storage = &source->storage;
-	tmp_mapper = &source->mapper;
-
-
 	size_t frame = 0;
 	uint32_t image_index{};
-	uint32_t thread_cnt = std::min((uint32_t)std::thread::hardware_concurrency(), effective_rsr_cnt - 1);
 
 
 	source->lock.lock();
+	tmp_storage = &source->storage;
+	tmp_mapper = &source->mapper;
+
 	init_vert_tmp_buf();
-	VkDeviceSize size_aligned = utilities::align_to((VkDeviceSize)sizeof(Vertex) * (VkDeviceSize)tmp_storage->get_vert_max(), spinal_cord->deviceProperties.limits.minStorageBufferOffsetAlignment);//storage.get_vert_max();
+	tmp_storage->r_init(this);
 	source->lock.unlock();
 
 	std::vector<std::pair<render_shared_resources*, uint32_t>> rendered_rsrs{};
@@ -363,7 +478,7 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 	std::vector<std::thread> threads{};
 
 
-
+	std::cout<<"frame"<<std::endl;
 	while(cond->test_and_set(std::memory_order_acquire)){
 		//should i wait present queue? in vulkan-guide there is no vkQueueWaitIdle(present_queue);
 
@@ -411,6 +526,8 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 		renderer_context * context_ptr = this;
 		//TODO UNEFFECTVE
 		for (uint32_t i = 0; i < thread_cnt; ++i) {
+
+
 			int32_t cnt = std::max(std::min((int32_t)tgt_per_task,  (int32_t)(entities->size()) - (int32_t)(i * tgt_per_task)),(int32_t)0);
 
 			if(!cnt) continue;
@@ -435,35 +552,21 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 			rsr.first->queue.resize(cnt);
 
 			for (int k = 0; k < cnt; ++k) {
-				harpy::human_part::ECS::Entity* e = ((*entities)[i * tgt_per_task + k]);
+				uint32_t entity_id = i * tgt_per_task + k;
+				auto target =  make_target(entities, entity_id);
+				if (!target.has_value()) continue;
+				rsr.first->queue[k] = *target;
 
-
-
-				auto components1 = e->get_components_by_name(harpy::human_part::ECS::Renderer::name);
-
-				if (components1.size() == 0) continue;
-
-				harpy::human_part::ECS::Renderer* renderer = dynamic_cast<harpy::human_part::ECS::Renderer*>(components1[0]);
-
-				auto components = e->get_components_by_name(harpy::human_part::ECS::Transform::name);
-
-				if (components.size() == 0) throw utilities::harpy_little_error("there are no transform component inside render task");
-
-				harpy::human_part::ECS::Transform* transform = dynamic_cast<harpy::human_part::ECS::Transform*>(components[0]);
-
-				rsr.first->queue[k].second = tmp_mapper->demap(renderer->mappings);
-
-				rsr.first->queue[k].first = transform;
 			}
 
-			std::pair<VkBuffer, uint32_t> vert_buf = std::make_pair(vert_tmp, i * size_aligned);
+
 
 			threads.push_back(
 					std::thread(
 							render_task_fake,
 							context_ptr,
 							rsr,
-							vert_buf,
+							rsr.second,
 							vk_queue,
 							&camera)
 						);
@@ -512,6 +615,8 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 			threads[i].join();
 		}
 
+		std::cout<<std::endl;
+
 		source->lock.unlock();
 
 		if(!USE_SHARED_RENDER_QUEUE){
@@ -531,9 +636,7 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 
 		if(!USE_SHARED_BLENDER_QUEUE){
 			spinal_cord->queue_supervisor.lock_free(blender_vk_queue.second);
-
 		}
-
 
 		frame = (frame + 1) % swapchain.image_sems.size();
 
@@ -543,9 +646,11 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 	spinal_cord->queue_supervisor.lock_free(present_queue.second);
 }
 
+
+
 void renderer_context::render_task(
 		std::pair<render_shared_resources*, uint32_t> rsr,
-		std::pair<VkBuffer, uint32_t> vert_buf,
+		uint32_t vert_buf_region_index,
 		std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vk_queue,
 		std::pair<harpy::human_part::ECS::Transform*, uint32_t>* camera)
 {
@@ -563,33 +668,99 @@ void renderer_context::render_task(
 	renderPassBeginInfo.framebuffer = rsr.first->fb;
 	renderPassBeginInfo.renderArea.offset = { 0, 0 };
 	renderPassBeginInfo.renderArea.extent = { swapchain.extent.width, swapchain.extent.height };
-	renderPassBeginInfo.pClearValues = clears;
-	renderPassBeginInfo.clearValueCount = 2;
+
+//	renderPassBeginInfo.pClearValues = clears;
+//	renderPassBeginInfo.clearValueCount = 2;
 
 
+	VkImageSubresourceRange colorSubresourceRange = {};
+	colorSubresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	colorSubresourceRange.baseMipLevel = 0;
+	colorSubresourceRange.levelCount = 1;
+	colorSubresourceRange.baseArrayLayer = 0;
+	colorSubresourceRange.layerCount = 1;
 
+	VkClearColorValue clearColor = {};
+	clearColor.float32[0] = 0.0f;
+	clearColor.float32[1] = 0.0f;
+	clearColor.float32[2] = 0.0f;
+	clearColor.float32[3] = 0.0f;
+
+	VkImageSubresourceRange dsSubresourceRange = {};
+	dsSubresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	dsSubresourceRange.baseMipLevel = 0;
+	dsSubresourceRange.levelCount = 1;
+	dsSubresourceRange.baseArrayLayer = 0;
+	dsSubresourceRange.layerCount = 1;
+
+	VkClearDepthStencilValue clearDepthStencil = {};
+	clearDepthStencil.depth = 1.0f;
+	clearDepthStencil.stencil = 0;
 
 	resource_types::View view = tmp_storage->views[(*camera).second];
 
+	if (vkBeginCommandBuffer(vk_queue.first.second, &beginInfo) != VK_SUCCESS)
+		throw utilities::harpy_little_error("failed to begin command buffer!");
+
+	VkImageMemoryBarrier imageBarrier = {};
+	imageBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	imageBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	imageBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+
+	imageBarrier.subresourceRange.baseMipLevel = 0;
+	imageBarrier.subresourceRange.levelCount = 1;
+	imageBarrier.subresourceRange.baseArrayLayer = 0;
+	imageBarrier.subresourceRange.layerCount = 1;
 
 
+	imageBarrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	imageBarrier.newLayout = VK_IMAGE_LAYOUT_GENERAL;
+	imageBarrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	imageBarrier.image = rsr.first->color_image;
+
+	vkCmdPipelineBarrier(
+		vk_queue.first.second,
+		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+		VK_PIPELINE_STAGE_TRANSFER_BIT,
+		0,
+		0, nullptr,
+		0, nullptr,
+		1, &imageBarrier
+	);
+
+	imageBarrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	imageBarrier.newLayout = VK_IMAGE_LAYOUT_GENERAL;
+	imageBarrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+	imageBarrier.image = rsr.first->depth_and_stencil_image;
+
+	vkCmdPipelineBarrier(
+		vk_queue.first.second,
+		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+		VK_PIPELINE_STAGE_TRANSFER_BIT,
+		0,
+		0, nullptr,
+		0, nullptr,
+		1, &imageBarrier
+	);
+
+	vkCmdClearColorImage(vk_queue.first.second, rsr.first->color_image, VK_IMAGE_LAYOUT_GENERAL, &clearColor, 1, &colorSubresourceRange);
+	vkCmdClearDepthStencilImage(vk_queue.first.second, rsr.first->depth_and_stencil_image, VK_IMAGE_LAYOUT_GENERAL, &clearDepthStencil, 1, &dsSubresourceRange);
 
 
 
 	for (uint32_t i = 0; i < rsr.first->queue.size(); i++){
-		std::pair<harpy::human_part::ECS::Transform*, std::vector<renderer_mappings>> entity = rsr.first->queue[i];
-		for (int i_prim = 0; i_prim < entity.second.size(); ++i_prim){
+		render_target target = rsr.first->queue[i];
 
-			vert_desc_pool_lock.lock();
-			rsr.first->reinit_vertex_tmp(vert_desc_pool, view.desc_set_layout);
-			vert_desc_pool_lock.unlock();
+		for (int i_prim = 0; i_prim < target.mappings.size(); ++i_prim){
 
-			if (vkBeginCommandBuffer(vk_queue.first.second, &beginInfo) != VK_SUCCESS)
-				throw utilities::harpy_little_error("failed to begin command buffer!");
+//			vert_desc_pool_lock.lock();
+//			rsr.first->reinit_vertex_tmp(vert_desc_pool, view.desc_set_layout);
+//			vert_desc_pool_lock.unlock();
 
-			resource_types::Shape shape = tmp_storage->shapes[entity.second[i_prim].shape_id];
-			resource_types::Material material = tmp_storage->materials[entity.second[i_prim].material_id];
-			//
+
+			resource_types::Shape shape = tmp_storage->shapes[target.mappings[i_prim].shape_id];
+			resource_types::Material material = tmp_storage->materials[target.mappings[i_prim].material_id];
+			std::cout<<"Shape:"<<target.mappings[i_prim].shape_id<<std::endl;
 	//=====================
 	//    SHAPE
 	//=====================
@@ -597,26 +768,30 @@ void renderer_context::render_task(
 	//=====================
 	//    VIEW & CAMERA TRANSPOSE
 	//=====================
+
 			view.camera_perform(
 					vk_queue.first.second,
-					rsr.first->vert_desc,
-					vert_buf,
+					std::make_pair(shape.vertexBuffer.first, 0),
+					vert_buf_region_index, //same with rsr index
 					&shape,
-					(*camera).first,
-					entity.first
+					(*camera).first->to_transform(),
+					target.transform
 					);
-			//
+
 			vkCmdBeginRenderPass(vk_queue.first.second, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+
 
 			view.view_perform(vk_queue.first.second);
 
-			VkDeviceSize offsets[] = {vert_buf.second};
-			vkCmdBindVertexBuffers(vk_queue.first.second, 0, 1, &vert_buf.first, offsets);
+//			VkDeviceSize offsets[] = {0};
+//			vkCmdBindVertexBuffers(vk_queue.first.second, 0, 1, &shape.vertexBuffer.first, offsets);
+			VkDeviceSize offsets[] = {0}; //{vert_buf.regions[vert_buf_region_index].offset
+			vkCmdBindVertexBuffers(vk_queue.first.second, 0, 1, &vert_buf.vert_tmp, offsets);
 			vkCmdBindIndexBuffer(vk_queue.first.second, shape.indexBuffer.first, 0, shape.indexType);
 	//=====================
 	//    MATERIAL
 	//=====================
-			material.perform(vk_queue.first.second, &shape);
+			material.perform(vk_queue.first.second, &shape, vert_buf.regions[vert_buf_region_index].vert_offset);
 			vkCmdEndRenderPass(vk_queue.first.second);
 	//=====================
 	//    EFFECT
@@ -626,12 +801,11 @@ void renderer_context::render_task(
 	//
 	//	   vkCmdBindDescriptorSets(vk_queue.first.second, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_layout, 0, 1, &pipeline.desc_set, 0, nullptr);
 
-			if (vkEndCommandBuffer(vk_queue.first.second) != VK_SUCCESS)
-				throw utilities::harpy_little_error("failed to end command buffer!");
-
-
 		}
 	}
+
+	if (vkEndCommandBuffer(vk_queue.first.second) != VK_SUCCESS)
+		throw utilities::harpy_little_error("failed to end command buffer!");
 
 	VkSubmitInfo submitInfo{};
 	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -978,6 +1152,22 @@ void renderer_context::copy_render_res(
 				1, &imageBarrier
 			);
 
+
+			imageBarrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+			imageBarrier.newLayout = VK_IMAGE_LAYOUT_GENERAL;
+			imageBarrier.image = rendered_rsr.first->color_image;
+
+			vkCmdPipelineBarrier(
+				vk_queue.first.second,
+				VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+				VK_PIPELINE_STAGE_TRANSFER_BIT,
+				0,
+				0, nullptr,
+				0, nullptr,
+				1, &imageBarrier
+			);
+
+
 			if (vkEndCommandBuffer(vk_queue.first.second) != VK_SUCCESS)
 				throw utilities::harpy_little_error("failed to end command buffer!");
 
@@ -1051,10 +1241,12 @@ void renderer_context::init(){
 	init_renderer_object_mapper();
 	init_blender();
 	swapchain.init_image_views();
+	thread_cnt = std::min((uint32_t)std::thread::hardware_concurrency(), effective_rsr_cnt - 1);
+
 
 }
 
 
 
-
+}
 

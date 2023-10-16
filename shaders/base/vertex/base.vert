@@ -59,5 +59,5 @@ void main() {
 //     );
 
     gl_Position = vec4(POSITION, 1.0);
-    fragColor = vec3(COLOR_0);
+    fragColor = POSITION;
 }

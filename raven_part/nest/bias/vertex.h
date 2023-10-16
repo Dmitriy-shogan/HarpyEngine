@@ -9,38 +9,32 @@
 #define RAVEN_PART_NEST_BIAS_VERTEX_H_
 #include <spinal_cord/vulkan_spinal_cord.h>
 namespace harpy::nest{
-	struct __attribute__((packed)) Vertex {
+	struct Vertex {
 
-			glm::vec3 POSITION;
-			float __fill = 1.0f;
-			glm::vec3 NORMAL;
-			float __fill2 = 1.0f;
-			glm::vec4 TANGENT;
-			glm::vec4 CUSTOM;
+		alignas(16) glm::vec3 POSITION;
+		alignas(16) glm::vec3 NORMAL;
+		alignas(16) glm::vec4 TANGENT;
+		alignas(16) glm::vec4 CUSTOM;
 
-			glm::vec2 TEXCOORD_0;
-			double __fill3 = 1.0f;
-			glm::vec2 TEXCOORD_1;
-			double __fill4 = 1.0f;
-			glm::vec2 TEXCOORD_2;
-			double __fill5 = 1.0f;
-			glm::vec2 TEXCOORD_3;
-			double __fill6 = 1.0f;
+		alignas(8) glm::vec2 TEXCOORD_0;
+		alignas(8) glm::vec2 TEXCOORD_1;
+		alignas(8) glm::vec2 TEXCOORD_2;
+		alignas(8) glm::vec2 TEXCOORD_3;
 
-			glm::vec4 COLOR_0;
-			glm::vec4 COLOR_1;
-			glm::vec4 COLOR_2;
-			glm::vec4 COLOR_3;
+		alignas(16) glm::vec4 COLOR_0;
+		alignas(16) glm::vec4 COLOR_1;
+		alignas(16) glm::vec4 COLOR_2;
+		alignas(16) glm::vec4 COLOR_3;
 
-			glm::vec4 JOINTS_0;
-			glm::vec4 JOINTS_1;
-			glm::vec4 JOINTS_2;
-			glm::vec4 JOINTS_3;
+		alignas(16) glm::uvec4 JOINTS_0;
+		alignas(16) glm::uvec4 JOINTS_1;
+		alignas(16) glm::uvec4 JOINTS_2;
+		alignas(16) glm::uvec4 JOINTS_3;
 
-			glm::vec4 WEIGHTS_0;
-			glm::vec4 WEIGHTS_1;
-			glm::vec4 WEIGHTS_2;
-			glm::vec4 WEIGHTS_3;
+		alignas(16) glm::vec4 WEIGHTS_0;
+		alignas(16) glm::vec4 WEIGHTS_1;
+		alignas(16) glm::vec4 WEIGHTS_2;
+		alignas(16) glm::vec4 WEIGHTS_3;
 
 
 

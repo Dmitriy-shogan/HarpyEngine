@@ -43,6 +43,7 @@ set(header_dir_list
     "raven_part/nest/"
     "raven_part/"
     "human_part/"
+    "supply/"
     )
     
 set(third_party_lib_list 

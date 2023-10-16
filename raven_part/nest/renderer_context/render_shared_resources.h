@@ -18,13 +18,14 @@ namespace harpy::nest
 {
 
 	struct renderer_context;
+	struct render_target;
 
 	struct render_shared_resources{
 		bool updated;
 
 		renderer_context* r_context;
 
-		std::vector<std::pair<harpy::human_part::ECS::Transform*, std::vector<renderer_mappings>>> queue{};
+		std::vector<render_target> queue{};
 
 		//color buffer
 		VkDeviceMemory color_image_memory = nullptr;
@@ -54,12 +55,12 @@ namespace harpy::nest
 		bool wait_needed = false;
 
 
-		VkDescriptorSet vert_desc = nullptr;
+		//VkDescriptorSet vert_desc = nullptr;
 
 
 		void init_images();
 		void init_sem();
-		void reinit_vertex_tmp(VkDescriptorPool vert_desc_pool, VkDescriptorSetLayout layout);
+		//void reinit_vertex_tmp(VkDescriptorPool vert_desc_pool, VkDescriptorSetLayout layout);
 		void init_blender_pool();
 		void wait();
 		void reset();

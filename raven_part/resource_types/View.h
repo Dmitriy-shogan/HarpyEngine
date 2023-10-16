@@ -14,7 +14,7 @@
 #include <bias/vertex.h>
 #include <ECS/ECS.h>
 #include <resource_types/Shape.h>
-
+#include "../../supply/supply.h"
 #include <spinal_cord/vulkan_spinal_cord.h>
 
 namespace harpy::nest{
@@ -28,13 +28,14 @@ namespace harpy::raven_part{
 namespace harpy::raven_part::resource_types{
 	struct View{
 		enum CameraType{
-			PRESPECTIVE,
-			ORTHOGRAPHIC
+			PERSPECTIVE,
+			ORTHOGRAPHIC,
+			ISOMETRIC
 		};
 
 		struct CameraPushConstants{
-			glm::mat4 transform;
-			glm::vec4 translate;
+			alignas(16) glm::mat4 transform;
+			alignas(16) glm::vec4 translate;
 
 		};
 
@@ -45,20 +46,23 @@ namespace harpy::raven_part::resource_types{
 		VkRect2D scissor{};
 		glm::vec2 view_field;
 
-		void load(tinygltf::Model& model, harpy::raven_part::load_package pack);
+		float aspectRatio = 1.0f;
+		float focus = 1.0f;
 
+		void load(tinygltf::Model& model, harpy::raven_part::load_package pack);
+		void r_init(renderer_context* r_context);
 		void view_perform(VkCommandBuffer cmd);
 		void camera_perform(
 				VkCommandBuffer cmd,
-				VkDescriptorSet desc_set,
-				std::pair<VkBuffer, VkDeviceSize> vert_tmp,//buffer,offset
+				std::pair<VkBuffer, VkDeviceSize> desc_set,
+				uint32_t region_i,//buffer,offset
 				Shape* shape,
-				human_part::ECS::Transform* camera,
-				human_part::ECS::Transform* object);
+				transform camera,
+				transform object);
 
 		//set0
 
-		VkDescriptorSetLayout desc_set_layout;
+
 
 		VkPipeline cameraGraphicsPipeline;
 		VkPipelineLayout cameraPipelineLayout;

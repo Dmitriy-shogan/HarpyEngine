@@ -28,6 +28,7 @@ void render_shared_resources::init_images(){
 	imageCreateInfo.samples = VK_SAMPLE_COUNT_1_BIT;
 	imageCreateInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
 	//VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+
 	imageCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
 
@@ -55,7 +56,8 @@ void render_shared_resources::init_images(){
 	//	  COLOR_BUFFER
 	//	========================
 	imageCreateInfo.format = VK_FORMAT_B8G8R8A8_UNORM;
-	imageCreateInfo.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+	imageCreateInfo.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+
 	//imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 	imageview_create_info.format = VK_FORMAT_B8G8R8A8_UNORM;
 
@@ -84,7 +86,7 @@ void render_shared_resources::init_images(){
 	//	========================
 
 	imageCreateInfo.format = VK_FORMAT_D32_SFLOAT_S8_UINT;
-	imageCreateInfo.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+	imageCreateInfo.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 	//imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 	imageview_create_info.format = VK_FORMAT_D32_SFLOAT_S8_UINT;
 
@@ -165,26 +167,6 @@ void render_shared_resources::init_sem(){
 
 
 
-
-void render_shared_resources::reinit_vertex_tmp(VkDescriptorPool vert_desc_pool, VkDescriptorSetLayout layout){
-
-
-	if (vert_desc){
-		VkDescriptorSet sets[] = {vert_desc};
-		if (vkFreeDescriptorSets(r_context->spinal_cord->device, vert_desc_pool, 1, sets) != VK_SUCCESS)
-			throw utilities::harpy_little_error("failed to free descriptor set!");
-	}
-
-	VkDescriptorSetAllocateInfo allocInfo{};
-	allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-	allocInfo.descriptorPool = vert_desc_pool;
-	allocInfo.descriptorSetCount = 1;
-	allocInfo.pSetLayouts = &layout;
-
-	if (vkAllocateDescriptorSets(r_context->spinal_cord->device, &allocInfo, &vert_desc) != VK_SUCCESS)
-		throw utilities::harpy_little_error("failed to allocate descriptor set!");
-
-}
 
 void render_shared_resources::init_blender_pool()
 	{

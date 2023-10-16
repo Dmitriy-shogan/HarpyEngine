@@ -1,6 +1,6 @@
 ﻿#include "utilities.h"
 #include <utilities/harpy_little_error.h>
-#include <pools/command_pool.h>
+//#include <pools/command_pool.h>
 #include <memory>
 #include <iostream>
 
@@ -121,6 +121,54 @@ uint32_t harpy::utilities::getChannelCountForFormat(VkFormat format) {
         	throw harpy::utilities::harpy_little_error("unstated channels count");
     }
     return -1;
+}
+
+uint32_t harpy::utilities::getVulkanComponentSize(VkFormat format) {
+	switch (format) {
+	        case VK_FORMAT_R8_UINT:
+	        case VK_FORMAT_R8_SINT:
+	        case VK_FORMAT_R8G8_UINT:
+	        case VK_FORMAT_R8G8_SINT:
+	        case VK_FORMAT_R8G8B8A8_UINT:
+	        case VK_FORMAT_R8G8B8A8_SINT:
+	        case VK_FORMAT_R8G8B8_UINT:
+			case VK_FORMAT_R8G8B8_SINT:
+	            return 1;
+
+
+			case VK_FORMAT_R16_UINT:
+			case VK_FORMAT_R16_SINT:
+			case VK_FORMAT_R16G16_UINT:
+			case VK_FORMAT_R16G16_SINT:
+			case VK_FORMAT_R16_SFLOAT:
+			case VK_FORMAT_R16G16_SFLOAT:
+			case VK_FORMAT_R16G16B16A16_UINT:
+			case VK_FORMAT_R16G16B16A16_SINT:
+			case VK_FORMAT_R16G16B16A16_SFLOAT:
+			case VK_FORMAT_R16G16B16_UINT:
+			case VK_FORMAT_R16G16B16_SINT:
+			case VK_FORMAT_R16G16B16_SFLOAT:
+				return 2;
+
+
+	        case VK_FORMAT_R32_UINT:
+	        case VK_FORMAT_R32_SINT:
+	        case VK_FORMAT_R32_SFLOAT:
+	        case VK_FORMAT_R32G32_UINT:
+			case VK_FORMAT_R32G32_SINT:
+			case VK_FORMAT_R32G32_SFLOAT:
+			case VK_FORMAT_R32G32B32A32_UINT:
+			case VK_FORMAT_R32G32B32A32_SINT:
+			case VK_FORMAT_R32G32B32A32_SFLOAT:
+			case VK_FORMAT_R32G32B32_UINT:
+			case VK_FORMAT_R32G32B32_SINT:
+			case VK_FORMAT_R32G32B32_SFLOAT:
+				return 4;
+
+	        default:
+	        	throw harpy::utilities::harpy_little_error("unstated channels count");
+	    }
+	    return -1;
 }
 
 bool harpy::utilities::isFloat(VkFormat format){

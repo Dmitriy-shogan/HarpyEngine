@@ -1,0 +1,50 @@
+#version 450
+
+
+layout(push_constant) uniform PushConstants {
+  mat4 transform;
+  vec4 translate;
+} pushConstants;
+
+
+struct Vertex {
+  vec3 POSITION;
+  vec3 NORMAL;
+  vec4 TANGENT;
+  vec4 CUSTOM;
+
+  vec2 TEXCOORD_0;
+  vec2 TEXCOORD_1;
+  vec2 TEXCOORD_2;
+  vec2 TEXCOORD_3;
+
+  vec4 COLOR_0;
+  vec4 COLOR_1;
+  vec4 COLOR_2;
+  vec4 COLOR_3;
+
+  uvec4 JOINTS_0;
+  uvec4 JOINTS_1;
+  uvec4 JOINTS_2;
+  uvec4 JOINTS_3;
+
+  vec4 WEIGHTS_0;
+  vec4 WEIGHTS_1;
+  vec4 WEIGHTS_2;
+  vec4 WEIGHTS_3;
+};
+
+layout(set = 0, binding = 0) buffer Out{
+  Vertex vertices_out[];
+};
+
+void main() {
+    uint i = gl_GlobalInvocationID.x;
+
+    vertices_out[i].POSITION = (pushConstants.transform * vec4(vertices_out[i].POSITION, 1)).xyz;
+    vertices_out[i].POSITION.z = min(0.9999, 0.9 - 0.9/(vertices_out[i].POSITION.z - 1));
+
+    vertices_out[i].NORMAL = (pushConstants.transform * vec4(vertices_out[i].NORMAL, 1)).xyz;
+    vertices_out[i].NORMAL.z = min(0.9999, 0.9 - 0.9/(vertices_out[i].NORMAL.z - 1));
+
+}

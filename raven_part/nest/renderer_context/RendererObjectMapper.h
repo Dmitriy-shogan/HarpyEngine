@@ -32,7 +32,7 @@ namespace harpy::nest
 		std::vector<harpy::raven_part::resource_types::Material> materials{};
 		std::vector<harpy::raven_part::resource_types::Shape> shapes{};
 
-		//void r_init(tinygltf::Model& model, tinygltf::Primitive& prim, harpy::raven_part::load_package pack);
+		void r_init(renderer_context* r_context);
 
 		uint32_t get_vert_max();
 
@@ -66,8 +66,11 @@ namespace harpy::nest
 
         void register_renderer(human_part::ECS::Renderer* renderer, std::vector<renderer_mappings> mappings){
         	renderer->mappings.resize(mappings.size());
+        	std::cout<<"register_renderer:"<<std::endl;
         		for (uint32_t i = 0; i < mappings.size(); ++i) {
+
         			renderer->mappings[i] = register_mapping(mappings[i]);
+        			std::cout<<renderer->mappings[i]<<std::endl;
 				}
 
         	}
@@ -110,11 +113,11 @@ namespace harpy::nest
 			}
 		}
 
-		std::vector<renderer_mappings> demap(std::vector<uint32_t> mappings){
-			std::vector<renderer_mappings> res;
-			res.resize(mappings.size());
-			for (uint32_t i = 0; i < mappings.size(); ++i) {
-				res[i] = this->mappings[i];
+		std::vector<renderer_mappings> demap(std::vector<uint32_t> maps){
+			std::vector<renderer_mappings> res{};
+			res.resize(maps.size());
+			for (uint32_t i = 0; i < maps.size(); ++i) {
+				res[i] = this->mappings[maps[i]];
 			}
 			return res;
 		}

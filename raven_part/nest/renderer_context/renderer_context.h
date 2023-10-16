@@ -28,6 +28,8 @@
 #include <atomic>
 #include <queue>
 #include <thread>
+
+#include "../../supply/supply.h"
 using namespace harpy::nest;
 using namespace harpy::raven_part;
 
@@ -47,9 +49,24 @@ namespace harpy::nest
 	#endif
 
 	const uint32_t effective_rsr_cnt = std::min((uint32_t)RSR_ABSURD_LIMIT, (uint32_t)rsr_queues_cnt); //, (uint32_t)(DEV_MEM_RENDER_PERSENTAGE * DEV_MEM_SIZE / RSR_GPU_MEM_COST));
+	extern uint32_t thread_cnt;
+
+
 	struct render_shared_resources;
 	struct vulkan_spinal_cord;
 	struct base_window_layout;
+
+
+
+	struct render_target{
+
+
+		struct transform transform;
+		std::vector<renderer_mappings> mappings;
+
+
+	};
+
 
 
 	struct renderer_context{
@@ -113,6 +130,38 @@ namespace harpy::nest
 			}
 		};
 
+		struct camera_vertex_buffer{
+			struct region{
+				uint32_t offset;
+				uint32_t vert_offset;
+
+
+				region(uint32_t offset, uint32_t vert_offset){
+
+					this->offset = offset;
+					this->vert_offset = vert_offset;
+				}
+			};
+
+			VkBuffer vert_tmp = nullptr;
+			VkDeviceMemory vert_tmp_mem = nullptr;
+			VkDescriptorPool vert_desc_pool = nullptr;
+			//std::mutex vert_desc_pool_lock;
+
+			std::vector<region> regions{};
+			VkDeviceSize size = 0;
+
+			VkDescriptorSetLayout vert_desc_layout = nullptr;
+			VkDescriptorSet vert_desc = nullptr;
+
+			renderer_context* r_context = nullptr;
+			void init(renderer_context* r_context, uint32_t region_cnt);
+
+
+
+
+		};
+
 		std::shared_ptr<nest::vulkan_spinal_cord> spinal_cord;
 
 		struct swapchain swapchain{this};
@@ -121,10 +170,7 @@ namespace harpy::nest
 		VkRenderPass render_pass = nullptr;
 		struct RSRPool rsr_pool{this};
 
-		VkBuffer vert_tmp = nullptr;
-		VkDeviceMemory vert_tmp_mem = nullptr;
-		VkDescriptorPool vert_desc_pool = nullptr;
-		std::mutex vert_desc_pool_lock;
+		struct camera_vertex_buffer vert_buf{};
 
 		VkDescriptorSetLayout blender_descriptor_set_layout1 = nullptr;
 		VkDescriptorSetLayout blender_descriptor_set_layout2 = nullptr;
@@ -141,15 +187,15 @@ namespace harpy::nest
 
 		VkDeviceSize bufferSize = 0;
 
-		std::queue<harpy::human_part::ECS::Entity*> queue;
+		std::queue<harpy::human_part::ECS::Entity*> queue{};
 
 
-		struct nest::RendererResourceStorage* tmp_storage;
-		nest::RendererObjectMapper* tmp_mapper;
+		struct nest::RendererResourceStorage* tmp_storage{};
+		nest::RendererObjectMapper* tmp_mapper{};
 
 		void render_task(
 				std::pair<render_shared_resources*, uint32_t> rsr,
-				std::pair<VkBuffer, uint32_t> vert_buf,
+				uint32_t vert_buf_region,
 				std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> vk_queue,
 				std::pair<harpy::human_part::ECS::Transform*, uint32_t>* camera
 				);
@@ -173,6 +219,8 @@ namespace harpy::nest
 				std::pair<render_shared_resources*, uint32_t> rsr,
 				uint32_t image_index);
 
+		std::optional<harpy::nest::render_target> make_target(std::shared_ptr<std::vector<human_part::ECS::Entity*>> entities, uint32_t id);
+		std::optional<harpy::transform> calculate_transform(std::shared_ptr<std::vector<human_part::ECS::Entity*>> entities, uint32_t id);
 		void init_swapchain();
 		void init_vert_tmp_buf();
 		void init_render_pass();
