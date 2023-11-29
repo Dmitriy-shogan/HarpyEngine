@@ -1,5 +1,0 @@
-[00:20:23.1224931] {Notate, man, chill} Chill, everything is working
-[00:20:45.5548613] {Notate, man, chill} Chill, everything is working
-[00:25:43.3831779] {Notate, man, chill}: Chill, everything is working
-[00:26:19.3452407] {Notate, man, chill}: Chill, everything is working
-[00:28:30.9335360] {Notate, man, chill}: Chill, everything is working
