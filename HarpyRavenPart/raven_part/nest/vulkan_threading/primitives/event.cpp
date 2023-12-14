@@ -11,7 +11,7 @@ void harpy::nest::threading::primitive::event::init(VkDevice* device = &resource
 
 
     
-    HARPY_VK_CHECK(vkCreateEvent(*device, &ci, nullptr, &vk_event));
+    //HARPY_VK_CHECK(vkCreateEvent(*device, &ci, nullptr, &vk_event));
 }
 
 harpy::nest::threading::primitive::event::operator VkEvent_T*&()

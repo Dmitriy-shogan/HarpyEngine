@@ -2,7 +2,10 @@
 #ifndef HARPY_NEST_COMMAND_COMMANDER
 #define HARPY_NEST_COMMAND_COMMANDER
 #include <nest/resources/command_thread_resource.h>
-#include <utilities/util/delegate.h>
+#include <nest/resources/record_cis_resource.h>
+#include <util/delegate.h>
+
+#include "nest/vulkan_threading/primitives/fence.h"
 
 namespace harpy::nest
 {
@@ -22,18 +25,40 @@ namespace harpy::nest
         utilities::delegate delegate{};
         wrappers::queue_type queue_type{};
         bool is_writing_to_primary{true};
-        size_t primary_counter{}, secondary_counter{};
-        resources::command_thread_resource* res{};
+        std::size_t primary_counter{}, secondary_counter{};
+        std::shared_ptr<resources::command_thread_resource> thread_resource{};
+        resources::records_cis records_resource{};
+        VkDevice* device;
+        VmaAllocator* allocator;
     
     public:
 
-        command_commander* start_recording(resources::command_thread_resource* resource, size_t starting_buffer = 0);
-        command_commander* record_to_secondary(size_t primary_buffer_index = 0);
+        command_commander(VkDevice* device
+    = &resources::common_vulkan_resource::get_resource().get_main_device(),
+    VmaAllocator* allocator =
+    &resources::common_vulkan_resource::get_resource().get_main_allocator());
+        void bind_thread_res(std::shared_ptr<resources::command_thread_resource> res);
+        void bind_records_cis(resources::records_cis cis);
+
+        void unbind_thread_res();
+        void unbind_records_cis();
+
+        command_commander* start_recording(long starting_buffer = 0);
+        command_commander* record_to_secondary(long starting_buffer = 0, long primary_buffer_index = 0);
+
+        command_commander* begin_render_pass();
+        command_commander* end_render_pass();
+        
+        command_commander* bind_pipeline();
+
+        command_commander* write_to_primary();
+        command_commander* write_to_secondary();
         
         command_commander* move_up_primary();
         command_commander* move_down_primary();
         command_commander* move_up_secondary();
         command_commander* move_down_secondary();
+        
         
         command_commander* clear_color();
         command_commander* clear_color_depth();
@@ -41,7 +66,7 @@ namespace harpy::nest
             
         command_commander* fill_buffer();
         command_commander* update_buffer();
-        command_commander* copy_buffer(VkBuffer src, VkBuffer dst, size_t size);
+        command_commander* load_into_buffer(VkBuffer dst, void* data, std::size_t size);
         //command_commander* copy_buffer2();
 
         command_commander* copy_image();
@@ -59,14 +84,23 @@ namespace harpy::nest
         command_commander* draw_indirect_count();
         command_commander* draw_multi_EXT();
             
-        command_commander* draw_indexed();
+        command_commander* draw_indexed(uint32_t indexex_to_draw,
+            uint32_t instances_to_draw = 0,
+            uint32_t starting_index = 0,
+            uint32_t starting_instance = 0,
+            uint32_t offset = 0);
+        
         command_commander* draw_indirect_indexed();
         command_commander* draw_indirect_count_indexed();
         command_commander* draw_multi_EXT_indexed();
 
-        command_commander* bind_index_buffer();
+        command_commander* bind_index_buffer(VkBuffer buffer, uint32_t offset = 0);
         command_commander* bind_index_buffer2();
-        command_commander* bind_vertex_buffers();
+        
+        command_commander* bind_vertex_buffers(
+            std::vector<VkBuffer>& buffers,
+            uint32_t thirst_binding = 0,
+            VkDeviceSize* offset = nullptr);
             
         command_commander* set_viewport();
         command_commander* set_scissors();
@@ -84,40 +118,11 @@ namespace harpy::nest
 
         command_commander* next_subpass();
 
+        void submit(std::future<bool>& is_completed, threading::primitives::fence fence);
+
             
         command_commander* end_recording_secondary();
-        utilities::delegate end_recording();
-
-    private:
-        VkCommandBufferInheritanceInfo inh_ci{
-            .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO,
-            .framebuffer = VK_NULL_HANDLE,
-            
-            //Needs research
-            .renderPass = res->render_pass->get_vk_render_pass(),
-            .subpass = 0,
-            .occlusionQueryEnable = VK_FALSE,
-        };
-
-        VkCommandBufferBeginInfo primary_begin_ci {
-            .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
-    
-            //Just for now, needs research
-            .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
-            };
-        VkCommandBufferBeginInfo begin_ci{
-            .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
-    
-            //Just for now, needs research
-            .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
-            .pInheritanceInfo = &inh_ci
-            };
-
-        VkBufferCopy buffer_copy_ci{
-        .size = 0,
-        .dstOffset = 0,
-        .srcOffset = 0,
-        };
+        utilities::delegate end_recording(bool do_clean_resources = true);
     };
 }
 

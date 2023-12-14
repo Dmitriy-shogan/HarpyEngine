@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.cpp">
+    <ClCompile Include="HarpyRavenPart.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

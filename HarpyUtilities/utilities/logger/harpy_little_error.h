@@ -2,6 +2,12 @@
 #ifndef HARPY_UTILITIES_LITTLE_ERROR
 #define HARPY_UTILITIES_LITTLE_ERROR
 #include <stdexcept>
+#include <dll_macro.h>
+
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable: 4275)
+#endif
 
 namespace harpy::utilities::error_handling
 {
@@ -23,8 +29,8 @@ namespace harpy::utilities::error_handling
         he_count = 8
      };
 
-    
-    class harpy_little_error : public std::runtime_error
+    //This will produce a number of errors, but ms documentation says that if this is std, it's fine
+    class HARPY_UTILITIES_API harpy_little_error : public std::runtime_error
     {
     public:
 
@@ -38,7 +44,6 @@ namespace harpy::utilities::error_handling
 
         harpy_little_error(error_severity severity, const char* error);
         harpy_little_error(std::string error);
-
         
 
         const error_severity severity;
@@ -47,5 +52,8 @@ namespace harpy::utilities::error_handling
 }
 
 
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 
 #endif //HARPY_UTILITIES_LITTLE_ERROR

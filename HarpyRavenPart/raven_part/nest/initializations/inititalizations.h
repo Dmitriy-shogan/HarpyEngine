@@ -68,7 +68,6 @@
 #define VK_NO_PROTOTYPES
 #include <volk/volk.h>
 
-#define VMA_IMPLEMENTATION
 #define VMA_STATIC_VULKAN_FUNCTIONS 0
 #define VMA_DYNAMIC_VULKAN_FUNCTIONS 0
 #include <vma/vk_mem_alloc.h>
@@ -121,6 +120,7 @@ return singleton_;}                                   \
 private:
 
 //Vulkan validation layers debug callback
+
 #include <logger/logger.h>
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(

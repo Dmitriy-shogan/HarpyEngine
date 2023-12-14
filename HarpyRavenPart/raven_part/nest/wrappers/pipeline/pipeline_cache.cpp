@@ -2,11 +2,10 @@
 #include <nest/wrappers/pipeline/graphics_pipeline.h>
 #include <filesystem>
 #include <nest/initializations/inititalizations.h>
-#include <utilities/logger/harpy_little_error.h> 
-#include <utilities/logger/logger.h>
+#include <logger/harpy_little_error.h> 
+#include <logger/logger.h>
 #include <nest/resources/common_vulkan_resource.h>
 
-#include "nest/initializations/inititalizations.h"
 using harpy_error = harpy::utilities::error_handling::harpy_little_error; 
 using logger = harpy::utilities::error_handling::logger;
 using resource = harpy::nest::resources::common_vulkan_resource;

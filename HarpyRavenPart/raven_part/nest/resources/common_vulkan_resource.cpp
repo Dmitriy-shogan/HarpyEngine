@@ -1,5 +1,5 @@
 ﻿#include "common_vulkan_resource.h"
-#include <utilities/logger/harpy_little_error.h>
+#include <logger/harpy_little_error.h>
 #include <nest/initializations/inititalizations.h>
 #include <nest/managers/swapchain_manager.h>
 
@@ -112,13 +112,13 @@ void common_vulkan_resource::set_main_window(windowing::window&& win)
     windows[0] = std::move(win);
 }
 
-size_t common_vulkan_resource::add_window(windowing::window_create_info win_ci)
+std::size_t common_vulkan_resource::add_window(windowing::window_create_info win_ci)
 {
     windows.emplace_back(win_ci);
     return windows.size() - 1;
 }
 
-size_t common_vulkan_resource::add_window(windowing::window&& win)
+std::size_t common_vulkan_resource::add_window(windowing::window&& win)
 {
     windows.emplace_back(std::move(win));
     return windows.size() - 1;
@@ -143,7 +143,7 @@ common_vulkan_resource::operator VmaAllocator_T*&()
 {INIT_CHECK(allocators.front());}
 
 bool common_vulkan_resource::is_inited()
-{return is_instance_initialized;}
+{return is_instance_initialized && !devices.empty();}
 
 common_vulkan_resource& common_vulkan_resource::get_resource()
 {

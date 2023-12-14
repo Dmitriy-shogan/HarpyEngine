@@ -3,12 +3,19 @@
 #define HARPY_UTILITIES_LOGGER
 #include <chrono>
 #include <fstream>
+#include <mutex>
 #include "harpy_little_error.h"
+
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable: 4251)
+#endif
 
 namespace harpy::utilities::error_handling
 {
+    
     //probably thread-safe singleton logger
-    class logger
+    class HARPY_UTILITIES_API logger
     {
         std::ofstream filelog{};
         std::mutex mutex{};
@@ -54,5 +61,8 @@ namespace harpy::utilities::error_handling
     };
 }
 
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 
 #endif //HARPY_UTILITIES_LOGGER

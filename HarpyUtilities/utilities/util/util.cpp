@@ -2,8 +2,8 @@
 
 #include <fstream>
 
-#include <utilities/logger/harpy_little_error.h>
-#include <utilities/logger/logger.h>
+#include <logger/harpy_little_error.h>
+#include <logger/logger.h>
 
 using logger = harpy::utilities::error_handling::logger;
 using harpy_error = harpy::utilities::error_handling::harpy_little_error;

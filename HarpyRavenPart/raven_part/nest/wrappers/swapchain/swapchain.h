@@ -23,15 +23,14 @@ namespace harpy::nest::wrappers
 
         void init_image_views();
         void init_framebuffers(render_pass pass);
-
-        //Block for standard things.
+        
         friend class swapchain_manager;
         
     public:
 
         swapchain() = default;
 
-        void init(std::shared_ptr<swapchain_ci> create_info);
+        void init(std::shared_ptr<swapchain_ci> create_info = nullptr);
         
         void recreate(std::shared_ptr<swapchain_ci> create_info);
 

@@ -3,13 +3,16 @@
 #define HARPY_NEST_MANAGER_SWAPCHAIN
 #include <nest/wrappers/swapchain/swapchain.h>
 
+#include "nest/initializations/inititalizations.h"
+
 namespace harpy::nest::managers
 {
     class swapchain_manager
     {
-        using swapchain = wrappers::swapchain;
+        HARPY_MAKE_SINGLETON(swapchain_manager);
         
-        static std::vector<swapchain> swapchains;
+        using swapchain = wrappers::swapchain;
+        std::vector<swapchain> swapchains;
         
     public:
 

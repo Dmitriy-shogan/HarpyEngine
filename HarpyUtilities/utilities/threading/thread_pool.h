@@ -6,7 +6,7 @@
  * There can be some code changes or it will be fully overwritten, Paul have made grate job
  * Currently changed: made singleton and moved to our namespace
  */
-#include <utilities/util/delegate.h>
+#include <util/delegate.h>
 #include <atomic>
 #include <barrier>
 #include <concepts>
@@ -138,9 +138,9 @@ namespace harpy::utilities::threading {
 #endif
         }
 
-        void enqueue(delegate const & del)
+        std::future<bool> enqueue(delegate const & del)
         {
-            std::ignore = enqueue(&delegate::invoke, del);
+            return enqueue(&delegate::invoke, del);
         }
 
         /**
@@ -172,7 +172,7 @@ namespace harpy::utilities::threading {
             : tasks_(number_of_threads) {
             std::size_t current_id = 0;
             for (std::size_t i = 0; i < number_of_threads; ++i) {
-                priority_queue_.push_back(size_t(current_id));
+                priority_queue_.push_back(std::size_t(current_id));
                 try {
                     threads_.emplace_back([&, id = current_id](const std::stop_token &stop_tok) {
                         do {

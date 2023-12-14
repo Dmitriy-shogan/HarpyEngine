@@ -1,6 +1,6 @@
 ﻿#include "window.h"
 
-#include "utilities/logger/harpy_little_error.h"
+#include <logger/harpy_little_error.h>
 
 void harpy::nest::windowing::window::init()
 {

@@ -4,27 +4,27 @@
 #include <concepts>
 #include <functional>
 #include <future>
+#include <dll_macro.h>
 
 
 namespace harpy::utilities
 {
     //TODO: better delegate
-    class delegate
+    class HARPY_UTILITIES_API delegate
     {
         std::vector<std::function<void()>> functions{};
     public:
 
         template <typename function, typename... args>
-            requires std::invocable<function, args...>
         void push_back(function f, args... argues);
 
-        void invoke();
+        bool invoke();
         void operator()();
 
         void clear();
     };
 
-    template <typename function, typename ... args> requires std::invocable<function, args...>
+    template <typename function, typename ... args>
     void delegate::push_back(function f, args... argues)
     {
         auto task = [func = std::move(f), ... largs = std::move(argues)]() {

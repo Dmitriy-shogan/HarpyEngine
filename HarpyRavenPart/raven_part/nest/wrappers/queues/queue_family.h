@@ -30,6 +30,7 @@ namespace harpy::nest::wrappers
         std::vector<VkQueue> queues{};
         const unsigned queue_amount;
         const queue_type type;
+        bool do_support_present;
         queue_family(queue_type q_type, uint32_t family, unsigned queue_amount)
         : family_number(family)
         , queue_amount(queue_amount)
@@ -42,9 +43,6 @@ namespace harpy::nest::wrappers
         queue_family& operator=(queue_family const &);
         queue_family(queue_family const &);
 
-        queue_family& operator=(queue_family&&);
-        queue_family(queue_family&&);
-
         virtual std::vector<VkQueue>& get_all_vk_queues();
         virtual VkQueue& get_vk_queue(size_t index);
         virtual operator VkQueue&();
@@ -53,6 +51,8 @@ namespace harpy::nest::wrappers
         
         virtual uint32_t get_family_index();
         virtual operator uint32_t();
+
+        virtual bool do_support_presentation();
 
         unsigned size();
         virtual ~queue_family();

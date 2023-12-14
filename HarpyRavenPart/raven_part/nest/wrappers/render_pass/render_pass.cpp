@@ -1,6 +1,5 @@
 ﻿#include "render_pass.h"
 #include <nest/initializations/inititalizations.h>
-#include <utilities/logger/logger.h>
 #include <nest/managers/swapchain_manager.h>
 #include <nest/resources/common_vulkan_resource.h>
 using resource = harpy::nest::resources::common_vulkan_resource;
@@ -9,12 +8,19 @@ using resource = harpy::nest::resources::common_vulkan_resource;
 
 void harpy::nest::wrappers::render_pass::init()
 {
-    managers::swapchain_manager man;
+    managers::swapchain_manager& man = managers::swapchain_manager::get_singleton();
     VkAttachmentDescription2 colorAttachment{};
     colorAttachment.format = man.get_main_swapchain().get_format();
     colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
     colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+
+    //Needs research
+    colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+    
     
     VkAttachmentReference2 colorAttachmentRef{};
     colorAttachmentRef.attachment = 0;

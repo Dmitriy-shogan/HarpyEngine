@@ -1,4 +1,5 @@
 ﻿#define VOLK_IMPLEMENTATION
+#define VMA_IMPLEMENTATION
 #include "inititalizations.h"
 
 #include <iostream>
@@ -7,7 +8,7 @@
 #include <GLFW/glfw3.h>
 
 
-#include <utilities/logger/logger.h>
+#include <logger/logger.h>
 #include <vector>
 #include <array>
 
@@ -270,10 +271,11 @@ void init_vk_queues_and_logical_device()
     
     vkGetPhysicalDeviceQueueFamilyProperties2(resource::get_resource(), &queue_families_amount, families.data());
 
+    resource::get_resource().get_all_queues().reserve(queue_families_amount);
     if(queue_families_amount == 1)
     {
         logger::get_logger() << "We found only one queue type, so here goes universal queue";
-        resource::get_resource().get_all_queues().push_back({wrappers::universal_family_queue{0}});
+        resource::get_resource().get_all_queues().push_back(static_cast<wrappers::queue_family>(wrappers::universal_family_queue{0}));
         //                                          ↑↑↑ Zero due to starting family starts from zero ↑↑↑
         queue_amount_to_create.push_back(1);
     }

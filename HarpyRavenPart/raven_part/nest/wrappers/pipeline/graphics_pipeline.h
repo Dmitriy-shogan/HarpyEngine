@@ -1,17 +1,15 @@
 ﻿#pragma once
 #ifndef HARPY_NEST_WRAPPERS_PIPELINE
 #define HARPY_NEST_WRAPPERS_PIPELINE
-#include <volk/volk.h>
-#include <vector>
 #include <nest/shader_works/shader_module/shader_module.h>
+#include <nest/wrappers/render_pass/render_pass.h>
+#include <nest/wrappers/pipeline/pipeline_cache.h>
 
-#include <nest/resources/common_vulkan_resource.h>
+#include "nest/resources/common_vulkan_resource.h"
 
 namespace harpy::nest::wrappers
 {
-    class render_pass;
-    class pipeline_cache;
-    static const std::vector<VkDynamicState> standard_dynamic_states{
+    static const std::vector standard_dynamic_states{
         VK_DYNAMIC_STATE_VIEWPORT,
         VK_DYNAMIC_STATE_SCISSOR
     };
@@ -19,8 +17,6 @@ namespace harpy::nest::wrappers
     struct graphics_pipeline_options_ci;
     struct graphics_pipeline_ci;
     
-
-    //TODO: create graphics pipeline families
     class graphics_pipeline
     {
         VkPipeline pipe{};
@@ -31,7 +27,13 @@ namespace harpy::nest::wrappers
 
     public:
 
-        graphics_pipeline() = default;
+        /*graphics_pipeline(graphics_pipeline& buffer) noexcept;
+        graphics_pipeline(const graphics_pipeline& buffer) noexcept;
+        graphics_pipeline& operator=(graphics_pipeline& buffer) noexcept;
+        graphics_pipeline& operator=(const graphics_pipeline& buffer) noexcept;
+
+        graphics_pipeline(graphics_pipeline&& buffer) noexcept;
+        graphics_pipeline& operator= (graphics_pipeline&& buffer) noexcept;*/
 
         void init(std::shared_ptr<graphics_pipeline_ci> create_info,
             bool is_wireframe = false,

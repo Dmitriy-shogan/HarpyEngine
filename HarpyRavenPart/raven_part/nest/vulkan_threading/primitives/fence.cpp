@@ -1,6 +1,6 @@
 ﻿#include "fence.h"
 #include <nest/resources/common_vulkan_resource.h>
-#include <utilities/logger/logger.h>
+#include <logger/logger.h>
 #include <nest/initializations/inititalizations.h>
 using resource = harpy::nest::resources::common_vulkan_resource;
 

@@ -5,7 +5,6 @@
 #include <nest/resources/common_vulkan_resource.h>
 #include <nest/initializations/inititalizations.h>
 #include <nest/resources/surface_capabilities.h>
-#include <utilities/logger/harpy_little_error.h>
 #include <nest/wrappers/render_pass/render_pass.h>
 
 using resource = harpy::nest::resources::common_vulkan_resource;
@@ -19,13 +18,13 @@ struct harpy::nest::wrappers::swapchain_ci{
 	std::vector<VkFormat> ideal_formats {VK_FORMAT_R8G8B8A8_SRGB, VK_FORMAT_B8G8R8A8_SRGB};
 	VkDevice device = resources::common_vulkan_resource::get_resource().get_main_device();
 	resources::surface_capabilities caps {resources::std_surface_capabilities};
-	VkSwapchainKHR old_swapcain{nullptr};
+	VkSwapchainKHR old_swapchain{nullptr};
 	render_pass pass{};
 };
 
 //TODO: populate with debug info
 void harpy::nest::wrappers::swapchain::init(
-	std::shared_ptr<swapchain_ci> create_info = nullptr)
+	std::shared_ptr<swapchain_ci> create_info)
 {
 	if (create_info == nullptr)
 	{
@@ -93,12 +92,10 @@ void harpy::nest::wrappers::swapchain::init(
 	ci.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
 	ci.compositeAlpha = create_info->caps.composite_alpha;
 	ci.presentMode = present_mode;
-	ci.oldSwapchain = create_info->old_swapcain;
+	ci.oldSwapchain = create_info->old_swapchain;
 
 	//Just for now
 	ci.clipped = true;
-	
-	ci.oldSwapchain = VK_NULL_HANDLE;
 
 	HARPY_VK_CHECK(vkCreateSwapchainKHR(resource::get_resource(), &ci, nullptr, &chain));
 
@@ -109,8 +106,6 @@ void harpy::nest::wrappers::swapchain::destroy(VkDevice device = resource::get_r
 {
 	if(chain)
 	{
-		vkDestroySwapchainKHR(device, chain, nullptr);
-
 		for(auto& f : framebuffers)
 		{
 			vkDestroyFramebuffer(device, f, nullptr);
@@ -124,6 +119,11 @@ void harpy::nest::wrappers::swapchain::destroy(VkDevice device = resource::get_r
 void harpy::nest::wrappers::swapchain::recreate(std::shared_ptr<swapchain_ci> create_info = nullptr)
 {
 	destroy();
+	if(!create_info)
+	{
+		create_info = std::make_shared<swapchain_ci>();
+	}
+	create_info->old_swapchain = chain;
 	init(std::move(create_info));
 }
 

@@ -1,10 +1,10 @@
-﻿#prama once
+﻿#pragma once
 #ifndef HARPY_RESOURCE_VULKAN_COMMON
 #define HARPY_RESOURCE_VULKAN_COMMON
 #include <vector>
 #include <nest/wrappers/queues/queue_family.h>
 #include <nest/windowing/window.h>
-#include <vma/vk_mem_alloc.h>
+#include <nest/initializations/inititalizations.h>
 
 namespace harpy::nest::resources
 {
@@ -13,11 +13,11 @@ namespace harpy::nest::resources
     };
     const std::vector musthave_device_extentions = {
         VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-        VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME
     };
 
     const std::vector preferrable_instance_extensions = {
-        VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME 
+        VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME,
+        VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME
     };
 
     const std::vector musthave_instance_extentions = {
@@ -94,8 +94,8 @@ namespace harpy::nest::resources
         void set_main_window(windowing::window_create_info);
         void set_main_window(windowing::window&&);
 
-        size_t add_window(windowing::window_create_info);
-        size_t add_window(windowing::window&&);
+        std::size_t add_window(windowing::window_create_info);
+        std::size_t add_window(windowing::window&&);
         
         std::vector<wrappers::queue_family>& get_all_queues();
         wrappers::queue_family& get_main_family_queue();

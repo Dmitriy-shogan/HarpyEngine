@@ -1,6 +1,6 @@
 ﻿#include "glsl_shader_factory.h"
-#include <utilities/util/util.h>
-#include <utilities/threading/thread_pool.h>
+#include <util/util.h>
+#include <threading/thread_pool.h>
 
 #include <utility>
 
