@@ -62,8 +62,8 @@ namespace harpy::nest {
         };
         VkInstance instance = nullptr;
         VkPhysicalDevice ph_device = nullptr;
-        VkPhysicalDeviceProperties deviceProperties;
-		VkPhysicalDeviceFeatures deviceFeatures;
+        VkPhysicalDeviceProperties deviceProperties{};
+		VkPhysicalDeviceFeatures deviceFeatures{};
 
 
         VkDevice device = nullptr;

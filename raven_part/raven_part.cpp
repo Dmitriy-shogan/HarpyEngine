@@ -48,11 +48,18 @@ namespace harpy::raven_part{
 
 				if(GLTF_CAMERA_TYPE_PERSPECTIVE){
 						view.cameraType = raven_part::resource_types::View::CameraType::PERSPECTIVE;
-						view.aspectRatio = cam->perspective.aspectRatio;
-						view.focus = 0.5f / glm::tan(cam->perspective.yfov / 2);
+						view.aspect = cam->perspective.aspectRatio;
+						view.fov = cam->perspective.yfov;
+						view.far = cam->perspective.zfar;
+						view.near = cam->perspective.znear;
+
 
 				}else if (GLTF_CAMERA_TYPE_ORTHOGRAPHIC){
 						view.cameraType = raven_part::resource_types::View::CameraType::ORTHOGRAPHIC;
+						view.xmag = cam->orthographic.xmag;
+						view.ymag = cam->orthographic.ymag;
+						view.far = cam->orthographic.zfar;
+						view.near = cam->orthographic.znear;
 
 				} else if (GLTF_CAMERA_TYPE_ISOMETRIC){
 						view.cameraType = raven_part::resource_types::View::CameraType::ISOMETRIC;

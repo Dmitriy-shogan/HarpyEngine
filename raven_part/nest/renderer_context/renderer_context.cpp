@@ -45,7 +45,6 @@ void renderer_context::init_render_pass()
     color_attachment.format = VK_FORMAT_B8G8R8A8_UNORM;
     color_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
 
-    //color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
     color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
 
@@ -61,7 +60,6 @@ void renderer_context::init_render_pass()
     depth_and_spencil_attachment.format = VK_FORMAT_D32_SFLOAT_S8_UINT;
     depth_and_spencil_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
 
-    //depth_and_spencil_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     depth_and_spencil_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
     depth_and_spencil_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
 
@@ -123,7 +121,6 @@ void renderer_context::init_blender(){
 
 		VkDescriptorSetLayoutBinding colorLayoutBinding{};
 		colorLayoutBinding.binding = 0;
-		//colorLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
 		colorLayoutBinding.descriptorCount = effective_rsr_cnt;
 		colorLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 		colorLayoutBinding.pImmutableSamplers = nullptr;
@@ -131,7 +128,6 @@ void renderer_context::init_blender(){
 
 		VkDescriptorSetLayoutBinding depthLayoutBinding{};
 		depthLayoutBinding.binding = 0;
-		//depthLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
 		depthLayoutBinding.descriptorCount = effective_rsr_cnt;
 		depthLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 		depthLayoutBinding.pImmutableSamplers = nullptr;
@@ -139,7 +135,6 @@ void renderer_context::init_blender(){
 
 		VkDescriptorSetLayoutBinding outLayoutBinding{};
 		outLayoutBinding.binding = 0;
-		//depthLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
 		outLayoutBinding.descriptorCount = 1;
 		outLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
 		outLayoutBinding.pImmutableSamplers = nullptr;
@@ -257,7 +252,6 @@ void renderer_context::init_blender(){
 
 void renderer_context::init_swapchain(){
 	swapchain.init();
-	//connected_window_layout.init_all(instance);
 }
 
 
@@ -353,7 +347,6 @@ void renderer_context::camera_vertex_buffer::init(renderer_context* r_context, u
 
 		if (vkAllocateDescriptorSets(r_context->spinal_cord->device, &descAllocInfo, &vert_desc) != VK_SUCCESS)
 			throw utilities::harpy_little_error("failed to allocate descriptor set!");
-		//Заменить множественные дескрипторы на один со смещением
 
 		VkDescriptorBufferInfo out_buffer;
 		out_buffer.buffer = vert_tmp;
@@ -448,6 +441,7 @@ void render_task_fake(
 {
 	ctx->render_task(rsr,vert_buf_region_index,vk_queue,camera);
 }
+
 //primitive
 void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_source> source, std::atomic_flag* cond){
 
@@ -477,8 +471,6 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 	std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> present_queue = spinal_cord->get_queue_supervisor().grab_presentation_queue(queue_flags, connected_window_layout->surface);
 	std::vector<std::thread> threads{};
 
-
-	std::cout<<"frame"<<std::endl;
 	while(cond->test_and_set(std::memory_order_acquire)){
 		//should i wait present queue? in vulkan-guide there is no vkQueueWaitIdle(present_queue);
 
@@ -511,15 +503,7 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 
 		std::pair<harpy::human_part::ECS::Transform*, uint32_t> camera = std::make_pair(transform_comp,camera_comp->view_id);
 
-
-
-
-
 		uint32_t tgt_per_task = std::ceil((float)source->entities->size() / (float)thread_cnt);
-
-
-
-
 
 		tmp_mapper->lock.lock();
 
@@ -576,12 +560,10 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 		std::pair<std::pair<VkQueue, VkCommandBuffer>, uint32_t> blender_vk_queue;
 		if(USE_SHARED_BLENDER_QUEUE){
 			blender_vk_queue = present_queue;
-			//TODO
 			if (vkQueueWaitIdle(blender_vk_queue.first.first) != VK_SUCCESS)
 										throw utilities::harpy_little_error("failed to wait blender queue!");
 		}else {
 			blender_vk_queue = spinal_cord->queue_supervisor.lock_grab(VK_QUEUE_COMPUTE_BIT | VK_QUEUE_TRANSFER_BIT);
-			//TODO
 			if (vkQueueWaitIdle(blender_vk_queue.first.first) != VK_SUCCESS)
 							throw utilities::harpy_little_error("failed to wait blender queue!");
 		}
@@ -601,9 +583,6 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 
 		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
 			swapchain.reinit();
-			//rsr_pool.fb_resize();
-			//for(auto& i : framebuffs)
-			//	vkDestroyFramebuffer(vulkan_backend->get_vk_device(), i, nullptr);
 			return;
 		}
 
@@ -615,7 +594,6 @@ void renderer_context::render_loop(std::shared_ptr<harpy::raven_part::scene_sour
 			threads[i].join();
 		}
 
-		std::cout<<std::endl;
 
 		source->lock.unlock();
 
@@ -668,9 +646,6 @@ void renderer_context::render_task(
 	renderPassBeginInfo.framebuffer = rsr.first->fb;
 	renderPassBeginInfo.renderArea.offset = { 0, 0 };
 	renderPassBeginInfo.renderArea.extent = { swapchain.extent.width, swapchain.extent.height };
-
-//	renderPassBeginInfo.pClearValues = clears;
-//	renderPassBeginInfo.clearValueCount = 2;
 
 
 	VkImageSubresourceRange colorSubresourceRange = {};
@@ -753,14 +728,9 @@ void renderer_context::render_task(
 
 		for (int i_prim = 0; i_prim < target.mappings.size(); ++i_prim){
 
-//			vert_desc_pool_lock.lock();
-//			rsr.first->reinit_vertex_tmp(vert_desc_pool, view.desc_set_layout);
-//			vert_desc_pool_lock.unlock();
-
-
 			resource_types::Shape shape = tmp_storage->shapes[target.mappings[i_prim].shape_id];
 			resource_types::Material material = tmp_storage->materials[target.mappings[i_prim].material_id];
-			std::cout<<"Shape:"<<target.mappings[i_prim].shape_id<<std::endl;
+
 	//=====================
 	//    SHAPE
 	//=====================
@@ -783,8 +753,6 @@ void renderer_context::render_task(
 
 			view.view_perform(vk_queue.first.second);
 
-//			VkDeviceSize offsets[] = {0};
-//			vkCmdBindVertexBuffers(vk_queue.first.second, 0, 1, &shape.vertexBuffer.first, offsets);
 			VkDeviceSize offsets[] = {0}; //{vert_buf.regions[vert_buf_region_index].offset
 			vkCmdBindVertexBuffers(vk_queue.first.second, 0, 1, &vert_buf.vert_tmp, offsets);
 			vkCmdBindIndexBuffer(vk_queue.first.second, shape.indexBuffer.first, 0, shape.indexType);
@@ -901,7 +869,7 @@ void renderer_context::blending(
 		VkDescriptorImageInfo out_buffer{};
 		out_buffer.imageView = rsr.first->color_image_view;
 		out_buffer.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
-		//out_buffer.sampler = blender_sampler;
+
 
 
 		VkWriteDescriptorSet color_buffer_write_descriptor_set = {};

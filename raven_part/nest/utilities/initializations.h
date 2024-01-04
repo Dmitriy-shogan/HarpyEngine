@@ -3,35 +3,51 @@
 #define HARPY_INITS
 
 //STL libraries
+
+
+#include <map>
+#include <vector>
+#include <array>
+#include <set>
+
+
+#include <string>
+#include <string.h>
+#include <memory>
+
 #include <iostream>
 #include <fstream>
-#include <algorithm>
+
+#include <any>
 #include <optional>
-#include <string>
-#include <vector>
-#include <set>
-#include <map>
+#include <functional>
+
+#include <algorithm>
 #include <cstdint>
 #include <stdexcept>
 #include <chrono>
 #include <ctime>
-#include <any>
-#include <functional>
-#include <array>
+#include <exception>
+
 //libfmt
 #include <fmt/core.h>
 #include <fmt/ranges.h>
 
+
 //GLFW libraries
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
+
+#include <gltf/tiny_gltf.h>
 
 //GLM libraries
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
-#include <gltf/tiny_gltf.h>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/string_cast.hpp>
+
 #include <toml++/toml.h>
 
 
@@ -43,8 +59,8 @@
 
 #define MAX_FRAMES_IN_FLIGHT 2
 
-#define SHADER_PATH_BASE_VERTEX "shaders/base/vertex/base.vert"
-#define SHADER_PATH_BASE_FRAGMENT "shaders/base/fragment/base.frag"
+#define SHADER_PATH_RENDER_VERTEX "shaders/base/vertex/base.vert"
+#define SHADER_PATH_RENDER_FRAGMENT "shaders/base/fragment/base.frag"
 #define SHADER_PATH_BASE_GEOMETRY "shaders/base/geometry/base.geom"
 #define SHADER_PATH_BASE_COMPUTE "shaders/base/compute/base.comp"
 #define SHADER_PATH_BASE_TESSALATION_CONTROL "shaders/base/tess_control/base.tesc"
@@ -53,8 +69,7 @@
 #define SHADER_PATH_BLENDER_VERTEX_DUMMY "shaders/base/vertex/service/blender.vert"
 #define SHADER_PATH_BLENDER_FRAGMENT "shaders/base/compute/service/blender.frag"
 
-#define SHADER_PATH_CAMERA_PRESPECTIVE_VERTEX "shaders/base/compute/service/camera_perespective.comp"
-#define SHADER_PATH_CAMERA_VERTEX "shaders/base/compute/service/camera_orthographic.comp"
+#define SHADER_PATH_CAMERA_VERTEX "shaders/base/compute/service/camera.comp"
 
 
 

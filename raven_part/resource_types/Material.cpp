@@ -12,6 +12,10 @@
 namespace harpy::raven_part::resource_types{
 
 
+	struct RenderPushConstants{
+
+	};
+
 	VkDescriptorSetLayout createDescriptorSetLayout(std::shared_ptr<vulkan_spinal_cord> cord) {
 		   VkDescriptorSetLayout descriptorSetLayout;
 	       VkDescriptorSetLayoutBinding uboLayoutBinding{};
@@ -38,10 +42,10 @@ namespace harpy::raven_part::resource_types{
 		   VkPipeline graphicsPipeline;
 
 		   shaders::shader_module vertex{cord->device};
-		   vertex.init(SHADER_PATH_BASE_VERTEX);
+		   vertex.init(SHADER_PATH_RENDER_VERTEX);
 
 		   shaders::shader_module fragment{cord->device};
-		   fragment.init(SHADER_PATH_BASE_FRAGMENT);
+		   fragment.init(SHADER_PATH_RENDER_FRAGMENT);
 
 
 	       VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
@@ -207,8 +211,7 @@ namespace harpy::raven_part::resource_types{
 	           throw std::runtime_error("failed to create graphics pipeline!");
 	       }
 	       return std::make_pair(graphicsPipeline,pipelineLayout);
-	//       vkDestroyShaderModule(device, fragShaderModule, nullptr);
-	//       vkDestroyShaderModule(device, vertShaderModule, nullptr);
+
 	   }
 
 	   VkDescriptorPool createDescriptorPool(std::shared_ptr<vulkan_spinal_cord> cord) {
@@ -235,31 +238,14 @@ namespace harpy::raven_part::resource_types{
 		   VkDescriptorSetAllocateInfo allocInfo{};
 		   allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
 		   allocInfo.descriptorPool = descriptorPool;
-		   allocInfo.descriptorSetCount = 1;//static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+		   allocInfo.descriptorSetCount = 1;
 		   allocInfo.pSetLayouts = &descriptorSetLayout;
 
 		   descriptorSets.resize(1);
 		   if (vkAllocateDescriptorSets(cord->device, &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
 			   throw std::runtime_error("failed to allocate descriptor sets!");
 		   }
-//
-//		   for (size_t i = 0; i < 1; i++) {
-//	           VkDescriptorBufferInfo bufferInfo{};
-//	           bufferInfo.buffer = uniformBuffer;
-//	           bufferInfo.offset = 0;
-//	           bufferInfo.range = sizeof(UniformBufferObject);
-//
-//			   VkWriteDescriptorSet descriptorWrite{};
-//			   descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-//			   descriptorWrite.dstSet = descriptorSets[i];
-//			   descriptorWrite.dstBinding = 0;
-//			   descriptorWrite.dstArrayElement = 0;
-//			   descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-//			   descriptorWrite.descriptorCount = 1;
-//			   descriptorWrite.pBufferInfo = &bufferInfo;
-//
-//			   vkUpdateDescriptorSets(cord->device, 1, &descriptorWrite, 0, nullptr);
-//		   }
+
 		   return descriptorSets;
 	   }
 

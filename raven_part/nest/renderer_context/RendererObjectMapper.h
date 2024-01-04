@@ -47,7 +47,6 @@ namespace harpy::nest
 
 
     struct renderer_mappings {
-        //uint32_t shader_id;
         uint32_t material_id;
         uint32_t pipeline_id;
         uint32_t shape_id;
@@ -66,11 +65,10 @@ namespace harpy::nest
 
         void register_renderer(human_part::ECS::Renderer* renderer, std::vector<renderer_mappings> mappings){
         	renderer->mappings.resize(mappings.size());
-        	std::cout<<"register_renderer:"<<std::endl;
         		for (uint32_t i = 0; i < mappings.size(); ++i) {
 
         			renderer->mappings[i] = register_mapping(mappings[i]);
-        			std::cout<<renderer->mappings[i]<<std::endl;
+
 				}
 
         	}

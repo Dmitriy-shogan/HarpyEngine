@@ -51,16 +51,10 @@ namespace harpy::nest
 		VkSemaphore sem = nullptr; //for signalising that render finished or blending finished
 		VkFence fence1 = nullptr;
 		VkFence blender_fence = nullptr;
-
 		bool wait_needed = false;
-
-
-		//VkDescriptorSet vert_desc = nullptr;
-
 
 		void init_images();
 		void init_sem();
-		//void reinit_vertex_tmp(VkDescriptorPool vert_desc_pool, VkDescriptorSetLayout layout);
 		void init_blender_pool();
 		void wait();
 		void reset();

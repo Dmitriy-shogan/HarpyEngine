@@ -41,10 +41,13 @@ layout(set = 0, binding = 0) buffer Out{
 void main() {
     uint i = gl_GlobalInvocationID.x;
 
-    vertices_out[i].POSITION = (pushConstants.transform * vec4(vertices_out[i].POSITION, 1)).xyz;
-    vertices_out[i].POSITION.z = min(0.9999, 0.9 - 0.9/(vertices_out[i].POSITION.z - 1));
+    vec4 pos = (pushConstants.transform * vec4(vertices_out[i].POSITION, 1));
+    vertices_out[i].POSITION = pos.xyz / pos.w;
+    vertices_out[i].POSITION.xy = vertices_out[i].POSITION.xy;
+    vertices_out[i].POSITION.y = vertices_out[i].POSITION.y;
 
-    vertices_out[i].NORMAL = (pushConstants.transform * vec4(vertices_out[i].NORMAL, 1)).xyz;
-    vertices_out[i].NORMAL.z = min(0.9999, 0.9 - 0.9/(vertices_out[i].NORMAL.z - 1));
+    vec4 norm = (pushConstants.transform * vec4(vertices_out[i].NORMAL, 1));
+    vertices_out[i].NORMAL = norm.xyz / norm.w;
+
 
 }

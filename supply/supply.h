@@ -17,7 +17,7 @@ namespace harpy{
 		glm::vec3 scale;
 
 		transform(){
-			this->rot = glm::quat{};
+			this->rot = glm::quat{1,0,0,0};
 			this->pos = glm::vec3{0,0,0};
 			this->scale = glm::vec3{1,1,1};
 		}
@@ -30,25 +30,23 @@ namespace harpy{
 
 		glm::mat4 pos_mat4(){
 
-			return glm::mat4_cast(rot) *
-					glm::translate(glm::mat4(1.0f), pos) *
-					glm::scale(glm::mat4(1.0f), scale);
+			return glm::translate(glm::mat4(1.0f), pos) * glm::mat4_cast(rot) * glm::scale(glm::mat4(1.0f), scale) ;
 		}
 
 		glm::mat4 pos_mat4_reversed(){
-			return glm::mat4_cast(-rot) *
-					glm::translate(glm::mat4(1.0f), -pos);
+			return glm::inverse(glm::mat4_cast(rot)) * glm::translate(glm::mat4(1.0f), -pos) ;
 		}
 
 		transform relative_to(const transform& other){
 			transform tr = transform{};
-			tr.pos = this->pos + other.pos;
-			tr.scale = this->scale * other.scale;
+			tr.pos = other.pos + this->pos ;
+			tr.scale = other.scale * this->scale;
 			tr.rot = this->rot * other.rot;
 			return tr;
 		}
 
 	};
+
 
 }
 

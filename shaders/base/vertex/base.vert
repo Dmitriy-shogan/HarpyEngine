@@ -33,31 +33,40 @@ layout(location = 19) in vec4 WEIGHTS_3;
 
 
 
-layout(location = 0) out vec3 fragColor;
+layout(location = 0) out vec3 POSITION_OUT;
+layout(location = 1) out vec3 NORMAL_OUT;
+layout(location = 2) out vec4 TANGENT_OUT;
+layout(location = 3) out vec4 CUSTOM_OUT;
+
+layout(location = 4) out vec2 TEXCOORD_0_OUT;
+layout(location = 5) out vec2 TEXCOORD_1_OUT;
+layout(location = 6) out vec2 TEXCOORD_2_OUT;
+layout(location = 7) out vec2 TEXCOORD_3_OUT;
+
+layout(location = 8) out vec4 COLOR_0_OUT;
+layout(location = 9) out vec4 COLOR_1_OUT;
+layout(location = 10) out vec4 COLOR_2_OUT;
+layout(location = 11) out vec4 COLOR_3_OUT;
+
+layout(location = 12) out uvec4 JOINTS_0_OUT;
+layout(location = 13) out uvec4 JOINTS_1_OUT;
+layout(location = 14) out uvec4 JOINTS_2_OUT;
+layout(location = 15) out uvec4 JOINTS_3_OUT;
+
+layout(location = 16) out vec4 WEIGHTS_0_OUT;
+layout(location = 17) out vec4 WEIGHTS_1_OUT;
+layout(location = 18) out vec4 WEIGHTS_2_OUT;
+layout(location = 19) out vec4 WEIGHTS_3_OUT;
+
+layout(set = 0, binding = 0) uniform sampler2D TEXTURE_0_SOURCE[];
+layout(set = 0, binding = 1) uniform sampler2D TEXTURE_1_SOURCE[];
+layout(set = 0, binding = 2) uniform sampler2D TEXTURE_2_SOURCE[];
+layout(set = 0, binding = 3) uniform sampler2D TEXTURE_3_SOURCE[];
 
 void main() {
-//     float angleX = radians(0.5); // Угол поворота по оси X в радианах
-//     float angleY = radians(0.5); // Угол поворота по оси Y в радианах
-//     
 
-    mat4 view = mat4(
-        -0.707107, -0.408248, 0.577350, 0.000000,
-        0.707107, -0.408248, 0.577350, 0.000000,
-        0.000000, 0.816497, 0.577350, 0.000000, 
-        -0.000000, -0.000000, -3.464102, 1.000000);
-    mat4 proj = mat4(
-        0.750000, 0.000000, 0.000000, 0.000000,
-        0.000000, -1.000000, 0.000000, 0.000000,
-        0.000000, 0.000000, -1.020202, -1.000000,
-        0.000000, 0.000000, -0.202020, 0.000000);
-    
-//     mat4 X = mat4(
-//     1.0, 0.0, 0.0, 0.0,
-//         0.0, 1.0, 0.0, 0.0,
-//         0.0, 0.0, 1.0, 0.0,
-//         0.0, 0.0, 0.0, 1.0
-//     );
-
-    gl_Position = vec4(POSITION, 1.0);
-    fragColor = POSITION;
+    gl_Position = vec4(POSITION,1);
+    POSITION_OUT = POSITION;
+    NORMAL_OUT = NORMAL;
+    COLOR_0_OUT = vec4(1,0,0,0.8);
 }

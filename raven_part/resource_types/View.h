@@ -46,8 +46,14 @@ namespace harpy::raven_part::resource_types{
 		VkRect2D scissor{};
 		glm::vec2 view_field;
 
-		float aspectRatio = 1.0f;
-		float focus = 1.0f;
+		float fov;
+		float aspect; // Соотношение сторон
+		float near;      // Ближняя отсекающая плоскость
+		float far; // Дальняя отсекающая плоскость
+
+		float xmag;
+		float ymag;
+
 
 		void load(tinygltf::Model& model, harpy::raven_part::load_package pack);
 		void r_init(renderer_context* r_context);

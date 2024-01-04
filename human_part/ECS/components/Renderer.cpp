@@ -11,7 +11,7 @@
 #include <ECS/components/Renderer.h>
 
 harpy::human_part::ECS::Renderer::Renderer(){
-	//mapping_id = r_context->mapper.lock_register_mapping(mappings);
+	//TODO Auto-generated constructor stub
 }
 
 harpy::human_part::ECS::Renderer::~Renderer() {

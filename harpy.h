@@ -91,7 +91,7 @@ namespace harpy{
 	};
 
 	extern std::shared_ptr<harpy::nest::renderer_context> r_context_ptr;
-	const std::chrono::milliseconds sleepDuration(100);
+	const std::chrono::milliseconds sleepDuration(50);
 
 	extern struct dataguide dataguide;
 	extern struct harpy_state state;

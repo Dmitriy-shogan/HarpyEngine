@@ -105,24 +105,6 @@ namespace harpy::raven_part::resource_types{
 			0, nullptr);
 
 
-		//VkDescriptorBufferInfo in_buffer;
-		 //IDK
-//		in_buffer.buffer = shape->vertexBuffer.first;
-//		in_buffer.offset = 0;
-//		in_buffer.range = bufferSize;//shape->vert_size; //IDK
-
-
-
-//		VkWriteDescriptorSet in_desc_set_wr = {};
-//		in_desc_set_wr.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-//		in_desc_set_wr.dstSet = desc_set;
-//		in_desc_set_wr.dstBinding = 0;
-//		in_desc_set_wr.dstArrayElement = 0;
-//		in_desc_set_wr.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-//		in_desc_set_wr.descriptorCount = 1;
-//		in_desc_set_wr.pBufferInfo = &in_buffer;
-
-
 		VkDescriptorSet sets3[] = {r_context->vert_buf.vert_desc};
 
 
@@ -130,32 +112,48 @@ namespace harpy::raven_part::resource_types{
 		//
 		CameraPushConstants cameraPushConstants;
 
-		cameraPushConstants.transform = glm::scale(
-				glm::mat4(1.0f),
-				glm::vec3(1.0f/view_field.x, 1.0f/view_field.y, 1.0f)
-				) *
-						(camera.pos_mat4_reversed() * object.pos_mat4());
+		glm::mat4 model = object.pos_mat4();
+		glm::mat4 view = camera.pos_mat4_reversed();
 
+		cameraPushConstants.transform = view * model;
+		double S,y;
+		glm::mat4 projection;
+		glm::vec4 proj_res;
+		glm::vec4 proj_res1;
+		glm::vec4 proj_res2;
+		glm::vec4 proj_res3;
 		switch (cameraType) {
 			case CameraType::PERSPECTIVE:
+//				cameraPushConstants.transform = glm::perspective(fov, aspect, near, far) * cameraPushConstants.transform;
+				S = -1.0f/tan(fov/2.0f);
+				y = near / (far - near);
+				projection = glm::mat4(
+						glm::vec4(S / (double)aspect, 0.0f , 0.0f, 0.0f),
+						glm::vec4(0.0f, S, 0.0f, 0.0f),
+						glm::vec4(0.0f, 0.0f, -(1.0f + y), -1.0f),
+						glm::vec4(0.0f, 0.0f, -far * y, 0.0f)
+					);
+				cameraPushConstants.transform = projection * cameraPushConstants.transform;
 
-				cameraPushConstants.transform = cameraPushConstants.transform * glm::mat4(
-					glm::vec4(focus / aspectRatio, 0.0f , 0.0f, 0.0f),
-					glm::vec4(0.0f, focus, 0.0f, 0.0f),
-					glm::vec4(0.0f, 0.0f, -1.0f, -1.0f),
-					glm::vec4(0.0f, 0.0f, -2.0f * focus, 0.0f)
-				);
+				proj_res = glm::vec4(1,0,0,1);
+				proj_res1 = model*proj_res;
+				proj_res2 = view*proj_res1;
+				proj_res3 = projection*proj_res2;
 				break;
 			case CameraType::ORTHOGRAPHIC:
+//				cameraPushConstants.transform = glm::scale(
+//								glm::mat4(1.0f),
+//								glm::vec3(1.0f/view_field.x, 1.0f/view_field.y, 1.0f)
+//								) * cameraPushConstants.transform;
 				break;
 			case CameraType::ISOMETRIC:
 
-				cameraPushConstants.transform = cameraPushConstants.transform * glm::mat4(
-			        glm::vec4(1.0f / glm::sqrt(2.0f), -1.0f / glm::sqrt(2.0f), 0.0f, 0.0f),
-			        glm::vec4(1.0f / glm::sqrt(2.0f), 1.0f / glm::sqrt(2.0f), 0.0f, 0.0f),
-			        glm::vec4(0.0f, 0.0f, glm::sqrt(2.0f), 0.0f),
-			        glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
-			    );
+//				cameraPushConstants.transform = cameraPushConstants.transform * glm::mat4(
+//			        glm::vec4(1.0f / glm::sqrt(2.0f), -1.0f / glm::sqrt(2.0f), 0.0f, 0.0f),
+//			        glm::vec4(1.0f / glm::sqrt(2.0f), 1.0f / glm::sqrt(2.0f), 0.0f, 0.0f),
+//			        glm::vec4(0.0f, 0.0f, glm::sqrt(2.0f), 0.0f),
+//			        glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
+//			    );
 
 				break;
 			default:

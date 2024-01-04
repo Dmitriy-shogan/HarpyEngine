@@ -28,7 +28,30 @@ void render(
 void physics(std::shared_ptr<harpy::raven_part::scene_source> obj_str_ptr, std::atomic_flag* phys_cond){ //, std::vector<human_part::ECS::Entity*> entities
 	glm::vec3 axisX(1.0f, 0.0f, 0.0f);
 	glm::vec3 axisY(0.0f, 1.0f, 0.0f);
+
+	int counter = 1;
 	while(phys_cond->test_and_set(std::memory_order_acquire)){
+		counter = (counter + 1) % (360 * 360 * 360);
+
+		auto src_camera = obj_str_ptr->cameras[0];
+		harpy::human_part::ECS::Camera* camera_comp = dynamic_cast<harpy::human_part::ECS::Camera*>(src_camera->get_components_by_name(harpy::human_part::ECS::Camera::name)[0]);
+
+		harpy::human_part::ECS::Transform* transform_comp = dynamic_cast<harpy::human_part::ECS::Transform*>(src_camera->get_components_by_name(harpy::human_part::ECS::Transform::name)[0]);
+
+
+//		float angleX = glm::radians(counter + 0.0f); // Угол поворота вокруг оси X
+//		float angleY = glm::radians(0.0f); // Угол поворота вокруг оси Y
+//
+//		// Создание кватерниона для поворота по оси X
+//		glm::quat quaternionX = glm::angleAxis(angleX, glm::vec3(1.0f, 0.0f, 0.0f));
+//
+//		// Создание кватерниона для поворота по оси Y
+//		glm::quat quaternionY = glm::angleAxis(angleY, glm::vec3(0.0f, 1.0f, 0.0f));
+//
+//		// Комбинирование кватернионов для поворота по обеим осям
+//		glm::quat resultQuat = quaternionY * quaternionX;
+
+		//transform_comp->transform.rot = resultQuat;
 		obj_str_ptr->lock.lock();
 		obj_str_ptr->consumed.clear();
 		obj_str_ptr->lock.unlock();
@@ -85,7 +108,7 @@ void scene_manager::start_scene(uint32_t scene_id){
 		current_unit->set_scene(scenes[scene_id]);
 
 		current_unit->start();
-		//ЗАГЛУШКА
+		//TODO ЗАГЛУШКА
 		current_unit->render_thread.join();
 
 	}

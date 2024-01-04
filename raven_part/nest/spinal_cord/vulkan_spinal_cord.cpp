@@ -304,8 +304,10 @@ void vulkan_spinal_cord::init_ph_device()
     vkEnumeratePhysicalDevices(instance, &device_count, devices.data());
 
     for (const auto& pdevice : devices) {
+    	vkGetPhysicalDeviceProperties(pdevice, &deviceProperties);
+    	vkGetPhysicalDeviceFeatures(pdevice, &deviceFeatures);
+    	ph_device = pdevice;
         if (is_device_suitable(pdevice)) {
-            ph_device = pdevice;
             break;
         }
     }
@@ -315,8 +317,7 @@ void vulkan_spinal_cord::init_ph_device()
     }
 
 
-	vkGetPhysicalDeviceProperties(ph_device, &deviceProperties);
-	vkGetPhysicalDeviceFeatures(ph_device, &deviceFeatures);
+
 }
 
 void vulkan_spinal_cord::init_device_and_queues()

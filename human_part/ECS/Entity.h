@@ -16,7 +16,7 @@
 namespace harpy::human_part::ECS{
 class Entity {
 		std::map<std::string,std::vector<Component *>,std::less<std::string>> components{};
-		uint32_t parent_id = -1;
+		int32_t parent_id = -1;
 	public:
 		Entity(uint32_t parent_id) {this->parent_id = parent_id;}
 		Entity() {}
