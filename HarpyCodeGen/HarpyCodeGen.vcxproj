@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{EF05F6A6-C153-40E9-926F-98985A7CDAEA}</ProjectGuid>
+    <ProjectGuid>{F32E22F4-C556-4F61-993D-CDAA00E2B047}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>HarpyRavenPart</RootNamespace>
+    <RootNamespace>HarpyCodeGen</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -30,26 +30,26 @@
     <PreferredToolArchitecture>x64</PreferredToolArchitecture>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -78,11 +78,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..//raven_part_stash/</OutDir>
-    <TargetName>raven_debug</TargetName>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);..//third_party/dlib;..//utilities_lib/;</LibraryPath>
-    <ReferencePath>$(VC_ReferencesPath_x64);</ReferencePath>
-    <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -96,12 +91,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;CPPDYNAMICLIBRARYTEMPLATE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -111,17 +106,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;HARPY_RAVEN_DLL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;CPPDYNAMICLIBRARYTEMPLATE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>raven_part;..//third_party/include;..//HarpyUtilities/utilities;..//third_party/dlib;..//utilities_lib/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..//third_party/dlib;..//utilities_lib/;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);vulkan-1.lib;glfw3dll.lib;harpy_utilities_debug.lib;shaderc_shared.lib;</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -132,12 +123,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;CPPDYNAMICLIBRARYTEMPLATE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -151,74 +142,19 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;CPPDYNAMICLIBRARYTEMPLATE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="HarpyEngineRework.cpp" />
-    <ClCompile Include="raven_part\3D\mesh.cpp" />
-    <ClCompile Include="raven_part\nest\command_commander\command_commander.cpp" />
-    <ClCompile Include="raven_part\nest\initializations\inititalizations.cpp" />
-    <ClCompile Include="raven_part\nest\managers\swapchain_manager.cpp" />
-    <ClCompile Include="raven_part\nest\pools\command_pool.cpp" />
-    <ClCompile Include="raven_part\nest\resources\common_vulkan_resource.cpp" />
-    <ClCompile Include="raven_part\nest\shader_works\glsl_shader_factory.cpp" />
-    <ClCompile Include="raven_part\nest\shader_works\hlsl_shader_factory.cpp" />
-    <ClCompile Include="raven_part\nest\shader_works\shader_module\shader_module.cpp" />
-    <ClCompile Include="raven_part\nest\vulkan_threading\primitives\event.cpp" />
-    <ClCompile Include="raven_part\nest\vulkan_threading\primitives\fence.cpp" />
-    <ClCompile Include="raven_part\nest\vulkan_threading\primitives\semaphor.cpp" />
-    <ClCompile Include="raven_part\nest\windowing\window.cpp" />
-    <ClCompile Include="raven_part\nest\wrappers\buffers\data_buffer.cpp" />
-    <ClCompile Include="raven_part\nest\wrappers\pipeline\graphics_pipeline.cpp" />
-    <ClCompile Include="raven_part\nest\wrappers\pipeline\pipeline_cache.cpp" />
-    <ClCompile Include="raven_part\nest\wrappers\queues\compute_family_queue.cpp" />
-    <ClCompile Include="raven_part\nest\wrappers\queues\graphics_family_queue.cpp" />
-    <ClCompile Include="raven_part\nest\wrappers\queues\main_family_queue.cpp" />
-    <ClCompile Include="raven_part\nest\wrappers\queues\queue_family.cpp" />
-    <ClCompile Include="raven_part\nest\wrappers\queues\transfer_family_queue.cpp" />
-    <ClCompile Include="raven_part\nest\wrappers\queues\universal_family_queue.cpp" />
-    <ClCompile Include="raven_part\nest\wrappers\render_pass\render_pass.cpp" />
-    <ClCompile Include="raven_part\nest\wrappers\swapchain\swapchain.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="dll_macro.h" />
-    <ClInclude Include="raven_part\3D\mesh.h" />
-    <ClInclude Include="raven_part\nest\command_commander\command_commander.h" />
-    <ClInclude Include="raven_part\nest\initializations\inititalizations.h" />
-    <ClInclude Include="raven_part\nest\managers\swapchain_manager.h" />
-    <ClInclude Include="raven_part\nest\pools\command_pool.h" />
-    <ClInclude Include="raven_part\nest\resources\buffer_set_resource.h" />
-    <ClInclude Include="raven_part\nest\resources\command_thread_resource.h" />
-    <ClInclude Include="raven_part\nest\resources\common_vulkan_resource.h" />
-    <ClInclude Include="raven_part\nest\resources\record_cis_resource.h" />
-    <ClInclude Include="raven_part\nest\resources\surface_capabilities.h" />
-    <ClInclude Include="raven_part\nest\shader_works\glsl_shader_factory.h" />
-    <ClInclude Include="raven_part\nest\shader_works\hlsl_shader_factory.h" />
-    <ClInclude Include="raven_part\nest\shader_works\shader_module\shader_module.h" />
-    <ClInclude Include="raven_part\nest\vulkan_threading\primitives\event.h" />
-    <ClInclude Include="raven_part\nest\vulkan_threading\primitives\fence.h" />
-    <ClInclude Include="raven_part\nest\vulkan_threading\primitives\semaphor.h" />
-    <ClInclude Include="raven_part\nest\windowing\window.h" />
-    <ClInclude Include="raven_part\nest\wrappers\buffers\data_buffer.h" />
-    <ClInclude Include="raven_part\nest\wrappers\pipeline\graphics_pipeline.h" />
-    <ClInclude Include="raven_part\nest\wrappers\pipeline\pipeline_cache.h" />
-    <ClInclude Include="raven_part\nest\wrappers\queues\compute_family_queue.h" />
-    <ClInclude Include="raven_part\nest\wrappers\queues\graphics_family_queue.h" />
-    <ClInclude Include="raven_part\nest\wrappers\queues\main_family_queue.h" />
-    <ClInclude Include="raven_part\nest\wrappers\queues\queue_family.h" />
-    <ClInclude Include="raven_part\nest\wrappers\queues\transfer_family_queue.h" />
-    <ClInclude Include="raven_part\nest\wrappers\queues\universal_family_queue.h" />
-    <ClInclude Include="raven_part\nest\wrappers\render_pass\render_pass.h" />
-    <ClInclude Include="raven_part\nest\wrappers\swapchain\swapchain.h" />
+    <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

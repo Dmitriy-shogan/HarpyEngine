@@ -69,7 +69,6 @@ struct harpy::nest::wrappers::graphics_pipeline_ci{
     render_pass pass{};
     pipeline_cache* cache {nullptr};
     graphics_pipeline_options_ci options{};
-    
 };
 
 void harpy::nest::wrappers::graphics_pipeline::init_layout()
@@ -175,10 +174,16 @@ void harpy::nest::wrappers::graphics_pipeline::init(
     ci.basePipelineHandle = VK_NULL_HANDLE; 
     ci.basePipelineIndex = -1;
     
-   if(create_info->cache)
-       HARPY_VK_CHECK(vkCreateGraphicsPipelines(device, *create_info->cache, 1, &ci, nullptr, &pipe));
-
-    HARPY_VK_CHECK(vkCreateGraphicsPipelines(device, nullptr, 1, &ci, nullptr, &pipe));
+   HARPY_VK_CHECK(
+       vkCreateGraphicsPipelines(
+           device,
+           *create_info->cache,
+           1,
+           &ci,
+           nullptr,
+           &pipe)
+           );
+   
 
 }
 

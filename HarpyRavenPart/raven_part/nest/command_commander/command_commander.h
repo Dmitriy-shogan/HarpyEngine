@@ -11,19 +11,7 @@ namespace harpy::nest
 {
     class command_commander
     {
-        enum res_state
-        {
-            null,
-            started_recording,
-            in_render_pass,
-            out_of_render_pass,
-            in_video_coding,
-            out_video_coding,
-            ended_recording
-        };
-        res_state state{null};
         utilities::delegate delegate{};
-        wrappers::queue_type queue_type{};
         bool is_writing_to_primary{true};
         std::size_t primary_counter{}, secondary_counter{};
         std::shared_ptr<resources::command_thread_resource> thread_resource{};

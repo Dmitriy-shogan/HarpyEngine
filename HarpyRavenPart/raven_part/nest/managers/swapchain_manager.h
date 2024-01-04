@@ -9,8 +9,6 @@ namespace harpy::nest::managers
 {
     class swapchain_manager
     {
-        HARPY_MAKE_SINGLETON(swapchain_manager);
-        
         using swapchain = wrappers::swapchain;
         std::vector<swapchain> swapchains;
         

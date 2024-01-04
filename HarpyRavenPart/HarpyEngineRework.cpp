@@ -33,6 +33,7 @@ int main(int argc, char* argv[])
     try {
         initializations::init_harpy();
         wrappers::render_pass render_pass{};
+        render_pass.init();
 
        wrappers::data_buffer vertex_buffer{};
         vertex_buffer.init(vertices.size(), wrappers::buffer_type::vertex);
@@ -40,17 +41,20 @@ int main(int argc, char* argv[])
         wrappers::data_buffer index_buffer{};
         index_buffer.init(indices.size(), wrappers::buffer_type::indice);
         
-        managers::swapchain_manager& swapchains = managers::swapchain_manager::get_singleton();
+        managers::swapchain_manager swapchains{};
         swapchains.init();
         
         resources::records_cis records{new resources::record_cis_resource(render_pass)};
         
-        resources::command_thread_resource thread_res{};
-        thread_res.queue_type = wrappers::universal;
-        thread_res.queue = std::make_shared<VkQueue>(resources::common_vulkan_resource::get_resource().get_main_family_queue().get_vk_queue(0));
-        thread_res.render_pass = std::make_shared<wrappers::render_pass>(render_pass);
+        std::shared_ptr<resources::command_thread_resource> thread_res{new resources::command_thread_resource};
+        thread_res->queue_type = wrappers::universal;
+        thread_res->queue = std::make_shared<VkQueue>(resources::common_vulkan_resource::get_resource().get_main_family_queue().get_vk_queue(0));
+        thread_res->render_pass = std::make_shared<wrappers::render_pass>(render_pass);
 
         command_commander commander{};
+        commander.bind_records_cis(records);
+        commander.bind_thread_res(thread_res);
+        
         auto deleg = commander.start_recording()->load_into_buffer(
             vertex_buffer.get_vk_buffer(),
             vertices.data(),
@@ -59,7 +63,7 @@ int main(int argc, char* argv[])
             indices.data(),
             index_buffer.get_size())->
         end_recording();
-        deleg.invoke();
+        deleg();
         
         
         //Main loop for now

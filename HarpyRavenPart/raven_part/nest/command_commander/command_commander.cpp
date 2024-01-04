@@ -1,9 +1,6 @@
 ﻿#include "command_commander.h"
-#include "nest/buffers/data_buffer.h"
-#include <string>
-
-#include "nest/buffers/vertex_buffer.h"
 #include "nest/vulkan_threading/primitives/fence.h"
+#include "nest/wrappers/buffers/data_buffer.h"
 
 harpy::nest::command_commander::command_commander(VkDevice* device,
                                                   VmaAllocator* allocator) : device(device), allocator(allocator)
@@ -109,7 +106,7 @@ harpy::nest::command_commander* harpy::nest::command_commander::load_into_buffer
         utilities::error_handling::logger::get_logger().log(utilities::error_handling::error_severity::warning, "WARNING!, you're trying to copy buffer in a graphics or compute queue. Please, use transfer only, main or universal");
         utilities::error_handling::logger::get_logger().show_last_log();
     }
-    buffers::data_buffer src{};
+    wrappers::data_buffer src{};
     VkBufferCreateInfo ci{};
     ci.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
     ci.size = size;
@@ -172,6 +169,7 @@ harpy::nest::command_commander* harpy::nest::command_commander::draw_indexed(
             starting_instance
             );
     }
+    return this;
 }
 
 harpy::nest::command_commander* harpy::nest::command_commander::bind_index_buffer(VkBuffer buffer, uint32_t offset)
