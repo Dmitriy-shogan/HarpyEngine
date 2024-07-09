@@ -1,0 +1,6 @@
+add_subdirectory(HarpyUtilities)
+add_subdirectory(HarpyRavenPart)
+add_subdirectory(HarpyHumanPart)
+add_subdirectory(HarpyCodeGen)
+add_subdirectory(HarpyEngine)
+add_subdirectory(Testing)
