@@ -13,7 +13,6 @@ namespace harpy::nest::wrappers
         VkSurfaceKHR surface{resources::common_vulkan_resource::get_resource()};
         uint32_t family_index {resources::common_vulkan_resource::get_resource().get_main_family_queue().get_family_index()};
         std::vector<VkFormat> ideal_formats {VK_FORMAT_R8G8B8A8_SRGB, VK_FORMAT_B8G8R8A8_SRGB, VK_FORMAT_R8G8B8_SINT};
-        VkDevice device = resources::common_vulkan_resource::get_resource().get_main_device();
         resources::surface_capabilities caps {resources::std_surface_capabilities};
         VkSwapchainKHR old_swapchain{nullptr};
         VkRenderPassCreateInfo2 ci = {};
@@ -65,7 +64,7 @@ namespace harpy::nest::wrappers
         VkExtent2D& get_extent();
         operator VkExtent2D&();
 
-        uint32_t acquire_vk_image_index(threading::semaphore semaphore, threading::fence* fence, size_t timeout = LLONG_MAX); 
+        uint32_t acquire_vk_image_index(threading::semaphore* semaphore_to_signal, threading::fence* fence_to_signal, size_t timeout = LLONG_MAX);
 
         VkRenderPass& get_render_pass();
 

@@ -280,7 +280,7 @@ shader_module glsl_shader_factory::create_shader_module(spirv_compilation_result
 
 std::future<shader_module> glsl_shader_factory::create_shader_module_async(std::string filename)
 {
-    return utilities::threading::std_thread_pool::get_singleton().enqueue
+    return utilities::threading::default_thread_pool::get_singleton().enqueue
     ([file = std::move(filename)]() -> shader_module
     {
         return glsl_shader_factory::get_singleton().create_shader_module(file);
@@ -289,7 +289,7 @@ std::future<shader_module> glsl_shader_factory::create_shader_module_async(std::
 
 std::future<shader_set> glsl_shader_factory::create_shader_set_async(std::string filename)
 {
-    return utilities::threading::std_thread_pool::get_singleton().enqueue
+    return utilities::threading::default_thread_pool::get_singleton().enqueue
     ([file = std::move(filename)]() -> shader_set
     {
         return glsl_shader_factory::get_singleton().create_shader_set(file);

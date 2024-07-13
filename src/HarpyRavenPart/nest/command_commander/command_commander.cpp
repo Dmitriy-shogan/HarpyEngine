@@ -78,6 +78,10 @@ void harpy::nest::command_commander::bind_thread_res(std::unique_ptr<resources::
 
 std::unique_ptr<harpy::nest::resources::command_thread_resource>&& harpy::nest::command_commander::unbind_thread_res()
 {
+    used_buffers.clear();
+    primary_counter = secondary_counter = 0;
+    is_writing_to_primary = 1;
+    delegate.clear();
     return std::move(thread_resource);
 }
 
@@ -89,7 +93,7 @@ harpy::nest::command_commander* harpy::nest::command_commander::start_recording(
     delegate.clear();
     
     primary_counter = starting_buffer;
-    used_buffers.insert(thread_resource->com_pool->get_primary_buffers()[primary_counter]);
+    used_buffers[thread_resource->com_pool->get_primary_buffers()[primary_counter]] = true;
     
     delegate.push_back([this, begin_ci]()
     {
@@ -104,7 +108,7 @@ harpy::nest::command_commander* harpy::nest::command_commander::record_to_second
 {
     secondary_counter = starting_buffer;
 
-    used_buffers.insert(thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer);
+    used_buffers[thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer] = true;
     VkCommandBufferInheritanceInfo info{};
     
     info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
@@ -439,7 +443,7 @@ harpy::nest::command_commander* harpy::nest::command_commander::reset_pool()
     return this;
 }
 
-void harpy::nest::command_commander::submit(threading::fence fence, threading::semaphore render_finish, threading::semaphore image_acquired, bool do_wait)
+void harpy::nest::command_commander::submit(threading::fence* fence, threading::semaphore* render_finish, threading::semaphore* image_acquired, bool do_wait)
 {
     VkSubmitInfo ci{};
     ci.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -448,18 +452,18 @@ void harpy::nest::command_commander::submit(threading::fence fence, threading::s
     ci.pCommandBuffers = &thread_resource->com_pool->get_primary_buffers()[primary_counter];
 
     VkPipelineStageFlags wait_dst_mask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    ci.waitSemaphoreCount = image_acquired.get_semaphore() ? 1 : 0;
-    ci.pWaitSemaphores = image_acquired.get_semaphore() ? &image_acquired.get_semaphore() : nullptr;
-    ci.pWaitDstStageMask = image_acquired.get_semaphore() ? &wait_dst_mask : nullptr;
+    ci.waitSemaphoreCount = image_acquired ? 1 : 0;
+    ci.pWaitSemaphores = image_acquired ? &image_acquired->get_vk_semaphore() : nullptr;
+    ci.pWaitDstStageMask = image_acquired ? &wait_dst_mask : nullptr;
 
-    ci.signalSemaphoreCount = 1;
-    ci.pSignalSemaphores = &render_finish.get_semaphore();
+    ci.signalSemaphoreCount = render_finish ? 1 : 0;
+    ci.pSignalSemaphores = render_finish ? &render_finish->get_vk_semaphore() : nullptr;
     
     HARPY_VK_CHECK(vkQueueSubmit(
         thread_resource->queue,
         1,
         &ci,
-        fence
+        fence ? fence->get_vk_fence() : nullptr
         ));
     
     if(do_wait)
@@ -473,10 +477,10 @@ void harpy::nest::command_commander::submit_one(resources::vulkan_synchronisatio
                              raw_signal_semaphores{sync_res.signal_semaphores.size()};
 
     for(size_t i = 0; i < sync_res.wait_semaphores.size(); i++)
-        raw_wait_semaphores[i] = sync_res.wait_semaphores[i].get_semaphore();
+        raw_wait_semaphores[i] = sync_res.wait_semaphores[i].get_vk_semaphore();
 
     for(size_t i = 0; i < sync_res.signal_semaphores.size(); i++)
-        raw_signal_semaphores[i] = sync_res.signal_semaphores[i].get_semaphore();
+        raw_signal_semaphores[i] = sync_res.signal_semaphores[i].get_vk_semaphore();
     
     VkSubmitInfo ci{};
     ci.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -509,15 +513,18 @@ void harpy::nest::command_commander::submit_all(resources::vulkan_synchronisatio
                              raw_signal_semaphores{sync_res.signal_semaphores.size()};
 
     for(size_t i = 0; i < sync_res.wait_semaphores.size(); i++)
-        raw_wait_semaphores[i] = sync_res.wait_semaphores[i].get_semaphore();
+        raw_wait_semaphores[i] = sync_res.wait_semaphores[i].get_vk_semaphore();
 
     for(size_t i = 0; i < sync_res.signal_semaphores.size(); i++)
-        raw_signal_semaphores[i] = sync_res.signal_semaphores[i].get_semaphore();
+        raw_signal_semaphores[i] = sync_res.signal_semaphores[i].get_vk_semaphore();
     
     VkSubmitInfo ci{};
     ci.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-    std::vector<VkCommandBuffer> buffers{used_buffers.begin(), used_buffers.end()};
+    std::vector<VkCommandBuffer> buffers{used_buffers.size()};
+    for(auto & used_buffer : used_buffers){
+        buffers.push_back(used_buffer.first);
+    }
     
     ci.commandBufferCount = used_buffers.size();
     ci.pCommandBuffers = buffers.data();
@@ -544,6 +551,7 @@ void harpy::nest::command_commander::submit_all(resources::vulkan_synchronisatio
 harpy::nest::command_commander* harpy::nest::command_commander::end_recording_secondary()
 {
     delegate.push_back(vkEndCommandBuffer, thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer);
+    is_writing_to_primary = true;
     return this;
 }
 
@@ -567,4 +575,49 @@ harpy::utilities::delegate harpy::nest::command_commander::end_recording(bool do
         thread_resource.reset();
     }
     return delegate;
+}
+
+void harpy::nest::command_commander::render_on_screen(wrappers::swapchain& swapchain, threading::semaphore& sem, uint32_t& image_number, VkQueue& queue) {
+
+    VkPresentInfoKHR presentInfo{};
+    presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+
+    presentInfo.waitSemaphoreCount = 1;
+    presentInfo.pWaitSemaphores = &sem.get_vk_semaphore();
+
+    presentInfo.swapchainCount = 1;
+    presentInfo.pSwapchains = &swapchain.get_vk_swapchain();
+
+    presentInfo.pImageIndices = &image_number;
+
+    HARPY_VK_CHECK(vkQueuePresentKHR(queue, &presentInfo));
+
+}
+
+harpy::nest::command_commander *harpy::nest::command_commander::trim_pool() {
+    thread_resource->com_pool->trim_pool();
+    return this;
+}
+
+harpy::nest::command_commander *harpy::nest::command_commander::bind_descriptor_sets(VkDescriptorSet set, pipeline::graphics_pipeline& pipeline) {
+
+    delegate.push_back([this, set, pipeline = &pipeline, command_buffer = is_writing_to_primary ?
+                                                                                thread_resource->com_pool->get_primary_buffers()[primary_counter]:
+                                                                                thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer]()
+                       {
+                           vkCmdBindDescriptorSets(command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->get_vk_layout(), 0, 1, &set, 0, nullptr);
+                       });
+
+    return this;
+}
+
+harpy::nest::command_commander *harpy::nest::command_commander::bind_descriptor_sets(std::vector<VkDescriptorSet>& sets,
+                                                                                     harpy::nest::pipeline::graphics_pipeline &pipeline) {
+    delegate.push_back([this, sets = &sets, pipeline = &pipeline, command_buffer = is_writing_to_primary ?
+                                                                          thread_resource->com_pool->get_primary_buffers()[primary_counter]:
+                                                                          thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer]()
+                       {
+                           vkCmdBindDescriptorSets(command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->get_vk_layout(), 0, sets->size(), sets->data(), 0, nullptr);
+                       });
+    return this;
 }

@@ -28,7 +28,7 @@ namespace harpy::nest::pipeline
             .rasterizerDiscardEnable = VK_FALSE,
             .polygonMode = VK_POLYGON_MODE_FILL,
             .cullMode = VK_CULL_MODE_BACK_BIT,
-            .frontFace = VK_FRONT_FACE_CLOCKWISE,
+            .frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE,
             .depthBiasEnable = VK_FALSE,
             .depthBiasConstantFactor = 0.0f,
             .depthBiasClamp = 0.0f,
@@ -90,6 +90,7 @@ namespace harpy::nest::pipeline
         pipeline_cache* cache {nullptr};
         graphics_pipeline_options_ci options{};
         wrappers::swapchain* swapchain{nullptr};
+        std::vector<VkDescriptorSetLayout>* descriptor_layouts{nullptr};
     };
     
     class graphics_pipeline
@@ -100,7 +101,7 @@ namespace harpy::nest::pipeline
 
         VkDevice* device{};
 
-        void init_layout();
+        void init_layout(std::vector<VkDescriptorSetLayout>* descriptors);
 
     public:
 

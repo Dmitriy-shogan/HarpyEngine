@@ -45,10 +45,14 @@ void harpy::nest::wrappers::data_buffer::init(std::size_t size)
     ci.pNext = nullptr;
 
     VmaAllocationCreateInfo alloc_ci{};
-    if(type == buffer_type::staging /*|| type == buffer_type::uniform*/)
+    if(type == buffer_type::staging )
     {
         alloc_ci.usage =  VMA_MEMORY_USAGE_CPU_TO_GPU;
         alloc_ci.flags = VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT;
+
+    } else if(type == buffer_type::uniform)
+    {
+        alloc_ci.requiredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
     } else
     {
         alloc_ci.usage = VMA_MEMORY_USAGE_AUTO;

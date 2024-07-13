@@ -2,25 +2,31 @@
 using resource = harpy::nest::resources::common_vulkan_resource;
 
 
-void harpy::nest::pipeline::graphics_pipeline::init_layout()
+void harpy::nest::pipeline::graphics_pipeline::init_layout(std::vector<VkDescriptorSetLayout>* descriptors)
 {
     VkPipelineLayoutCreateInfo pipeline_layout_ci{};
     pipeline_layout_ci.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     VkDescriptorSetLayoutCreateInfo ci{};
     
-    //TODO: DESCRIPTOR SETS
-    pipeline_layout_ci.setLayoutCount = 0;
-    pipeline_layout_ci.pSetLayouts = nullptr;
-    pipeline_layout_ci.pushConstantRangeCount = 0;
-    pipeline_layout_ci.pPushConstantRanges = nullptr;
+    if(descriptors){
+        pipeline_layout_ci.setLayoutCount = descriptors->size();
+        pipeline_layout_ci.pSetLayouts = descriptors->data();
 
+        //Push constants is a must, should be used later
+        /*pipeline_layout_ci.pushConstantRangeCount = 0;
+        pipeline_layout_ci.pPushConstantRanges = nullptr;*/
+    }
+    else {
+        pipeline_layout_ci.setLayoutCount = 0;
+        pipeline_layout_ci.pSetLayouts = nullptr;
+    }
     HARPY_VK_CHECK(vkCreatePipelineLayout(resource::get_resource(), &pipeline_layout_ci, nullptr, &layout));
 }
 
 harpy::nest::pipeline::graphics_pipeline::graphics_pipeline(graphics_pipeline_ci* create_info, bool is_wireframe,
     VkDevice* device) : device(device)
 {
-    init_layout();
+    init_layout(create_info->descriptor_layouts);
     
     std::vector<VkPipelineShaderStageCreateInfo> shader_stage_create_infos{};
     
@@ -67,7 +73,8 @@ harpy::nest::pipeline::graphics_pipeline::graphics_pipeline(graphics_pipeline_ci
         ci.pName = "main";
         shader_stage_create_infos.emplace_back(ci);
     }
-    
+
+    //This is wrong, you now
     if(is_wireframe)
         create_info->options.rasterizer.polygonMode = VK_POLYGON_MODE_LINE;
     
@@ -97,6 +104,7 @@ harpy::nest::pipeline::graphics_pipeline::graphics_pipeline(graphics_pipeline_ci
            &ci,
            nullptr,
            &pipe));
+
 }
 
 VkPipeline& harpy::nest::pipeline::graphics_pipeline::get_vk_pipeline()

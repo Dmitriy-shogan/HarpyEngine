@@ -25,7 +25,7 @@ namespace harpy::nest
         wrappers::data_buffer staging_buffer{wrappers::buffer_type::staging};
         
         std::unique_ptr<resources::command_thread_resource> thread_resource{};
-        std::set<VkCommandBuffer> used_buffers{};
+        std::unordered_map<VkCommandBuffer, bool> used_buffers{};
         
         VkDevice* device;
         VmaAllocator* allocator;
@@ -72,8 +72,12 @@ namespace harpy::nest
         command_commander* move_down_primary();
         command_commander* move_up_secondary();
         command_commander* move_down_secondary();
-        
-        
+
+        command_commander* bind_descriptor_sets(VkDescriptorSet set, pipeline::graphics_pipeline& pipeline);
+        command_commander* bind_descriptor_sets(std::vector<VkDescriptorSet>& sets, pipeline::graphics_pipeline& pipeline);
+
+
+
         command_commander* clear_color();
         command_commander* clear_color_depth();
         command_commander* clear_attachments();
@@ -149,7 +153,7 @@ namespace harpy::nest
         command_commander* trim_pool();
 
         //Just for now
-        void submit(threading::fence fence, threading::semaphore render_finish, threading::semaphore image_acquired, bool do_wait = true);
+        void submit(threading::fence* fence = nullptr, threading::semaphore* render_finish = nullptr, threading::semaphore* image_acquired = nullptr, bool do_wait = true);
 
         void submit_one(resources::vulkan_synchronisation_resource sync_res, //vector of semaphores, that will be signaled
                         std::vector<VkPipelineStageFlags> flags,             //vector of flags
@@ -158,7 +162,9 @@ namespace harpy::nest
         void submit_all(
             resources::vulkan_synchronisation_resource sync_res, //vector of semaphores, that will be signaled
             std::vector<VkPipelineStageFlags> flags,             //vector of flags
-            bool do_wait = true); 
+            bool do_wait = true);
+
+        void render_on_screen(wrappers::swapchain& swapchain, threading::semaphore& sem, uint32_t& image_number, VkQueue& queue);
             
         command_commander* end_recording_secondary();
         

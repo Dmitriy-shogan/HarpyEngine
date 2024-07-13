@@ -8,12 +8,6 @@ harpy::nest::threading::semaphore::semaphore(VkDevice* device) : device(device)
     HARPY_VK_CHECK(vkCreateSemaphore(*device, &ci, nullptr, &semaphor));
 }
 
-harpy::nest::threading::semaphore::semaphore(semaphore& sem)
-{
-    device = sem.device;
-    do_delete_in_destructor = false;
-    semaphor = sem.semaphor;
-}
 
 harpy::nest::threading::semaphore::semaphore(semaphore&& sem)
 {
@@ -26,7 +20,7 @@ harpy::nest::threading::semaphore::operator VkSemaphore_T*&()
     return semaphor;
 }
 
-VkSemaphore& harpy::nest::threading::semaphore::get_semaphore()
+VkSemaphore& harpy::nest::threading::semaphore::get_vk_semaphore()
 {
     return semaphor;
 }

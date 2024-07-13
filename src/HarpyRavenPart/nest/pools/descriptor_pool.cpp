@@ -1,7 +1,7 @@
 #include <nest/pools/descriptor_pool.h>
 
 harpy::nest::pools::descriptor_pool::descriptor_pool(uint32_t descriptor_amount, descriptor_types type,  VkDevice* device)
-: device(device), types(std::set{type}), max_descriptor_amount(MAX_FRAMES_IN_FLIGHT)
+: device(device), types(std::set{type}), max_descriptor_amount(descriptor_amount)
 {
     VkDescriptorPoolSize size_ci{};
     size_ci.type = static_cast<VkDescriptorType>(type);
@@ -12,6 +12,7 @@ harpy::nest::pools::descriptor_pool::descriptor_pool(uint32_t descriptor_amount,
 
     //Just for now
     ci.maxSets = MAX_FRAMES_IN_FLIGHT;
+
     ci.poolSizeCount = 1;
     ci.pPoolSizes = &size_ci;
 
@@ -20,15 +21,15 @@ harpy::nest::pools::descriptor_pool::descriptor_pool(uint32_t descriptor_amount,
 }
 
 harpy::nest::pools::descriptor_pool::descriptor_pool(
-    std::vector<pool_size_desc>& descriptions, uint32_t max_set_amount, VkDevice* device)
+        std::initializer_list<pools::pool_size_desc> descriptions, uint32_t max_set_amount, VkDevice* device)
 : device(device), max_descriptor_amount(max_set_amount)
 {
     std::vector<VkDescriptorPoolSize> sizes{descriptions.size()};
     for(int f = 0; auto& i : sizes)
     {
-        i.type = static_cast<VkDescriptorType>(descriptions[f].type);
-        types.emplace(descriptions[f].type);
-        i.descriptorCount = descriptions[f++].amount;
+        i.type = static_cast<VkDescriptorType>(descriptions.begin()[f].type);
+        types.emplace(data(descriptions)[f].type);
+        i.descriptorCount = descriptions.begin()[f++].amount;
     }
     
 

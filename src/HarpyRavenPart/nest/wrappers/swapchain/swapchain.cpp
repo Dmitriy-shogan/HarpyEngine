@@ -47,7 +47,7 @@ void harpy::nest::wrappers::swapchain::init(
 	//TODO: make v-sync and make out present modes
 	for(auto& i : create_info->caps.present_modes)
 	{
-		//Here must be v_sync check for correctly finding present mode, but later, when v_synk integration will be
+		//Here must be v_sync check for correctly finding present mode, but later, when v_sync integration will be
 		if(i == VK_PRESENT_MODE_MAILBOX_KHR || i == VK_PRESENT_MODE_FIFO_KHR)
 		{
 			present_mode = i;
@@ -240,7 +240,7 @@ void harpy::nest::wrappers::swapchain::init_framebuffers()
 
 harpy::nest::wrappers::swapchain::swapchain(swapchain_ci* create_info, VkDevice* device)
 {
-	init(std::move(create_info), std::move(device));
+	init(create_info, device);
 }
 
 
@@ -277,14 +277,17 @@ harpy::nest::wrappers::swapchain::operator VkExtent2D&()
 {return extent;
 }
 
-uint32_t harpy::nest::wrappers::swapchain::acquire_vk_image_index(threading::semaphore semaphore, threading::fence* fence,
-                                                            size_t timeout)
+uint32_t harpy::nest::wrappers::swapchain::acquire_vk_image_index(threading::semaphore* semaphore_to_signal,
+                                                                  threading::fence* fence_to_signal,
+                                                                  size_t timeout)
 {
 	uint32_t vk_image_index{};
-    if(fence)
-	    vkAcquireNextImageKHR(*device, chain, timeout, semaphore, *fence, &vk_image_index);
-    else
-        vkAcquireNextImageKHR(*device, chain, timeout, semaphore, nullptr, &vk_image_index);
+    HARPY_VK_CHECK(vkAcquireNextImageKHR(*device, chain,
+                          timeout,
+                                         semaphore_to_signal ? semaphore_to_signal->get_vk_semaphore() : nullptr,
+                          fence_to_signal ? fence_to_signal->get_vk_fence() : nullptr,
+                          &vk_image_index));
+
     return vk_image_index;
 }
 

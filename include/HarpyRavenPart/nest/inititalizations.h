@@ -97,6 +97,7 @@ constexpr bool is_validation_layers{false};
 #define HARPY_VK_CHECK(x) if (x) throw harpy::utilities::error_handling::harpy_little_error \
 (harpy::utilities::error_handling::error_severity::wrong_init, "Something went wrong while initializing part of Vulkan")
 
+
 #define HARPY_MAKE_SINGLETON(class_name)              \
 private:                                              \
 class_name() = default;                               \

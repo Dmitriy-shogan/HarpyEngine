@@ -5,8 +5,6 @@ add_executable(HarpyRavenExe ${HARPY_RAVEN_MODULE}/nest/inititalizations.h
         nest/managers/swapchain_manager.cpp
         nest/pipeline/graphics_pipeline.cpp
         nest/pipeline/pipeline_cache.cpp
-        nest/pipeline/descriptors/descriptor_allocator.cpp
-        nest/pipeline/descriptors/descriptor_factory.cpp
         nest/pools/command_pool.cpp
         nest/pools/descriptor_pool.cpp
         nest/resources/common_vulkan_resource.cpp
@@ -25,7 +23,8 @@ add_executable(HarpyRavenExe ${HARPY_RAVEN_MODULE}/nest/inititalizations.h
         nest/wrappers/swapchain/swapchain.cpp
         3D/mesh.cpp
         3D/renderer.cpp
-        main.cpp)
+        main.cpp
+        ../../include/HarpyRavenPart/3D/uniform_buffer_objects.h)
 
 add_library(HarpyRavenLib
         ${HARPY_RAVEN_MODULE}/nest/inititalizations.h
@@ -35,8 +34,6 @@ add_library(HarpyRavenLib
         nest/managers/swapchain_manager.cpp
         nest/pipeline/graphics_pipeline.cpp
         nest/pipeline/pipeline_cache.cpp
-        nest/pipeline/descriptors/descriptor_allocator.cpp
-        nest/pipeline/descriptors/descriptor_factory.cpp
         nest/pools/command_pool.cpp
         nest/pools/descriptor_pool.cpp
         nest/resources/common_vulkan_resource.cpp

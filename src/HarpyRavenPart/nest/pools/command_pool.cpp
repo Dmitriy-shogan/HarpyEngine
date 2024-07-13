@@ -87,7 +87,7 @@ void harpy::nest::pools::command_pool::reset_pool()
 
 void harpy::nest::pools::command_pool::trim_pool()
 {
-    vkTrimCommandPoolKHR(*device, pool, 0);
+    vkTrimCommandPool(*device, pool, 0);
 }
 
 VkCommandPool& harpy::nest::pools::command_pool::get_vk_pool()

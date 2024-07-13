@@ -13,17 +13,16 @@ namespace harpy::nest::threading
         bool do_delete_in_destructor = true;
         VkDevice* device{};
         VkSemaphore semaphor{};
-        ;
     public:
 
         semaphore(VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device());
         
-        semaphore(semaphore& sem);
+        semaphore(semaphore const& sem) = delete;
         semaphore(semaphore&& sem);
         
         
         operator VkSemaphore&();
-        VkSemaphore& get_semaphore();
+        VkSemaphore& get_vk_semaphore();
 
         ~semaphore();
     

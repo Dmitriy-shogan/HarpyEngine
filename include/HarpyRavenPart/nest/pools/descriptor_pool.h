@@ -12,8 +12,6 @@ namespace harpy::nest::pools
         storage_buffer = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
         storage_image = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
         sampled_image = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
-        
-        
 
         he_first = storage_buffer,
         he_is_bm = 0,
@@ -34,7 +32,7 @@ namespace harpy::nest::pools
         size_t max_descriptor_amount{};
     public:
         descriptor_pool(uint32_t descriptor_amount, descriptor_types type, VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device());
-        descriptor_pool(std::vector<pool_size_desc>& descriptions, uint32_t max_set_amount, VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device());
+        descriptor_pool(std::initializer_list<pools::pool_size_desc> descriptions, uint32_t max_set_amount, VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device());
 
         descriptor_pool(descriptor_pool const& pool) = delete;
         descriptor_pool& operator=(descriptor_pool const& pool) = delete;
