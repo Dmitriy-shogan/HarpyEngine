@@ -37,7 +37,7 @@ void show_on_screen(wrappers::swapchain& swapchain, threading::semaphore& sem, u
     presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 
     presentInfo.waitSemaphoreCount = 1;
-    presentInfo.pWaitSemaphores = &sem.get_semaphore();
+    presentInfo.pWaitSemaphores = &sem.get_vk_semaphore();
 
     presentInfo.swapchainCount = 1;
     presentInfo.pSwapchains = &swapchain.get_vk_swapchain();

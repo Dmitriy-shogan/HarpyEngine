@@ -261,7 +261,7 @@ namespace harpy::utilities::threading {
         std::atomic_int_fast64_t pending_tasks_{};
     };
 
-    using std_thread_pool = thread_pool<default_function_type, std::jthread>;
+    using default_thread_pool = thread_pool<default_function_type, std::jthread>;
     
 }
 
