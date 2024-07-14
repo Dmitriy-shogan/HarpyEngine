@@ -114,14 +114,11 @@ namespace harpy::raven_part::resource_types{
 
 		glm::mat4 model = object.pos_mat4();
 		glm::mat4 view = camera.pos_mat4_reversed();
-
+		cameraPushConstants.translate = glm::vec4(object.pos,1);
 		cameraPushConstants.transform = view * model;
 		double S,y;
 		glm::mat4 projection;
-		glm::vec4 proj_res;
-		glm::vec4 proj_res1;
-		glm::vec4 proj_res2;
-		glm::vec4 proj_res3;
+
 		switch (cameraType) {
 			case CameraType::PERSPECTIVE:
 //				cameraPushConstants.transform = glm::perspective(fov, aspect, near, far) * cameraPushConstants.transform;
@@ -135,10 +132,6 @@ namespace harpy::raven_part::resource_types{
 					);
 				cameraPushConstants.transform = projection * cameraPushConstants.transform;
 
-				proj_res = glm::vec4(1,0,0,1);
-				proj_res1 = model*proj_res;
-				proj_res2 = view*proj_res1;
-				proj_res3 = projection*proj_res2;
 				break;
 			case CameraType::ORTHOGRAPHIC:
 //				cameraPushConstants.transform = glm::scale(

@@ -5,9 +5,14 @@
 void harpy::nest::base_window_layout::init_window()
 {
     glfw_window = glfwCreateWindow(800, 600, "Cool title", nullptr, nullptr);
-    
+
+    glfwMakeContextCurrent(glfw_window);
+    glfwSetInputMode(glfw_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
     glfwSetWindowUserPointer(glfw_window, this);
     glfwSetFramebufferSizeCallback(glfw_window, base_framebuffer_resize);
+
+
 }
 
 void harpy::nest::base_window_layout::init_surface()

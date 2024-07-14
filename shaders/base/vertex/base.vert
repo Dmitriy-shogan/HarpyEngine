@@ -1,4 +1,4 @@
-#version 450
+#version 450 core
 
 layout(binding = 0) uniform UniformBufferObject {
     mat4 model;
@@ -63,10 +63,16 @@ layout(set = 0, binding = 1) uniform sampler2D TEXTURE_1_SOURCE[];
 layout(set = 0, binding = 2) uniform sampler2D TEXTURE_2_SOURCE[];
 layout(set = 0, binding = 3) uniform sampler2D TEXTURE_3_SOURCE[];
 
+
 void main() {
 
     gl_Position = vec4(POSITION,1);
     POSITION_OUT = POSITION;
     NORMAL_OUT = NORMAL;
-    COLOR_0_OUT = vec4(1,0,0,0.8);
+
+    float c1 = fract(sin(dot(POSITION.xy, vec2(12.9898, 78.233))) * 43758.5453);
+    float c2 = fract(sin(dot(POSITION.xy + vec2(1.0, 1.0), vec2(12.9898, 78.233))) * 43758.5453);
+    float c3 = fract(sin(dot(POSITION.xy + vec2(2.0, 2.0), vec2(12.9898, 78.233))) * 43758.5453);
+
+    COLOR_0_OUT = vec4(c1,c2,c3,0.5);
 }

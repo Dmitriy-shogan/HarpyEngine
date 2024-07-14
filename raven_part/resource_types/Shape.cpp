@@ -22,7 +22,9 @@ namespace harpy::raven_part::resource_types{
 
 
 		auto indexBufferRes = harpy::utilities::loadIndexBuffer(pack.r_context_ptr->spinal_cord, pack.copy_buf, pack.copy_queue, prim, model);
+		std::cout<<"index buffer loaded"<<std::endl;
 		auto vertexBufferRes = harpy::utilities::loadVertexBuffer(pack.r_context_ptr->spinal_cord, pack.copy_buf, pack.copy_queue, prim, model);
+		std::cout<<"vertex buffer loaded"<<std::endl;
 		vertexBuffer = vertexBufferRes.first;
 		indexBuffer = indexBufferRes.first;
 

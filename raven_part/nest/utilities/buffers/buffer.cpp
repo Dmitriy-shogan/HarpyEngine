@@ -410,27 +410,7 @@ namespace harpy::utilities{
 				default_val = 0;
 			}
 
-			double norm_factor = 0.0f;
-
-			switch (tinygltf::GetNumComponentsInType(accessor.type)) {
-				case 3:
-					norm_factor += std::max(norm_factor, accessor.maxValues[2] - accessor.minValues[2]);
-					/* no break */
-				case 2:
-					norm_factor += std::max(norm_factor, accessor.maxValues[1] - accessor.minValues[1]);
-					/* no break */
-				case 1:
-					norm_factor += std::max(norm_factor, accessor.maxValues[0] - accessor.minValues[0]);
-					/* no break */
-				default:
-					break;
-			}
-
-			if (attrib == "POSITION") {
-
-			}else{
-				norm_factor = 1.0;
-			}
+			double norm_factor = 1.0f;
 
 
 

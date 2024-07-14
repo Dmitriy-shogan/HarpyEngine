@@ -20,7 +20,9 @@ namespace harpy::raven_part{
 				for (size_t i = 0; i < scene.nodes.size(); ++i) {
 
 					assert((scene.nodes[i] >= 0) && (scene.nodes[i] < model.nodes.size()));
+					std::cout<<std::endl;
 
+					std::cout<<">>>>>load root node with gltf index: "<<std::to_string(scene.nodes[i])<<" name: " + model.nodes[scene.nodes[i]].name<<std::endl;
 					loadNode(model, model.nodes[scene.nodes[i]],-1, preload_map, pack);
 				}
 				r_context_ptr->spinal_cord->queue_supervisor.lock_free(transfer_queue.second);

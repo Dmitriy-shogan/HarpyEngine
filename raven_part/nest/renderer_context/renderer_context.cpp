@@ -388,11 +388,34 @@ void renderer_context::init_renderer_object_mapper(){
 
 
 std::optional<transform> renderer_context::calculate_transform(std::shared_ptr<std::vector<human_part::ECS::Entity*>> entities, uint32_t id){
-	transform tr = transform{};
+	transform tr;
 	harpy::human_part::ECS::Entity* e;
 	harpy::human_part::ECS::Transform* transform_comp;
 
+	e = ((*entities)[id]);
+
+	auto components = e->get_components_by_name(harpy::human_part::ECS::Transform::name);
+
+	if (components.size() == 0) throw utilities::harpy_little_error("there are no transform component inside render task");
+
+	transform_comp = dynamic_cast<harpy::human_part::ECS::Transform*>(components[0]);
+
+	tr = transform_comp->to_transform();
+
+	std::string path_str = std::to_string(id);
+
+	std::cout<<std::endl<<">>>new task"<<std::endl;
+	std::cout<<"res for step" + std::to_string(id) + ": x: "<<tr.pos.x<<" y: "<<tr.pos.y<<" z: "<<tr.pos.z<<std::endl;
+
+	if(e->get_parent_id().has_value())
+		id = *(e->get_parent_id());
+	else
+		id = -1;
+
+
+
 	while(id != -1){
+		path_str = path_str + "->" + std::to_string(id);
 		e = ((*entities)[id]);
 
 		auto components = e->get_components_by_name(harpy::human_part::ECS::Transform::name);
@@ -401,13 +424,34 @@ std::optional<transform> renderer_context::calculate_transform(std::shared_ptr<s
 
 		transform_comp = dynamic_cast<harpy::human_part::ECS::Transform*>(components[0]);
 
-		tr = tr.relative_to(transform_comp->to_transform());
+		auto tr1 = transform_comp->to_transform();
+		tr = tr.relative_to(tr1);
+//		std::cout<<"tr1 pos x: "<<tr1.pos.x<<" y: "<<tr1.pos.y<<" z: "<<tr1.pos.z<<std::endl;
+//		std::cout<<"tr1 rot w: "<<tr1.rot.w<<" x: "<<tr1.rot.x<<" y: "<<tr1.rot.y<<" z: "<<tr1.rot.z<<std::endl;
+//		std::cout<<"tr1 scale x: "<<tr1.scale.x<<" y: "<<tr1.scale.y<<" z: "<<tr1.scale.z<<std::endl;
+//
+//		std::cout<<"tr1 matrix"<<std::endl;
+//		auto tr_mat = tr1.pos_mat4();
+//		for (int i = 0; i < 4; ++i) {
+//			for (int j = 0; j < 4; ++j) {
+//				std::cout<<tr_mat[i][j]<<" ";
+//			}
+//			std::cout<<std::endl;
+//		}
+//		std::cout<<"	|"<<std::endl<<"	v"<<std::endl;
+
+		std::cout<<"res for step" + std::to_string(id) + ": x: "<<tr.pos.x<<" y: "<<tr.pos.y<<" z: "<<tr.pos.z<<std::endl;
 
 		if(e->get_parent_id().has_value())
 			id = *(e->get_parent_id());
 		else
 			id = -1;
+
 	}
+
+
+	std::cout<<std::endl<<std::endl;
+
 	return tr;
 }
 

@@ -22,32 +22,20 @@ namespace harpy::human_part::ECS{
 		struct transform transform{};
 
 		Transform(glm::vec3 pos_vec, glm::quat rot, glm::vec3 scale){
-			transform.pos = pos_vec;
-			transform.rot = rot;
-			transform.scale = scale; //not used now
+			struct transform tr{rot, pos_vec, scale};
+			transform = {rot, pos_vec, scale};
 		};
 
-		Transform(glm::vec3 pos_vec){
-			transform.pos = pos_vec;
-			transform.rot = glm::quat{0.0f,0.0f,0.0f,1.0f};
+		Transform(glm::mat4 mat){
+			transform = {mat};
 		};
 
 		Transform(){
-			transform.pos = glm::vec3(0.0f);
-			transform.rot = glm::quat{0.0f,0.0f,0.0f,1.0f};
+			transform = {};
 		};
 
 		~Transform(){};
 		std::string Name() override {return name;}
-
-
-		glm::mat4 pos_mat4(){
-			return glm::mat4_cast(transform.rot) * glm::translate(glm::mat4(1.0f), transform.pos);
-		}
-
-		glm::mat4 pos_mat4_reversed(){
-			return glm::mat4_cast(-transform.rot) * glm::translate(glm::mat4(1.0f), -transform.pos);
-		}
 
 		harpy::transform to_transform(){
 			return transform;

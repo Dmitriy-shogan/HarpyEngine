@@ -28,6 +28,7 @@
 #include <chrono>
 #include <ctime>
 #include <exception>
+#include <filesystem>
 
 //libfmt
 #include <fmt/core.h>
@@ -38,7 +39,10 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
-#include <gltf/tiny_gltf.h>
+#include "tiny_gltf.h"
+#define TINYGLTF_IMPLEMENTATION
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
 
 //GLM libraries
 #define GLM_FORCE_RADIANS

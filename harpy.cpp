@@ -5,6 +5,8 @@
  *      Author: hexi
  */
 #include "harpy.h"
+
+#include <memory>
 #include <memory>
 #include <shaders/shader_module.h>
 #include <spinal_cord/vulkan_spinal_cord.h>
@@ -16,6 +18,60 @@ namespace harpy{
 	tinygltf::TinyGLTF GLTFloader;
 	tinygltf::Model model;
 	struct scene_manager sceneManager;
+
+
+
+	float lastX = 400, lastY = 300;
+	bool firstMouse = true;
+	float yaw = -90.0f, pitch = 0.0f;
+
+	void processInput(GLFWwindow *window, glm::vec3 &translation, float deltaTime) {
+		float speed = 50.0f * deltaTime; // Скорость движения
+
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+			translation.z -= speed;
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			translation.z += speed;
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			translation.x += speed;
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			translation.x -= speed;
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+			translation.y += speed;
+		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+			translation.y -= speed;
+	}
+
+	void mouse_callback(GLFWwindow* window, double xpos, double ypos, glm::quat &orientation) {
+		if (firstMouse) {
+			lastX = xpos;
+			lastY = ypos;
+			firstMouse = false;
+		}
+
+		float xoffset = xpos - lastX;
+		float yoffset = lastY - ypos; // обратное направление, так как y-координата идет вверх
+		lastX = xpos;
+		lastY = ypos;
+
+		float sensitivity = 0.1f;
+		xoffset *= sensitivity;
+		yoffset *= sensitivity;
+
+		yaw += xoffset;
+		pitch += yoffset;
+
+		// Ограничиваем pitch
+		if (pitch > 89.0f)
+			pitch = 89.0f;
+		if (pitch < -89.0f)
+			pitch = -89.0f;
+
+		// Обновляем кватернион
+		glm::quat qPitch = glm::angleAxis(glm::radians(pitch), glm::vec3(1.0f, 0.0f, 0.0f));
+		glm::quat qYaw = glm::angleAxis(glm::radians(yaw), glm::vec3(0.0f, 1.0f, 0.0f));
+		orientation = qYaw * qPitch;
+	}
 
 void render(
 		std::shared_ptr<harpy::nest::renderer_context> r_context_ptr,
@@ -30,6 +86,18 @@ void physics(std::shared_ptr<harpy::raven_part::scene_source> obj_str_ptr, std::
 	glm::vec3 axisY(0.0f, 1.0f, 0.0f);
 
 	int counter = 1;
+	glm::vec3 translation(0.0f);
+	glm::vec3 translation_delta(0.0f);
+	float lastFrameTime = 0.0f;
+
+
+	static std::shared_ptr<glm::quat> orientationPtr = std::make_shared<glm::quat>();
+	glfwSetCursorPosCallback(r_context_ptr->connected_window_layout->glfw_window, [](GLFWwindow* window, double xpos, double ypos) {
+
+		mouse_callback(window, xpos, ypos, *orientationPtr);
+	});
+	// glfwSetWindowUserPointer(r_context_ptr->connected_window_layout->glfw_window, &orientation);
+
 	while(phys_cond->test_and_set(std::memory_order_acquire)){
 		counter = (counter + 1) % (360 * 360 * 360);
 
@@ -53,8 +121,30 @@ void physics(std::shared_ptr<harpy::raven_part::scene_source> obj_str_ptr, std::
 
 		//transform_comp->transform.rot = resultQuat;
 		obj_str_ptr->lock.lock();
+
+		float currentFrameTime = glfwGetTime();
+		float deltaTime = currentFrameTime - lastFrameTime;
+		lastFrameTime = currentFrameTime;
+
+		translation_delta = glm::vec3(0.0f);
+		// Обработка ввода
+		processInput(r_context_ptr->connected_window_layout->glfw_window, translation_delta, deltaTime);
+		translation = translation + ((*orientationPtr) * translation_delta);
+		// Обновление сцены (например, применение трансляции)
+		std::cout << "Translation: (" << translation.x << ", " << translation.y << ", " << translation.z << ")" << std::endl;
+		std::cout << "Orientation: (" << (*orientationPtr).x << ", " << (*orientationPtr).y << ", " << (*orientationPtr).z << ", " << (*orientationPtr).w << ")" << std::endl;
+
+		transform_comp->transform.pos = translation;
+		transform_comp->transform.rot = *orientationPtr;
+		transform_comp->transform.recompute_matrix();
+		// transform_comp->transform.mat = glm::rotate(,*orientationPtr) * glm::mat4_cast(*orientationPtr);
+		// transform_comp->transform.decompose_matrix();
+		// Обработка событий
+		glfwPollEvents();
+
 		obj_str_ptr->consumed.clear();
 		obj_str_ptr->lock.unlock();
+
 		std::this_thread::sleep_for(sleepDuration);
 	}
 }
@@ -77,19 +167,26 @@ void load_dataguide(){
 void load_gltf(){
 		std::string err;
 		std::string warn;
+		std::filesystem::path currentPath;
 
-		bool res = GLTFloader.LoadASCIIFromFile(&model, &err, &warn, dataguide.gltf_uri);
+		try {
+			currentPath = std::filesystem::current_path();
+			std::cout << "Текущая рабочая директория: " << currentPath << std::endl;
+		} catch (const std::filesystem::filesystem_error& e) {
+			std::cerr << "Ошибка: " << e.what() << std::endl;
+		}
+		bool res = GLTFloader.LoadASCIIFromFile(&model, &err, &warn, currentPath / dataguide.gltf_uri);
 
 		if (!warn.empty()) {
-
+			std::cout<<warn<<std::endl;
 		}
 
 		if (!err.empty()) {
+			std::cout<<err<<std::endl;
 			throw harpy::utilities::harpy_little_error("Failed to load gltf scene");
 		}
 
 	}
-
 
 
 

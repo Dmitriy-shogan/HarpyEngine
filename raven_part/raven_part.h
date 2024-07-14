@@ -143,25 +143,29 @@ namespace harpy::raven_part{
 				entity_id = create_entity(parent_entity_id);
 			else
 				entity_id = create_entity();
-
+			std::cout<<">>>created entity with id: "<<std::to_string(entity_id)<<" child of: "<<std::to_string(parent_entity_id)<<std::endl;
 			if(has_transform(model, node)){
 				entity_load_transform_component(entity_id, model, node);
+
 			}else{
 				entity_create_transform_component(entity_id);
 			}
-
+			std::cout<<">>>transform loaded/created"<<std::endl;
 			if ((node.camera) >= 0 && (node.camera) < model.cameras.size()){
 
 				cameras.push_back((*entities)[entity_id]);
 				entity_load_camera_component(entity_id, model, node, pack);
 			}
-
+			std::cout<<">>>camera loaded/created/passed"<<std::endl;
+			std::cout<<">>>mesh: "<<std::to_string(node.mesh)<<std::endl;
 			if ((node.mesh >= 0) && (node.mesh < model.meshes.size())) {
 				entity_load_renderer_component(entity_id, model, node, preload_map, pack); //model.meshes[node.mesh]
 			}
-
+			std::cout<<">>>mesh loaded/created"<<std::endl;
+			std::cout<<">>>childrens: "<<std::to_string(node.children.size())<<std::endl;
 			for (size_t i = 0; i < node.children.size(); i++) {
 				assert((node.children[i] >= 0) && (node.children[i] < model.nodes.size()));
+				std::cout<<">>>>>load children: "<<std::to_string(node.children[i])<<std::endl;
 				loadNode(model, model.nodes[node.children[i]], entity_id,preload_map, pack);
 			}
 		}
@@ -176,16 +180,21 @@ namespace harpy::raven_part{
 		void entity_load_transform_component(uint32_t entity_id, tinygltf::Model& model, tinygltf::Node& node){
 			human_part::ECS::Transform* tr = new human_part::ECS::Transform();
 			if (((node.translation.size() >= 3) && (node.scale.size() >= 3) && (node.rotation.size() >= 4))){
-				tr->transform.pos = glm::vec3{node.translation[0],node.translation[1],node.translation[2]};
-				tr->transform.rot = glm::quat{node.rotation[0],node.rotation[1],node.rotation[2],node.rotation[3]};
-				tr->transform.scale = glm::vec3{node.scale[0],node.scale[1],node.scale[2]};
+				std::vector<float> rot_row = std::vector<float>(node.rotation.begin(), node.rotation.end());
+				glm::quat rot = glm::make_quat(rot_row.data());
+				std::vector<float> trs_row = std::vector<float>(node.translation.begin(), node.translation.end());
+				glm::vec3 trs = glm::make_vec3(trs_row.data());
+				std::vector<float> sc_row = std::vector<float>(node.scale.begin(), node.scale.end());
+				glm::vec3 sc = glm::make_vec3(sc_row.data());
+				tr->transform = transform(rot, trs, sc);
+				tr->transform.rot = glm::conjugate(tr->transform.rot);
 			}else {
 				std::vector<float> matrix_row = std::vector<float>(node.matrix.begin(), node.matrix.end());
 				glm::mat4 matrix = glm::make_mat4(matrix_row.data());
-				glm::vec3 skew;
-				glm::vec4 prespective;
-				glm::decompose(matrix, tr->transform.scale, tr->transform.rot, tr->transform.pos, skew, prespective);
-				//tr->transform.rot = glm::conjugate(tr->transform.rot);
+				//matrix = glm::transpose(matrix);
+				tr->transform = transform(matrix);
+				tr->transform.decompose_matrix();
+
 			}
 
 			(*entities)[entity_id]->add_component(tr);
@@ -197,7 +206,7 @@ namespace harpy::raven_part{
 				}
 
 		void entity_load_renderer_component(uint32_t entity_id, tinygltf::Model& model, tinygltf::Node& node, struct preload_map preload_map, struct load_package pack){
-			//std::cout<<"entity_load_renderer_component()"<<std::endl;
+			std::cout<<"entity_load_renderer_component()"<<std::endl;
 			human_part::ECS::Renderer* rend = new human_part::ECS::Renderer();
 			std::vector<renderer_mappings> mappings{};
 			mappings.clear();
@@ -205,6 +214,7 @@ namespace harpy::raven_part{
 			mappings.resize(prim_count);
 
 			for (int i = 0; i < prim_count; ++i) {
+				std::cout<<"Prim: "<<i<<std::endl;
 				tinygltf::Primitive prim = model.meshes[node.mesh].primitives[i];
 				if (preload_map.isMaterialLoaded(prim.material)){
 					mappings[i].material_id = preload_map.getMaterialId(prim.material);
@@ -215,30 +225,33 @@ namespace harpy::raven_part{
 					mappings[i].material_id = storage.register_material(material);
 					preload_map.setMaterialId(prim.material, mappings[i].material_id);
 				}
+				std::cout<<"material loaded"<<std::endl;
 
 				if (preload_map.isShapeLoaded(prim.indices, prim.attributes)){
-					//std::cout<<"ShapeID Restored: "<<mappings[i].shape_id<<std::endl;
+					std::cout<<"ShapeID Restored: "<<mappings[i].shape_id<<std::endl;
 					mappings[i].shape_id = preload_map.getShapeId(prim.indices, prim.attributes);
 				}else{
 					raven_part::resource_types::Shape shape{};
+					std::cout<<"trying to load shape"<<std::endl;
 					shape.load(model, prim, pack);
 
 					mappings[i].shape_id = storage.register_shape(shape);
-					//std::cout<<"ShapeID: "<<mappings[i].shape_id<<std::endl;
+					std::cout<<"ShapeID: "<<mappings[i].shape_id<<std::endl;
 					preload_map.setShapeId(prim.indices, prim.attributes, mappings[i].shape_id);
 				}
+				std::cout<<"shape loaded"<<std::endl;
 			}
-			//std::cout<<"mappings: "<<std::endl;
+			std::cout<<"mappings: "<<std::endl;
 			for (int i_mapp = 0; i_mapp < mappings.size(); ++i_mapp) {
-				//std::cout<<mappings[i_mapp].material_id<<std::endl;
-				//std::cout<<mappings[i_mapp].shape_id<<std::endl;
-				//std::cout<<mappings[i_mapp].pipeline_id<<std::endl;
+				std::cout<<mappings[i_mapp].material_id<<std::endl;
+				std::cout<<mappings[i_mapp].shape_id<<std::endl;
+				std::cout<<mappings[i_mapp].pipeline_id<<std::endl;
 			}
 
 			mapper.register_renderer(rend, mappings);
-			//std::cout<<"register_renderer: "<<rend<<":"<<&mappings<<":"<<mappings.size()<<std::endl;
+			std::cout<<"register_renderer: "<<rend<<":"<<&mappings<<":"<<mappings.size()<<std::endl;
 			(*entities)[entity_id]->add_component(rend);
-			//std::cout<<"Entity:"<<entity_id<<std::endl;
+			std::cout<<"Entity:"<<entity_id<<std::endl;
 		}
 
 		void entity_load_camera_component(uint32_t entity_id, tinygltf::Model& model, tinygltf::Node& node, struct load_package pack);

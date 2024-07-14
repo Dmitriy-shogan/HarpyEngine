@@ -43,8 +43,8 @@ void main() {
 
     vec4 pos = (pushConstants.transform * vec4(vertices_out[i].POSITION, 1));
     vertices_out[i].POSITION = pos.xyz / pos.w;
-    vertices_out[i].POSITION.xy = vertices_out[i].POSITION.xy;
-    vertices_out[i].POSITION.y = vertices_out[i].POSITION.y;
+    vertices_out[i].POSITION.xyz = vertices_out[i].POSITION.xyz;
+
 
     vec4 norm = (pushConstants.transform * vec4(vertices_out[i].NORMAL, 1));
     vertices_out[i].NORMAL = norm.xyz / norm.w;
