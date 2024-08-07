@@ -7,8 +7,8 @@ using namespace resources;
 
 #define INIT_CHECK(x) if(is_instance_initialized) \
     return x; \
-    throw harpy::utilities::error_handling::harpy_little_error \
-    (harpy::utilities::error_handling::error_severity::not_init, "Common vulkan resource is not initialized yet")
+    throw harpy::utilities::harpy_little_error \
+    (harpy::utilities::error_severity::not_init, "Common vulkan resource is not initialized yet")
 
 //USE THIS FOR INITIALIZING INSTANCE
 VkInstance& common_vulkan_resource::get_instance()
@@ -70,15 +70,15 @@ std::vector<VkDevice>& common_vulkan_resource::get_all_devices()
 
 VkDevice& common_vulkan_resource::get_main_device()
 {
-    if(!is_inited()) throw utilities::error_handling::harpy_little_error
-    (utilities::error_handling::error_severity::not_init, "Common vulkan resource is not initialized yet");
+    if(!is_inited()) throw utilities::harpy_little_error
+    (utilities::error_severity::not_init, "Common vulkan resource is not initialized yet");
     return devices.front();
 }
 
 common_vulkan_resource::operator VkDevice_T*&()
 {
-    if(!is_inited()) throw utilities::error_handling::harpy_little_error
-    (utilities::error_handling::error_severity::not_init, "Common vulkan resource is not initialized yet");
+    if(!is_inited()) throw utilities::harpy_little_error
+    (utilities::error_severity::not_init, "Common vulkan resource is not initialized yet");
     return devices.front();
 }
 
@@ -87,15 +87,15 @@ std::vector<windowing::window>& common_vulkan_resource::get_all_windows()
 
 windowing::window& common_vulkan_resource::get_main_window()
 {
-    if(!is_inited()) throw utilities::error_handling::harpy_little_error
-    (utilities::error_handling::error_severity::not_init, "Common vulkan resource is not initialized yet");
+    if(!is_inited()) throw utilities::harpy_little_error
+    (utilities::error_severity::not_init, "Common vulkan resource is not initialized yet");
     return windows.front();
 }
 
 common_vulkan_resource::operator harpy::nest::windowing::window&()
 {
-    if(!is_inited()) throw utilities::error_handling::harpy_little_error
-   (utilities::error_handling::error_severity::not_init, "Common vulkan resource is not initialized yet");
+    if(!is_inited()) throw utilities::harpy_little_error
+   (utilities::error_severity::not_init, "Common vulkan resource is not initialized yet");
     return windows.front();
 }
 

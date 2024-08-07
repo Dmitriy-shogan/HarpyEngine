@@ -12,6 +12,7 @@ const harpy::nest::wrappers::data_buffer& harpy::nest::D3::mesh::get_indices() c
     return indices;
 }
 
+/*
 void harpy::nest::D3::mesh::load(
     command_commander& commander,
     std::vector<wrappers::vertex>& vertices,
@@ -23,13 +24,8 @@ void harpy::nest::D3::mesh::load(
 
     auto delegate = commander.reset_pool()
     ->start_recording()
-    ->load_vertex_index_buffers(
-        vertices.data(),
-        vertices.size() * sizeof(wrappers::vertex),
-        indices,
-        this->vertices.get_vk_buffer(),
-        this->indices.get_vk_buffer()
-    )
+            ->load_into_buffer(vertices,vertices)
+            ->load_into_buffer(index_buffer, indices)
     ->end_recording();
     
     auto is_ready = utilities::threading::thread_pool<>::get_singleton().enqueue(delegate);
@@ -41,6 +37,7 @@ void harpy::nest::D3::mesh::load(
 
     commander.submit_one(std::move(resource), {});
 }
+*/
 
 bool harpy::nest::D3::mesh::is_loaded()
 {

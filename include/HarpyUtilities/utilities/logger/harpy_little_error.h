@@ -9,7 +9,7 @@
 #pragma warning(disable: 4275)
 #endif
 
-namespace harpy::utilities::error_handling
+namespace harpy::utilities
 {
     
     enum class error_severity

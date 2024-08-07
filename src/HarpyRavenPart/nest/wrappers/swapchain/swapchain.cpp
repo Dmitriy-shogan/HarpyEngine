@@ -7,9 +7,8 @@
 #include <nest/resources/surface_capabilities.h>
 
 using resource = harpy::nest::resources::common_vulkan_resource;
-using harpy_error = harpy::utilities::error_handling::harpy_little_error;
-using error_enum = harpy::utilities::error_handling::error_severity;
-
+using harpy_error = harpy::utilities::harpy_little_error;
+using error_enum = harpy::utilities::error_severity;
 
 //TODO: populate with debug info
 void harpy::nest::wrappers::swapchain::init(
@@ -148,6 +147,20 @@ void harpy::nest::wrappers::swapchain::init_render_pass(VkRenderPassCreateInfo2 
 {
 	if(ci.sType == 0)
 	{
+        VkAttachmentDescription2 depthAttachment{};
+        depthAttachment.format = get_depth_format();
+        depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+        depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+        depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        depthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+        VkAttachmentReference2 depthAttachmentRef{};
+        depthAttachmentRef.attachment = 1;
+        depthAttachmentRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
 		VkAttachmentDescription2 colorAttachment{};
 		colorAttachment.sType = VK_STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_2;
 		colorAttachment.format = format;
@@ -167,17 +180,30 @@ void harpy::nest::wrappers::swapchain::init_render_pass(VkRenderPassCreateInfo2 
 		colorAttachmentRef.attachment = 0;
 		colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
+        std::array<VkAttachmentDescription2, 2> attachments{depthAttachment, colorAttachment};
+
 		VkSubpassDescription2 subpass{};
 		subpass.sType = VK_STRUCTURE_TYPE_SUBPASS_DESCRIPTION_2;
 		subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 		subpass.colorAttachmentCount = 1;
 		subpass.pColorAttachments = &colorAttachmentRef;
+        subpass.pDepthStencilAttachment = &depthAttachmentRef;
+
+        VkSubpassDependency2 dependency{};
+        dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+        dependency.dstSubpass = 0;
+        dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+        dependency.srcAccessMask = 0;
+        dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+        dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
 		
 		ci.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO_2;
-		ci.attachmentCount = 1;
-		ci.pAttachments = &colorAttachment;
+		ci.attachmentCount = 2;
+		ci.pAttachments = attachments.data();
 		ci.subpassCount = 1;
 		ci.pSubpasses = &subpass;
+        ci.dependencyCount = 1;
+        ci.pDependencies = &dependency;
 	}
 	
 	HARPY_VK_CHECK(vkCreateRenderPass2(resource::get_resource(), &ci, nullptr, &render_pass));
@@ -309,4 +335,17 @@ harpy::nest::wrappers::swapchain::~swapchain()
 	}
 	if (chain)
 		vkDestroySwapchainKHR(*device, chain, nullptr);
+}
+
+VkFormat harpy::nest::wrappers::swapchain::get_depth_format() {
+    for (VkFormat format :  {VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT}) {
+        VkFormatProperties props;
+        vkGetPhysicalDeviceFormatProperties(resource::get_resource().get_phys_device(), format, &props);
+
+        if ((props.optimalTilingFeatures & VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT) == VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT) {
+            return format;
+        }
+    }
+
+    throw std::runtime_error("failed to find supported format!");
 }

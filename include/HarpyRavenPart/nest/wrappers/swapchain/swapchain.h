@@ -69,6 +69,8 @@ namespace harpy::nest::wrappers
         VkRenderPass& get_render_pass();
 
         void destroy(bool do_destroy_vk_swapchain = false) const;
+
+        static VkFormat get_depth_format();
         
         ~swapchain();
     };

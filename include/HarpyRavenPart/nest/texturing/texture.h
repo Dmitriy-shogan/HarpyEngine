@@ -15,14 +15,16 @@ namespace harpy::nest::texturing
         VkImage image{};
         VmaAllocation allocation{};
         VkImageView view{};
+        VkExtent3D extent{};
+        VkFormat format{};
+        size_t image_size{};
 
-        utilities::images::image* cv_image{nullptr};
-        void init();
+        void init(utilities::image& image);
         void init_view(VkFormat format);
     public:
 
         texture(
-            utilities::images::image& image,
+            utilities::image& image,
             VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device(),
             VmaAllocator* allocator = &resources::common_vulkan_resource::get_resource().get_main_allocator());
         
@@ -33,9 +35,11 @@ namespace harpy::nest::texturing
         texture& operator=(texture&& text) noexcept;
         
         VkImage& get_vk_image();
-        
         operator VkImage&();
-        utilities::images::image* get_raw_cv_image_ptr();
+
+        VkImageView& get_vk_image_view();
+        operator VkImageView&();
+
         size_t get_size();
         ~texture();
         

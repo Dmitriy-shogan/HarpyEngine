@@ -16,7 +16,7 @@
 
 #include "nest/managers/queue_manager.h"
 
-using logger = harpy::utilities::error_handling::logger;
+using logger = harpy::utilities::logger;
 using resource = harpy::nest::resources::common_vulkan_resource;
 
 using namespace harpy;
@@ -86,7 +86,7 @@ void init_vk_instance()
         //HERE GOES STOP
         stop:
         //HERE GOES STOP
-        if(!is_val_layer) throw harpy::utilities::error_handling::harpy_little_error("No validation layers found");
+        if(!is_val_layer) throw harpy::utilities::harpy_little_error("No validation layers found");
         
         extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
         
@@ -108,7 +108,7 @@ void init_vk_instance()
         instance_ci.enabledLayerCount = 0;
     }
 
-    std::vector<const char*> working_extensions;
+    std::vector<const char*> working_extensions{};
     for(auto& i : extensions)
     {
         if(i) working_extensions.push_back(i);
@@ -165,7 +165,7 @@ void init_vk_instance()
         logger::get_logger() << "That's all for extensions!";
     }
 }
-void init_window()
+void init_window(windowing::window_create_info ci)
 {
     logger::get_logger() << "Starting windows creation";
 
@@ -174,7 +174,8 @@ void init_window()
 
     //Disabling till swapchain
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-    resource::get_resource().set_main_window(windowing::window({800, 600, false, false, "Testing"}));
+
+    resource::get_resource().set_main_window(std::move(ci));
     
     logger::get_logger() << "Window created succesfully, gonna create physical device";
 }
@@ -183,7 +184,7 @@ void init_vk_physical_device()
     uint32_t phys_device_counter{};
     vkEnumeratePhysicalDevices(resource::get_resource(), &phys_device_counter, nullptr);
 
-    if(!phys_device_counter) throw utilities::error_handling::harpy_little_error("No physical devices found, man. Buy a graphics card!");
+    if(!phys_device_counter) throw utilities::harpy_little_error("No physical devices found, man. Buy a graphics card!");
     
     std::vector<VkPhysicalDevice> devices{phys_device_counter};
     vkEnumeratePhysicalDevices(resource::get_resource(), &phys_device_counter, devices.data());
@@ -358,7 +359,7 @@ void init_vk_logical_device()
             }
         }
         if(!is_swapchain)
-            throw utilities::error_handling::harpy_little_error("No swapchain extension has been found. No way you can use this engine");
+            throw utilities::harpy_little_error("No swapchain extension has been found. No way you can use this engine");
     }
 
     device_ci.enabledExtensionCount = static_cast<uint32_t>(resources::musthave_device_extentions.size());
@@ -430,10 +431,10 @@ void init_vma()
 
 
 
-void harpy::nest::initializations::init_vk_common_resource()
+void harpy::nest::initializations::init_vk_common_resource(windowing::window_create_info ci)
 {
     init_vk_instance();
-    init_window();
+    init_window(std::move(ci));
     init_vk_physical_device();
     init_vk_logical_device();
     init_vk_surface();
@@ -443,10 +444,20 @@ void harpy::nest::initializations::init_vk_common_resource()
     logger::get_logger() << "Your common vulkan resources have been created succesfully. Now you can use other vulkan features in Harpy Engine";
 }
 
-void harpy::nest::initializations::init_harpy()
+void harpy::nest::initializations::init_harpy(windowing::window_create_info ci)
 {
     glfwInit();
-    init_vk_common_resource();
+
+    if(!glfwVulkanSupported()){
+        throw utilities::harpy_little_error(
+                utilities::error_severity::we_are_fucked,
+                "Sorry, but somehow your machine don't now what vulkan is or glfw just won't work with it"
+                );
+    }
+    glfwSetErrorCallback(glfw_error_callback);
+
+
+    init_vk_common_resource(std::move(ci));
     init_std_surface_capabilities();
 }
 
@@ -455,3 +466,20 @@ void initializations::init_std_surface_capabilities()
     resources::std_surface_capabilities = resources::create_surface_capabilities();
 }
 
+void initializations::glfw_error_callback(int code, const char *description) {
+    auto& logger = harpy::utilities::logger::get_logger();
+    logger << "GLFW errored. Here is code: " + std::to_string(code) + "\nHere is description: " + description;
+}
+
+VkBool32 VKAPI_CALL
+debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType,
+              const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData) {
+
+    harpy::utilities::logger::get_logger() << std::make_pair(harpy::utilities::error_severity::error, pCallbackData->pMessage);
+    harpy::utilities::logger::get_logger()
+            .log(harpy::utilities::error_severity::error,
+                 std::string("Validation layer: ") +  pCallbackData->pMessage);
+
+
+    return VK_FALSE;
+}

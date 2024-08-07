@@ -24,7 +24,14 @@ add_executable(HarpyRavenExe ${HARPY_RAVEN_MODULE}/nest/inititalizations.h
         3D/mesh.cpp
         3D/renderer.cpp
         main.cpp
-        ../../include/HarpyRavenPart/3D/uniform_buffer_objects.h)
+        ../../include/HarpyRavenPart/3D/uniform_buffer_objects.h
+        nest/pipeline/descriptor_factory.cpp
+        ../../include/HarpyRavenPart/nest/pipeline/descriptor_factory.h
+        nest/resources/depth_image.cpp
+        ../../include/HarpyRavenPart/nest/resources/depth_image.h
+        nest/windowing/input_controller.cpp
+        ../../include/HarpyRavenPart/nest/windowing/input_controller.h
+        ../../include/HarpyUtilities/utilities/allocators/allocator.h)
 
 add_library(HarpyRavenLib
         ${HARPY_RAVEN_MODULE}/nest/inititalizations.h
@@ -51,7 +58,14 @@ add_library(HarpyRavenLib
         nest/wrappers/queues/queue_family.cpp
         nest/wrappers/swapchain/swapchain.cpp
         3D/mesh.cpp
-        3D/renderer.cpp)
+        3D/renderer.cpp
+        nest/pipeline/descriptor_factory.cpp
+        ../../include/HarpyRavenPart/nest/pipeline/descriptor_factory.h
+        nest/resources/depth_image.cpp
+        ../../include/HarpyRavenPart/nest/resources/depth_image.h
+        nest/windowing/input_controller.cpp
+        ../../include/HarpyRavenPart/nest/windowing/input_controller.h
+        ../../include/HarpyUtilities/utilities/allocators/allocator.h)
 
 file(COPY ${CMAKE_SOURCE_DIR}/external_resources DESTINATION ${CMAKE_BINARY_DIR})
 target_compile_definitions(HarpyRavenLib PRIVATE HARPY_RAVEN_DLL_EXPORTS)
@@ -65,6 +79,7 @@ target_include_directories(HarpyRavenLib
         PUBLIC  ${HARPY_UTILITIES_MODULE}
                 ${glm_SOURCE_DIR}
                 ${HARPY_INCLUDES}/HarpyRavenPart)
+
 target_link_libraries(HarpyRavenLib
         PRIVATE glfw
                 GPUOpen::VulkanMemoryAllocator
@@ -72,6 +87,7 @@ target_link_libraries(HarpyRavenLib
                 "${Vulkan_INCLUDE_DIRS}/../Lib/shaderc_shared.lib"
         PUBLIC HarpyUtilities
                 glm)
+
 target_include_directories(HarpyRavenExe
         PRIVATE ${glfw_SOURCE_DIR}/include
         ${volk_SOURCE_DIR}
@@ -80,6 +96,7 @@ target_include_directories(HarpyRavenExe
         PUBLIC  ${HARPY_UTILITIES_MODULE}
         ${glm_SOURCE_DIR}
         ${HARPY_INCLUDES}/HarpyRavenPart)
+
 target_link_libraries(HarpyRavenExe
         PRIVATE glfw
         GPUOpen::VulkanMemoryAllocator

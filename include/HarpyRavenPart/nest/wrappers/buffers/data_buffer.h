@@ -6,12 +6,14 @@
 
 namespace harpy::nest::wrappers
 {
-    
+
+    //TODO: move vertex to the more understandable spot
     struct vertex
     {
         //TODO: don't forget about vertex structure
         glm::vec3 coords{};
         glm::vec3 base_color{};
+        glm::vec2 texture_coords{};
     };
 
     //JUST FOR NOW
@@ -22,18 +24,24 @@ namespace harpy::nest::wrappers
     };
 
     inline std::vector<VkVertexInputAttributeDescription> vertex_vk_input_attribute_descriptions{
-                    {
-                        .location = 0,
-                        .binding = 0,
-                        .format = VK_FORMAT_R32G32B32_SFLOAT,
-                        .offset = offsetof(vertex, coords),
-                    },
-                    {
-                        .location = 1,
-                        .binding = 0,
-                        .format = VK_FORMAT_R32G32B32_SFLOAT,
-                        .offset = offsetof(vertex, base_color),
-                    }
+            {
+                    .location = 0,
+                    .binding = 0,
+                    .format = VK_FORMAT_R32G32B32_SFLOAT,
+                    .offset = offsetof(vertex, coords),
+            },
+            {
+                    .location = 1,
+                    .binding = 0,
+                    .format = VK_FORMAT_R32G32B32_SFLOAT,
+                    .offset = offsetof(vertex, base_color),
+            },
+            {
+                    .location = 2,
+                    .binding = 0,
+                    .format = VK_FORMAT_R32G32_SFLOAT,
+                    .offset = offsetof(vertex, texture_coords),
+            }
     };
     
     enum class buffer_type

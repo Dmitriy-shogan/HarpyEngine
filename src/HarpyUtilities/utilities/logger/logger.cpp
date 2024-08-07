@@ -1,8 +1,9 @@
 ﻿#include <logger/logger.h>
 
 #include <iostream>
+#include "logger/logger.h"
 
-using namespace harpy::utilities::error_handling;
+using namespace harpy::utilities;
 
 void logger::private_log(error_severity severity, std::string error)
 {

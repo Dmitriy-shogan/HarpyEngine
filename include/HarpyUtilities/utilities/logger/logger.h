@@ -11,7 +11,7 @@
 #pragma warning(disable: 4251)
 #endif
 
-namespace harpy::utilities::error_handling
+namespace harpy::utilities
 {
     
     //probably thread-safe singleton logger

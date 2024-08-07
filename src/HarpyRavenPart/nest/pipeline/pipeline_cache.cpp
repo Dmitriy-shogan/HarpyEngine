@@ -5,8 +5,8 @@
 #include <logger/harpy_little_error.h>
 #include <logger/logger.h>
 
-using harpy_error = harpy::utilities::error_handling::harpy_little_error; 
-using logger = harpy::utilities::error_handling::logger;
+using harpy_error = harpy::utilities::harpy_little_error; 
+using logger = harpy::utilities::logger;
 using resource = harpy::nest::resources::common_vulkan_resource;
 
 #define HARPY_STD_PIPELINE_CACHE_FILE "data/pipeline_cache.hpc"

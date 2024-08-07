@@ -20,15 +20,19 @@ namespace harpy::utilities
 
         //Два главных метода для вызова, исполняют одно и то же
         //Пока что кроме добавления (выше), вызова и очистки ничё ненадо, что ясно
-        bool invoke();
+        bool invoke(bool do_clean = false);
         void operator()();
+        void invoke_one(size_t index);
+
         void clear();
+        void pop_back();
+        size_t size();
     };
 
     template <typename function, typename ... args>
     void delegate::push_back(function f, args... argues)
     {
-        auto task = [func = std::move(f), ... largs = std::move(argues)]() {
+        auto task = [func = std::move(f), ... largs = std::move(argues)]() mutable {
             func(largs...);
         };
         functions.push_back(task);

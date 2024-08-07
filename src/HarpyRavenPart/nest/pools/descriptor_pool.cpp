@@ -1,7 +1,7 @@
 #include <nest/pools/descriptor_pool.h>
 
 harpy::nest::pools::descriptor_pool::descriptor_pool(uint32_t descriptor_amount, descriptor_types type,  VkDevice* device)
-: device(device), types(std::set{type}), max_descriptor_amount(descriptor_amount)
+: device(device), types(std::set{type})
 {
     VkDescriptorPoolSize size_ci{};
     size_ci.type = static_cast<VkDescriptorType>(type);
@@ -21,8 +21,8 @@ harpy::nest::pools::descriptor_pool::descriptor_pool(uint32_t descriptor_amount,
 }
 
 harpy::nest::pools::descriptor_pool::descriptor_pool(
-        std::initializer_list<pools::pool_size_desc> descriptions, uint32_t max_set_amount, VkDevice* device)
-: device(device), max_descriptor_amount(max_set_amount)
+        std::initializer_list<pools::pool_size_desc> descriptions, uint32_t max_descriptors_amount, VkDevice* device)
+: device(device), max_descriptor_amount(max_descriptors_amount)
 {
     std::vector<VkDescriptorPoolSize> sizes{descriptions.size()};
     for(int f = 0; auto& i : sizes)
@@ -86,3 +86,4 @@ harpy::nest::pools::descriptor_pool::~descriptor_pool()
     if(pool)
         vkDestroyDescriptorPool(*device, pool, nullptr);
 }
+

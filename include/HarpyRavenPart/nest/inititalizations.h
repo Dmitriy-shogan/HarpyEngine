@@ -81,6 +81,10 @@
 //Max frames that can be rendered at a time
 #define MAX_FRAMES_IN_FLIGHT 2
 
+//Glm definitions
+#define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+
 #ifdef HARPY_DEBUG
 constexpr bool is_harpy_debug {true};
 #else
@@ -93,9 +97,9 @@ constexpr bool is_validation_layers{true};
 constexpr bool is_validation_layers{false};
 #endif
 
-//Just VK check
-#define HARPY_VK_CHECK(x) if (x) throw harpy::utilities::error_handling::harpy_little_error \
-(harpy::utilities::error_handling::error_severity::wrong_init, "Something went wrong while initializing part of Vulkan")
+//TODO: make this into function
+#define HARPY_VK_CHECK(x) if (x) throw harpy::utilities::harpy_little_error \
+(harpy::utilities::error_severity::wrong_init, "Something went wrong while initializing part of Vulkan")
 
 
 #define HARPY_MAKE_SINGLETON(class_name)              \
@@ -127,16 +131,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
     VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
     VkDebugUtilsMessageTypeFlagsEXT messageType,
     const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
-    void* pUserData) {
-    
-    harpy::utilities::error_handling::logger::get_logger() << std::make_pair(harpy::utilities::error_handling::error_severity::error, pCallbackData->pMessage);
-    harpy::utilities::error_handling::logger::get_logger()
-    .log(harpy::utilities::error_handling::error_severity::error,
-        std::string("Validation layer: ") +  pCallbackData->pMessage);
-    
-
-    return VK_FALSE;
-}
+    void* pUserData);
 
 
 namespace harpy
@@ -148,6 +143,10 @@ namespace harpy
 namespace harpy::nest::resources
 {
     class common_vulkan_resource;
+}
+
+namespace harpy::nest::windowing{
+    struct window_create_info;
 }
 
 
@@ -186,9 +185,10 @@ namespace harpy::nest::initializations
 
     inline vendors_id vendor;
     
-    void init_vk_common_resource();
-    void init_harpy();
+    void init_vk_common_resource(windowing::window_create_info ci);
+    void init_harpy(windowing::window_create_info ci);
     void init_std_surface_capabilities();
+    void glfw_error_callback(int code, const char* description);
 }
 
 #endif

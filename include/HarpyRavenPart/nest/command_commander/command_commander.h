@@ -22,7 +22,9 @@ namespace harpy::nest
         bool is_writing_to_primary{true};
         std::size_t primary_counter{}, secondary_counter{};
 
+        //Just for now
         wrappers::data_buffer staging_buffer{wrappers::buffer_type::staging};
+        uint32_t staging_size{0};
         
         std::unique_ptr<resources::command_thread_resource> thread_resource{};
         std::unordered_map<VkCommandBuffer, bool> used_buffers{};
@@ -87,12 +89,15 @@ namespace harpy::nest
         command_commander* load_into_buffer(
             VkBuffer dst,
             void* data,
-            std::size_t size,
-            VkBufferCopy buf_copy = {0, 0, 0});
+            std::size_t size);
 
-        command_commander* load_into_texture(texturing::texture& texture, wrappers::swapchain& swapchain = managers::swapchain_manager::get_singleton().get_swapchain());
+        template<typename T>
+        command_commander* load_into_buffer(
+                VkBuffer dst,
+                std::vector<T>& vector);
 
-        command_commander* load_vertex_index_buffers(void* vertex_data, size_t vertex_size, const std::vector<uint32_t>& indice_data, VkBuffer vertex_buffer, VkBuffer index_buffer);
+        command_commander* load_into_texture(texturing::texture& texture, utilities::image& image);
+
         //command_commander* copy_buffer2();
 
         command_commander* copy_image();
@@ -173,5 +178,38 @@ namespace harpy::nest
     };
 }
 
+template<typename T>
+harpy::nest::command_commander *harpy::nest::command_commander::load_into_buffer(VkBuffer dst, std::vector<T>& vector) {
+
+    delegate.push_back([this, dst, &vector, command_buffer = is_writing_to_primary ?
+                                                             thread_resource->com_pool->get_primary_buffers()[primary_counter]:
+                                                             thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer] ()
+                       {
+                           if (staging_buffer.get_size() < vector.size() * sizeof(vector.front()) + staging_size) init_staging_buffer(vector.size() * sizeof(vector.front()) + staging_size);
+
+                           void* temp_data{nullptr};
+                           vmaMapMemory(*allocator, staging_buffer.get_vma_allocation(), &temp_data);
+                           std::memcpy(static_cast<char*>(temp_data) + staging_size, vector.data(), vector.size() * sizeof(vector.front()));
+                           vmaUnmapMemory(*allocator, staging_buffer.get_vma_allocation());
+
+                           VkBufferCopy copy{
+                                   .srcOffset = staging_size,
+                                   .dstOffset = 0,
+                                   .size = vector.size() * sizeof(vector.front())
+                           };
+
+                           vkCmdCopyBuffer(
+                                   command_buffer,
+                                   staging_buffer.get_vk_buffer(),
+                                   dst,
+                                   1,
+                                   &copy);
+                           staging_size += vector.size() * sizeof(vector.front());
+
+                       });
+
+
+    return this;
+}
 
 #endif //HARPY_NEST_COMMAND_COMMANDER

@@ -72,7 +72,7 @@ shader_types glsl_shader_factory::process_extension(std::string_view filename)
     case 'p':
         return shader_types::compute;
         default:
-            throw utilities::error_handling::harpy_little_error("Tossed not a shader or invalid shader extension");
+            throw utilities::harpy_little_error("Tossed not a shader or invalid shader extension");
     }
 }
 
@@ -93,7 +93,7 @@ shaderc_shader_kind glsl_shader_factory::shader_types_to_shaderc_shader_kind(sha
     case shader_types::vertex:
         return shaderc_vertex_shader;
         default:
-            throw utilities::error_handling::harpy_little_error("Wrong shader type while converting tp shaderc types");
+            throw utilities::harpy_little_error("Wrong shader type while converting tp shaderc types");
     }
 }
 
@@ -117,7 +117,7 @@ void glsl_shader_factory::set_set(const glsl_shader_factory_options& set)
 void glsl_shader_factory::set_set(size_t index)
 {
     if (index < 0 || index >= sets.size())
-        throw utilities::error_handling::harpy_little_error("Wrong index while setting set for glsl shader factory");
+        throw utilities::harpy_little_error("Wrong index while setting set for glsl shader factory");
     current_set = index;
 }
 
@@ -128,7 +128,7 @@ std::string glsl_shader_factory::preprocess(const std::string& shader, shader_ty
           shader_name.c_str(), process_options());
 
     if (result.GetCompilationStatus() != shaderc_compilation_status_success) {
-        throw utilities::error_handling::harpy_little_error(result.GetErrorMessage());
+        throw utilities::harpy_little_error(result.GetErrorMessage());
     }
 
     return {result.cbegin(), result.cend()};
@@ -141,7 +141,7 @@ harpy::spirv_compilation_result glsl_shader_factory::compile(const std::string& 
       compiler.CompileGlslToSpv(shader, shader_types_to_shaderc_shader_kind(type), "shader lul", process_options());
 
     if (module.GetCompilationStatus() != shaderc_compilation_status_success) {
-        throw utilities::error_handling::harpy_little_error(module.GetErrorMessage());
+        throw utilities::harpy_little_error(module.GetErrorMessage());
     }
 
     return {module.cbegin(), module.cend()};
@@ -154,7 +154,7 @@ std::string glsl_shader_factory::compile_binary(const std::string& shader, shade
           shader.c_str(), process_options());
 
     if (result.GetCompilationStatus() != shaderc_compilation_status_success) {
-        throw utilities::error_handling::harpy_little_error(result.GetErrorMessage());
+        throw utilities::harpy_little_error(result.GetErrorMessage());
     }
     return {result.cbegin(), result.cend()};
 }
@@ -203,7 +203,7 @@ harpy::spirv_compilation_result glsl_shader_factory::build_assembly(const std::s
 {
     auto result = compiler.AssembleToSpv(assembled_string);
     if (result.GetCompilationStatus() != shaderc_compilation_status_success) {
-        throw utilities::error_handling::harpy_little_error(result.GetErrorMessage());
+        throw utilities::harpy_little_error(result.GetErrorMessage());
     }
     return {result.cbegin(), result.cend()};
 }
@@ -280,7 +280,7 @@ shader_module glsl_shader_factory::create_shader_module(spirv_compilation_result
 
 std::future<shader_module> glsl_shader_factory::create_shader_module_async(std::string filename)
 {
-    return utilities::threading::default_thread_pool::get_singleton().enqueue
+    return utilities::default_thread_pool::get_singleton().enqueue
     ([file = std::move(filename)]() -> shader_module
     {
         return glsl_shader_factory::get_singleton().create_shader_module(file);
@@ -289,7 +289,7 @@ std::future<shader_module> glsl_shader_factory::create_shader_module_async(std::
 
 std::future<shader_set> glsl_shader_factory::create_shader_set_async(std::string filename)
 {
-    return utilities::threading::default_thread_pool::get_singleton().enqueue
+    return utilities::default_thread_pool::get_singleton().enqueue
     ([file = std::move(filename)]() -> shader_set
     {
         return glsl_shader_factory::get_singleton().create_shader_set(file);

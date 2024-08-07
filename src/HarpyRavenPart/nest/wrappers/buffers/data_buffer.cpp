@@ -1,6 +1,5 @@
 ﻿#include <nest/wrappers/buffers/data_buffer.h>
 
-#include <nest/pipeline/descriptors/uniform_buffers_descriptions.h>
 
 void harpy::nest::wrappers::data_buffer::init(std::size_t size)
 {
@@ -37,7 +36,7 @@ void harpy::nest::wrappers::data_buffer::init(std::size_t size)
             break;
         }
     default:
-        throw utilities::error_handling::harpy_little_error("What a joker, decided to create a buffer with an enum that is not even bm!");
+        throw utilities::harpy_little_error("What a joker, decided to create a buffer with an enum that is not even bm!");
     }
     ci.size = this->size;
     //Just for now, needs research

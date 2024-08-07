@@ -5,20 +5,29 @@
 
 void harpy::nest::command_commander::init_staging_buffer(uint32_t size)
 {
-    staging_buffer.~data_buffer();
-    staging_buffer = wrappers::data_buffer{wrappers::buffer_type::staging, size};
+    if(staging_buffer.get_size()) {
+        auto ptr = staging_buffer.get_mapped_ptr();
+        void *temp_data = new char[staging_size];
+        std::memcpy(temp_data, ptr, staging_size);
+        staging_buffer.unmap_ptr();
+
+        staging_buffer.~data_buffer();
+        staging_buffer = wrappers::data_buffer{wrappers::buffer_type::staging, size};
+        ptr = staging_buffer.get_mapped_ptr();
+        std::memcpy(ptr, temp_data, staging_size);
+        staging_buffer.unmap_ptr();
+        delete[] temp_data;
+    } else
+        staging_buffer.init(size);
 }
 
 void harpy::nest::command_commander::transit_image(texturing::texture& texture, VkImageLayout old_layout, VkImageLayout new_layout)
 {
-    delegate.push_back([this, text = &texture, old_layout, new_layout, command_buffer = is_writing_to_primary ?
-                                                            thread_resource->com_pool->get_primary_buffers()[primary_counter]:
-                                                            thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer]()
-    {
+    auto& command_buffer = is_writing_to_primary ? thread_resource->com_pool->get_primary_buffers()[primary_counter]: thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer;
         VkPipelineStageFlags src{}, dst{};
         VkImageMemoryBarrier ci{};
         ci.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-        ci.image = text->get_vk_image();
+        ci.image = texture.get_vk_image();
         ci.oldLayout = old_layout;
         ci.newLayout = new_layout;
 
@@ -49,7 +58,7 @@ void harpy::nest::command_commander::transit_image(texturing::texture& texture, 
             src = VK_PIPELINE_STAGE_TRANSFER_BIT;
             dst = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
         } else {
-            throw utilities::error_handling::harpy_little_error("Unsupported layout transition while transiting image from one layer to another");
+            throw utilities::harpy_little_error("Unsupported layout transition while transiting image from one layer to another");
         }
 
         vkCmdPipelineBarrier(
@@ -62,7 +71,6 @@ void harpy::nest::command_commander::transit_image(texturing::texture& texture, 
             0,
             nullptr,
             1, &ci);
-    });
 }
 
 harpy::nest::command_commander::command_commander(VkDevice* device,
@@ -88,7 +96,7 @@ std::unique_ptr<harpy::nest::resources::command_thread_resource>&& harpy::nest::
 harpy::nest::command_commander* harpy::nest::command_commander::start_recording(long starting_buffer, VkCommandBufferBeginInfo begin_ci)
 {
     if(!thread_resource)
-        throw utilities::error_handling::harpy_little_error("Please first bind thread resource before starting recording");
+        throw utilities::harpy_little_error("Please first bind thread resource before starting recording");
     
     delegate.clear();
     
@@ -109,15 +117,13 @@ harpy::nest::command_commander* harpy::nest::command_commander::record_to_second
     secondary_counter = starting_buffer;
 
     used_buffers[thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer] = true;
-    VkCommandBufferInheritanceInfo info{};
-    
-    info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
-    
-    begin_ci.pInheritanceInfo = &info;
-   
+
     thread_resource->com_pool->get_secondary_buffers().back().parent_primary_buffer = primary_buffer_index;
-    delegate.push_back([this, ci = begin_ci]()
+    delegate.push_back([this, ci = begin_ci] () mutable
     {
+        VkCommandBufferInheritanceInfo info{};
+        info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
+        ci.pInheritanceInfo = &info;
         vkBeginCommandBuffer(
         thread_resource->com_pool->get_secondary_buffers()[primary_counter].buffer,
         &ci
@@ -211,54 +217,60 @@ harpy::nest::command_commander* harpy::nest::command_commander::move_down_second
     return this;
 }
 
-harpy::nest::command_commander* harpy::nest::command_commander::load_into_buffer(VkBuffer dst, void* data, std::size_t size, VkBufferCopy buf_copy)
+harpy::nest::command_commander* harpy::nest::command_commander::load_into_buffer(VkBuffer dst, void* data, std::size_t size)
 {
     /*if(is_harpy_debug && thread_resource->queueget_type() == pipeline::graphics || thread_resource->queue_manager->get_type() == pipeline::compute)
     {
-        utilities::error_handling::logger::get_logger().log(utilities::error_handling::error_severity::warning, "WARNING!, you're trying to copy buffer in a graphics or compute queue. Please, use transfer only, main or universal queues");
-        utilities::error_handling::logger::get_logger().show_last_log();
+        utilities::logger::get_logger().log(utilities::error_severity::warning, "WARNING!, you're trying to copy buffer in a graphics or compute queue. Please, use transfer only, main or universal queues");
+        utilities::logger::get_logger().show_last_log();
     }*/
     
-    delegate.push_back([this, copy = &buf_copy, dst, size, data, command_buffer = is_writing_to_primary ?
+    delegate.push_back([this, dst, size, data, command_buffer = is_writing_to_primary ?
                                                             thread_resource->com_pool->get_primary_buffers()[primary_counter]:
                                                             thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer] ()
     {
-        if (staging_buffer.get_size() < size) init_staging_buffer(size);
+        if (staging_buffer.get_size() < size + staging_size) init_staging_buffer(size + staging_size);
         
     void* temp_data{nullptr};
     vmaMapMemory(*allocator, staging_buffer.get_vma_allocation(), &temp_data);
-    std::memcpy(temp_data, data, size);
+    std::memcpy(static_cast<char*>(temp_data) + staging_size, data, size);
     vmaUnmapMemory(*allocator, staging_buffer.get_vma_allocation());
 
-    copy->size = size;
+    VkBufferCopy copy{
+        .srcOffset = staging_size,
+        .dstOffset = 0,
+        .size = size
+    };
+
         vkCmdCopyBuffer(
         command_buffer,
         staging_buffer.get_vk_buffer(),
         dst,
         1,
-        copy);
+        &copy);
+        staging_size += size;
+
     });
 
     
     return this;
 }
 
-harpy::nest::command_commander* harpy::nest::command_commander::load_into_texture(texturing::texture& texture, wrappers::swapchain& swapchain)
+harpy::nest::command_commander* harpy::nest::command_commander::load_into_texture(texturing::texture& texture, utilities::image& image)
 {
-    delegate.push_back([this, chain = &swapchain, text = &texture, command_buffer = is_writing_to_primary ?
+    delegate.push_back([this, image = &image, text = &texture, command_buffer = is_writing_to_primary ?
                                                             thread_resource->com_pool->get_primary_buffers()[primary_counter]:
                                                             thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer] ()
     {
         transit_image(*text);
-        if (staging_buffer.get_size() < text->get_size()) init_staging_buffer(text->get_size());
-        
-        void* temp_data{nullptr};
-        vmaMapMemory(*allocator, staging_buffer.get_vma_allocation(), &temp_data);
-        std::memcpy(temp_data, text->get_raw_cv_image_ptr()->get_cv_data().data, text->get_size());
-        vmaUnmapMemory(*allocator, staging_buffer.get_vma_allocation());
+        if (staging_buffer.get_size() < text->get_size() + staging_size) init_staging_buffer(staging_size + text->get_size());
+
+        auto ptr = staging_buffer.get_mapped_ptr();
+        std::memcpy(static_cast<char*>(ptr) + staging_size, image->get_cv_data().data, text->get_size());
+        staging_buffer.unmap_ptr();
 
         VkBufferImageCopy copy{};
-        copy.bufferOffset = 0;
+        copy.bufferOffset = staging_size;
         copy.bufferRowLength = 0;
         copy.bufferImageHeight = 0;
 
@@ -268,7 +280,9 @@ harpy::nest::command_commander* harpy::nest::command_commander::load_into_textur
         copy.imageSubresource.layerCount = 1;
 
         copy.imageOffset = {0, 0, 0};
-        copy.imageExtent = {chain->get_extent().width, chain->get_extent().height, 1};
+        copy.imageExtent = {image->dimension_sizes().first, image->dimension_sizes().second, 1};
+
+        staging_size += text->get_size();
         
         vkCmdCopyBufferToImage(
             command_buffer,
@@ -279,46 +293,6 @@ harpy::nest::command_commander* harpy::nest::command_commander::load_into_textur
             &copy);
 
         transit_image(*text, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-    });
-    return this;
-}
-
-
-harpy::nest::command_commander* harpy::nest::command_commander::load_vertex_index_buffers(void* vertex_data,
-                                                                                          size_t vertex_size,
-                                                                                          const std::vector<uint32_t>& indice_data,
-                                                                                          VkBuffer vertex_buffer,
-                                                                                          VkBuffer index_buffer)
-{
-    delegate.push_back([this, vertex_data, vertex_size, indice_data, vertex_buffer, index_buffer, command_buffer = is_writing_to_primary ?
-                                                            thread_resource->com_pool->get_primary_buffers()[primary_counter]:
-                                                            thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer] ()
-    {
-        auto const indice_size = indice_data.size() * sizeof(uint32_t);
-        if(indice_size + vertex_size > staging_buffer.get_size())
-            init_staging_buffer(indice_size + vertex_size);
-
-        int32_t* temp_data{nullptr};
-    vmaMapMemory(*allocator, staging_buffer.get_vma_allocation(), reinterpret_cast<void**>(&temp_data));
-        std::memcpy(temp_data, indice_data.data(), indice_size);
-        std::memcpy(temp_data + indice_data.size(), vertex_data, vertex_size);
-    vmaUnmapMemory(*allocator, staging_buffer.get_vma_allocation());
-
-        VkBufferCopy copies[2] = {
-            {
-                .srcOffset = 0,
-                .dstOffset = 0,
-                .size = indice_size
-            },
-            {
-                .srcOffset =  indice_size,
-                .dstOffset = 0,
-                .size = vertex_size
-            }
-        };
-        
-        vkCmdCopyBuffer(command_buffer, staging_buffer.get_vk_buffer(), index_buffer, 1, copies);
-        vkCmdCopyBuffer(command_buffer, staging_buffer.get_vk_buffer(), vertex_buffer, 1, &copies[1]);
     });
     return this;
 }
@@ -565,8 +539,8 @@ harpy::utilities::delegate harpy::nest::command_commander::end_recording(bool do
     }
     catch(std::runtime_error& err)
     {
-        utilities::error_handling::logger::get_logger() << err.what();
-        utilities::error_handling::logger::get_logger() << "CAREFULL. LAST OBJECT OF VKSUBMITINFO IN VECTOR WILL BE OVERWRITTEN";
+        utilities::logger::get_logger() << err.what();
+        utilities::logger::get_logger() << "CAREFULL. LAST OBJECT OF VKSUBMITINFO IN VECTOR WILL BE OVERWRITTEN";
         thread_resource->submit_infos.back().pCommandBuffers = &thread_resource->com_pool->get_primary_buffers()[primary_counter];
         thread_resource->submit_infos.back().commandBufferCount = 1;
     }
@@ -621,3 +595,5 @@ harpy::nest::command_commander *harpy::nest::command_commander::bind_descriptor_
                        });
     return this;
 }
+
+

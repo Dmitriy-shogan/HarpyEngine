@@ -5,15 +5,15 @@
 #include <logger/harpy_little_error.h>
 #include <logger/logger.h>
 
-using logger = harpy::utilities::error_handling::logger;
-using harpy_error = harpy::utilities::error_handling::harpy_little_error;
+using logger = harpy::utilities::logger;
+using harpy_error = harpy::utilities::harpy_little_error;
 
 std::vector<char> harpy::utilities::read_file_binary(std::string way_to_file)
 {
     std::ifstream file(way_to_file, std::ios::ate | std::ios::binary);
 
     if (!file.is_open()) {
-        throw error_handling::harpy_little_error("failed to open file!");
+        throw harpy_little_error("failed to open file!");
     }
 
     size_t file_size = file.tellg();
@@ -32,7 +32,7 @@ std::string harpy::utilities::read_file(std::string way_to_file)
     std::ifstream file(way_to_file, std::ios::ate | std::ios::binary);
 
     if (!file.is_open()) {
-        throw error_handling::harpy_little_error("failed to open file!");
+        throw harpy_little_error("failed to open file!");
     }
     
     std::ifstream::pos_type fileSize = file.tellg();
@@ -49,7 +49,7 @@ void harpy::utilities::write_file(std::string way_to_file, std::string data)
 {
     std::ofstream file{way_to_file};
     if (!file.is_open()) {
-        throw error_handling::harpy_little_error("failed to create/open file" + way_to_file);
+        throw harpy_little_error("failed to create/open file" + way_to_file);
     }
     file << data;
     file.close();

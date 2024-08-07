@@ -12,6 +12,7 @@ namespace harpy::nest::texturing
         , V{VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER}
         , W{VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER};
     };
+
     class texture_sampler
     {
     private:

@@ -5,21 +5,52 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/imgcodecs.hpp>
 
-namespace harpy::utilities::images
+namespace harpy::utilities
 {
+    enum image_format{
+        A = 1 << 0,
+        B = 1 << 1,
+        G = 1 << 2,
+        R = 1 << 3,
+        is_BGR = 1 << 4,
+        is_GRAY = 1 << 5,
+        RGB = R|G|B,
+        BGR = RGB|is_BGR,
+        RGBA = RGB|A,
+        BGRA = BGR|A,
+
+        he_first = A,
+        he_bm = 1,
+        he_sum = 10
+    };
+
     class HARPY_UTILITIES_API image
     {
         cv::Mat cv_image{};
+        //Only because of int don't want to be an image format
+        int current_format{};
         
     public:
         image() = default;
+        image(std::string path);
 
         void read_image(std::string path);
 
-        //Just for now, doing nothing
+        //NOT IMPLEMENTED
         void save_image(std::string path, std::string filename);
 
+        std::pair<uint32_t, uint32_t> dimension_sizes();
+        int get_current_format();
+
         const cv::Mat& get_cv_data();
+
+        void convert_image_color_space(cv::ColorConversionCodes code);
+
+        int get_channels();
+
+        uint32_t get_size();
+        uint32_t get_width();
+        uint32_t get_height();
         
     };
 }

@@ -27,7 +27,7 @@ harpy::nest::texturing::texture_sampler::operator VkSampler_T*&()
     return sampler;
 }
 
-harpy::nest::texturing::texture_sampler::texture_sampler(texture_address_modes addresses, VkDevice* device)
+harpy::nest::texturing::texture_sampler::texture_sampler(texture_address_modes addresses, VkDevice* device) : device(device)
 {
     VkSamplerCreateInfo ci{};
     ci.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;

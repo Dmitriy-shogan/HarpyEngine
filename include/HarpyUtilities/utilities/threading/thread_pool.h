@@ -25,7 +25,7 @@
 
 #include "thread_safe_queue.h"
 
-namespace harpy::utilities::threading {
+namespace harpy::utilities {
 
 #ifdef HARPY_UTILITIES_THREADS_NUMBER
     
@@ -150,7 +150,7 @@ namespace harpy::utilities::threading {
 #endif
         }
 
-        std::future<bool> enqueue(delegate & del)
+        std::future<bool> enqueue(delegate del)
         {
             return enqueue([deleg = &del]()
             {

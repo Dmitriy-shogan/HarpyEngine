@@ -6,7 +6,7 @@
 #include <mutex>
 #include <optional>
 
-namespace harpy::utilities::threading {
+namespace harpy::utilities {
     /**
      * @brief Simple concept for the Lockable and Basic Lockable types as defined by the C++
      * standard.
