@@ -1,33 +1,36 @@
 #pragma once
-#ifndef HARPY_NEST_3D_RENDERER
-#define HARPY_NEST_3D_RENDERER
+#ifndef HARPY_3D_RENDERER
+#define HARPY_3D_RENDERER
 #include <nest/command_commander/command_commander.h>
 
-namespace harpy::nest::D3
+namespace harpy::D3
 {
+    //TODO: rethink renderer
     class renderer
     {
-        command_commander commander{};
-        //Just for now, need multiple swapchain support to render to not only main window
-        std::unique_ptr<wrappers::swapchain> swapchain{};
+        uint32_t image_index{0};
 
-        std::vector<resources::command_thread_resource> thread_resources{};
+        nest::command_commander commander{};
 
-        std::vector<pipeline::graphics_pipeline> pipelines{};
-        std::vector<pipeline::pipeline_cache> pipeline_caches{};
-        std::vector<shaders::shader_set> shader_sets{};
+        //Just for now. Will be needed more swapchains to support multiple screens.
+        nest::wrappers::swapchain swapchain;
 
-        std::vector<threading::semaphore> semaphores{};
-        std::vector<threading::fence> fences{};
-        
-        const resources::common_vulkan_resource& resource = resources::common_vulkan_resource::get_resource();
+        std::vector<nest::resources::command_thread_resource> thread_resources{};
 
-        uint32_t image_index{};
+        std::vector<nest::pipeline::graphics_pipeline> pipelines{};
+        std::vector<nest::pipeline::pipeline_cache> pipeline_caches{};
+
+        std::vector<nest::threading::semaphore> semaphores{};
+        std::vector<nest::threading::fence> fences{};
+
+        nest::threading::semaphore render_finish_sem{};
+
         
     public:
+        renderer(nest::wrappers::swapchain swapchain);
 
         
         void show_on_screen();
     };
 }
-#endif //HARPY_NEST_3D_RENDERER
+#endif //HARPY_3D_RENDERER

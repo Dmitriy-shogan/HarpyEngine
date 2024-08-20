@@ -2,7 +2,7 @@
 #ifndef HARPY_NEST_PIPELINE_DESCRIPTOR_FACTORY
 #define HARPY_NEST_PIPELINE_DESCRIPTOR_FACTORY
 #include <nest/pools/descriptor_pool.h>
-#include <nest/wrappers/buffers/data_buffer.h>
+#include "nest/wrappers/data_buffer.h"
 #include <nest/texturing/texture_sampler.h>
 #include <nest/texturing/texture.h>
 

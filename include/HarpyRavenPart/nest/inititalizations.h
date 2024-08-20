@@ -125,7 +125,7 @@ private:
 
 //Vulkan validation layers debug callback
 
-#include <logger/logger.h>
+#include <utilities/logger/logger.h>
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
     VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,

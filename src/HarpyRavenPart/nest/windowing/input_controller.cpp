@@ -39,7 +39,7 @@ void harpy::nest::windowing::input_controller::static_input_callback_manager::ke
 void
 harpy::nest::windowing::input_controller::static_input_callback_manager::cursor_position_callback(GLFWwindow *window,
                                                                                                   double x, double y) {
-    controller->cursor_position_map[{x, y}].invoke();
+    controller->cursor_position_action.invoke(&x, &y);
 }
 
 void harpy::nest::windowing::input_controller::static_input_callback_manager::mouse_button_callback(GLFWwindow *window,
@@ -243,6 +243,20 @@ double harpy::nest::windowing::input_controller::get_time_elapsed_since_start() 
 
 void harpy::nest::windowing::input_controller::set_callback_manager() {
     static_input_callback_manager::set_instance(this);
+}
+
+void harpy::nest::windowing::input_controller::map_mouse_movement(
+        harpy::utilities::parameters_delegate<double *, double *> action) {
+    cursor_position_action = std::move(action);
+}
+
+void harpy::nest::windowing::input_controller::unmap_mouse_movement() {
+    cursor_position_action.clear();
+}
+
+void harpy::nest::windowing::input_controller::update_mouse_movement(
+        harpy::utilities::parameters_delegate<double *, double *> action) {
+    cursor_position_action = std::move(action);
 }
 
 

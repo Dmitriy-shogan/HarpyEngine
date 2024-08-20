@@ -8,7 +8,7 @@
 
 #include <nest/vulkan_threading/fence.h>
 #include <nest/pipeline/graphics_pipeline.h>
-#include <nest/wrappers/swapchain/swapchain.h>
+#include "nest/wrappers/swapchain.h"
 
 #include "nest/resources/vulkan_synchronisation_resource.h"
 #include "nest/texturing/texture.h"

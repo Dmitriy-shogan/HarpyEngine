@@ -1,22 +1,31 @@
 ﻿#include <nest/command_commander/command_commander.h>
 #include <nest/vulkan_threading/fence.h>
-#include <nest/wrappers/buffers/data_buffer.h>
-#include <nest/wrappers/swapchain/swapchain.h>
+#include "nest/wrappers/data_buffer.h"
+#include "nest/wrappers/swapchain.h"
 
 void harpy::nest::command_commander::init_staging_buffer(uint32_t size)
 {
     if(staging_buffer.get_size()) {
+
         auto ptr = staging_buffer.get_mapped_ptr();
+
+
         void *temp_data = new char[staging_size];
         std::memcpy(temp_data, ptr, staging_size);
+
+
         staging_buffer.unmap_ptr();
 
+
         staging_buffer.~data_buffer();
-        staging_buffer = wrappers::data_buffer{wrappers::buffer_type::staging, size};
+
+        staging_buffer = std::move(wrappers::data_buffer{wrappers::buffer_type::staging, size});
+
         ptr = staging_buffer.get_mapped_ptr();
         std::memcpy(ptr, temp_data, staging_size);
         staging_buffer.unmap_ptr();
-        delete[] temp_data;
+
+        delete[] static_cast<char*>(temp_data);
     } else
         staging_buffer.init(size);
 }
@@ -147,9 +156,12 @@ harpy::nest::command_commander* harpy::nest::command_commander::start_render_pas
         renderPassInfo.renderArea.offset = {0, 0};
         renderPassInfo.renderArea.extent = swapchain.get_extent();
 
-        VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
-        renderPassInfo.clearValueCount = 1;
-        renderPassInfo.pClearValues = &clearColor;
+        std::vector<VkClearValue> clearColor{2};
+        clearColor[0].color = {{0.0f, 0.0f, 0.0f, 1.0f}};
+        clearColor[1].depthStencil = {1.0f, 0};
+
+        renderPassInfo.clearValueCount = clearColor.size();
+        renderPassInfo.pClearValues = clearColor.data();
 
         vkCmdBeginRenderPass(command_buffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     });
@@ -432,7 +444,8 @@ void harpy::nest::command_commander::submit(threading::fence* fence, threading::
 
     ci.signalSemaphoreCount = render_finish ? 1 : 0;
     ci.pSignalSemaphores = render_finish ? &render_finish->get_vk_semaphore() : nullptr;
-    
+
+
     HARPY_VK_CHECK(vkQueueSubmit(
         thread_resource->queue,
         1,

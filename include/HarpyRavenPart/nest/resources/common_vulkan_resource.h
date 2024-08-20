@@ -2,7 +2,7 @@
 #ifndef HARPY_RESOURCE_VULKAN_COMMON
 #define HARPY_RESOURCE_VULKAN_COMMON
 #include <vector>
-#include <nest/wrappers/queues/queue_family.h>
+#include "nest/wrappers/queue_family.h"
 #include <nest/windowing/window.h>
 #include <nest/inititalizations.h>
 

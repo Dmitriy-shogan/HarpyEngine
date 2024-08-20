@@ -20,18 +20,20 @@ void harpy::nest::texturing::texture::init(utilities::image& image)
     ci.mipLevels = 1;
     ci.samples = VK_SAMPLE_COUNT_1_BIT;
     ci.arrayLayers = 1;
-    
+    bool checker{false};
     switch(image.get_cv_data().channels())
     {
-    case 1:
+    case 1: {
         ci.format = VK_FORMAT_R8_SRGB;
         break;
-    case 3:
-        ci.format = VK_FORMAT_B8G8R8_SRGB;
-        break;
-    case 4:
+    }
+    case 3: {
+        image.convert_image_color_space(cv::COLOR_BGR2BGRA);
+    }
+    case 4: {
         ci.format = VK_FORMAT_B8G8R8A8_SRGB;
         break;
+    }
     default:
         throw utilities::harpy_little_error("WATAFUCK, you have something strange number of channels, while initialising texture");
     }
@@ -41,12 +43,16 @@ void harpy::nest::texturing::texture::init(utilities::image& image)
     ci.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
     ci.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
+    vkCreateImage(*device, &ci, nullptr, &this->image);
+
     VmaAllocationCreateInfo alloc_ci{};
     alloc_ci.usage = VMA_MEMORY_USAGE_GPU_ONLY;
-    alloc_ci.requiredFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 
-    HARPY_VK_CHECK(vmaCreateImage(*allocator, &ci, &alloc_ci, &this->image, &allocation, nullptr));
+    vmaCreateImage(*allocator, &ci, &alloc_ci, &this->image, &allocation, nullptr);
     init_view(ci.format);
+
+    if(checker) {
+        /*image.convert_image_color_space(cv::COLOR_RGB2BGR);*/}
 }
 
 void harpy::nest::texturing::texture::init_view(VkFormat format)
@@ -74,6 +80,13 @@ harpy::nest::texturing::texture::texture(utilities::image& image, VkDevice* devi
           allocator(allocator)
 {
     init(image);
+}
+
+harpy::nest::texturing::texture::texture(VkDevice* device,
+                                         VmaAllocator* allocator)
+        : device(device),
+          allocator(allocator)
+{
 }
 
 harpy::nest::texturing::texture::texture(texture&& text) noexcept : device(text.device),

@@ -18,9 +18,9 @@ add_executable(HarpyRavenExe ${HARPY_RAVEN_MODULE}/nest/inititalizations.h
         nest/vulkan_threading/pipeline_barrier.cpp
         nest/vulkan_threading/semaphor.cpp
         nest/windowing/window.cpp
-        nest/wrappers/buffers/data_buffer.cpp
-        nest/wrappers/queues/queue_family.cpp
-        nest/wrappers/swapchain/swapchain.cpp
+        nest/wrappers/data_buffer.cpp
+        nest/wrappers/queue_family.cpp
+        nest/wrappers/swapchain.cpp
         3D/mesh.cpp
         3D/renderer.cpp
         main.cpp
@@ -31,7 +31,27 @@ add_executable(HarpyRavenExe ${HARPY_RAVEN_MODULE}/nest/inititalizations.h
         ../../include/HarpyRavenPart/nest/resources/depth_image.h
         nest/windowing/input_controller.cpp
         ../../include/HarpyRavenPart/nest/windowing/input_controller.h
-        ../../include/HarpyUtilities/utilities/allocators/allocator.h)
+        ../../include/HarpyUtilities/utilities/allocators/allocator.h
+        nest/wrappers/render_pass.cpp
+        ../../include/HarpyRavenPart/nest/wrappers/render_pass.h
+        3D/model_loader.cpp
+        ../../include/HarpyRavenPart/3D/model_loader.h
+        3D/model.cpp
+        ../../include/HarpyRavenPart/3D/model.h
+        3D/camera.cpp
+        ../../include/HarpyRavenPart/3D/camera.h
+        3D/primitive_models/circle.cpp
+        ../../include/HarpyRavenPart/3D/primitive_models/circle.h
+        3D/primitive_models/sphere.cpp
+        ../../include/HarpyRavenPart/3D/primitive_models/sphere.h
+        3D/primitive_models/point.cpp
+        ../../include/HarpyRavenPart/3D/primitive_models/point.h
+        3D/primitive_models/rectangle.cpp
+        ../../include/HarpyRavenPart/3D/primitive_models/rectangle.h
+        3D/primitive_models/cube.cpp
+        ../../include/HarpyRavenPart/3D/primitive_models/cube.h
+        3D/primitive_models/line.cpp
+        ../../include/HarpyRavenPart/3D/primitive_models/line.h)
 
 add_library(HarpyRavenLib
         ${HARPY_RAVEN_MODULE}/nest/inititalizations.h
@@ -54,9 +74,9 @@ add_library(HarpyRavenLib
         nest/vulkan_threading/pipeline_barrier.cpp
         nest/vulkan_threading/semaphor.cpp
         nest/windowing/window.cpp
-        nest/wrappers/buffers/data_buffer.cpp
-        nest/wrappers/queues/queue_family.cpp
-        nest/wrappers/swapchain/swapchain.cpp
+        nest/wrappers/data_buffer.cpp
+        nest/wrappers/queue_family.cpp
+        nest/wrappers/swapchain.cpp
         3D/mesh.cpp
         3D/renderer.cpp
         nest/pipeline/descriptor_factory.cpp
@@ -65,7 +85,23 @@ add_library(HarpyRavenLib
         ../../include/HarpyRavenPart/nest/resources/depth_image.h
         nest/windowing/input_controller.cpp
         ../../include/HarpyRavenPart/nest/windowing/input_controller.h
-        ../../include/HarpyUtilities/utilities/allocators/allocator.h)
+        ../../include/HarpyUtilities/utilities/allocators/allocator.h
+        nest/wrappers/render_pass.cpp
+        ../../include/HarpyRavenPart/nest/wrappers/render_pass.h
+        3D/model_loader.cpp
+        ../../include/HarpyRavenPart/3D/model_loader.h
+        3D/model.cpp
+        ../../include/HarpyRavenPart/3D/model.h
+        3D/camera.cpp
+        ../../include/HarpyRavenPart/3D/camera.h
+        3D/primitive_models/Circle.cpp
+        ../../include/HarpyRavenPart/3D/primitive_models/circle.h
+        3D/primitive_models/rectangle.cpp
+        ../../include/HarpyRavenPart/3D/primitive_models/rectangle.h
+        3D/primitive_models/cube.cpp
+        ../../include/HarpyRavenPart/3D/primitive_models/cube.h
+        3D/primitive_models/line.cpp
+        ../../include/HarpyRavenPart/3D/primitive_models/line.h)
 
 file(COPY ${CMAKE_SOURCE_DIR}/external_resources DESTINATION ${CMAKE_BINARY_DIR})
 target_compile_definitions(HarpyRavenLib PRIVATE HARPY_RAVEN_DLL_EXPORTS)
@@ -76,6 +112,7 @@ target_include_directories(HarpyRavenLib
                 ${volk_SOURCE_DIR}
                 ${vma_SOURCE_DIR}/include
                 ${Vulkan_INCLUDE_DIRS}
+                ${assimp_SOURCE_DIR}/include
         PUBLIC  ${HARPY_UTILITIES_MODULE}
                 ${glm_SOURCE_DIR}
                 ${HARPY_INCLUDES}/HarpyRavenPart)
@@ -85,6 +122,7 @@ target_link_libraries(HarpyRavenLib
                 GPUOpen::VulkanMemoryAllocator
                 volk_headers
                 "${Vulkan_INCLUDE_DIRS}/../Lib/shaderc_shared.lib"
+                assimp
         PUBLIC HarpyUtilities
                 glm)
 
@@ -93,6 +131,7 @@ target_include_directories(HarpyRavenExe
         ${volk_SOURCE_DIR}
         ${vma_SOURCE_DIR}/include
         ${Vulkan_INCLUDE_DIRS}
+        ${assimp_SOURCE_DIR}/include
         PUBLIC  ${HARPY_UTILITIES_MODULE}
         ${glm_SOURCE_DIR}
         ${HARPY_INCLUDES}/HarpyRavenPart)
@@ -102,5 +141,6 @@ target_link_libraries(HarpyRavenExe
         GPUOpen::VulkanMemoryAllocator
         volk_headers
         "${Vulkan_INCLUDE_DIRS}/../Lib/shaderc_shared.lib"
+        assimp
         PUBLIC HarpyUtilities
         glm)

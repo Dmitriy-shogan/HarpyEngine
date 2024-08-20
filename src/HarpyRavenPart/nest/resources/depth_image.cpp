@@ -3,15 +3,16 @@
 //
 
 #include <nest/resources/depth_image.h>
+#include "nest/wrappers/swapchain.h"
 
-void harpy::nest::resources::depth_image::init(wrappers::swapchain& chain)
+void harpy::nest::resources::depth_image::init(VkExtent2D extent)
 {
 
     VkImageCreateInfo ci{};
     ci.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     ci.imageType = VK_IMAGE_TYPE_2D;
 
-    ci.extent = {chain.get_extent().height, chain.get_extent().width, 1};
+    ci.extent = {extent.width, extent.height, 1};
     ci.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 
     //Just for now
@@ -52,12 +53,12 @@ void harpy::nest::resources::depth_image::init_view()
     HARPY_VK_CHECK(vkCreateImageView(*device, &ci, nullptr, &view));
 }
 
-harpy::nest::resources::depth_image::depth_image(wrappers::swapchain& chain, VkDevice* device,
+harpy::nest::resources::depth_image::depth_image(VkExtent2D extent, VkDevice* device,
                                          VmaAllocator* allocator)
         : device(device),
-          allocator(allocator)
-{
-    init(chain);
+          allocator(allocator) {
+    if (extent.width || extent.height)
+        init(extent);
 }
 
 harpy::nest::resources::depth_image::depth_image(depth_image&& depth) noexcept : device(depth.device),

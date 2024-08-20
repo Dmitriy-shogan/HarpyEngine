@@ -1,7 +1,7 @@
 ﻿#pragma once
 #ifndef HARPY_VULKAN_WRAPPER_QUEUE
 #define HARPY_VULKAN_WRAPPER_QUEUE
-#include <volk.h>
+#include "volk.h"
 
 namespace harpy::nest::wrappers
 {

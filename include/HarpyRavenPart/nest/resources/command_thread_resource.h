@@ -2,7 +2,7 @@
 #ifndef HARPY_NEST_RESOURCES_COMMAND_THREAD
 #define HARPY_NEST_RESOURCES_COMMAND_THREAD
 #include <memory>
-#include <nest/wrappers/queues/queue_family.h>
+#include "nest/wrappers/queue_family.h"
 #include <nest/pools/command_pool.h>
 
 #include "nest/managers/queue_manager.h"

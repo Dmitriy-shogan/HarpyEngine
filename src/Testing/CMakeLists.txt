@@ -1,20 +1,93 @@
-add_executable(Test Testing.cpp)
+add_executable(Test
+        Testing.cpp
+        ${HARPY_RAVEN_MODULE}/nest/inititalizations.h
+        ../HarpyRavenPart/nest/inititalizations.cpp
+        ../HarpyRavenPart/nest/command_commander/command_commander.cpp
+        ../HarpyRavenPart/nest/managers/queue_manager.cpp
+        ../HarpyRavenPart/nest/managers/swapchain_manager.cpp
+        ../HarpyRavenPart/nest/pipeline/graphics_pipeline.cpp
+        ../HarpyRavenPart/nest/pipeline/pipeline_cache.cpp
+        ../HarpyRavenPart/nest/pools/command_pool.cpp
+        ../HarpyRavenPart/nest/pools/descriptor_pool.cpp
+        ../HarpyRavenPart/nest/resources/common_vulkan_resource.cpp
+        ../HarpyRavenPart/nest/shader_works/shader_module.cpp
+        ../HarpyRavenPart/nest/shader_works/glsl_shader_factory.cpp
+        ../HarpyRavenPart/nest/shader_works/hlsl_shader_factory.cpp
+        ../HarpyRavenPart/nest/texturing/texture.cpp
+        ../HarpyRavenPart/nest/texturing/texture_sampler.cpp
+        ../HarpyRavenPart/nest/vulkan_threading/event.cpp
+        ../HarpyRavenPart/nest/vulkan_threading/fence.cpp
+        ../HarpyRavenPart/nest/vulkan_threading/pipeline_barrier.cpp
+        ../HarpyRavenPart/nest/vulkan_threading/semaphor.cpp
+        ../HarpyRavenPart/nest/windowing/window.cpp
+        ../HarpyRavenPart/nest/wrappers/data_buffer.cpp
+        ../HarpyRavenPart/nest/wrappers/queue_family.cpp
+        ../HarpyRavenPart/nest/wrappers/swapchain.cpp
+        ../HarpyRavenPart/3D/mesh.cpp
+        ../HarpyRavenPart/3D/renderer.cpp
+        ../../include/HarpyRavenPart/3D/uniform_buffer_objects.h
+        ../HarpyRavenPart/nest/pipeline/descriptor_factory.cpp
+        ../../include/HarpyRavenPart/nest/pipeline/descriptor_factory.h
+        ../HarpyRavenPart/nest/resources/depth_image.cpp
+        ../../include/HarpyRavenPart/nest/resources/depth_image.h
+        ../HarpyRavenPart/nest/windowing/input_controller.cpp
+        ../../include/HarpyRavenPart/nest/windowing/input_controller.h
+        ../../include/HarpyUtilities/utilities/allocators/allocator.h
+        ../HarpyRavenPart/nest/wrappers/render_pass.cpp
+        ../../include/HarpyRavenPart/nest/wrappers/render_pass.h
+        ../HarpyRavenPart/3D/model_loader.cpp
+        ../../include/HarpyRavenPart/3D/model_loader.h
+        ../HarpyRavenPart/3D/model.cpp
+        ../../include/HarpyRavenPart/3D/model.h
+        ../HarpyRavenPart/3D/camera.cpp
+        ../../include/HarpyRavenPart/3D/camera.h
+        ../HarpyRavenPart/3D/primitive_models/circle.cpp
+        ../../include/HarpyRavenPart/3D/primitive_models/circle.h
+        ../HarpyRavenPart/3D/primitive_models/sphere.cpp
+        ../../include/HarpyRavenPart/3D/primitive_models/sphere.h
+        ../HarpyRavenPart/3D/primitive_models/point.cpp
+        ../../include/HarpyRavenPart/3D/primitive_models/point.h
+        ../HarpyRavenPart/3D/primitive_models/rectangle.cpp
+        ../../include/HarpyRavenPart/3D/primitive_models/rectangle.h
+        ../HarpyRavenPart/3D/primitive_models/cube.cpp
+        ../../include/HarpyRavenPart/3D/primitive_models/cube.h
+        ../HarpyRavenPart/3D/primitive_models/line.cpp
+        ../../include/HarpyRavenPart/3D/primitive_models/line.h
+        ../HarpyUtilities/utilities/images/image.cpp
+        ../HarpyUtilities/utilities/util/util.cpp
+        ../HarpyUtilities/utilities/logger/harpy_little_error.cpp
+        ../HarpyUtilities/utilities/logger/logger.cpp
+        ../HarpyUtilities/utilities/util/delegate.cpp
+        ${HARPY_INCLUDES}/HarpyUtilities/dll_macro.h)
+
 target_include_directories(Test
         PRIVATE ${glfw_SOURCE_DIR}/include
         ${volk_SOURCE_DIR}
         ${vma_SOURCE_DIR}/include
         ${Vulkan_INCLUDE_DIRS}
         ${glm_SOURCE_DIR}
-        PUBLIC HarpyRavenLib
+        ${assimp_SOURCE_DIR}/include
+        ${CMAKE_BINARY_DIR}
+        ${HARPY_INCLUDES}/HarpyUtilities/utilities
+        ${opencv_SOURCE_DIR}/include
+        ${opencv_SOURCE_DIR}/modules/core/include
+        ${opencv_SOURCE_DIR}/modules/imgcodecs/include
+        ${opencv_SOURCE_DIR}/modules/imgproc/include
+        ${opencv_SOURCE_DIR}/modules/video/include
+        ${opencv_SOURCE_DIR}/modules/videoio/include
+        PUBLIC
         ${HARPY_RAVEN_MODULE}
+        ${HARPY_UTILITIES_MODULE}
 
 )
 target_link_libraries(Test
-        PRIVATE glfw
+        PRIVATE
+         opencv_core opencv_imgcodecs opencv_imgproc opencv_video opencv_videoio
+        glfw
         GPUOpen::VulkanMemoryAllocator
         volk_headers
         "${Vulkan_INCLUDE_DIRS}/../Lib/shaderc_shared.lib"
-        PUBLIC HarpyRavenLib
-        HarpyUtilities
+        PUBLIC
         glm
+        assimp
 )

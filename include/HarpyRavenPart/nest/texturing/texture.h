@@ -19,7 +19,7 @@ namespace harpy::nest::texturing
         VkFormat format{};
         size_t image_size{};
 
-        void init(utilities::image& image);
+
         void init_view(VkFormat format);
     public:
 
@@ -27,6 +27,12 @@ namespace harpy::nest::texturing
             utilities::image& image,
             VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device(),
             VmaAllocator* allocator = &resources::common_vulkan_resource::get_resource().get_main_allocator());
+
+        texture(
+                VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device(),
+                VmaAllocator* allocator = &resources::common_vulkan_resource::get_resource().get_main_allocator());
+
+        void init(utilities::image& image);
         
         texture(const texture& text) = delete;
         texture(texture&& text) noexcept;
@@ -42,8 +48,6 @@ namespace harpy::nest::texturing
 
         size_t get_size();
         ~texture();
-        
-    
     };
 }
 

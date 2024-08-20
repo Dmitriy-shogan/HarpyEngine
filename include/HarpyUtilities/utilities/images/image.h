@@ -1,7 +1,8 @@
 #pragma once
 #ifndef HARPY_UTILITIES_IMAGES
 #define HARPY_UTILITIES_IMAGES
-#include <../dll_macro.h>
+#include <dll_macro.h>
+#include <../HarpyUtilities/dll_macro.h>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/imgcodecs.hpp>
 

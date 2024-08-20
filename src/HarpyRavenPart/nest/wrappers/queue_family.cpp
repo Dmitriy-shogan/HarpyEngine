@@ -1,5 +1,5 @@
-﻿#include <nest/wrappers/queues/queue_family.h>
-#include <nest/resources/common_vulkan_resource.h>
+﻿#include "nest/wrappers/queue_family.h"
+#include "nest/resources/common_vulkan_resource.h"
 
 using resource = harpy::nest::resources::common_vulkan_resource;
 

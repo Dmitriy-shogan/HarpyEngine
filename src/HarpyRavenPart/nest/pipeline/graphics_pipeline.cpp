@@ -92,6 +92,7 @@ harpy::nest::pipeline::graphics_pipeline::graphics_pipeline(graphics_pipeline_ci
     ci.pDepthStencilState = nullptr;
     ci.pColorBlendState = &create_info->options.blend_state;
     ci.pDynamicState = &create_info->options.dynamic_states;
+    ci.pDepthStencilState = &create_info->options.depth_stencil;
     ci.layout = layout;
     ci.renderPass = create_info->swapchain->get_render_pass();
     ci.basePipelineHandle = VK_NULL_HANDLE; 

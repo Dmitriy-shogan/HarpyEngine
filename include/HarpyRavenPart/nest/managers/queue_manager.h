@@ -3,7 +3,7 @@
 #define HARPY_NEST_MANAGERS_QUEUE
 #include <deque>
 #include <nest/inititalizations.h>
-#include <nest/wrappers/queues/queue_family.h>
+#include "nest/wrappers/queue_family.h"
 
 namespace harpy::nest::managers
 {

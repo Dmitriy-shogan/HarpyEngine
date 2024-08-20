@@ -52,8 +52,6 @@ set(ASSIMP_WARNINGS_AS_ERRORS OFF CACHE BOOL "")
 set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "")
 
 
-FetchContent_Declare(assimp
-        GIT_REPOSITORY https://github.com/assimp/assimp)
 FetchContent_Declare(glfw
         GIT_REPOSITORY https://github.com/glfw/glfw)
 FetchContent_Declare(glm
@@ -64,9 +62,11 @@ FetchContent_Declare(volk
         GIT_REPOSITORY https://github.com/zeux/volk)
 FetchContent_Declare(opencv
         GIT_REPOSITORY https://github.com/opencv/opencv)
+FetchContent_Declare(assimp
+        GIT_REPOSITORY https://github.com/assimp/assimp)
 
 
-FetchContent_MakeAvailable(assimp glfw glm vma volk opencv)
+FetchContent_MakeAvailable(glfw glm vma volk opencv assimp)
 
 set(HARPY_INCLUDES "${PROJECT_SOURCE_DIR}/include")
 set(HARPY_SOURCES "${PROJECT_BINARY_DIR}/src")

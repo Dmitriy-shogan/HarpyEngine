@@ -1,10 +1,12 @@
 ﻿#pragma once
 #ifndef HARPY_NEST_WRAPPERS_SWAPCHAIN
 #define HARPY_NEST_WRAPPERS_SWAPCHAIN
-#include <nest/resources/common_vulkan_resource.h>
-#include <nest/resources/surface_capabilities.h>
-#include <nest/vulkan_threading/fence.h>
-#include <nest/vulkan_threading/semaphor.h>
+#include "nest/resources/common_vulkan_resource.h"
+#include "nest/resources/surface_capabilities.h"
+#include "nest/vulkan_threading/fence.h"
+#include "nest/vulkan_threading/semaphor.h"
+#include "nest/resources/depth_image.h"
+#include <nest/wrappers/render_pass.h>
 
 namespace harpy::nest::wrappers
 {
@@ -24,14 +26,15 @@ namespace harpy::nest::wrappers
         std::vector<VkImageView> views{};
         std::vector<VkImage> images{};
         std::vector<VkFramebuffer> framebuffers{};
-        VkRenderPass render_pass;
-        
+
         VkFormat format{};
         VkColorSpaceKHR color_space{};
         VkPresentModeKHR present_mode{};
         VkExtent2D extent{};
 
-        void init_render_pass(VkRenderPassCreateInfo2 ci = {});
+        resources::depth_image depth_image{};
+        render_pass pass{};
+
         void init_image_views();
         void init_framebuffers();
 
@@ -66,7 +69,7 @@ namespace harpy::nest::wrappers
 
         uint32_t acquire_vk_image_index(threading::semaphore* semaphore_to_signal, threading::fence* fence_to_signal, size_t timeout = LLONG_MAX);
 
-        VkRenderPass& get_render_pass();
+        render_pass& get_render_pass();
 
         void destroy(bool do_destroy_vk_swapchain = false) const;
 

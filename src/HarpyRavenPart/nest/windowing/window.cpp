@@ -457,3 +457,7 @@ uint32_t harpy::nest::windowing::window::get_position_y() {
     glfwGetWindowPos(win, reinterpret_cast<int*>(&x), reinterpret_cast<int*>(&y));
     return y;
 }
+
+std::pair<int, int> harpy::nest::windowing::window::get_screen_center() {
+    return std::pair<int, int>(ci.width/2, ci.height/2);
+}

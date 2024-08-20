@@ -1,33 +1,33 @@
 ﻿#pragma once
-#ifndef HARPY_NEST_3D_MESH
-#define HARPY_NEST_3D_MESH
-#include <nest/wrappers/buffers/data_buffer.h>
+#ifndef HARPY_3D_MESH
+#define HARPY_3D_MESH
+#include "nest/wrappers/data_buffer.h"
 
 #include <nest/command_commander/command_commander.h>
 
-namespace harpy::nest::D3
+namespace harpy::D3
 {
     class mesh
     {
-        wrappers::data_buffer vertices{wrappers::buffer_type::vertex};
-        wrappers::data_buffer indices{wrappers::buffer_type::indice};
+        nest::wrappers::data_buffer vertices{nest::wrappers::buffer_type::vertex};
+        nest::wrappers::data_buffer indices{nest::wrappers::buffer_type::indice};
+
     
     public:
 
         mesh() = default;
 
         void load(
-            command_commander& commander,
-            std::vector<wrappers::vertex>& vertices,
-            const std::vector<uint32_t>& indices,
-            resources::vulkan_synchronisation_resource& resource);
+            nest::command_commander& commander,
+            std::vector<nest::wrappers::vertex>& vertices,
+            std::vector<uint32_t>& indices);
 
         bool is_loaded();
 
-        const wrappers::data_buffer& get_vertices() const;
-        const wrappers::data_buffer& get_indices() const;
+        nest::wrappers::data_buffer & get_vertices();
+        nest::wrappers::data_buffer & get_indices();
     };
 }
 
 
-#endif //HARPY_NEST_3D_MESH
+#endif //HARPY_3D_MESH

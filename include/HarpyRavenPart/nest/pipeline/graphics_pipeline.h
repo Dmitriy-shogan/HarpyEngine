@@ -5,7 +5,7 @@
 #include <nest/pipeline/pipeline_cache.h>
 
 #include <nest/managers/swapchain_manager.h>
-#include <nest/wrappers/buffers/data_buffer.h>
+#include "nest/wrappers/data_buffer.h"
 
 namespace harpy::nest::pipeline
 {
@@ -83,7 +83,21 @@ namespace harpy::nest::pipeline
         .sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO,
         .viewportCount = 1,
         .scissorCount = 1,};
-};
+
+        VkPipelineDepthStencilStateCreateInfo depth_stencil{.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO,
+                .pNext = nullptr,
+                .flags = 0,
+                .depthTestEnable = VK_TRUE,
+                .depthWriteEnable = VK_TRUE,
+                .depthCompareOp = VK_COMPARE_OP_LESS,
+                .depthBoundsTestEnable = VK_FALSE,
+                .stencilTestEnable = VK_FALSE,
+                .front = {},
+                .back = {},
+                .minDepthBounds = 0,
+                .maxDepthBounds = 1.0f,};
+    };
+
     struct graphics_pipeline_ci
     {
         shaders::shader_set modules;

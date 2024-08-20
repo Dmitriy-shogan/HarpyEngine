@@ -11,7 +11,7 @@
 
 #include <nest/command_commander/command_commander.h>
 #include <nest/vulkan_threading/semaphor.h>
-#include <nest/wrappers/buffers/data_buffer.h>
+#include "nest/wrappers/data_buffer.h"
 #include <nest/pipeline/graphics_pipeline.h>
 
 #include <nest/pipeline/descriptor_factory.h>
@@ -20,28 +20,12 @@
 #include <nest/texturing/texture.h>
 #include <nest/texturing/texture_sampler.h>
 
-#include <nest/windowing/input_controller.h>
+#include <assimp/Importer.hpp>
+#include <3D/model_loader.h>
 
 
 using namespace harpy;
 using namespace nest;
-
-std::vector<wrappers::vertex> vertices = {
-        {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-        {{0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-        {{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-        {{-0.5f, 0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
-
-        {{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-        {{0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-        {{0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-        {{-0.5f, 0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
-};
-
-std::vector<uint32_t> indices = {
-        0, 1, 2, 2, 3, 0,
-        4, 5, 6, 6, 7, 4
-};
 
 void show_on_screen(wrappers::swapchain& swapchain, threading::semaphore& sem, uint32_t& image_number, VkQueue& queue)
 {
@@ -89,13 +73,12 @@ int main()
     ci.width = 800;
     ci.refresh_rate = 145;
     ci.is_focused_on_show = 1;
-    ci.is_decorated = false;
+    ci.is_resizable = false;
+    ci.is_decorated = true;
     ci.name = "BEST WINDOW EVER EVER!!!";
     initializations::init_harpy(ci);
     try {
-        //Initialise buffers
-        wrappers::data_buffer vertex_buffer{wrappers::buffer_type::vertex, vertices.size()};
-        wrappers::data_buffer index_buffer{wrappers::buffer_type::indice, indices.size()};
+
         std::vector<wrappers::data_buffer> uniform_buffers{};
         for(auto i = 0; i < MAX_FRAMES_IN_FLIGHT; i++){
             uniform_buffers.emplace_back(wrappers::buffer_type::uniform, sizeof(D3::uniform_buffers::sight_ub));
@@ -124,7 +107,7 @@ int main()
 
 
         //Initialize textures
-        utilities::image image{"../external_resources/images/default/beware.png"};
+        utilities::image image{"../external_resources/3d_objects/default/maxwell/nowhiskers.jpg"};
         texturing::texture_sampler sampler{};
         texturing::texture texture{image};
 
@@ -141,6 +124,7 @@ int main()
 
         //Initialise pipeline
         pipeline::graphics_pipeline_ci ci{
+
                 .modules = shaders::shader_set{
                         .vertex = std::move(vertex_shader),
                         .fragment = std::move(fragment_shader)
@@ -164,7 +148,17 @@ int main()
         //Initialising queues
         managers::queue_manager universal_manager{
                 resources::common_vulkan_resource::get_resource().get_main_family_queue()};
+        //Only for нищие дебилычи с ноутом и встроенкой (меня)
         VkQueue present_queue = universal_manager.get_queue();
+
+        wrappers::queue_family transfer_queue = [&]() mutable {
+            auto& res = resources::common_vulkan_resource::get_resource().get_all_family_queues();
+            for(auto& i : res)
+                if(i.get_type() == wrappers::queue_type::transfer)
+                    return i;
+        }();
+
+        managers::queue_manager transfer_manager{transfer_queue};
 
         //Create and initialise thread resource
         std::unique_ptr<resources::command_thread_resource>
@@ -176,6 +170,20 @@ int main()
                                    }
         };
 
+        //Create and initialise thread resource
+        std::unique_ptr<resources::command_thread_resource>
+                thread_res2{new resources::command_thread_resource
+                                   {
+                                           .queue = transfer_manager.get_queue(),
+                                           .com_pool = std::make_unique<pools::command_pool>
+                                                   (transfer_queue)
+                                   }
+        };
+
+
+
+        D3::model_loader loader{std::move(thread_res2)};
+        auto md = loader.load_model("../external_resources/3d_objects/default/maxwell/maxwell.fbx");
 
 
 
@@ -198,16 +206,13 @@ int main()
                         .maxDepth = 1.0f
                 };
 
-        //Loading data into buffers
-        auto deleg = commander.start_recording()
-                ->load_into_buffer(vertex_buffer,vertices)
-                ->load_into_buffer(index_buffer,  indices)
-                ->load_into_texture(texture, image)
-                ->end_recording();
-
-        deleg();
-
+        //Load the object
+        commander.reset_pool()
+        ->start_recording()
+        ->load_into_texture(texture, image)
+        ->end_recording()();
         commander.submit();
+
 
         uint32_t image_index{};
 
@@ -227,10 +232,10 @@ int main()
                     ->bind_pipeline(pipe)
                     ->set_scissors(scissors)
                     ->set_viewport(viewport)
-                    ->bind_vertex_buffers(vertex_buffer)
-                    ->bind_index_buffer(index_buffer)
+                    ->bind_vertex_buffers(md->get_mesh().get_vertices())
+                    ->bind_index_buffer(md->get_mesh().get_indices())
                     ->bind_descriptor_sets(descriptor_sets[image_index], pipe)
-                    ->draw_indexed(indices.size())
+                    ->draw_indexed(md->get_mesh().get_indices().get_size() / sizeof(uint32_t))
                     ->end_render_pass()
                     ->end_recording();
 

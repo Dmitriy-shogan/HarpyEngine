@@ -1,10 +1,10 @@
-﻿#include <nest/wrappers/swapchain/swapchain.h>
+﻿#include "nest/wrappers/swapchain.h"
 
 #include <algorithm>
 #include <utility>
-#include <nest/resources/common_vulkan_resource.h>
-#include <nest/inititalizations.h>
-#include <nest/resources/surface_capabilities.h>
+#include "nest/resources/common_vulkan_resource.h"
+#include "nest/inititalizations.h"
+#include "nest/resources/surface_capabilities.h"
 
 using resource = harpy::nest::resources::common_vulkan_resource;
 using harpy_error = harpy::utilities::harpy_little_error;
@@ -111,7 +111,8 @@ void harpy::nest::wrappers::swapchain::init(
                            
 	HARPY_VK_CHECK(vkCreateSwapchainKHR(resource::get_resource(), &ci, nullptr, &chain));
 	init_image_views();
-	init_render_pass(create_info->ci);
+    depth_image.init(extent);
+	pass.init(format);
 	init_framebuffers();
 	if(checker)
 		delete create_info;
@@ -121,7 +122,6 @@ void harpy::nest::wrappers::swapchain::destroy(bool do_delete_vk_swapchain) cons
 {
 	if(chain)
 	{
-		vkDestroyRenderPass(*device, render_pass, nullptr);
 
 		for(auto& f : framebuffers)
 			vkDestroyFramebuffer(*device, f, nullptr);
@@ -134,80 +134,15 @@ void harpy::nest::wrappers::swapchain::destroy(bool do_delete_vk_swapchain) cons
 	}
 }
 
-
+//OH JEEZ
+//Todo: deleting old swapchain must be AFTER creation of the new one
 void harpy::nest::wrappers::swapchain::recreate(swapchain_ci* create_info, VkDevice* device)
 {
-	destroy();
+    destroy();
 	create_info->old_swapchain = chain;
 	init(create_info, device);
 }
 
-
-void harpy::nest::wrappers::swapchain::init_render_pass(VkRenderPassCreateInfo2 ci)
-{
-	if(ci.sType == 0)
-	{
-        VkAttachmentDescription2 depthAttachment{};
-        depthAttachment.format = get_depth_format();
-        depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-        depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-        depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-        depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        depthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
-        VkAttachmentReference2 depthAttachmentRef{};
-        depthAttachmentRef.attachment = 1;
-        depthAttachmentRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
-		VkAttachmentDescription2 colorAttachment{};
-		colorAttachment.sType = VK_STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_2;
-		colorAttachment.format = format;
-		colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-		colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-		colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-
-		//Needs research
-		colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-		colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-		colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-		colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-    
-    
-		VkAttachmentReference2 colorAttachmentRef{};
-		colorAttachmentRef.sType = VK_STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2;
-		colorAttachmentRef.attachment = 0;
-		colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-        std::array<VkAttachmentDescription2, 2> attachments{depthAttachment, colorAttachment};
-
-		VkSubpassDescription2 subpass{};
-		subpass.sType = VK_STRUCTURE_TYPE_SUBPASS_DESCRIPTION_2;
-		subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-		subpass.colorAttachmentCount = 1;
-		subpass.pColorAttachments = &colorAttachmentRef;
-        subpass.pDepthStencilAttachment = &depthAttachmentRef;
-
-        VkSubpassDependency2 dependency{};
-        dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-        dependency.dstSubpass = 0;
-        dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
-        dependency.srcAccessMask = 0;
-        dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
-        dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-		
-		ci.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO_2;
-		ci.attachmentCount = 2;
-		ci.pAttachments = attachments.data();
-		ci.subpassCount = 1;
-		ci.pSubpasses = &subpass;
-        ci.dependencyCount = 1;
-        ci.pDependencies = &dependency;
-	}
-	
-	HARPY_VK_CHECK(vkCreateRenderPass2(resource::get_resource(), &ci, nullptr, &render_pass));
-}
 
 void harpy::nest::wrappers::swapchain::init_image_views()
 {
@@ -247,15 +182,17 @@ void harpy::nest::wrappers::swapchain::init_image_views()
 void harpy::nest::wrappers::swapchain::init_framebuffers()
 {
 	framebuffers.resize(views.size());
+    std::vector<VkImageView> attachments{2};
+    attachments[1] = depth_image.get_vk_image_view();
 	
 	for(int counter = 0; auto& i : framebuffers)
 	{
 		VkFramebufferCreateInfo frame_ci{};
-	
+        attachments[0] = views[counter++];
 		frame_ci.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-		frame_ci.renderPass = render_pass;
-		frame_ci.attachmentCount = 1;
-		frame_ci.pAttachments = &views[counter++];
+		frame_ci.renderPass = pass.get_vk_render_pass();
+		frame_ci.attachmentCount = attachments.size();
+		frame_ci.pAttachments = attachments.data();
 		frame_ci.width = extent.width;
 		frame_ci.height = extent.height;
 		frame_ci.layers = 1;
@@ -267,6 +204,7 @@ void harpy::nest::wrappers::swapchain::init_framebuffers()
 harpy::nest::wrappers::swapchain::swapchain(swapchain_ci* create_info, VkDevice* device)
 {
 	init(create_info, device);
+    depth_image = resources::depth_image(extent);
 }
 
 
@@ -317,16 +255,14 @@ uint32_t harpy::nest::wrappers::swapchain::acquire_vk_image_index(threading::sem
     return vk_image_index;
 }
 
-VkRenderPass& harpy::nest::wrappers::swapchain::get_render_pass()
-{return render_pass;
+harpy::nest::wrappers::render_pass& harpy::nest::wrappers::swapchain::get_render_pass()
+{return pass;
 }
 
 harpy::nest::wrappers::swapchain::~swapchain()
 {
-	if(render_pass)
+	if(pass.get_vk_render_pass())
 	{
-		vkDestroyRenderPass(*device, render_pass, nullptr);
-
 		for(auto& f : framebuffers)
 			vkDestroyFramebuffer(*device, f, nullptr);
 		

@@ -5,7 +5,7 @@
 #ifndef HARPY_NEST_WINDOWING_INPUT_CONTROLLER
 #define HARPY_NEST_WINDOWING_INPUT_CONTROLLER
 #include <nest/resources/common_vulkan_resource.h>
-#include <map>
+#include <util/util.h>
 
 namespace harpy::nest::windowing {
 
@@ -19,17 +19,21 @@ namespace harpy::nest::windowing {
         he_sum = 3
     };
 
+
+
     class input_controller {
+
         window* win{};
         std::unordered_map<std::string, GLFWcursor*> cursors{};
 
-        std::map<std::pair<double, double>, utilities::delegate> cursor_position_map{};
+        utilities::parameters_delegate<double*, double*>
+            cursor_position_action{};
 
         std::unordered_map<int, utilities::delegate> press_keymap{};
         std::unordered_map<int, utilities::delegate> repeat_keymap{};
         std::unordered_map<int, utilities::delegate> release_keymap{};
         std::unordered_map<int, utilities::delegate> mouse_map{};
-        std::pair<bool, utilities::delegate> scroll_action{};
+        utilities::parameters_delegate<int*> scroll_action{};
         utilities::delegate on_drop_action{};
 
         void set_callback_manager();
@@ -88,6 +92,10 @@ namespace harpy::nest::windowing {
         void map_drop_action(utilities::delegate delegate);
         void unmap_drop_action();
         void update_drop_action(utilities::delegate delegate);
+
+        void map_mouse_movement(utilities::parameters_delegate<double*, double*>);
+        void unmap_mouse_movement();
+        void update_mouse_movement(utilities::parameters_delegate<double*, double*>);
 
         uint32_t get_char();
 

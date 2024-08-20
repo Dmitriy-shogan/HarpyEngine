@@ -1,7 +1,7 @@
 ﻿#pragma once
 #ifndef HARPY_NEST_POOLS_COMMAND
 #define HARPY_NEST_POOLS_COMMAND
-#include <nest/wrappers/queues/queue_family.h>
+#include "nest/wrappers/queue_family.h"
 #include <nest/resources/buffer_set_resource.h>
 
 namespace harpy::nest::pools

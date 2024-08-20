@@ -37,6 +37,7 @@ namespace harpy::nest::windowing
         window_create_info ci{};
 
         //TODO: better design maybe?
+        //TODO: assign parametric delegates
         utilities::delegate on_window_close_delegate{};
         utilities::delegate on_window_move_delegate{};
         utilities::delegate on_window_resize_delegate{};
@@ -149,6 +150,8 @@ namespace harpy::nest::windowing
         bool is_focused();
         bool is_transparent();
         bool is_mouse_passthrough();
+
+        std::pair<int, int> get_screen_center();
 
         ~window();
     };

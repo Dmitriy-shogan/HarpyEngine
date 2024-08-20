@@ -1,8 +1,8 @@
 ﻿#pragma once
 #ifndef HARPY_NEST_BUFFERS_DATA
 #define HARPY_NEST_BUFFERS_DATA
-#include <glm/glm.hpp>
-#include <nest/resources/common_vulkan_resource.h>
+#include "glm/glm.hpp"
+#include "nest/resources/common_vulkan_resource.h"
 
 namespace harpy::nest::wrappers
 {
@@ -12,8 +12,9 @@ namespace harpy::nest::wrappers
     {
         //TODO: don't forget about vertex structure
         glm::vec3 coords{};
-        glm::vec3 base_color{};
+        glm::vec3 normals{};
         glm::vec2 texture_coords{};
+        glm::vec3 base_color{};
     };
 
     //JUST FOR NOW
@@ -31,15 +32,21 @@ namespace harpy::nest::wrappers
                     .offset = offsetof(vertex, coords),
             },
             {
-                    .location = 1,
+                    .location = 0,
                     .binding = 0,
                     .format = VK_FORMAT_R32G32B32_SFLOAT,
+                    .offset = offsetof(vertex, coords),
+            },
+            {
+                    .location = 1,
+                    .binding = 0,
+                    .format = VK_FORMAT_R32G32_SFLOAT,
                     .offset = offsetof(vertex, base_color),
             },
             {
                     .location = 2,
                     .binding = 0,
-                    .format = VK_FORMAT_R32G32_SFLOAT,
+                    .format = VK_FORMAT_R32G32B32_SFLOAT,
                     .offset = offsetof(vertex, texture_coords),
             }
     };

@@ -3,12 +3,12 @@
 #define HARPY_NEST_MANAGER_SWAPCHAIN
 #include <deque>
 #include <map>
-#include <nest/wrappers/swapchain/swapchain.h>
+#include "nest/wrappers/swapchain.h"
 #include <nest/inititalizations.h>
 
 namespace harpy::nest::managers
 {
-    
+    ///Todo: rethink about swapchain manager
     class swapchain_manager
     {
         HARPY_MAKE_SINGLETON(swapchain_manager)

@@ -5,7 +5,6 @@
 #ifndef HARPY_NEST_RESOURCES_DEPTH_IMAGE
 #define HARPY_NEST_RESOURCES_DEPTH_IMAGE
 #include <nest/resources/common_vulkan_resource.h>
-#include "nest/wrappers/swapchain/swapchain.h"
 
 namespace harpy::nest::resources {
 
@@ -17,13 +16,15 @@ namespace harpy::nest::resources {
         VmaAllocation allocation{};
         VkImageView view{};
 
-        void init(wrappers::swapchain& chain);
+
         void init_view();
     public:
 
-        depth_image(wrappers::swapchain& chain,
+        depth_image(VkExtent2D extent = {0, 0},
                 VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device(),
                 VmaAllocator* allocator = &resources::common_vulkan_resource::get_resource().get_main_allocator());
+
+        void init(VkExtent2D extent);
 
         depth_image(const depth_image& depth) = delete;
         depth_image(depth_image&& depth) noexcept;
