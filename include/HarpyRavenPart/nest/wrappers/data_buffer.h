@@ -32,22 +32,22 @@ namespace harpy::nest::wrappers
                     .offset = offsetof(vertex, coords),
             },
             {
-                    .location = 0,
-                    .binding = 0,
-                    .format = VK_FORMAT_R32G32B32_SFLOAT,
-                    .offset = offsetof(vertex, coords),
-            },
-            {
                     .location = 1,
                     .binding = 0,
-                    .format = VK_FORMAT_R32G32_SFLOAT,
-                    .offset = offsetof(vertex, base_color),
+                    .format = VK_FORMAT_R32G32B32_SFLOAT,
+                    .offset = offsetof(vertex, normals),
             },
             {
                     .location = 2,
                     .binding = 0,
-                    .format = VK_FORMAT_R32G32B32_SFLOAT,
+                    .format = VK_FORMAT_R32G32_SFLOAT,
                     .offset = offsetof(vertex, texture_coords),
+            },
+            {
+                    .location = 3,
+                    .binding = 0,
+                    .format = VK_FORMAT_R32G32B32_SFLOAT,
+                    .offset = offsetof(vertex, base_color),
             }
     };
     

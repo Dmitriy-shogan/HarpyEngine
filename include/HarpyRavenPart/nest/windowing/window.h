@@ -151,7 +151,7 @@ namespace harpy::nest::windowing
         bool is_transparent();
         bool is_mouse_passthrough();
 
-        std::pair<int, int> get_screen_center();
+        std::pair<double, double> get_screen_center();
 
         ~window();
     };

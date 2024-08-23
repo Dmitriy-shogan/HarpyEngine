@@ -50,11 +50,8 @@ std::unique_ptr<harpy::D3::model> harpy::D3::model_loader::load_model(std::strin
             vertices[i].coords = {local_mesh->mVertices[i].x, local_mesh->mVertices[i].y, local_mesh->mVertices[i].z};
             vertices[i].texture_coords = {local_mesh->mTextureCoords[0][i].x, local_mesh->mTextureCoords[0][i].y};
             vertices[i].base_color = {0.5f, 0.5f, 0.5f};
+            vertices[i].normals = {local_mesh->mNormals[i].x, local_mesh->mNormals[i].y, local_mesh->mNormals[i].z};
         }
-
-        utilities::logger::get_logger()
-                << "First coords and texture coords: " + std::to_string(local_mesh->mVertices[0].x) +
-                   std::to_string(local_mesh->mVertices[0].y) + std::to_string(local_mesh->mVertices[0].z);
 
         actual_mesh.load(commander, vertices, indices);
         result->msh = std::move(actual_mesh);

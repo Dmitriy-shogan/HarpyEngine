@@ -50,7 +50,6 @@ void update_uniform_buffer(D3::camera& cam, wrappers::data_buffer* uniform_buffe
     static bool get_rotated_idiot{true};
 
     auto currentTime = std::chrono::high_resolution_clock::now();
-    float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
     if(get_rotated_idiot) {
         ubo.model = glm::mat4{1.0f};
@@ -90,6 +89,7 @@ int main()
         utilities::delegate forward{}, backward{};
         utilities::parameters_delegate<double*, double*> mouse_movement{};
         double camx{}, camy{};
+        auto& win = resources::common_vulkan_resource::get_resource().get_main_window();
         auto center = resources::common_vulkan_resource::get_resource().get_main_window().get_screen_center();
 
         mouse_movement.push_back([&cam, &last_x = center.first, &last_y = center.second](double* x, double* y) mutable {
@@ -98,7 +98,7 @@ int main()
             last_x = *x;
             last_y = *y;
 
-            const float sensitivity = 0.01f;
+            const float sensitivity = 0.001f;
             xoffset *= sensitivity;
             yoffset *= sensitivity;
 
@@ -106,6 +106,7 @@ int main()
             cam.get_hor_rotation() += xoffset;
         });
         controller.map_mouse_movement(mouse_movement);
+        controller.disable_cursor();
 
 
         utilities::delegate move_delegate{};
@@ -163,7 +164,7 @@ int main()
 
 
         //Initialize textures
-        utilities::image image{"../external_resources/images/default/beware.png"};
+        utilities::image image{"../external_resources/3d_objects/default/viking_room/viking_room.png"};
         texturing::texture_sampler sampler{};
         texturing::texture texture{image};
 
@@ -239,7 +240,7 @@ int main()
 
 
         D3::model_loader loader{std::move(thread_res2)};
-        auto md = loader.load_model("../external_resources/3d_objects/default/maxwell/maxwell.fbx");
+        auto md = loader.load_model("../external_resources/3d_objects/default/viking_room/viking_room.obj");
 
 
         //Camera fun

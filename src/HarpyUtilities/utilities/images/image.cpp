@@ -8,13 +8,15 @@ void shift_bit(int& num, int bit){
 void harpy::utilities::image::read_image(std::string path)
 {
     cv_image = imread(path, cv::IMREAD_UNCHANGED);
+    cv::Mat temp_image{};
     switch(cv_image.channels()){
         case 1:
             current_format = R;
             break;
         case 3:
+            cv::cvtColor(cv_image, temp_image, cv::COLOR_BGR2BGRA);
             current_format = BGR;
-            break;
+            convert_image_color_space(cv::COLOR_BGR2BGRA);
         case 4:
             current_format = BGRA;
     }
