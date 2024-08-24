@@ -56,7 +56,9 @@ void update_uniform_buffer(D3::camera& cam, wrappers::data_buffer* uniform_buffe
         //ubo.model = glm::rotate(ubo.model, glm::radians(90.0f), glm::vec3(1.0f, 1.0f, 0.0f));
         get_rotated_idiot = false;
     }
+/*
     ubo.model = glm::rotate(ubo.model, glm::radians(1.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+*/
 
 
 
@@ -111,12 +113,14 @@ int main()
 
         utilities::delegate move_delegate{};
         move_delegate.push_back([&cam](){
-            cam.get_position() += glm::vec3(cam.construct_rotation_matrix() * glm::vec4(cam.get_velocity() * 0.5f, 0.f));
+            cam.get_position() += glm::vec3(cam.construct_rotation_matrix() * glm::vec4(cam.get_velocity() * 0.1f, 0.f));
         });
         cam.bind_update_action(move_delegate);
 
         utilities::delegate forwards{}, forwards_release{};
         utilities::delegate backwards{}, backwards_release{};
+        utilities::delegate left{}, right{};
+        utilities::delegate left_relese{}, right_relese{};
         forwards.push_back([&cam](){
             cam.get_velocity().z = -1;
         });
@@ -129,11 +133,28 @@ int main()
         backwards_release.push_back([&cam](){
             cam.get_velocity().z = 0;
         });
+        left.push_back([&cam](){
+            cam.get_velocity().x = -1;
+        });
+        left_relese.push_back([&cam](){
+            cam.get_velocity().x = 0;
+        });
+        right.push_back([&cam](){
+            cam.get_velocity().x = 1;
+        });
+        right_relese.push_back([&cam](){
+            cam.get_velocity().x = 0;
+        });
 
-        controller.map_key(GLFW_KEY_W, windowing::input_action::repeat, forwards);
-        controller.map_key(GLFW_KEY_S, windowing::input_action::repeat, backwards);
+
+        controller.map_key(GLFW_KEY_W, windowing::input_action::press, forwards);
+        controller.map_key(GLFW_KEY_S, windowing::input_action::press, backwards);
         controller.map_key(GLFW_KEY_W, windowing::input_action::release, forwards_release);
         controller.map_key(GLFW_KEY_S, windowing::input_action::release, backwards_release);
+        controller.map_key(GLFW_KEY_A, windowing::input_action::press, left);
+        controller.map_key(GLFW_KEY_D, windowing::input_action::press, right);
+        controller.map_key(GLFW_KEY_A, windowing::input_action::release, left_relese);
+        controller.map_key(GLFW_KEY_D, windowing::input_action::release, right_relese);
 
 
         std::vector<wrappers::data_buffer> uniform_buffers{};
@@ -162,9 +183,10 @@ int main()
         auto set = descriptor_sets.front();
         descriptor_sets.push_back(set);
 
-
         //Initialize textures
-        utilities::image image{"../external_resources/3d_objects/default/viking_room/viking_room.png"};
+        auto img = cv::imread("../external_resources/3d_objects/default/maxwell/nowhiskers.jpg");
+        cv::cvtColor(img, img, cv::COLOR_YCrCb2BGR, 3, );
+        utilities::image image{"../external_resources/3d_objects/default/maxwell/nowhiskers.jpg"};
         texturing::texture_sampler sampler{};
         texturing::texture texture{image};
 

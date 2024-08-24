@@ -8,15 +8,13 @@ void shift_bit(int& num, int bit){
 void harpy::utilities::image::read_image(std::string path)
 {
     cv_image = imread(path, cv::IMREAD_UNCHANGED);
-    cv::Mat temp_image{};
     switch(cv_image.channels()){
         case 1:
             current_format = R;
             break;
         case 3:
-            cv::cvtColor(cv_image, temp_image, cv::COLOR_BGR2BGRA);
-            current_format = BGR;
-            convert_image_color_space(cv::COLOR_BGR2BGRA);
+            cv::cvtColor(cv_image, cv_image, cv::COLOR_YCrCb2BGR);
+            cv::cvtColor(cv_image, cv_image, cv::COLOR_BGR2BGRA);
         case 4:
             current_format = BGRA;
     }
@@ -45,80 +43,92 @@ void harpy::utilities::image::convert_image_color_space(cv::ColorConversionCodes
             if (current_format == RGB || current_format == BGR) {
                 cv::cvtColor(cv_image, cv_image, code, 4);
                 shift_bit(current_format, 0);
-            } else goto error;
+                return;
+            } else break;
         }
         case cv::COLOR_BGRA2BGR: {
             if (current_format == RGBA || current_format == BGRA) {
                 cv::cvtColor(cv_image, cv_image, code, 3);
                 shift_bit(current_format, 0);
-            } else goto error;
+                return;
+            } else break;
         }
         case cv::COLOR_BGR2RGBA: {
             if (current_format == BGR || current_format == RGB) {
                 cv::cvtColor(cv_image, cv_image, code, 4);
                 shift_bit(current_format, 0);
                 shift_bit(current_format, 4);
-            } else goto error;
+                return;
+            } else break;
         }
         case cv::COLOR_RGBA2BGR: {
             if (current_format == RGBA || current_format == BGRA) {
                 cv::cvtColor(cv_image, cv_image, code, 3);
                 shift_bit(current_format, 0);
                 shift_bit(current_format, 4);
-            } else goto error;
+                return;
+            } else break;
         }
         case cv::COLOR_BGR2RGB: {
             if (current_format == RGB || current_format == BGR) {
                 cv::cvtColor(cv_image, cv_image, code, 3);
                 shift_bit(current_format, 4);
-            } else goto error;
+                return;
+            } else break;
         }
         case cv::COLOR_BGRA2RGBA: {
             if (current_format == RGBA || current_format == BGRA) {
                 cv::cvtColor(cv_image, cv_image, code, 4);
                 shift_bit(current_format, 4);
-            } else goto error;
+                return;
+            } else break;
         }
         case cv::COLOR_BGR2GRAY: {
             if (current_format == BGR) {
                 cv::cvtColor(cv_image, cv_image, code, 1);
                 shift_bit(current_format, 5);
-            } else goto error;
+                return;
+            } else break;
         }
         case cv::COLOR_RGB2GRAY: {
             if (current_format == RGB) {
                 cv::cvtColor(cv_image, cv_image, code, 1);
                 shift_bit(current_format, 5);
-            } else goto error;
+                return;
+            } else break;
         }
         case cv::COLOR_GRAY2BGR: {
             if (current_format & is_GRAY) {
                 cv::cvtColor(cv_image, cv_image, code, 3);
                 current_format = BGR;
-            } else goto error;
+                return;
+            } else break;
         }
         case cv::COLOR_GRAY2BGRA: {
             if (current_format == RGBA || current_format == BGRA) {
                 cv::cvtColor(cv_image, cv_image, code, 4);
                 current_format = BGRA;
-            } else goto error;
+                return;
+            } else break;
         }
         case cv::COLOR_BGRA2GRAY: {
             if (current_format == RGBA || current_format == BGRA) {
                 cv::cvtColor(cv_image, cv_image, code, 1);
                 shift_bit(current_format, 5);
-            } else goto error;
+                return;
+            } else break;
         }
         case cv::COLOR_RGBA2GRAY: {
             if (current_format == RGBA || current_format == BGRA) {
                 cv::cvtColor(cv_image, cv_image, code, 1);
                 shift_bit(current_format, 5);
-            } else goto error;
+                return;
+            } else break;
         }
         default:
-        error:
             throw harpy_little_error("Wrong image code conversion used (or not supported yet)");
     }
+    throw harpy_little_error("Wrong image code conversion used (or not supported yet)");
 }
 
 int harpy::utilities::image::get_current_format() {

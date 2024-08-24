@@ -10,7 +10,7 @@ find_package(Vulkan REQUIRED)
 find_package(Threads REQUIRED)
 
 #[[To not check is dependency up-to-date]]
-set(FETCHCONTENT_UPDATES_DISCONNECTED ON CACHE BOOL "Do not update everytime I run cmake, please")
+set(FETCHCONTENT_UPDATES_DISCONNECTED ON CACHE BOOL "Do not update everytime I run cmake, please" FORCE)
 
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 #[[Not working right now]]
@@ -18,6 +18,8 @@ option(HARPY_BUILD_TESTS "Build the harpy test programs" OFF)
 option(HARPY_INSTALL "Generate installation target" OFF)
 option(HARPY_BENCHMARK "For testing and measurements" OFF)
 
+set(WITH_UNIFONT OFF CACHE BOOL "" FORCE)
+set(WITH_ADE OFF CACHE BOOL "" FORCE)
 set(BUILD_opencv_apps OFF CACHE BOOL "")
 set(BUILD_opencv_calib3d OFF CACHE BOOL "")
 set(BUILD_opencv_core ON CACHE BOOL "")
@@ -54,6 +56,9 @@ set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "")
 
 FetchContent_Declare(glfw
         GIT_REPOSITORY https://github.com/glfw/glfw)
+FetchContent_Declare(ffmpeg
+        GIT_REPOSITORY https://git.ffmpeg.org/ffmpeg.git
+)
 FetchContent_Declare(glm
         GIT_REPOSITORY https://github.com/icaven/glm)
 FetchContent_Declare(vma
@@ -61,12 +66,14 @@ FetchContent_Declare(vma
 FetchContent_Declare(volk
         GIT_REPOSITORY https://github.com/zeux/volk)
 FetchContent_Declare(opencv
-        GIT_REPOSITORY https://github.com/opencv/opencv)
+        GIT_REPOSITORY https://github.com/opencv/opencv
+        GIT_TAG 5.x)
 FetchContent_Declare(assimp
         GIT_REPOSITORY https://github.com/assimp/assimp)
 
 
-FetchContent_MakeAvailable(glfw glm vma volk opencv assimp)
+
+FetchContent_MakeAvailable(glfw ffmpeg glm vma volk opencv assimp)
 
 set(HARPY_INCLUDES "${PROJECT_SOURCE_DIR}/include")
 set(HARPY_SOURCES "${PROJECT_BINARY_DIR}/src")
