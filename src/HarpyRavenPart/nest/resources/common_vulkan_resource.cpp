@@ -1,6 +1,5 @@
 ﻿#include <nest/resources/common_vulkan_resource.h>
 #include <logger/harpy_little_error.h>
-#include <nest/managers/swapchain_manager.h>
 
 using namespace harpy::nest;
 using namespace resources;

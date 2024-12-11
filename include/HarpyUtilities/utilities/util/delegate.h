@@ -1,10 +1,9 @@
 ﻿#pragma once
 #ifndef HARPY_UTILITIES_DELEGATE
 #define HARPY_UTILITIES_DELEGATE
-#include <concepts>
 #include <functional>
 #include <future>
-#include <../dll_macro.h>
+#include <../utilities_dll_macro.h>
 
 
 namespace harpy::utilities

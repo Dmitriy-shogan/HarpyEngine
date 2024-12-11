@@ -44,7 +44,8 @@ harpy::nest::managers::queue_wrapper harpy::nest::managers::queue_manager::get_q
 {
     queue_wrapper wrapper{queues.front(), type};
     wrapper.manager = this;
-    queues.pop_front();
+    if(type != wrappers::queue_type::universal)
+        queues.pop_front();
     return wrapper;
 }
 
@@ -59,4 +60,7 @@ harpy::nest::wrappers::queue_type harpy::nest::managers::queue_manager::get_type
 
 bool harpy::nest::managers::queue_manager::do_support_present()
 {return is_support_present;}
+
+uint32_t harpy::nest::managers::queue_manager::get_family_index() {return family_index;}
+
 

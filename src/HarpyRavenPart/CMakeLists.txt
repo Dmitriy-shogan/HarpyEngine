@@ -2,7 +2,6 @@ add_executable(HarpyRavenExe ${HARPY_RAVEN_MODULE}/nest/inititalizations.h
         nest/inititalizations.cpp
         nest/command_commander/command_commander.cpp
         nest/managers/queue_manager.cpp
-        nest/managers/swapchain_manager.cpp
         nest/pipeline/graphics_pipeline.cpp
         nest/pipeline/pipeline_cache.cpp
         nest/pools/command_pool.cpp
@@ -25,8 +24,6 @@ add_executable(HarpyRavenExe ${HARPY_RAVEN_MODULE}/nest/inititalizations.h
         3D/renderer.cpp
         main.cpp
         ../../include/HarpyRavenPart/3D/uniform_buffer_objects.h
-        nest/pipeline/descriptor_factory.cpp
-        ../../include/HarpyRavenPart/nest/pipeline/descriptor_factory.h
         nest/resources/depth_image.cpp
         ../../include/HarpyRavenPart/nest/resources/depth_image.h
         nest/windowing/input_controller.cpp
@@ -58,7 +55,6 @@ add_library(HarpyRavenLib
         nest/inititalizations.cpp
         nest/command_commander/command_commander.cpp
         nest/managers/queue_manager.cpp
-        nest/managers/swapchain_manager.cpp
         nest/pipeline/graphics_pipeline.cpp
         nest/pipeline/pipeline_cache.cpp
         nest/pools/command_pool.cpp
@@ -79,8 +75,6 @@ add_library(HarpyRavenLib
         nest/wrappers/swapchain.cpp
         3D/mesh.cpp
         3D/renderer.cpp
-        nest/pipeline/descriptor_factory.cpp
-        ../../include/HarpyRavenPart/nest/pipeline/descriptor_factory.h
         nest/resources/depth_image.cpp
         ../../include/HarpyRavenPart/nest/resources/depth_image.h
         nest/windowing/input_controller.cpp
@@ -113,9 +107,11 @@ target_include_directories(HarpyRavenLib
                 ${vma_SOURCE_DIR}/include
                 ${Vulkan_INCLUDE_DIRS}
                 ${assimp_SOURCE_DIR}/include
+                ${HARPY_CODEGEN_MODULE}
         PUBLIC  ${HARPY_UTILITIES_MODULE}
                 ${glm_SOURCE_DIR}
-                ${HARPY_INCLUDES}/HarpyRavenPart)
+                ${HARPY_INCLUDES}/HarpyRavenPart
+)
 
 target_link_libraries(HarpyRavenLib
         PRIVATE glfw
@@ -123,6 +119,7 @@ target_link_libraries(HarpyRavenLib
                 volk_headers
                 "${Vulkan_INCLUDE_DIRS}/../Lib/shaderc_shared.lib"
                 assimp
+                HarpyCodeGen
         PUBLIC HarpyUtilities
                 glm)
 
@@ -132,6 +129,7 @@ target_include_directories(HarpyRavenExe
         ${vma_SOURCE_DIR}/include
         ${Vulkan_INCLUDE_DIRS}
         ${assimp_SOURCE_DIR}/include
+        ${HARPY_CODEGEN_MODULE}
         PUBLIC  ${HARPY_UTILITIES_MODULE}
         ${glm_SOURCE_DIR}
         ${HARPY_INCLUDES}/HarpyRavenPart)
@@ -142,5 +140,6 @@ target_link_libraries(HarpyRavenExe
         volk_headers
         "${Vulkan_INCLUDE_DIRS}/../Lib/shaderc_shared.lib"
         assimp
+        HarpyCodeGen
         PUBLIC HarpyUtilities
         glm)

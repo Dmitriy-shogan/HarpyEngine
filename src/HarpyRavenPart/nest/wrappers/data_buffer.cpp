@@ -9,21 +9,20 @@ void harpy::nest::wrappers::data_buffer::init(std::size_t size)
     VkBufferCreateInfo ci{};
     ci.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 
-    switch(type)
-    {
-    case buffer_type::vertex:
+    switch(type) {
+        case buffer_type::vertex:
         {
             ci.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
             this->size = size * sizeof(vertex);
             break;
         }
-    case buffer_type::indice:
+        case buffer_type::indice:
         {
             ci.usage = VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
             this->size = size * sizeof(uint32_t);
             break;
         }
-    case buffer_type::staging:
+        case buffer_type::staging:
         {
             ci.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
             this->size = size;
@@ -35,8 +34,8 @@ void harpy::nest::wrappers::data_buffer::init(std::size_t size)
             this->size = size;
             break;
         }
-    default:
-        throw utilities::harpy_little_error("What a joker, decided to create a buffer with an enum that is not even bm!");
+        default:
+            throw utilities::harpy_little_error("What a joker, decided to create a buffer with an enum that is not even bm!");
     }
     ci.size = this->size;
     //Just for now, needs research

@@ -5,9 +5,9 @@ void shift_bit(int& num, int bit){
     num ^= 1<<bit;
 }
 
-void harpy::utilities::image::read_image(std::string path)
+void harpy::utilities::image::read_image(sz::string_view path)
 {
-    cv_image = imread(path, cv::IMREAD_UNCHANGED);
+    cv_image = imread(path.begin(), cv::IMREAD_UNCHANGED);
     switch(cv_image.channels()){
         case 1:
             current_format = R;
@@ -20,7 +20,7 @@ void harpy::utilities::image::read_image(std::string path)
     }
 }
 
-void harpy::utilities::image::save_image(std::string path, std::string filename)
+void harpy::utilities::image::save_image(sz::string_view path, sz::string_view filename)
 {
     //imwrite(path + filename, cv_image);
 }
@@ -29,7 +29,7 @@ const cv::Mat& harpy::utilities::image::get_cv_data()
 {return cv_image;
 }
 
-harpy::utilities::image::image(std::string path) {
+harpy::utilities::image::image(sz::string_view path) {
     read_image(std::move(path));
 }
 

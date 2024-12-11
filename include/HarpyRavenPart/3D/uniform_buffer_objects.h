@@ -9,7 +9,7 @@
 //TODO: better and more uniform templates
 namespace harpy::D3::uniform_buffers {
     struct sight_ub{
-        glm::mat4 model{}, view{}, proj{};
+        glm::mat4 view{1.0f}, proj{1.0f}, view_proj{1.0f};
     };
 }
 

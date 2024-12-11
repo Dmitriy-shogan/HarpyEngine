@@ -45,6 +45,10 @@ namespace harpy::nest::managers
         wrappers::queue_type get_type();
 
         bool do_support_present();
+
+        uint32_t get_family_index();
+
+
     };
 }
 

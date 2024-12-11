@@ -132,6 +132,8 @@ namespace harpy::nest::windowing {
         static void wake_from_waiting();
         static double get_time_elapsed_since_start();
 
+        window* get_window() const;
+
         ~input_controller();
     };
 }

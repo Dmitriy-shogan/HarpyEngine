@@ -8,6 +8,10 @@
 #include <glm/mat4x4.hpp>
 #include <util/delegate.h>
 
+namespace harpy::nest::windowing {
+    class input_controller;
+}
+
 namespace harpy::D3 {
     class camera {
         glm::vec3 position{};
@@ -74,8 +78,12 @@ namespace harpy::D3 {
         std::pair<float, float> get_vertical_restrictions();
         std::pair<float, float> get_horizontal_restrictions();
 
+        static void set_standard_movement(camera & cam, float speed, nest::windowing::input_controller & controller);
 
+        static void set_standard_mouse_movement(camera& cam, float sensitivity, nest::windowing::input_controller& input);
     };
+
+
 
 }
 #endif //HARPY_3D_CAMERA

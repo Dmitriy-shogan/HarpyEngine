@@ -10,7 +10,7 @@ namespace harpy::nest::shaders
     //TODO: create tool for saving shaderc compiler options
     struct hlsl_shader_factory_options
     {
-        std::vector<std::string> definitions{};
+        std::vector<sz::string> definitions{};
         
     };
     
@@ -26,32 +26,32 @@ namespace harpy::nest::shaders
     
     public:
         
-        std::vector<uint32_t> compile(std::string shader, bool do_save = false);
-        std::vector<uint32_t> compile_from_file(std::string filename, bool do_save = false);
+        std::vector<uint32_t> compile(sz::string_view shader, bool do_save = false);
+        std::vector<uint32_t> compile_from_file(sz::string_view filename, bool do_save = false);
         
-        void load_set(std::string filename, bool set_current = true);
-        void load_sets(std::string directory);
+        void load_set(sz::string_view filename, bool set_current = true);
+        void load_sets(sz::string_view directory);
 
-        void save_set(std::string filename);
-        void save_sets(std::string directory);
+        void save_set(sz::string_view filename);
+        void save_sets(sz::string_view directory);
 
         hlsl_shader_factory_options& get_set(int index);
         
         void set_set(hlsl_shader_factory_options set);
         void set_set(size_t index);
         
-        shader_module create_shader_module(std::string filename);
+        shader_module create_shader_module(sz::string_view filename);
         shader_module create_shader_module(std::vector<uint32_t> shader);
         
-        static std::future<std::vector<shader_module>> create_shader_modules_async(std::string filename);
+        static std::future<std::vector<shader_module>> create_shader_modules_async(sz::string_view filename);
         
         //FILE MUST BE VALID HSP FILE
-        static std::future<std::vector<shader_set>> create_shader_sets_async(std::string filename);
+        static std::future<std::vector<shader_set>> create_shader_sets_async(sz::string_view filename);
         
         //FILE MUST BE VALID HSP FILE
-        shader_set create_shader_set_from_hsp(std::string filename); //HarpyShaderPackage
+        shader_set create_shader_set_from_hsp(sz::string_view filename); //HarpyShaderPackage
         //FILE MUST BE VALID HSP FILE
-        shader_set create_shader_set(std::string directory);
+        shader_set create_shader_set(sz::string_view directory);
     };
 }
 

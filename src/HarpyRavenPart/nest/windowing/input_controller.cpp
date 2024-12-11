@@ -180,7 +180,7 @@ void harpy::nest::windowing::input_controller::normalize_cursor() {
 
 void harpy::nest::windowing::input_controller::turn_raw_mouse_motion(bool is_raw) {
     set_callback_manager();
-    if(glfwRawMouseMotionSupported() && glfwGetInputMode(win->get_glfw_window(), GLFW_CURSOR_DISABLED))
+    if(glfwRawMouseMotionSupported() && glfwGetInputMode(win->get_glfw_window(), GLFW_CURSOR) == GLFW_CURSOR_DISABLED)
         glfwSetInputMode(win->get_glfw_window(), GLFW_RAW_MOUSE_MOTION, is_raw);
     else
         glfwSetInputMode(win->get_glfw_window(), GLFW_RAW_MOUSE_MOTION, false);
@@ -239,6 +239,10 @@ void harpy::nest::windowing::input_controller::wake_from_waiting() {
 
 double harpy::nest::windowing::input_controller::get_time_elapsed_since_start() {
     return glfwGetTime();
+}
+
+harpy::nest::windowing::window * harpy::nest::windowing::input_controller::get_window() const {
+    return win;
 }
 
 void harpy::nest::windowing::input_controller::set_callback_manager() {

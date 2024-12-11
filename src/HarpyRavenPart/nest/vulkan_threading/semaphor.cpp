@@ -25,8 +25,7 @@ VkSemaphore& harpy::nest::threading::semaphore::get_vk_semaphore()
     return semaphor;
 }
 
-harpy::nest::threading::semaphore::~semaphore()
-{
+harpy::nest::threading::semaphore::~semaphore() {
     if(semaphor && do_delete_in_destructor)
         vkDestroySemaphore(*device, semaphor, nullptr);
 }

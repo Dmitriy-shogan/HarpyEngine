@@ -6,7 +6,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-std::unique_ptr<harpy::D3::model> harpy::D3::model_loader::load_model(std::string_view path) {
+std::unique_ptr<harpy::D3::model> harpy::D3::model_loader::load_model(sz::string_view path) {
     std::unique_ptr<model> result{new model()};
 
     uint32_t import_flags = 0;
@@ -49,11 +49,9 @@ std::unique_ptr<harpy::D3::model> harpy::D3::model_loader::load_model(std::strin
         for (int i = 0; i < local_mesh->mNumVertices; ++i) {
             vertices[i].coords = {local_mesh->mVertices[i].x, local_mesh->mVertices[i].y, local_mesh->mVertices[i].z};
             vertices[i].texture_coords = {local_mesh->mTextureCoords[0][i].x, local_mesh->mTextureCoords[0][i].y};
-            vertices[i].base_color = {0.5f, 0.5f, 0.5f};
             vertices[i].normals = {local_mesh->mNormals[i].x, local_mesh->mNormals[i].y, local_mesh->mNormals[i].z};
         }
-
-        actual_mesh.load(commander, vertices, indices);
+        commander.fast_load_mesh(actual_mesh, vertices, indices);
         result->msh = std::move(actual_mesh);
         return result;
     }
@@ -70,3 +68,4 @@ harpy::D3::model_loader::model_loader(std::unique_ptr<nest::resources::command_t
 
     commander.bind_thread_res(std::move(thread_res));
 }
+

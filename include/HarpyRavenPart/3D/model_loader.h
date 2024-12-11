@@ -6,6 +6,7 @@
 #define HARPY_D3_MODEL_LOADER
 #include <assimp/Importer.hpp>
 #include <3D/model.h>
+#include <nest/command_commander/command_commander.h>
 
 namespace harpy::D3 {
 
@@ -18,7 +19,7 @@ namespace harpy::D3 {
     public:
         model_loader(std::unique_ptr<nest::resources::command_thread_resource> thread_res);
 
-        std::unique_ptr<model> load_model(std::string_view path);
+        std::unique_ptr<model> load_model(sz::string_view path);
 
     };
 }

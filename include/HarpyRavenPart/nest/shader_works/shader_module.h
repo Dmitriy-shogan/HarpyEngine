@@ -34,9 +34,9 @@ namespace harpy::nest::shaders
     public:
         
         shader_module(const spirv_compilation_result& data, shader_types type, VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device());
-        shader_module(const std::string& shader_assembly, shader_types type, VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device());
+        shader_module(const sz::string_view& shader_assembly, shader_types type, VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device());
         shader_module(spirv_compilation_result&& data, shader_types type, VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device());
-        shader_module(std::string&& shader_assembly, shader_types type, VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device());
+        shader_module(sz::string_view&& shader_assembly, shader_types type, VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device());
         
         shader_module(const shader_module& shader);
         shader_module(shader_module&& shader) noexcept;

@@ -84,6 +84,7 @@
 //Glm definitions
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#define GLM_ENABLE_EXPERIMENTAL
 
 #ifdef HARPY_DEBUG
 constexpr bool is_harpy_debug {true};

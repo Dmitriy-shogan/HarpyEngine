@@ -8,7 +8,7 @@
 using logger = harpy::utilities::logger;
 using harpy_error = harpy::utilities::harpy_little_error;
 
-std::vector<char> harpy::utilities::read_file_binary(std::string way_to_file)
+std::vector<char> harpy::utilities::read_file_binary(sz::string_view way_to_file)
 {
     std::ifstream file(way_to_file, std::ios::ate | std::ios::binary);
 
@@ -27,7 +27,7 @@ std::vector<char> harpy::utilities::read_file_binary(std::string way_to_file)
     return buffer;
 }
 
-std::string harpy::utilities::read_file(std::string way_to_file)
+sz::string harpy::utilities::read_file(sz::string_view way_to_file)
 {
     std::ifstream file(way_to_file, std::ios::ate | std::ios::binary);
 
@@ -41,15 +41,15 @@ std::string harpy::utilities::read_file(std::string way_to_file)
     std::vector<char> bytes(fileSize);
     file.read(bytes.data(), fileSize);
 
-    return std::string(bytes.data(), fileSize);
+    return sz::string{bytes.data(), fileSize};
 }
 
 
-void harpy::utilities::write_file(std::string way_to_file, std::string data)
+void harpy::utilities::write_file(sz::string_view way_to_file, sz::string_view data)
 {
     std::ofstream file{way_to_file};
     if (!file.is_open()) {
-        throw harpy_little_error("failed to create/open file" + way_to_file);
+        throw harpy_little_error(sz::string{"failed to create/open file: "} + way_to_file);
     }
     file << data;
     file.close();

@@ -14,12 +14,10 @@ namespace harpy::nest::resources
     {
         managers::queue_wrapper queue;
         std::unique_ptr<pools::command_pool> com_pool{};
-        std::vector<VkSubmitInfo> submit_infos{
-            {
-                {
+        VkSubmitInfo submit_infos{
                     .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
                       .commandBufferCount = 1,
-                }}};
+                };
     };
 }
 

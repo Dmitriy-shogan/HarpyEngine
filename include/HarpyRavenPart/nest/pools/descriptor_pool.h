@@ -6,7 +6,6 @@
 
 namespace harpy::nest::pools
 {
-    inline const size_t max_descriptors_per_pool = 5000;
     enum class descriptor_types
     {
         uniform_buffer = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
@@ -14,36 +13,31 @@ namespace harpy::nest::pools
         storage_image = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
         sampled_image = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
         sampler = VK_DESCRIPTOR_TYPE_SAMPLER,
-
-        he_first = uniform_buffer,
-        he_is_bm = 0,
-        he_sum = 5
     };
 
-    struct pool_size_desc
-    {
-        descriptor_types type{};
-        uint32_t amount{};
-    };
-    
+    //TODO: implement four descriptor set levels 0 -- global, 1 -- perpass resources, 2 -- materials (arguable), 3 -- per object
     class descriptor_pool
     {
         VkDevice* device{};
         VkDescriptorPool pool{};
         std::set<descriptor_types> types{};
-        //Needs research
-        size_t max_descriptor_amount{max_descriptors_per_pool};
+        std::vector<VkDescriptorSetLayout> layouts{};
+        uint32_t current_max_size{2000};
     public:
-        descriptor_pool(uint32_t descriptor_amount, descriptor_types type, VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device());
-        descriptor_pool(std::initializer_list<pools::pool_size_desc> descriptions,
-                        uint32_t max_descriptors_amount = max_descriptors_per_pool,
-                        VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device());
+
+        descriptor_pool(VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device());
 
         descriptor_pool(descriptor_pool const& pool) = delete;
         descriptor_pool& operator=(descriptor_pool const& pool) = delete;
 
         descriptor_pool(descriptor_pool&& pool) noexcept;
         descriptor_pool& operator=(descriptor_pool&& pool) noexcept;
+
+        void allocate_descriptors(uint32_t descriptor_amount, descriptor_types type);
+        VkDescriptorSetLayout get_layout(std::vector<VkDescriptorSetLayoutBinding> bindings);
+
+        static VkDescriptorSetLayoutBinding get_standard_sight_binding();
+
 
         VkDescriptorPool& get_vk_pool();
         operator VkDescriptorPool&();

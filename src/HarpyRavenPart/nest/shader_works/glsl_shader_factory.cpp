@@ -4,11 +4,13 @@
 
 #include <utility>
 
-#include <nest/managers/swapchain_manager.h>
 
 using namespace harpy::nest::shaders;
-const std::string separator {" SEPARATOR_SEPARATOR "};
-const std::string shader_name {"shader"};
+using sz::literals::operator""_sz;
+
+const sz::string separator {"\n SEPARATOR_SEPARATOR \n"};
+const sz::string shader_name {"shader"};
+
 
 shaderc::CompileOptions glsl_shader_factory::process_options()
 {
@@ -54,7 +56,7 @@ shaderc::CompileOptions glsl_shader_factory::process_options()
     return options;
 }
 
-shader_types glsl_shader_factory::process_extension(std::string_view filename)
+shader_types glsl_shader_factory::process_extension(sz::string_view filename)
 {
     //vert, frag, tesc, tese, geom, comp
     switch (filename.back())
@@ -116,12 +118,12 @@ void glsl_shader_factory::set_set(const glsl_shader_factory_options& set)
 
 void glsl_shader_factory::set_set(size_t index)
 {
-    if (index < 0 || index >= sets.size())
+    if (index >= sets.size())
         throw utilities::harpy_little_error("Wrong index while setting set for glsl shader factory");
     current_set = index;
 }
 
-std::string glsl_shader_factory::preprocess(const std::string& shader, shader_types type, bool do_save)
+sz::string glsl_shader_factory::preprocess(sz::string_view shader, shader_types type, bool do_save)
 {
     auto result =
       compiler.PreprocessGlsl(shader, shader_types_to_shaderc_shader_kind(type),
@@ -131,10 +133,10 @@ std::string glsl_shader_factory::preprocess(const std::string& shader, shader_ty
         throw utilities::harpy_little_error(result.GetErrorMessage());
     }
 
-    return {result.cbegin(), result.cend()};
+    return {result.begin()};
 }
 
-harpy::spirv_compilation_result glsl_shader_factory::compile(const std::string& shader, shader_types type, bool do_save)
+harpy::spirv_compilation_result glsl_shader_factory::compile(sz::string_view shader, shader_types type, bool do_save)
 {
     
     shaderc::SpvCompilationResult module =
@@ -147,59 +149,59 @@ harpy::spirv_compilation_result glsl_shader_factory::compile(const std::string& 
     return {module.cbegin(), module.cend()};
 }
 
-std::string glsl_shader_factory::compile_binary(const std::string& shader, shader_types type, bool do_save)
+sz::string glsl_shader_factory::compile_binary(sz::string_view shader, shader_types type, bool do_save)
 {
     auto result =
       compiler.CompileGlslToSpvAssembly(shader, shader_types_to_shaderc_shader_kind(type),
-          shader.c_str(), process_options());
+          shader.data(), process_options());
 
     if (result.GetCompilationStatus() != shaderc_compilation_status_success) {
         throw utilities::harpy_little_error(result.GetErrorMessage());
     }
-    return {result.cbegin(), result.cend()};
+    return {result.begin()};
 }
 
-harpy::spirv_compilation_result glsl_shader_factory::full_compilation(std::string shader, shader_types type, bool do_save)
+harpy::spirv_compilation_result glsl_shader_factory::full_compilation(sz::string_view shader, shader_types type, bool do_save)
 {
-    auto processed = preprocess(std::move(shader), type);
+    auto processed = preprocess(shader, type);
     return compile(processed, type, do_save);
 }
 
-std::string glsl_shader_factory::full_compilation_binary(std::string shader, shader_types type, bool do_save)
+sz::string glsl_shader_factory::full_compilation_binary(sz::string_view shader, shader_types type, bool do_save)
 {
-    auto processed = preprocess(std::move(shader), type);
+    auto processed = preprocess(shader, type);
     return compile_binary(processed, type, do_save);
 }
 
-std::string glsl_shader_factory::preprocess_from_file(const std::string& filename, bool do_save)
+sz::string glsl_shader_factory::preprocess_from_file(sz::string_view filename, bool do_save)
 {
     auto type = process_extension(filename);
-    auto shader = utilities::read_file("shaders/glsl" + filename);
+    auto shader = utilities::read_file(sz::string{"shaders/glsl"} + filename);
     return preprocess(std::move(shader), type, do_save);
 }
 
-harpy::spirv_compilation_result glsl_shader_factory::compile_from_file(const std::string& filename, bool do_save)
+harpy::spirv_compilation_result glsl_shader_factory::compile_from_file(sz::string_view filename, bool do_save)
 {
     auto type = process_extension(filename);
-    auto shader = utilities::read_file("shaders/glsl" + filename);
+    auto shader = utilities::read_file(sz::string{"shaders/glsl"} + filename);
     return compile(std::move(shader), type, do_save);
 }
 
-std::string glsl_shader_factory::compile_binary_from_file(const std::string& filename, bool do_save)
+sz::string glsl_shader_factory::compile_binary_from_file(sz::string_view filename, bool do_save)
 {
     auto type = process_extension(filename);
     auto shader = utilities::read_file(filename);
     return compile_binary(std::move(shader), type, do_save);
 }
 
-harpy::spirv_compilation_result glsl_shader_factory::full_compilation_from_file(const std::string& filename, bool do_save)
+harpy::spirv_compilation_result glsl_shader_factory::full_compilation_from_file(sz::string_view filename, bool do_save)
 {
     auto type = process_extension(filename);
     auto shader = utilities::read_file(filename);
     return full_compilation(std::move(shader), type, do_save);
 }
 
-harpy::spirv_compilation_result glsl_shader_factory::build_assembly(const std::string& assembled_string)
+harpy::spirv_compilation_result glsl_shader_factory::build_assembly(sz::string_view assembled_string)
 {
     auto result = compiler.AssembleToSpv(assembled_string);
     if (result.GetCompilationStatus() != shaderc_compilation_status_success) {
@@ -208,19 +210,19 @@ harpy::spirv_compilation_result glsl_shader_factory::build_assembly(const std::s
     return {result.cbegin(), result.cend()};
 }
 
-std::string glsl_shader_factory::full_compilation_binary_from_file(const std::string& filename, bool do_save)
+sz::string glsl_shader_factory::full_compilation_binary_from_file(sz::string_view filename, bool do_save)
 {
     auto type = process_extension(filename);
     auto shader = utilities::read_file(filename);
     return full_compilation_binary(std::move(shader), type, do_save);
 }
 
-void glsl_shader_factory::load_sets(const std::string& filename)
+void glsl_shader_factory::load_sets(sz::string_view filename)
 {
-    auto data = utilities::read_file("shaders/glsl/" + filename);
+    auto data = utilities::read_file(sz::string{"shaders/glsl/"} + filename);
     size_t iter = 0;
     size_t sep_iter{};
-    while(iter < data.size() && iter != std::string::npos)
+    while(iter < data.size() && iter != sz::string::npos)
     {
         glsl_shader_factory_options options{};
         
@@ -247,25 +249,25 @@ void glsl_shader_factory::load_sets(const std::string& filename)
 }
 
 
-void glsl_shader_factory::save_sets(const std::string& filename)
+void glsl_shader_factory::save_sets(sz::string_view filename)
 {
-    std::string data{};
+    sz::string data{};
     for(auto& i : sets)
     {
         data.append(std::to_string(i.flags) + '\n');
         data.append(std::to_string(i.forced_version) + '\n');
         for(auto &f : i.definitions)
             data.append(f.first + ':' + f.second + '^');
-        data.append('\n' + separator + '\n');
+        data.append(separator);
     }
     
-    utilities::write_file("shaders/glsl/" + filename, data);
+    utilities::write_file(sz::string{"shaders/glsl/"} + filename, data);
 }
 
 glsl_shader_factory_options& glsl_shader_factory::get_set(int index)
 {return sets.at(index);}
 
-shader_module glsl_shader_factory::create_shader_module(const std::string& filename)
+shader_module glsl_shader_factory::create_shader_module(sz::string_view filename)
 {
     auto type = process_extension(filename);
     auto spv_shader = full_compilation_from_file(filename);
@@ -278,7 +280,7 @@ shader_module glsl_shader_factory::create_shader_module(spirv_compilation_result
     return {shader, type};
 }
 
-std::future<shader_module> glsl_shader_factory::create_shader_module_async(std::string filename)
+std::future<shader_module> glsl_shader_factory::create_shader_module_async(sz::string_view filename)
 {
     return utilities::default_thread_pool::get_singleton().enqueue
     ([file = std::move(filename)]() -> shader_module
@@ -287,7 +289,7 @@ std::future<shader_module> glsl_shader_factory::create_shader_module_async(std::
     });
 }
 
-std::future<shader_set> glsl_shader_factory::create_shader_set_async(std::string filename)
+std::future<shader_set> glsl_shader_factory::create_shader_set_async(sz::string_view filename)
 {
     return utilities::default_thread_pool::get_singleton().enqueue
     ([file = std::move(filename)]() -> shader_set
@@ -296,7 +298,7 @@ std::future<shader_set> glsl_shader_factory::create_shader_set_async(std::string
     });
 }
 
-shader_set glsl_shader_factory::create_shader_set(std::string way_to_file)
+shader_set glsl_shader_factory::create_shader_set(sz::string_view way_to_file)
 {
     shader_set main_set{};
     auto file = utilities::read_file(std::move(way_to_file));

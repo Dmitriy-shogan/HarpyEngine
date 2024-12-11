@@ -15,7 +15,7 @@ harpy::nest::shaders::shader_module::shader_module(const spirv_compilation_resul
     vkCreateShaderModule(resource::get_resource(), &ci, nullptr, &shader);
 }
 
-harpy::nest::shaders::shader_module::shader_module(const std::string& shader_assembly, shader_types type, VkDevice* device) : type(type), device(device)
+harpy::nest::shaders::shader_module::shader_module(const sz::string_view& shader_assembly, shader_types type, VkDevice* device) : type(type), device(device)
 {
     auto shader_data = glsl_shader_factory::get_singleton().build_assembly(shader_assembly);
     VkShaderModuleCreateInfo ci{};
@@ -36,7 +36,7 @@ harpy::nest::shaders::shader_module::shader_module(spirv_compilation_result&& da
     vkCreateShaderModule(resource::get_resource(), &ci, nullptr, &shader);
 }
 
-harpy::nest::shaders::shader_module::shader_module(std::string&& shader_assembly, shader_types type, VkDevice* device) : type(type), device(device)
+harpy::nest::shaders::shader_module::shader_module(sz::string_view&& shader_assembly, shader_types type, VkDevice* device) : type(type), device(device)
 {
     auto shader_data = glsl_shader_factory::get_singleton().build_assembly(shader_assembly);
     VkShaderModuleCreateInfo ci{};

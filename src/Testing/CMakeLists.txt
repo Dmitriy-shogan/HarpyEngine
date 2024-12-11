@@ -4,7 +4,6 @@ add_executable(Test
         ../HarpyRavenPart/nest/inititalizations.cpp
         ../HarpyRavenPart/nest/command_commander/command_commander.cpp
         ../HarpyRavenPart/nest/managers/queue_manager.cpp
-        ../HarpyRavenPart/nest/managers/swapchain_manager.cpp
         ../HarpyRavenPart/nest/pipeline/graphics_pipeline.cpp
         ../HarpyRavenPart/nest/pipeline/pipeline_cache.cpp
         ../HarpyRavenPart/nest/pools/command_pool.cpp
@@ -26,8 +25,6 @@ add_executable(Test
         ../HarpyRavenPart/3D/mesh.cpp
         ../HarpyRavenPart/3D/renderer.cpp
         ../../include/HarpyRavenPart/3D/uniform_buffer_objects.h
-        ../HarpyRavenPart/nest/pipeline/descriptor_factory.cpp
-        ../../include/HarpyRavenPart/nest/pipeline/descriptor_factory.h
         ../HarpyRavenPart/nest/resources/depth_image.cpp
         ../../include/HarpyRavenPart/nest/resources/depth_image.h
         ../HarpyRavenPart/nest/windowing/input_controller.cpp
@@ -58,7 +55,7 @@ add_executable(Test
         ../HarpyUtilities/utilities/logger/harpy_little_error.cpp
         ../HarpyUtilities/utilities/logger/logger.cpp
         ../HarpyUtilities/utilities/util/delegate.cpp
-        ${HARPY_INCLUDES}/HarpyUtilities/dll_macro.h)
+        ${HARPY_INCLUDES}/HarpyUtilities/utilities_dll_macro.h)
 
 target_include_directories(Test
         PRIVATE ${glfw_SOURCE_DIR}/include
@@ -75,7 +72,9 @@ target_include_directories(Test
         ${opencv_SOURCE_DIR}/modules/imgproc/include
         ${opencv_SOURCE_DIR}/modules/video/include
         ${opencv_SOURCE_DIR}/modules/videoio/include
+        ${stringzilla_SOURCE_DIR}/include
         PUBLIC
+        ${HARPY_CODEGEN_MODULE}
         ${HARPY_RAVEN_MODULE}
         ${HARPY_UTILITIES_MODULE}
 
@@ -87,6 +86,8 @@ target_link_libraries(Test
         GPUOpen::VulkanMemoryAllocator
         volk_headers
         "${Vulkan_INCLUDE_DIRS}/../Lib/shaderc_shared.lib"
+        ${STRINGZILLA_TARGET_NAME}
+        HarpyCodeGen
         PUBLIC
         glm
         assimp

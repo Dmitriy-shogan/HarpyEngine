@@ -206,13 +206,10 @@ void harpy::nest::windowing::window::set_window_position(int x, int y) {
     glfwSetWindowPos(win, x, y);
 }
 
-void harpy::nest::windowing::window::set_window_title(std::string title) {
-    glfwSetWindowTitle(win, title.c_str());
+void harpy::nest::windowing::window::set_window_title(sz::string_view title) {
+    glfwSetWindowTitle(win, title.data());
 }
 
-void harpy::nest::windowing::window::set_window_title(std::u8string title) {
-    glfwSetWindowTitle(win, reinterpret_cast<const char*>(title.c_str()));
-}
 
 void harpy::nest::windowing::window::set_window_image(harpy::utilities::image first,
                                                       harpy::utilities::image second) {

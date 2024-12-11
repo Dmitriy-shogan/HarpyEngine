@@ -52,7 +52,7 @@ void update_uniform_buffer(wrappers::data_buffer* uniform_buffer, wrappers::swap
     auto currentTime = std::chrono::high_resolution_clock::now();
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
-    ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    ubo.view_proj = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     ubo.proj = glm::perspective(glm::radians(90.0f), chain->get_extent().width / (float) chain->get_extent().height,
                                 0.1f, 100.0f);
     ubo.proj[1][1] *= -1;
@@ -125,7 +125,7 @@ int main()
         //Initialise pipeline
         pipeline::graphics_pipeline_ci ci{
 
-                .modules = shaders::shader_set{
+                .shaders = shaders::shader_set{
                         .vertex = std::move(vertex_shader),
                         .fragment = std::move(fragment_shader)
                 },
@@ -221,7 +221,7 @@ int main()
         {
             glfwPollEvents();
 
-            fence.wait_and_reset_fence();
+            fence.wait_and_reset();
             update_uniform_buffer(&uniform_buffers[image_index], &chain);
 
             image_index = ci.swapchain->acquire_vk_image_index(&swapchain_sem, nullptr);

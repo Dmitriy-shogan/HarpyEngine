@@ -3,8 +3,6 @@
 #define HARPY_3D_MESH
 #include "nest/wrappers/data_buffer.h"
 
-#include <nest/command_commander/command_commander.h>
-
 namespace harpy::D3
 {
     class mesh
@@ -16,11 +14,6 @@ namespace harpy::D3
     public:
 
         mesh() = default;
-
-        void load(
-            nest::command_commander& commander,
-            std::vector<nest::wrappers::vertex>& vertices,
-            std::vector<uint32_t>& indices);
 
         bool is_loaded();
 

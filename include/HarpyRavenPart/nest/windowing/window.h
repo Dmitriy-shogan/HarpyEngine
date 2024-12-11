@@ -3,7 +3,6 @@
 #define HARPY_NATIVE_WINDOWING
 #include <GLFW/glfw3.h>
 #include <string>
-#include <glm/vec2.hpp>
 #include <utilities/util/delegate.h>
 #include <utilities/images/image.h>
 
@@ -16,7 +15,7 @@ namespace harpy::nest::windowing
         uint32_t height{600};
         uint32_t refresh_rate{60};
         std::pair<uint32_t, uint32_t> aspect_ratio{16, 9};
-        std::string name{"BEST WINDOW EVER"};
+        sz::string name{"BEST WINDOW EVER"};
         bool is_fullscreen{false};
         bool is_borderless{false};
         bool is_resizable{true};
@@ -98,8 +97,7 @@ namespace harpy::nest::windowing
 
         void set_window_position(int x, int y);
 
-        void set_window_title(std::string title);
-        void set_window_title(std::u8string title);
+        void set_window_title(sz::string_view title);
 
         void set_window_image(utilities::image first, utilities::image second = {});
         void reset_window_image();

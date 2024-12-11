@@ -8,10 +8,15 @@
 
 #include <nest/vulkan_threading/fence.h>
 #include <nest/pipeline/graphics_pipeline.h>
+
+#include "3D/uniform_buffer_objects.h"
+#include <3D/mesh.h>
+
 #include "nest/wrappers/swapchain.h"
 
 #include "nest/resources/vulkan_synchronisation_resource.h"
 #include "nest/texturing/texture.h"
+
 
 namespace harpy::nest
 {
@@ -20,14 +25,17 @@ namespace harpy::nest
         utilities::delegate delegate{};
         
         bool is_writing_to_primary{true};
-        std::size_t primary_counter{}, secondary_counter{};
+        std::vector<VkCommandBuffer>::iterator primary_counter{};
+
+        uint32_t secondary_counter_helper{};
+        std::unordered_map<VkCommandBuffer, std::size_t>::iterator secondary_counter{};
 
         //Just for now
         wrappers::data_buffer staging_buffer{wrappers::buffer_type::staging};
         uint32_t staging_size{0};
         
         std::unique_ptr<resources::command_thread_resource> thread_resource{};
-        std::unordered_map<VkCommandBuffer, bool> used_buffers{};
+        std::vector<VkCommandBuffer> used_buffers{};
         
         VkDevice* device;
         VmaAllocator* allocator;
@@ -45,19 +53,20 @@ namespace harpy::nest
                                 = &resources::common_vulkan_resource::get_resource().get_main_allocator());
         
         void bind_thread_res(std::unique_ptr<resources::command_thread_resource> res);
+        bool is_binded();
         
         [[nodiscard]]
         std::unique_ptr<resources::command_thread_resource>&& unbind_thread_res();
 
         command_commander* start_recording(
-            long starting_buffer = 0,
+            uint32_t starting_buffer = 0,
             VkCommandBufferBeginInfo begin_ci = VkCommandBufferBeginInfo{
             .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
             });
         
         command_commander* record_to_secondary(
-            long starting_buffer = 0,
-            long primary_buffer_index = 0,
+            uint32_t starting_buffer = 0,
+            uint32_t primary_buffer_index = 0,
             VkCommandBufferBeginInfo begin_ci = VkCommandBufferBeginInfo{
             .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
             });
@@ -78,6 +87,7 @@ namespace harpy::nest
         command_commander* bind_descriptor_sets(VkDescriptorSet set, pipeline::graphics_pipeline& pipeline);
         command_commander* bind_descriptor_sets(std::vector<VkDescriptorSet>& sets, pipeline::graphics_pipeline& pipeline);
 
+        command_commander* bind_push_constants(pipeline::graphics_pipeline& pipe, glm::mat4 matrix);
 
 
         command_commander* clear_color();
@@ -86,6 +96,7 @@ namespace harpy::nest
             
         command_commander* fill_buffer();
         command_commander* update_buffer();
+
         command_commander* load_into_buffer(
             VkBuffer dst,
             void* data,
@@ -96,8 +107,13 @@ namespace harpy::nest
                 VkBuffer dst,
                 std::vector<T>& vector);
 
+        command_commander* load_into_uniform_buffer(
+            wrappers::data_buffer& buffer,
+            D3::uniform_buffers::sight_ub& sight);
+
         command_commander* load_into_texture(texturing::texture& texture, utilities::image& image);
 
+        command_commander* copy_buffer(VkBuffer src, VkBuffer dst, VkDeviceSize size);
         //command_commander* copy_buffer2();
 
         command_commander* copy_image();
@@ -153,44 +169,33 @@ namespace harpy::nest
 
         command_commander* next_subpass();
 
+        //Just for now: Command pools don't allow to reset individual buffers
         command_commander* reset_current_com_buffer();
         command_commander* reset_pool();
         command_commander* trim_pool();
 
+
         //Just for now
-        void submit(threading::fence* fence = nullptr, threading::semaphore* render_finish = nullptr, threading::semaphore* image_acquired = nullptr, bool do_wait = true);
-
-        void submit_one(resources::vulkan_synchronisation_resource sync_res, //vector of semaphores, that will be signaled
-                        std::vector<VkPipelineStageFlags> flags,             //vector of flags
-                        bool do_wait = true);
-        
-        void submit_all(
-            resources::vulkan_synchronisation_resource sync_res, //vector of semaphores, that will be signaled
-            std::vector<VkPipelineStageFlags> flags,             //vector of flags
-            bool do_wait = true);
-
-        void render_on_screen(wrappers::swapchain& swapchain, threading::semaphore& sem, uint32_t& image_number, VkQueue& queue);
+        void submit(VkPipelineStageFlags wait_dst_mask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, threading::fence* fence = nullptr, threading::semaphore* render_finish = nullptr, threading::semaphore* image_acquired = nullptr, bool do_wait = true);
             
-        command_commander* end_recording_secondary();
+        command_commander* end_recording_secondary(bool do_write_to_primary = true);
         
         [[nodiscard]]
-        utilities::delegate end_recording(bool do_clean_resources = false);
+        utilities::delegate end_recording();
+
+        void fast_load_mesh(D3::mesh& mesh, std::vector<wrappers::vertex> & vertices, std::vector<uint32_t> & indices);
+        void fast_load_texture(texturing::texture& texture, utilities::image& image);
     };
 }
 
 template<typename T>
 harpy::nest::command_commander *harpy::nest::command_commander::load_into_buffer(VkBuffer dst, std::vector<T>& vector) {
-
-    delegate.push_back([this, dst, &vector, command_buffer = is_writing_to_primary ?
-                                                             thread_resource->com_pool->get_primary_buffers()[primary_counter]:
-                                                             thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer] ()
+    delegate.push_back([this, dst, &vector, command_buffer = is_writing_to_primary ? *primary_counter : secondary_counter->first] ()
                        {
                            if (staging_buffer.get_size() < vector.size() * sizeof(vector.front()) + staging_size) init_staging_buffer(vector.size() * sizeof(vector.front()) + staging_size);
 
-                           void* temp_data{nullptr};
-                           vmaMapMemory(*allocator, staging_buffer.get_vma_allocation(), &temp_data);
-                           std::memcpy(static_cast<char*>(temp_data) + staging_size, vector.data(), vector.size() * sizeof(vector.front()));
-                           vmaUnmapMemory(*allocator, staging_buffer.get_vma_allocation());
+                           std::memcpy(static_cast<char*>(staging_buffer.get_mapped_ptr()) + staging_size, vector.data(), vector.size() * sizeof(vector.front()));
+                          staging_buffer.unmap_ptr();
 
                            VkBufferCopy copy{
                                    .srcOffset = staging_size,
@@ -198,15 +203,17 @@ harpy::nest::command_commander *harpy::nest::command_commander::load_into_buffer
                                    .size = vector.size() * sizeof(vector.front())
                            };
 
-                           vkCmdCopyBuffer(
-                                   command_buffer,
-                                   staging_buffer.get_vk_buffer(),
-                                   dst,
-                                   1,
-                                   &copy);
-                           staging_size += vector.size() * sizeof(vector.front());
+                                vkCmdCopyBuffer(
+                                        command_buffer,
+                                        staging_buffer.get_vk_buffer(),
+                                        dst,
+                                        1,
+                                        &copy);
 
-                       });
+
+                 staging_size += vector.size() * sizeof(vector.front());
+
+             });
 
 
     return this;

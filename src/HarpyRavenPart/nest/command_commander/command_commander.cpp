@@ -3,20 +3,18 @@
 #include "nest/wrappers/data_buffer.h"
 #include "nest/wrappers/swapchain.h"
 
+//TODO: replace taking command buffers [] with .at()
 void harpy::nest::command_commander::init_staging_buffer(uint32_t size)
 {
     if(staging_buffer.get_size()) {
 
         auto ptr = staging_buffer.get_mapped_ptr();
 
-
         void *temp_data = new char[staging_size];
         std::memcpy(temp_data, ptr, staging_size);
 
 
         staging_buffer.unmap_ptr();
-
-
         staging_buffer.~data_buffer();
 
         staging_buffer = std::move(wrappers::data_buffer{wrappers::buffer_type::staging, size});
@@ -30,9 +28,10 @@ void harpy::nest::command_commander::init_staging_buffer(uint32_t size)
         staging_buffer.init(size);
 }
 
+
 void harpy::nest::command_commander::transit_image(texturing::texture& texture, VkImageLayout old_layout, VkImageLayout new_layout)
 {
-    auto& command_buffer = is_writing_to_primary ? thread_resource->com_pool->get_primary_buffers()[primary_counter]: thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer;
+        auto command_buffer = is_writing_to_primary ? *primary_counter : secondary_counter->first;
         VkPipelineStageFlags src{}, dst{};
         VkImageMemoryBarrier ci{};
         ci.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -92,49 +91,55 @@ void harpy::nest::command_commander::bind_thread_res(std::unique_ptr<resources::
     thread_resource = std::move(res);
 }
 
+bool harpy::nest::command_commander::is_binded() {
+    return thread_resource.get();
+}
+
 
 std::unique_ptr<harpy::nest::resources::command_thread_resource>&& harpy::nest::command_commander::unbind_thread_res()
 {
     used_buffers.clear();
-    primary_counter = secondary_counter = 0;
-    is_writing_to_primary = 1;
+    is_writing_to_primary = true;
     delegate.clear();
     return std::move(thread_resource);
 }
 
-harpy::nest::command_commander* harpy::nest::command_commander::start_recording(long starting_buffer, VkCommandBufferBeginInfo begin_ci)
+harpy::nest::command_commander* harpy::nest::command_commander::start_recording(uint32_t starting_buffer, VkCommandBufferBeginInfo begin_ci)
 {
     if(!thread_resource)
         throw utilities::harpy_little_error("Please first bind thread resource before starting recording");
     
     delegate.clear();
     
-    primary_counter = starting_buffer;
-    used_buffers[thread_resource->com_pool->get_primary_buffers()[primary_counter]] = true;
+    primary_counter = thread_resource->com_pool->get_primary_buffers().begin();
+    primary_counter += starting_buffer;
+
+    used_buffers.push_back(*primary_counter);
+    thread_resource->submit_infos.commandBufferCount = 1;
     
     delegate.push_back([this, begin_ci]()
     {
-        vkBeginCommandBuffer(thread_resource->com_pool->get_primary_buffers()[primary_counter],
+        vkBeginCommandBuffer(*primary_counter,
                              &begin_ci);
     });
     
     return this;
 }
 
-harpy::nest::command_commander* harpy::nest::command_commander::record_to_secondary(long starting_buffer, long primary_buffer_index, VkCommandBufferBeginInfo begin_ci)
+harpy::nest::command_commander* harpy::nest::command_commander::record_to_secondary(uint32_t starting_buffer, uint32_t primary_buffer_index, VkCommandBufferBeginInfo begin_ci)
 {
-    secondary_counter = starting_buffer;
-
-    used_buffers[thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer] = true;
-
-    thread_resource->com_pool->get_secondary_buffers().back().parent_primary_buffer = primary_buffer_index;
+    secondary_counter = thread_resource->com_pool->get_secondary_buffers().begin();
+    while(starting_buffer-- > 0) {
+        ++secondary_counter;
+    }
+    secondary_counter->second = primary_buffer_index;
     delegate.push_back([this, ci = begin_ci] () mutable
     {
         VkCommandBufferInheritanceInfo info{};
         info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
         ci.pInheritanceInfo = &info;
         vkBeginCommandBuffer(
-        thread_resource->com_pool->get_secondary_buffers()[primary_counter].buffer,
+        secondary_counter->first,
         &ci
         );
     });
@@ -146,8 +151,8 @@ harpy::nest::command_commander* harpy::nest::command_commander::record_to_second
 harpy::nest::command_commander* harpy::nest::command_commander::start_render_pass(wrappers::swapchain& swapchain, uint32_t image_index)
 {
     delegate.push_back([this, image_index, &swapchain, command_buffer = is_writing_to_primary ?
-                                                            thread_resource->com_pool->get_primary_buffers()[primary_counter]:
-                                                            thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer]()
+                                                            *primary_counter:
+                                                            secondary_counter->first]
     {
         VkRenderPassBeginInfo renderPassInfo{};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -163,6 +168,7 @@ harpy::nest::command_commander* harpy::nest::command_commander::start_render_pas
         renderPassInfo.clearValueCount = clearColor.size();
         renderPassInfo.pClearValues = clearColor.data();
 
+
         vkCmdBeginRenderPass(command_buffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     });
     return this;
@@ -172,8 +178,8 @@ harpy::nest::command_commander* harpy::nest::command_commander::start_render_pas
 harpy::nest::command_commander* harpy::nest::command_commander::end_render_pass()
 {
     delegate.push_back([this, command_buffer = is_writing_to_primary ?
-                                                            thread_resource->com_pool->get_primary_buffers()[primary_counter]:
-                                                            thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer]()
+                                                            *primary_counter:
+                                                            secondary_counter->first]()
     {
 
         vkCmdEndRenderPass(command_buffer);
@@ -184,8 +190,8 @@ harpy::nest::command_commander* harpy::nest::command_commander::end_render_pass(
 harpy::nest::command_commander* harpy::nest::command_commander::bind_pipeline(pipeline::graphics_pipeline& pipeline)
 {
     delegate.push_back([this, &pipeline, command_buffer = is_writing_to_primary ?
-                                                            thread_resource->com_pool->get_primary_buffers()[primary_counter]:
-                                                            thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer]()
+                                                            *primary_counter:
+                                                            secondary_counter->first]()
     {
 
         vkCmdBindPipeline(command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.get_vk_pipeline());
@@ -219,13 +225,16 @@ harpy::nest::command_commander* harpy::nest::command_commander::move_down_primar
 
 harpy::nest::command_commander* harpy::nest::command_commander::move_up_secondary()
 {
+    secondary_counter_helper++;
     ++secondary_counter;
     return this;
 }
 
 harpy::nest::command_commander* harpy::nest::command_commander::move_down_secondary()
 {
-    --secondary_counter;
+    secondary_counter = thread_resource->com_pool->get_secondary_buffers().begin();
+    for(auto i  = 0; i < --secondary_counter_helper; i++)
+        secondary_counter++;
     return this;
 }
 
@@ -238,11 +247,11 @@ harpy::nest::command_commander* harpy::nest::command_commander::load_into_buffer
     }*/
     
     delegate.push_back([this, dst, size, data, command_buffer = is_writing_to_primary ?
-                                                            thread_resource->com_pool->get_primary_buffers()[primary_counter]:
-                                                            thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer] ()
+                                                            *primary_counter:
+                                                            secondary_counter->first] ()
     {
         if (staging_buffer.get_size() < size + staging_size) init_staging_buffer(size + staging_size);
-        
+
     void* temp_data{nullptr};
     vmaMapMemory(*allocator, staging_buffer.get_vma_allocation(), &temp_data);
     std::memcpy(static_cast<char*>(temp_data) + staging_size, data, size);
@@ -268,11 +277,23 @@ harpy::nest::command_commander* harpy::nest::command_commander::load_into_buffer
     return this;
 }
 
+harpy::nest::command_commander * harpy::nest::command_commander::load_into_uniform_buffer(wrappers::data_buffer &buffer,
+    D3::uniform_buffers::sight_ub &sight) {
+    delegate.push_back([this, &buffer, sight] () mutable {
+                                                                if(buffer.get_type() != wrappers::buffer_type::uniform)
+                                                                    throw utilities::harpy_little_error("Sorry, we don't allow to load into non uniform buffers in LOAD INTO UNIFORM BUFFERS");
+        auto ptr = buffer.get_mapped_ptr();
+        std::memcpy(ptr, &sight, sizeof(D3::uniform_buffers::sight_ub));
+        buffer.unmap_ptr();
+    });
+    return this;
+}
+
 harpy::nest::command_commander* harpy::nest::command_commander::load_into_texture(texturing::texture& texture, utilities::image& image)
 {
     delegate.push_back([this, image = &image, text = &texture, command_buffer = is_writing_to_primary ?
-                                                            thread_resource->com_pool->get_primary_buffers()[primary_counter]:
-                                                            thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer] ()
+                                                            *primary_counter:
+                                                            secondary_counter->first] ()
     {
         transit_image(*text);
         if (staging_buffer.get_size() < text->get_size() + staging_size) init_staging_buffer(staging_size + text->get_size());
@@ -309,6 +330,20 @@ harpy::nest::command_commander* harpy::nest::command_commander::load_into_textur
     return this;
 }
 
+harpy::nest::command_commander * harpy::nest::command_commander::copy_buffer(VkBuffer src, VkBuffer dst,
+    VkDeviceSize size) {
+    delegate.push_back([this, src, dst, size, command_buffer = is_writing_to_primary ?
+                                                            *primary_counter:
+                                                            secondary_counter->first] () {
+        VkBufferCopy copy{};
+        copy.srcOffset = 0;
+        copy.dstOffset = 0;
+        copy.size = size;
+        vkCmdCopyBuffer(command_buffer, src, dst, 1, &copy);
+    });
+                                                            return this;
+}
+
 harpy::nest::command_commander* harpy::nest::command_commander::draw_indexed(
     uint32_t indexes_to_draw,
     uint32_t instances_to_draw,
@@ -318,8 +353,8 @@ harpy::nest::command_commander* harpy::nest::command_commander::draw_indexed(
     )
 {
     delegate.push_back([this, indexes_to_draw, instances_to_draw, starting_index, starting_instance, offset, command_buffer = is_writing_to_primary ?
-                                                            thread_resource->com_pool->get_primary_buffers()[primary_counter]:
-                                                            thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer] ()
+                                                            *primary_counter:
+                                                            secondary_counter->first] ()
     {
         vkCmdDrawIndexed(
         command_buffer,
@@ -336,8 +371,8 @@ harpy::nest::command_commander* harpy::nest::command_commander::draw_indexed(
 harpy::nest::command_commander* harpy::nest::command_commander::bind_index_buffer(VkBuffer buffer, uint32_t offset)
 {
     delegate.push_back([this, buffer, offset, command_buffer = is_writing_to_primary ?
-                                                            thread_resource->com_pool->get_primary_buffers()[primary_counter]:
-                                                            thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer]()
+                                                            *primary_counter:
+                                                            secondary_counter->first]()
     {
         vkCmdBindIndexBuffer(
         command_buffer,
@@ -352,8 +387,8 @@ harpy::nest::command_commander* harpy::nest::command_commander::bind_vertex_buff
     VkDeviceSize* offset)
 {
     delegate.push_back([this, &buffer, offset, command_buffer = is_writing_to_primary ?
-                                                            thread_resource->com_pool->get_primary_buffers()[primary_counter]:
-                                                            thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer]()
+                                                            *primary_counter:
+                                                            secondary_counter->first]()
     {
         if(!offset)
         {
@@ -369,8 +404,8 @@ harpy::nest::command_commander* harpy::nest::command_commander::bind_vertex_buff
 harpy::nest::command_commander* harpy::nest::command_commander::bind_vertex_buffers(std::vector<wrappers::data_buffer>& buffers, uint32_t first_binding, VkDeviceSize* offset)
 {
     delegate.push_back([this, &buffers, first_binding, offset, command_buffer = is_writing_to_primary ?
-                                                            thread_resource->com_pool->get_primary_buffers()[primary_counter]:
-                                                            thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer]()
+                                                            *primary_counter:
+                                                            secondary_counter->first]()
     {
         std::vector<VkBuffer> vertex_buffers(buffers.size());
         for(size_t i = 0; auto& j : buffers)
@@ -379,7 +414,7 @@ harpy::nest::command_commander* harpy::nest::command_commander::bind_vertex_buff
         }
         if(!offset)
         {
-            VkDeviceSize offsets[]{0};
+            VkDeviceSize offsets[]{};
             vkCmdBindVertexBuffers(command_buffer, first_binding, 1, vertex_buffers.data(), offsets);
         }
         else
@@ -391,8 +426,8 @@ harpy::nest::command_commander* harpy::nest::command_commander::bind_vertex_buff
 harpy::nest::command_commander* harpy::nest::command_commander::set_viewport(VkViewport viewport)
 {
     delegate.push_back([this, viewport, command_buffer = is_writing_to_primary ?
-                                                            thread_resource->com_pool->get_primary_buffers()[primary_counter]:
-                                                            thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer]()
+                                                            *primary_counter:
+                                                            secondary_counter->first]()
     {
 
         vkCmdSetViewport(command_buffer, 0, 1, &viewport);
@@ -403,8 +438,8 @@ harpy::nest::command_commander* harpy::nest::command_commander::set_viewport(VkV
 harpy::nest::command_commander* harpy::nest::command_commander::set_scissors(VkRect2D scissors)
 {
     delegate.push_back([this, scissors, command_buffer = is_writing_to_primary ?
-                                                            thread_resource->com_pool->get_primary_buffers()[primary_counter]:
-                                                            thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer]()
+                                                            *primary_counter:
+                                                            secondary_counter->first]()
     {
 
         vkCmdSetScissor(command_buffer, 0, 1, &scissors);
@@ -414,12 +449,10 @@ harpy::nest::command_commander* harpy::nest::command_commander::set_scissors(VkR
 
 harpy::nest::command_commander* harpy::nest::command_commander::reset_current_com_buffer()
 {
-    vkResetCommandBuffer(thread_resource->com_pool->get_primary_buffers()[primary_counter], 0);
-    for(auto& i : thread_resource->com_pool->get_secondary_buffers())
-    {
-        if (i.parent_primary_buffer == primary_counter)
-            vkResetCommandBuffer(i.buffer, 0);
-    }
+    auto command_buffer = is_writing_to_primary ?
+                                                            *primary_counter:
+                                                            secondary_counter->first;
+    vkResetCommandBuffer(command_buffer, 0);
     return this;
 }
 
@@ -429,157 +462,67 @@ harpy::nest::command_commander* harpy::nest::command_commander::reset_pool()
     return this;
 }
 
-void harpy::nest::command_commander::submit(threading::fence* fence, threading::semaphore* render_finish, threading::semaphore* image_acquired, bool do_wait)
+void harpy::nest::command_commander::submit(VkPipelineStageFlags wait_dst_mask, threading::fence* wait_fence, threading::semaphore* render_finish_semaphore, threading::semaphore* wait_semaphore, bool do_wait)
 {
-    VkSubmitInfo ci{};
-    ci.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    //Just for now
-    ci.commandBufferCount = 1;
-    ci.pCommandBuffers = &thread_resource->com_pool->get_primary_buffers()[primary_counter];
+    auto& submit_info = thread_resource->submit_infos;
+    if(wait_dst_mask == VK_PIPELINE_STAGE_HOST_BIT)
+        throw utilities::harpy_little_error("Oh, you tried to use abnormal wait destination mask"
+            " for submit action. Check VUID-VkSubmitInfo-pWaitDstStageMask-00078");
 
-    VkPipelineStageFlags wait_dst_mask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    ci.waitSemaphoreCount = image_acquired ? 1 : 0;
-    ci.pWaitSemaphores = image_acquired ? &image_acquired->get_vk_semaphore() : nullptr;
-    ci.pWaitDstStageMask = image_acquired ? &wait_dst_mask : nullptr;
+    submit_info.waitSemaphoreCount = wait_semaphore ? 1 : 0;
+    submit_info.pWaitSemaphores = wait_semaphore ? &wait_semaphore->get_vk_semaphore() : nullptr;
+    submit_info.pWaitDstStageMask = wait_semaphore ? &wait_dst_mask : nullptr;
 
-    ci.signalSemaphoreCount = render_finish ? 1 : 0;
-    ci.pSignalSemaphores = render_finish ? &render_finish->get_vk_semaphore() : nullptr;
+    submit_info.signalSemaphoreCount = render_finish_semaphore ? 1 : 0;
+    submit_info.pSignalSemaphores = render_finish_semaphore ? &render_finish_semaphore->get_vk_semaphore() : nullptr;
 
 
     HARPY_VK_CHECK(vkQueueSubmit(
         thread_resource->queue,
         1,
-        &ci,
-        fence ? fence->get_vk_fence() : nullptr
+        &submit_info,
+        wait_fence ? wait_fence->get_vk_fence() : nullptr
         ));
     
     if(do_wait)
         HARPY_VK_CHECK(vkQueueWaitIdle(thread_resource->queue));
 }
 
-void harpy::nest::command_commander::submit_one(resources::vulkan_synchronisation_resource sync_res,
-    std::vector<VkPipelineStageFlags> flags, bool do_wait)
+harpy::nest::command_commander* harpy::nest::command_commander::end_recording_secondary(bool do_write_to_primary)
 {
-    std::vector<VkSemaphore> raw_wait_semaphores{sync_res.wait_semaphores.size()},
-                             raw_signal_semaphores{sync_res.signal_semaphores.size()};
-
-    for(size_t i = 0; i < sync_res.wait_semaphores.size(); i++)
-        raw_wait_semaphores[i] = sync_res.wait_semaphores[i].get_vk_semaphore();
-
-    for(size_t i = 0; i < sync_res.signal_semaphores.size(); i++)
-        raw_signal_semaphores[i] = sync_res.signal_semaphores[i].get_vk_semaphore();
-    
-    VkSubmitInfo ci{};
-    ci.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    
-    ci.commandBufferCount = 1;
-    ci.pCommandBuffers = &thread_resource->com_pool->get_primary_buffers()[primary_counter];
-
-    ci.waitSemaphoreCount = sync_res.wait_semaphores.size();
-    ci.pWaitSemaphores = raw_wait_semaphores.data();
-    
-    ci.pWaitDstStageMask = flags.data();
-
-    ci.signalSemaphoreCount = sync_res.signal_semaphores.size();
-    ci.pSignalSemaphores = raw_signal_semaphores.data();
-    
-    HARPY_VK_CHECK(vkQueueSubmit(
-        thread_resource->queue,
-        1,
-        &ci,
-        sync_res.fence
-        ));
-    
-    if(do_wait)
-        HARPY_VK_CHECK(vkQueueWaitIdle(thread_resource->queue));
-}
-
-void harpy::nest::command_commander::submit_all(resources::vulkan_synchronisation_resource sync_res, std::vector<VkPipelineStageFlags> flags, bool do_wait)
-{
-    std::vector<VkSemaphore> raw_wait_semaphores{sync_res.wait_semaphores.size()},
-                             raw_signal_semaphores{sync_res.signal_semaphores.size()};
-
-    for(size_t i = 0; i < sync_res.wait_semaphores.size(); i++)
-        raw_wait_semaphores[i] = sync_res.wait_semaphores[i].get_vk_semaphore();
-
-    for(size_t i = 0; i < sync_res.signal_semaphores.size(); i++)
-        raw_signal_semaphores[i] = sync_res.signal_semaphores[i].get_vk_semaphore();
-    
-    VkSubmitInfo ci{};
-    ci.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-
-    std::vector<VkCommandBuffer> buffers{used_buffers.size()};
-    for(auto & used_buffer : used_buffers){
-        buffers.push_back(used_buffer.first);
-    }
-    
-    ci.commandBufferCount = used_buffers.size();
-    ci.pCommandBuffers = buffers.data();
-
-    ci.waitSemaphoreCount = sync_res.wait_semaphores.size();
-    ci.pWaitSemaphores = raw_wait_semaphores.data();
-    
-    ci.pWaitDstStageMask = flags.data();
-
-    ci.signalSemaphoreCount = sync_res.signal_semaphores.size();
-    ci.pSignalSemaphores = raw_signal_semaphores.data();
-    
-    HARPY_VK_CHECK(vkQueueSubmit(
-        thread_resource->queue,
-        1,
-        &ci,
-        sync_res.fence
-        ));
-    
-    if(do_wait)
-        HARPY_VK_CHECK(vkQueueWaitIdle(thread_resource->queue));
-}
-
-harpy::nest::command_commander* harpy::nest::command_commander::end_recording_secondary()
-{
-    delegate.push_back(vkEndCommandBuffer, thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer);
-    is_writing_to_primary = true;
+    delegate.push_back(vkEndCommandBuffer, secondary_counter->first);
+    is_writing_to_primary = do_write_to_primary;
     return this;
 }
 
-harpy::utilities::delegate harpy::nest::command_commander::end_recording(bool do_clean_resources)
+harpy::utilities::delegate harpy::nest::command_commander::end_recording()
 {
-    delegate.push_back(vkEndCommandBuffer, thread_resource->com_pool->get_primary_buffers()[primary_counter]);
-    try
-    {
-        thread_resource->submit_infos[primary_counter].pCommandBuffers = &thread_resource->com_pool->get_primary_buffers()[primary_counter];
-        thread_resource->submit_infos[primary_counter].commandBufferCount = 1;
-    }
-    catch(std::runtime_error& err)
-    {
-        utilities::logger::get_logger() << err.what();
-        utilities::logger::get_logger() << "CAREFULL. LAST OBJECT OF VKSUBMITINFO IN VECTOR WILL BE OVERWRITTEN";
-        thread_resource->submit_infos.back().pCommandBuffers = &thread_resource->com_pool->get_primary_buffers()[primary_counter];
-        thread_resource->submit_infos.back().commandBufferCount = 1;
-    }
-    if(do_clean_resources)
-    {
-        thread_resource.reset();
-    }
+    delegate.push_back(vkEndCommandBuffer, *primary_counter);
+        thread_resource->submit_infos.pCommandBuffers = used_buffers.data();
+        thread_resource->submit_infos.commandBufferCount = used_buffers.size();
     return delegate;
 }
 
-void harpy::nest::command_commander::render_on_screen(wrappers::swapchain& swapchain, threading::semaphore& sem, uint32_t& image_number, VkQueue& queue) {
+void harpy::nest::command_commander::fast_load_mesh(D3::mesh &mesh, std::vector<wrappers::vertex> &vertices,
+    std::vector<uint32_t> &indices) {
+    auto& mesh_vertices = mesh.get_vertices();
+    auto& mesh_indices = mesh.get_indices();
+    if(mesh_vertices.get_size() == 0)
+        mesh_vertices.init(vertices.size());
+    if(mesh_indices.get_size() == 0)
+        mesh_indices.init(indices.size());
 
-    VkPresentInfoKHR presentInfo{};
-    presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-
-    presentInfo.waitSemaphoreCount = 1;
-    presentInfo.pWaitSemaphores = &sem.get_vk_semaphore();
-
-    presentInfo.swapchainCount = 1;
-    presentInfo.pSwapchains = &swapchain.get_vk_swapchain();
-
-    presentInfo.pImageIndices = &image_number;
-
-    HARPY_VK_CHECK(vkQueuePresentKHR(queue, &presentInfo));
-
+    reset_pool()
+    ->start_recording()
+    ->load_into_buffer(mesh_vertices, vertices)
+    ->load_into_buffer(mesh_indices, indices)
+    ->end_recording()();
+    submit();
 }
+
+void harpy::nest::command_commander::fast_load_texture(texturing::texture &texture, utilities::image &image) {
+}
+
 
 harpy::nest::command_commander *harpy::nest::command_commander::trim_pool() {
     thread_resource->com_pool->trim_pool();
@@ -589,8 +532,8 @@ harpy::nest::command_commander *harpy::nest::command_commander::trim_pool() {
 harpy::nest::command_commander *harpy::nest::command_commander::bind_descriptor_sets(VkDescriptorSet set, pipeline::graphics_pipeline& pipeline) {
 
     delegate.push_back([this, set, pipeline = &pipeline, command_buffer = is_writing_to_primary ?
-                                                                                thread_resource->com_pool->get_primary_buffers()[primary_counter]:
-                                                                                thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer]()
+                                                            *primary_counter:
+                                                            secondary_counter->first]()
                        {
                            vkCmdBindDescriptorSets(command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->get_vk_layout(), 0, 1, &set, 0, nullptr);
                        });
@@ -601,11 +544,22 @@ harpy::nest::command_commander *harpy::nest::command_commander::bind_descriptor_
 harpy::nest::command_commander *harpy::nest::command_commander::bind_descriptor_sets(std::vector<VkDescriptorSet>& sets,
                                                                                      harpy::nest::pipeline::graphics_pipeline &pipeline) {
     delegate.push_back([this, sets = &sets, pipeline = &pipeline, command_buffer = is_writing_to_primary ?
-                                                                          thread_resource->com_pool->get_primary_buffers()[primary_counter]:
-                                                                          thread_resource->com_pool->get_secondary_buffers()[secondary_counter].buffer]()
+                                                            *primary_counter:
+                                                            secondary_counter->first]()
                        {
                            vkCmdBindDescriptorSets(command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->get_vk_layout(), 0, sets->size(), sets->data(), 0, nullptr);
                        });
+    return this;
+}
+
+//TODO: unhardcode
+harpy::nest::command_commander * harpy::nest::command_commander::bind_push_constants(pipeline::graphics_pipeline& pipe, glm::mat4 matrix) {
+    delegate.push_back([this, matrix, &pipe, command_buffer = is_writing_to_primary ?
+                                                                *primary_counter:
+                                                                secondary_counter->first]() mutable
+                           {
+                               vkCmdPushConstants(command_buffer, pipe.get_vk_layout(), VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(glm::mat4), &matrix);
+                           });
     return this;
 }
 

@@ -11,73 +11,67 @@ using resource = harpy::nest::resources::common_vulkan_resource;
 
 #define HARPY_STD_PIPELINE_CACHE_FILE "data/pipeline_cache.hpc"
 
-harpy::nest::pipeline::pipeline_cache::pipeline_cache(std::string id, bool do_restore) : id(std::move(id))
+harpy::nest::pipeline::pipeline_cache::pipeline_cache(bool do_restore,  VkDevice* device) : device(device)
 {
-    VkPipelineCacheCreateInfo ci{};
-    ci.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
-
     if(do_restore)
     {
-        try{
-            auto data = restore_cache();
-            ci.initialDataSize = data.size();
-            ci.pInitialData = data.c_str();
-        }
-        catch(harpy_error& err)
-        {
-            logger::get_logger().log(err);
-            if constexpr(is_harpy_debug)
-                logger::get_logger().show_last_log();
-        }
+        restore_cache();
+    } else {
+        VkPipelineCacheCreateInfo ci{};
+        ci.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+        vkCreatePipelineCache(*device, &ci, nullptr, &cache);
     }
-
-    vkCreatePipelineCache(resource::get_resource(), &ci, nullptr, &cache);
 }
 
-void harpy::nest::pipeline::pipeline_cache::set_id(std::string id)
-{
-    this->id = std::move(id);
-}
 
-void harpy::nest::pipeline::pipeline_cache::save_to_file()
+void harpy::nest::pipeline::pipeline_cache::save_to_file(sz::string_view directory, sz::string_view filename)
 {
-    std::ofstream out{HARPY_STD_PIPELINE_CACHE_FILE, std::ios_base::app}; //Harpy Pipeline Cache
+    if(filename.empty())
+        filename =  "pipeline_cache.hpc"; //Harpy Pipeline Cache
+    sz::string full_name {sz::string{directory}.append("\\").append(filename)};
+
+    std::fstream out{full_name, std::ios_base::app};
     if(!out.is_open())
     {
-        std::filesystem::create_directory("data");
-        std::ofstream{HARPY_STD_PIPELINE_CACHE_FILE};
-        out.open(HARPY_STD_PIPELINE_CACHE_FILE);
+        std::filesystem::create_directory(directory.begin());
+        std::ofstream{full_name};
+        out.open(full_name);
     }
 
-    out << std::endl << id << ':';
-
     size_t cache_size{};
-    vkGetPipelineCacheData(resource::get_resource(), cache, &cache_size, nullptr);
-    std::string local_cache{};
+    vkGetPipelineCacheData(*device, cache, &cache_size, nullptr);
+    sz::string local_cache{};
     local_cache.resize(cache_size);
-    vkGetPipelineCacheData(resource::get_resource(), cache, &cache_size, local_cache.data());
-    out << local_cache;
+    vkGetPipelineCacheData(*device, cache, &cache_size, local_cache.data());
+    out << local_cache << std::endl;
 
     out.close();
 }
 
-std::string harpy::nest::pipeline::pipeline_cache::restore_cache()
+void harpy::nest::pipeline::pipeline_cache::restore_cache(sz::string_view directory, sz::string_view filename)
 {
-    std::ifstream in{HARPY_STD_PIPELINE_CACHE_FILE};
+    if(cache)
+        vkDestroyPipelineCache(*device, cache, nullptr);
+
+    if(filename.empty())
+        filename = "pipeline_cache.hpc";
+
+    sz::string full_name {sz::string{directory}.append("\\").append(filename)};
+
+    std::ifstream in{full_name};
     if (!in.is_open())
     {
-        throw harpy_error("You haven't created any caches yet to restore them.");
+        throw harpy_error("You haven't created any caches yet to restore them or it hasn't been found");
     }
-    std::string local_cache{};
-    while (std::getline(in, local_cache))
-    {
-        if(local_cache.find(id) != std::string::npos)
-        {
-            auto index = local_cache.find_first_of(':');
-            return std::string{local_cache.substr(++index)};
-        }
-    }
-    throw harpy_error("There is no pipelines with this id");
+    std::string cache{};
+    std::getline(in, cache);
+
+    VkPipelineCacheCreateInfo ci{};
+    ci.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+    ci.initialDataSize = cache.size();
+    ci.pInitialData = cache.data();
+
+    vkCreatePipelineCache(*device, &ci, nullptr, &this->cache);
 }
 
 VkPipelineCache& harpy::nest::pipeline::pipeline_cache::get_vk_cache()
@@ -90,5 +84,5 @@ harpy::nest::pipeline::pipeline_cache::operator VkPipelineCache_T*&()
 
 harpy::nest::pipeline::pipeline_cache::~pipeline_cache()
 {
-    vkDestroyPipelineCache(resource::get_resource(), cache, nullptr);
+    vkDestroyPipelineCache(*device, cache, nullptr);
 }

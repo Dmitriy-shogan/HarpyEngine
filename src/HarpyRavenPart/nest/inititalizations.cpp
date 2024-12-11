@@ -219,7 +219,7 @@ void init_vk_physical_device()
                 << "Vendor ID:" + std::to_string(props.properties.vendorID)
                 << "Device type (enum value):" + std::to_string(props.properties.deviceType)
                 << "Driver version:" + std::to_string(props.properties.driverVersion)
-                << "Device name:" + std::string(props.properties.deviceName);
+                << sz::string{"Device name: "}.append(props.properties.deviceName);
             }
         }
         
@@ -243,7 +243,7 @@ void init_vk_physical_device()
                     << "Vendor ID:" + std::to_string(props.properties.vendorID)
                     << "Device type (enum value):" + std::to_string(props.properties.deviceType)
                     << "Driver version:" + std::to_string(props.properties.driverVersion)
-                    << "Device name:" + std::string(props.properties.deviceName);
+                    << sz::string{"Device name: "}.append(props.properties.deviceName);
                 }
                 break;
             }
@@ -352,7 +352,7 @@ void init_vk_logical_device()
         bool is_swapchain{false};
         for(auto& i : props)
         {
-            if (std::string(i.extensionName) == std::string(VK_KHR_SWAPCHAIN_EXTENSION_NAME))
+            if (sz::string(i.extensionName) == sz::string(VK_KHR_SWAPCHAIN_EXTENSION_NAME))
             {
                 is_swapchain = true;
                 break;
@@ -467,19 +467,19 @@ void initializations::init_std_surface_capabilities()
 }
 
 void initializations::glfw_error_callback(int code, const char *description) {
-    auto& logger = harpy::utilities::logger::get_logger();
-    logger << "GLFW errored. Here is code: " + std::to_string(code) + "\nHere is description: " + description;
+    static logger local_logger{"Window logger"};
+    local_logger << std::pair{utilities::error_severity::error,
+        "GLFW errored. Here is code: " + std::to_string(code) + "\nHere is description: " + description};
 }
 
 VkBool32 VKAPI_CALL
 debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType,
               const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData) {
-
-    harpy::utilities::logger::get_logger() << std::make_pair(harpy::utilities::error_severity::error, pCallbackData->pMessage);
-    harpy::utilities::logger::get_logger()
-            .log(harpy::utilities::error_severity::error,
-                 std::string("Validation layer: ") +  pCallbackData->pMessage);
-
+    //Это локальный дебаггер (пишет в командную строку ошибки)
+    static utilities::logger local_logger{"Vulkan debugger"};
+    //Это то, что он писать будет
+    local_logger << std::make_pair(utilities::error_severity::vulkan_error,
+        sz::string{pCallbackData->pMessage});
 
     return VK_FALSE;
 }

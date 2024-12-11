@@ -48,12 +48,12 @@ harpy::nest::threading::fence::operator VkFence_T*&()
 {return vk_fence;
 }
 
-VkResult harpy::nest::threading::fence::wait_for_fence(std::size_t how_long_to_wait)
-{
+VkResult harpy::nest::threading::fence::wait(std::size_t how_long_to_wait) {
     return vkWaitForFences(*device, 1, &vk_fence, true, how_long_to_wait);
 }
 
-VkResult harpy::nest::threading::fence::wait_and_reset_fence(std::size_t how_long_to_wait)
+
+VkResult harpy::nest::threading::fence::wait_and_reset(std::size_t how_long_to_wait)
 {
     vkWaitForFences(*device, 1, &vk_fence, true, how_long_to_wait);
     return vkResetFences(*device, 1, &vk_fence);

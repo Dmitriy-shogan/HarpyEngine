@@ -1,8 +1,8 @@
 #pragma once
 #ifndef HARPY_UTILITIES_IMAGES
 #define HARPY_UTILITIES_IMAGES
-#include <dll_macro.h>
-#include <../HarpyUtilities/dll_macro.h>
+#include <../utilities_dll_macro.h>
+#include <stringzilla/stringzilla.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/imgcodecs.hpp>
 
@@ -33,12 +33,12 @@ namespace harpy::utilities
         
     public:
         image() = default;
-        image(std::string path);
+        image(sz::string_view path);
 
-        void read_image(std::string path);
+        void read_image(sz::string_view path);
 
         //NOT IMPLEMENTED
-        void save_image(std::string path, std::string filename);
+        void save_image(sz::string_view path, sz::string_view filename);
 
         std::pair<uint32_t, uint32_t> dimension_sizes();
         int get_current_format();

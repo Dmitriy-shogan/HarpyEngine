@@ -56,9 +56,6 @@ set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "")
 
 FetchContent_Declare(glfw
         GIT_REPOSITORY https://github.com/glfw/glfw)
-FetchContent_Declare(ffmpeg
-        GIT_REPOSITORY https://git.ffmpeg.org/ffmpeg.git
-)
 FetchContent_Declare(glm
         GIT_REPOSITORY https://github.com/icaven/glm)
 FetchContent_Declare(vma
@@ -70,10 +67,13 @@ FetchContent_Declare(opencv
         GIT_TAG 5.x)
 FetchContent_Declare(assimp
         GIT_REPOSITORY https://github.com/assimp/assimp)
+FetchContent_Declare(stringzilla
+        GIT_REPOSITORY https://github.com/ashvardanian/StringZilla
+        GIT_TAG main)
 
 
 
-FetchContent_MakeAvailable(glfw ffmpeg glm vma volk opencv assimp)
+FetchContent_MakeAvailable(glfw glm vma volk opencv assimp stringzilla)
 
 set(HARPY_INCLUDES "${PROJECT_SOURCE_DIR}/include")
 set(HARPY_SOURCES "${PROJECT_BINARY_DIR}/src")
@@ -85,12 +85,12 @@ set(WORKING_DIR "${CMAKE_BINARY_DIR}/build")
 
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-    set(LIBRARY_OUTPUT_PATH "${WORKING_DIR}/dlib" CACHE PATH "Build directory" FORCE)
+    set(LIBRARY_OUTPUT_PATH "${WORKING_DIR}/dlib" CACHE PATH "Build directory")
     set(CMAKE_SHARED_LIBRARY_PREFIX "d")
     set(CMAKE_STATIC_LIBRARY_PREFIX "d")
     add_compile_definitions(_DEBUG HARPY_DEBUG)
 else()
-    set(LIBRARY_OUTPUT_PATH "${WORKING_DIR}/lib" CACHE PATH "Build directory" FORCE)
+    set(LIBRARY_OUTPUT_PATH "${WORKING_DIR}/lib" CACHE PATH "Build directory")
 endif()
 
 if(HARPY_BENCHMARK)

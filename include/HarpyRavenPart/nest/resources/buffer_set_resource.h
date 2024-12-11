@@ -6,16 +6,11 @@
 
 namespace harpy::nest::resources
 {
-    struct second_buffers_pair
-    {
-        VkCommandBuffer buffer{};
-        std::size_t parent_primary_buffer{};
-    };
-    
+
     struct buffer_set_resource
     {
         std::vector<VkCommandBuffer> primary_buffers{};
-        std::vector<second_buffers_pair> secondary_buffers{};
+        std::unordered_map<VkCommandBuffer, std::size_t> secondary_buffers{};
     };
 }
 

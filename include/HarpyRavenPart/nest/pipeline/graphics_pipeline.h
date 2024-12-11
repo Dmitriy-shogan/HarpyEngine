@@ -4,8 +4,8 @@
 #include <nest/shader_works/shader_module.h>
 #include <nest/pipeline/pipeline_cache.h>
 
-#include <nest/managers/swapchain_manager.h>
-#include "nest/wrappers/data_buffer.h"
+#include <nest/wrappers/data_buffer.h>
+#include <nest/wrappers/swapchain.h>
 
 namespace harpy::nest::pipeline
 {
@@ -100,28 +100,32 @@ namespace harpy::nest::pipeline
 
     struct graphics_pipeline_ci
     {
-        shaders::shader_set modules;
-        pipeline_cache* cache {nullptr};
+        shaders::shader_set shaders{};
+        pipeline_cache cache {};
         graphics_pipeline_options_ci options{};
         wrappers::swapchain* swapchain{nullptr};
-        std::vector<VkDescriptorSetLayout>* descriptor_layouts{nullptr};
+        std::vector<VkDescriptorSetLayout> descriptor_layouts{};
     };
     
     class graphics_pipeline
     {
         VkPipeline pipe{};
         VkPipelineLayout layout{};
-        std::string id{};
+        std::unique_ptr<graphics_pipeline_ci> saved_ci{nullptr};
 
         VkDevice* device{};
 
-        void init_layout(std::vector<VkDescriptorSetLayout>* descriptors);
+        void init_layout(std::vector<VkDescriptorSetLayout>& descriptors);
 
     public:
 
-        graphics_pipeline(graphics_pipeline_ci* create_info = nullptr,
+        graphics_pipeline(std::unique_ptr<graphics_pipeline_ci> create_info,
             bool is_wireframe = false,
             VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device());
+        graphics_pipeline(shaders::shader_set& set, graphics_pipeline const & pipe);
+
+        graphics_pipeline(graphics_pipeline&& other);
+        graphics_pipeline& operator=(graphics_pipeline&& other);
         
         VkPipeline& get_vk_pipeline();
         operator VkPipeline&();
@@ -129,8 +133,10 @@ namespace harpy::nest::pipeline
         VkPipelineLayout& get_vk_layout();
         operator VkPipelineLayout&();
 
-        void set_id(std::string id);
-        std::string get_id();
+        std::vector<VkDescriptorSetLayout>& get_descriptor_set_layouts();
+
+        void set_id(sz::string_view id);
+        sz::string get_id();
 
         
     ~graphics_pipeline();

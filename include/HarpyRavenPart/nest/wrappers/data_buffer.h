@@ -14,7 +14,6 @@ namespace harpy::nest::wrappers
         glm::vec3 coords{};
         glm::vec3 normals{};
         glm::vec2 texture_coords{};
-        glm::vec3 base_color{};
     };
 
     //JUST FOR NOW
@@ -24,7 +23,7 @@ namespace harpy::nest::wrappers
         .inputRate = VK_VERTEX_INPUT_RATE_VERTEX,
     };
 
-    inline std::vector<VkVertexInputAttributeDescription> vertex_vk_input_attribute_descriptions{
+    static inline const std::vector<VkVertexInputAttributeDescription> vertex_vk_input_attribute_descriptions{
             {
                     .location = 0,
                     .binding = 0,
@@ -43,12 +42,6 @@ namespace harpy::nest::wrappers
                     .format = VK_FORMAT_R32G32_SFLOAT,
                     .offset = offsetof(vertex, texture_coords),
             },
-            {
-                    .location = 3,
-                    .binding = 0,
-                    .format = VK_FORMAT_R32G32B32_SFLOAT,
-                    .offset = offsetof(vertex, base_color),
-            }
     };
     
     enum class buffer_type

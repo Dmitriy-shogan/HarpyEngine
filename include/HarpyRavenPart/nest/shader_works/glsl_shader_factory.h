@@ -35,7 +35,7 @@ namespace harpy::nest::shaders
             he_is_bm = 1,
             he_count = 12
         };
-        std::map<std::string, std::string> definitions{};
+        std::map<sz::string, sz::string> definitions{};
         int forced_version{}; // NOT IMPLEMENTED
         uint16_t flags{};
         //So, HSO file.
@@ -60,43 +60,44 @@ namespace harpy::nest::shaders
         std::mutex mutex{};
 
         shaderc::CompileOptions process_options();
-        shader_types process_extension(std::string_view filename);
+
+        static shader_types process_extension(sz::string_view filename);
         shaderc_shader_kind shader_types_to_shaderc_shader_kind(shader_types type);
     public:
 
-        std::string preprocess(const std::string& shader, shader_types type, bool do_save = false);
-        std::string preprocess_from_file(const std::string& filename, bool do_save = false);
+        sz::string preprocess( sz::string_view shader, shader_types type, bool do_save = false);
+        sz::string preprocess_from_file( sz::string_view filename, bool do_save = false);
         
-        spirv_compilation_result compile(const std::string& shader, shader_types type, bool do_save = false);
-        spirv_compilation_result full_compilation(std::string shader, shader_types type, bool do_save = false);
-        spirv_compilation_result compile_from_file(const std::string& filename, bool do_save = false);
-        spirv_compilation_result full_compilation_from_file(const std::string& filename, bool do_save = false);
+        spirv_compilation_result compile(sz::string_view shader, shader_types type, bool do_save = false);
+        spirv_compilation_result full_compilation(sz::string_view shader, shader_types type, bool do_save = false);
+        spirv_compilation_result compile_from_file(sz::string_view filename, bool do_save = false);
+        spirv_compilation_result full_compilation_from_file(sz::string_view filename, bool do_save = false);
 
-        spirv_compilation_result build_assembly(const std::string& assembled_string);
-        std::string compile_binary(const std::string& shader, shader_types type, bool do_save = false);
-        std::string full_compilation_binary(std::string shader, shader_types type, bool do_save = false);
-        std::string compile_binary_from_file(const std::string& filename, bool do_save = false);
-        std::string full_compilation_binary_from_file(const std::string& filename, bool do_save = false);
+        spirv_compilation_result build_assembly( sz::string_view assembled_string);
+        sz::string compile_binary( sz::string_view shader, shader_types type, bool do_save = false);
+        sz::string full_compilation_binary(sz::string_view shader, shader_types type, bool do_save = false);
+        sz::string compile_binary_from_file( sz::string_view filename, bool do_save = false);
+        sz::string full_compilation_binary_from_file( sz::string_view filename, bool do_save = false);
         
         //MUST BE VALID HSO FILE
-        void load_sets(const std::string& filename = "options.hso");
+        void load_sets( sz::string_view filename = "options.hso");
         
-        void save_sets(const std::string& filename = "options.hso");
+        void save_sets( sz::string_view filename = "options.hso");
 
         glsl_shader_factory_options& get_set(int index);
         
         void set_set(const glsl_shader_factory_options& set);
         void set_set(size_t index);
         
-        shader_module create_shader_module(const std::string& filename);
+        shader_module create_shader_module( sz::string_view filename);
         shader_module create_shader_module(spirv_compilation_result shader, shader_types type);
         
-        static std::future<shader_module> create_shader_module_async(std::string filename);
+        static std::future<shader_module> create_shader_module_async(sz::string_view filename);
         
         //FILE MUST BE VALID HGSP FILE WITH OPTIONS BLOCK
-        static std::future<shader_set> create_shader_set_async(std::string filename);
+        static std::future<shader_set> create_shader_set_async(sz::string_view filename);
         
-        shader_set create_shader_set(std::string way_to_file); //HarpyGlslShaderPackage
+        shader_set create_shader_set(sz::string_view way_to_file); //HarpyGlslShaderPackage
     };
 
     
