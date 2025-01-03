@@ -46,15 +46,25 @@ void harpy::D3::renderer::init_default_pipeline() {
     pipelines.emplace(pipeline_id, std::move(pipeline));
 }
 
+void harpy::D3::renderer::init_default_texture() {
+    utilities::image image{"../external_resources/images/default/beware.png"};
+    textures["default"] = image;
+    commander.fast_load_texture(textures["default"], image);
+}
+
 void harpy::D3::renderer::init_descriptors() {
     descriptor_factory.allocate_descriptors(2000, nest::pools::descriptor_types::uniform_buffer);
-    global_layout = descriptor_factory.get_layout({descriptor_factory.get_standard_sight_binding()});
+    global_layout = descriptor_factory.get_layout(
+        {
+            descriptor_factory.get_standard_sight_binding(),
+        descriptor_factory.get_standard_texture_binding()
+        });
 
     VkDescriptorSetAllocateInfo allocInfo {};
     allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     allocInfo.descriptorPool = descriptor_factory;
     //Just for now
-    allocInfo.descriptorSetCount = 1;
+    allocInfo.descriptorSetCount = 2;
     allocInfo.pSetLayouts = &global_layout;
 
     VkDescriptorBufferInfo binfo{};
@@ -69,13 +79,29 @@ void harpy::D3::renderer::init_descriptors() {
     setWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
     setWrite.pBufferInfo = &binfo;
 
+    VkDescriptorImageInfo image_buffer_info{};
+    image_buffer_info.sampler = texture_sampler;
+    image_buffer_info.imageView = textures["default"];
+    image_buffer_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+    VkWriteDescriptorSet sampler_write{};
+    sampler_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    sampler_write.pNext = nullptr;
+
+    sampler_write.dstBinding = 1;
+    sampler_write.descriptorCount = 1;
+    sampler_write.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER;
+    sampler_write.pImageInfo = &image_buffer_info;
+
+    VkWriteDescriptorSet sets[] = {setWrite, sampler_write};
+
     for(auto& i : frames_data) {
         vkAllocateDescriptorSets(nest::resources::common_vulkan_resource::get_resource(), &allocInfo, &i.global_descriptor_set);
         //information about the buffer we want to point at in the descriptor
         binfo.buffer = i.sight_uniform_buffer;
         setWrite.dstSet = i.global_descriptor_set;
 
-        vkUpdateDescriptorSets(nest::resources::common_vulkan_resource::get_resource(), 1, &setWrite, 0, nullptr);
+        vkUpdateDescriptorSets(nest::resources::common_vulkan_resource::get_resource(), 2, sets, 0, nullptr);
     }
 }
 
@@ -92,16 +118,23 @@ void harpy::D3::renderer::update_uniform_buffers() {
 
 }
 
+harpy::D3::renderer::render_target & harpy::D3::renderer::search_render_target(sz::string_view id) {
+    for(auto& i : render_targets) {
+
+    }
+}
+
 
 harpy::D3::renderer::renderer() {
     init_queue_managers();
     init_thread_resources();
+    init_default_texture();
     init_descriptors();
     init_default_pipeline();
 }
 
 //TODO: add texture support
-void harpy::D3::renderer::copy_render_target(model& model) {
+void harpy::D3::renderer::add_render_target(model& model) {
     static uint32_t copy_times = 0;
     std::unique_ptr<D3::model> model_copy = std::make_unique<D3::model>();
 
@@ -129,17 +162,17 @@ void harpy::D3::renderer::copy_render_target(model& model) {
     commander.bind_thread_res(std::move(temp_thing));
 }
 
-void harpy::D3::renderer::add_render_target(sz::string_view path_to_model) {
+void harpy::D3::renderer::add_render_target(sz::string_view path_to_model, sz::string_view id,  sz::string_view pipeline_id) {
     if(thread_resources.size() == 1) {
         auto resource {std::make_unique<nest::resources::command_thread_resource>
             (queue_managers.front().get_queue(),std::make_unique<nest::pools::command_pool>(queue_managers.front().get_family_index()))};
         model_loader loader{std::move(resource)};
-        render_targets.emplace_back(loader.load_model(path_to_model));
+        render_targets.emplace_back(loader.load_model(path_to_model, id, pipeline_id));
     } else {
         for(int i = thread_resources.size() -1; i >= 0; i--) {
             if(thread_resources[i]->queue.get_type() == nest::wrappers::queue_type::transfer) {
                 model_loader loader{std::move(thread_resources[i])};
-                render_targets.emplace_back(loader.load_model(path_to_model));
+                render_targets.push_back({loader.load_model(path_to_model, id, pipeline_id)});
             }
         }
     };
@@ -236,7 +269,7 @@ void harpy::D3::renderer::show_on_screen()
 {
     auto image_index = swapchain.acquire_vk_image_index(&semaphore, nullptr);
     auto& frame_data = frames_data[image_index];
-    //Just for now: static present queue to not think about it
+    //We can always assume, that the first queue is present because it just how it works
     static VkQueue present_queue = queue_managers.front().get_queue();
     VkPresentInfoKHR presentInfo{};
     presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;

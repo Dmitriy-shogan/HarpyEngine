@@ -1,7 +1,3 @@
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${WORKING_DIR}/runtime_output")
-set(CMAKE_BUILD_FILES_DIRECTORY "${WORKING_DIR}/runtime_output")
-set(CMAKE_BUILD_DIRECTORY "${WORKING_DIR}/runtime_output")
-
 add_library(HarpyUtilities
         utilities/images/image.cpp
         utilities/util/util.cpp

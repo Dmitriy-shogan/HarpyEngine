@@ -9,8 +9,6 @@ namespace harpy::D3
     {
         nest::wrappers::data_buffer vertices{nest::wrappers::buffer_type::vertex};
         nest::wrappers::data_buffer indices{nest::wrappers::buffer_type::indice};
-
-    
     public:
 
         mesh() = default;

@@ -3,6 +3,12 @@
 
 void harpy::nest::texturing::texture::init(utilities::image& image)
 {
+    if(this->image)
+    {
+        vkDestroyImageView(*device, view, nullptr);
+        vmaDestroyImage(*allocator, this->image, allocation);
+    }
+
     image_size = image.get_cv_data().total() * image.get_cv_data().elemSize();
 
     VkImageCreateInfo ci{};
@@ -20,7 +26,6 @@ void harpy::nest::texturing::texture::init(utilities::image& image)
     ci.mipLevels = 1;
     ci.samples = VK_SAMPLE_COUNT_1_BIT;
     ci.arrayLayers = 1;
-    bool checker{false};
     switch(image.get_cv_data().channels())
     {
     case 1: {
@@ -50,9 +55,6 @@ void harpy::nest::texturing::texture::init(utilities::image& image)
 
     vmaCreateImage(*allocator, &ci, &alloc_ci, &this->image, &allocation, nullptr);
     init_view(ci.format);
-
-    if(checker) {
-        /*image.convert_image_color_space(cv::COLOR_RGB2BGR);*/}
 }
 
 void harpy::nest::texturing::texture::init_view(VkFormat format)
@@ -74,22 +76,24 @@ void harpy::nest::texturing::texture::init_view(VkFormat format)
     HARPY_VK_CHECK(vkCreateImageView(*device, &ci, nullptr, &view));
 }
 
-harpy::nest::texturing::texture::texture(utilities::image& image, VkDevice* device,
+harpy::nest::texturing::texture::texture(sz::string_view id, utilities::image& image, VkDevice* device,
                                          VmaAllocator* allocator)
-        : device(device),
+        : id(id),
+        device(device),
           allocator(allocator)
 {
     init(image);
 }
 
-harpy::nest::texturing::texture::texture(VkDevice* device,
+harpy::nest::texturing::texture::texture(sz::string_view id, VkDevice* device,
                                          VmaAllocator* allocator)
-        : device(device),
-          allocator(allocator)
-{
+        : id(id),
+        device(device),
+          allocator(allocator) {
 }
 
-harpy::nest::texturing::texture::texture(texture&& text) noexcept : device(text.device),
+harpy::nest::texturing::texture::texture(texture&& text) noexcept : id(std::move(text.id)),
+                                                                    device(text.device),
                                                                     allocator(text.allocator),
                                                                     image(text.image),
                                                                     allocation(text.allocation)
@@ -104,7 +108,7 @@ harpy::nest::texturing::texture& harpy::nest::texturing::texture::operator=(text
     allocator = text.allocator;
     image = text.image;
     allocation = text.allocation;
-
+    id = std::move(text.id);
     
     text.allocation = nullptr;
     text.image = nullptr;
@@ -122,6 +126,14 @@ harpy::nest::texturing::texture::operator VkImage_T*&()
 size_t harpy::nest::texturing::texture::get_size()
 {
     return image_size;
+}
+
+sz::string harpy::nest::texturing::texture::get_id() {
+    return id;
+}
+
+void harpy::nest::texturing::texture::set_id(sz::string_view id) {
+    this->id = id;
 }
 
 

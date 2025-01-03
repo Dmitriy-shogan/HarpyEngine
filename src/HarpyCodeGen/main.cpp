@@ -1,7 +1,7 @@
 //
 // Created by Xyeveloper on 01.08.2024.
 //
-#include "shader/glsl_generator.hpp"
+#include <shader/glsl_generator.hpp>
 #include <logger/logger.h>
 
 

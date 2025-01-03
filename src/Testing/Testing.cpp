@@ -78,11 +78,11 @@ int main()
         D3::camera::set_standard_movement(cam, 0.1f, controller);
 
         D3::renderer renderer{};
-        renderer.add_render_target("../external_resources/3d_objects/default/maxwell/maxwell.fbx");
+        renderer.add_render_target("../external_resources/3d_objects/default/maxwell/maxwell.fbx", "le_funny_cat");
 
         utilities::image image{"../external_resources/3d_objects/default/maxwell/nowhiskers.jpg"};
         texturing::texture_sampler sampler{};
-        texturing::texture texture{image};
+        texturing::texture texture{"default", image};
 
         while(!glfwWindowShouldClose(resources::common_vulkan_resource::get_resource().get_main_window()))
         {

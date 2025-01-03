@@ -6,8 +6,10 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-std::unique_ptr<harpy::D3::model> harpy::D3::model_loader::load_model(sz::string_view path) {
+std::unique_ptr<harpy::D3::model> harpy::D3::model_loader::load_model(sz::string_view path, sz::string_view id,  sz::string_view pipeline_id) {
     std::unique_ptr<model> result{new model()};
+    result->set_id(id);
+    result->set_pipeline_id(pipeline_id);
 
     uint32_t import_flags = 0;
 

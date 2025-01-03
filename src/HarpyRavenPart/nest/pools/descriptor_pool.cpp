@@ -67,6 +67,15 @@ VkDescriptorSetLayoutBinding harpy::nest::pools::descriptor_pool::get_standard_s
     return binding;
 }
 
+VkDescriptorSetLayoutBinding harpy::nest::pools::descriptor_pool::get_standard_texture_binding() {
+    static VkDescriptorSetLayoutBinding binding{.binding = 1,
+        .descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER,
+        .descriptorCount = 1,
+    .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
+    .pImmutableSamplers = nullptr};
+    return binding;
+}
+
 VkDescriptorPool& harpy::nest::pools::descriptor_pool::get_vk_pool()
 {return pool;
 }

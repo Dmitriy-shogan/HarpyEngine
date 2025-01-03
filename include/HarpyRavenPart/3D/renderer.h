@@ -8,15 +8,11 @@
 #include <3D/camera.h>
 
 #include <nest/pools/descriptor_pool.h>
+#include <nest/texturing/texture_sampler.h>
 
 namespace harpy::D3
 {
-    //TODO: rethink renderer
-    /* Some thoughts:
-     * We can pass only two matrices: model and cam_view, while proj can be somewhat static i think
-     *
-     *
-     */
+
     class renderer
     {
 
@@ -28,12 +24,15 @@ namespace harpy::D3
 
         nest::pools::descriptor_pool descriptor_factory{};
 
+        //TODO: make function for checking is thread resource is actually alright, when picking it up
         std::vector<std::unique_ptr<nest::resources::command_thread_resource>> thread_resources{};
         std::unique_ptr<nest::resources::command_thread_resource>* transfer_thread_resource{nullptr};
 
         std::unordered_map<sz::string, nest::pipeline::graphics_pipeline> pipelines{};
 
         camera cam{0, 0, 0};
+
+        nest::texturing::texture_sampler texture_sampler{};
 
 
         struct frame_data {
@@ -50,9 +49,15 @@ namespace harpy::D3
             VkDescriptorSet global_descriptor_set{};
         };
 
-        std::vector<frame_data> frames_data{2}; //Todo: unhardcode
+        std::vector<frame_data> frames_data{2}; //TODO: unhardcode
 
-       std::vector<std::unique_ptr<model>> render_targets{};
+        struct render_target {
+            mesh msh{};
+            sz::string texture_id{"default"};
+        };
+
+        std::vector<render_target> render_targets{};
+        std::vector<nest::texturing::texture> textures{};
 
         nest::threading::semaphore semaphore{};
 
@@ -77,6 +82,8 @@ namespace harpy::D3
 
         void init_default_pipeline();
 
+        void init_default_texture();
+
         //TODO: use dynamic uniform_buffer
         void init_static_uniform_buffers();
         void init_dynamic_uniform_buffers();
@@ -86,11 +93,15 @@ namespace harpy::D3
         void update_uniform_buffers();
 
         nest::command_commander* prepare_render_targets();
+
+        render_target& search_render_target(sz::string_view id);
+        nest::texturing::texture& search_texture(sz::string_view id);
+
     public:
         renderer();
 
-        void copy_render_target(model& model);
-        void add_render_target(sz::string_view path_to_model);
+        void add_render_target(model& model);
+        void add_render_target(sz::string_view path_to_model, sz::string_view id,  sz::string_view pipeline_id = "default");
 
         renderer* bind_custom_thread_resource(nest::resources::command_thread_resource&& resource);
         renderer* bind_custom_swapchain(nest::wrappers::swapchain&& chain);
@@ -108,11 +119,12 @@ namespace harpy::D3
 
         std::unique_ptr<model>& get_render_target(sz::string_view model_id);
 
-
         renderer* set_cam(camera cam);
         renderer* render();
 
         void show_on_screen();
+
+
     };
 }
 #endif //HARPY_3D_RENDERER

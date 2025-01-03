@@ -19,7 +19,7 @@ namespace harpy::D3 {
     public:
         model_loader(std::unique_ptr<nest::resources::command_thread_resource> thread_res);
 
-        std::unique_ptr<model> load_model(sz::string_view path);
+        std::unique_ptr<model> load_model(sz::string_view path, sz::string_view id,  sz::string_view pipeline_id = "default");
 
     };
 }

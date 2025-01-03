@@ -30,6 +30,7 @@ namespace harpy::nest::pools
         descriptor_pool(descriptor_pool const& pool) = delete;
         descriptor_pool& operator=(descriptor_pool const& pool) = delete;
 
+
         descriptor_pool(descriptor_pool&& pool) noexcept;
         descriptor_pool& operator=(descriptor_pool&& pool) noexcept;
 
@@ -37,6 +38,7 @@ namespace harpy::nest::pools
         VkDescriptorSetLayout get_layout(std::vector<VkDescriptorSetLayoutBinding> bindings);
 
         static VkDescriptorSetLayoutBinding get_standard_sight_binding();
+        static VkDescriptorSetLayoutBinding get_standard_texture_binding();
 
 
         VkDescriptorPool& get_vk_pool();

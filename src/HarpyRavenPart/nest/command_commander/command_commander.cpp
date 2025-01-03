@@ -521,6 +521,11 @@ void harpy::nest::command_commander::fast_load_mesh(D3::mesh &mesh, std::vector<
 }
 
 void harpy::nest::command_commander::fast_load_texture(texturing::texture &texture, utilities::image &image) {
+    reset_pool()
+    ->start_recording()
+    ->load_into_texture(texture, image)
+    ->end_recording()();
+    submit();
 }
 
 

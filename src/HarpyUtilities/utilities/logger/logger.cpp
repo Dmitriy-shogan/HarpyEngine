@@ -100,7 +100,7 @@ void logger::fast_cmd_log(harpy_little_error &error) {
 
 void logger::fast_cmd_log(error_severity sever, sz::string_view error) {
     format_last_log(sever, error);
-    sz::string colored_log {last_log};
+    colored_log = last_log;
     colored_log.insert(colored_log.find_first_of(">")+2, font_colors.at(sever));
     colored_log.append(reset_color);
     std::cout << colored_log << std::endl;

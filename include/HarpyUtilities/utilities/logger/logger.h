@@ -16,7 +16,7 @@
 namespace harpy::utilities
 {
     
-    //probably thread-safe singleton logger
+    //thread-safe (kinda) logger
     class HARPY_UTILITIES_API logger
     {
         static inline std::ofstream filelog{};
@@ -43,7 +43,7 @@ namespace harpy::utilities
 
         sz::string tag{};
         sz::string last_log{};
-
+        sz::string colored_log{};
 
         void private_log(error_severity severity, sz::string_view error);
         void private_log(harpy_little_error& error);
