@@ -60,6 +60,8 @@ namespace harpy::nest::shaders
         std::unique_ptr<shader_module> geometry{nullptr};
         std::any extra_info{};
     };
+    static shader_set standard_shader_set;
+
 }
 
 #endif//HARPY_NEST_SHADER_MODULE

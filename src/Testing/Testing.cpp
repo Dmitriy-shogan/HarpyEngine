@@ -63,7 +63,7 @@ int main()
     ci.height = 900;
     ci.width = 1600;
     ci.refresh_rate = 145;
-    ci.is_focused_on_show = 1;
+    ci.is_focused_on_show = false;
     ci.is_resizable = false;
     ci.is_decorated = true;
     ci.name = "BEST WINDOW EVER EVER!!!";

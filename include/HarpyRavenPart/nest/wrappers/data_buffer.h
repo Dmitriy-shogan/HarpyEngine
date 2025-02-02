@@ -65,9 +65,10 @@ namespace harpy::nest::wrappers
         std::size_t size{};
         buffer_type type;
         VkBuffer buffer{};
-        
-        
+
+        inline static std::unordered_map<VkBuffer, int> buffers{};
     public:
+
         
         data_buffer(buffer_type type, std::size_t size = 0,
             VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device(),
@@ -75,8 +76,8 @@ namespace harpy::nest::wrappers
         
         void init(std::size_t size);
         
-        data_buffer(const data_buffer& buffer) = delete;
-        data_buffer& operator=(const data_buffer& buffer) = delete;
+        data_buffer(const data_buffer& buffer);
+        data_buffer& operator=(const data_buffer& buffer);
         
         data_buffer(data_buffer&& buffer) noexcept;
         data_buffer& operator= (data_buffer&& buffer) noexcept;

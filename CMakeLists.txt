@@ -4,14 +4,15 @@ project(HarpyEngine VERSION 0.01)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
+
+
 include(FetchContent)
 
 find_package(Vulkan REQUIRED)
 find_package(Threads REQUIRED)
 
 #[[To not check is dependency up-to-date]]
-set(FETCHCONTENT_UPDATES_DISCONNECTED ON CACHE BOOL "Do not update everytime I run cmake, please" FORCE)
-
+set(FETCHCONTENT_UPDATES_DISCONNECTED ON CACHE BOOL "Do not update everytime I run cmake, please")
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 #[[Not working right now]]
 option(HARPY_BUILD_TESTS "Build the harpy test programs" OFF)

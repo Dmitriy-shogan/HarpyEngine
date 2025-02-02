@@ -3,8 +3,15 @@
 
 void harpy::nest::wrappers::data_buffer::init(std::size_t size)
 {
-    if(buffer)
-        vmaDestroyBuffer(*allocator, buffer, alloc);
+    if(buffer){
+        if(--buffers[buffer] <= 0){
+            buffers.erase(buffer);
+            vmaDestroyBuffer(*allocator, buffer, alloc);
+        } else {
+            buffer = nullptr;
+            alloc = nullptr;
+        }
+    }
     
     VkBufferCreateInfo ci{};
     ci.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -57,6 +64,7 @@ void harpy::nest::wrappers::data_buffer::init(std::size_t size)
     }
 
     HARPY_VK_CHECK(vmaCreateBuffer(*allocator, &ci, &alloc_ci, &buffer, &alloc, nullptr));
+    buffers[buffer]++;
 }
 
 harpy::nest::wrappers::data_buffer::data_buffer(buffer_type type, std::size_t size, VkDevice* device,
@@ -136,6 +144,29 @@ void harpy::nest::wrappers::data_buffer::unmap_ptr()
 
 harpy::nest::wrappers::data_buffer::~data_buffer()
 {
-    if(buffer)
+    if(buffer && --buffers[buffer] <= 0) {
+        buffers.erase(buffer);
         vmaDestroyBuffer(*allocator, buffer, alloc);
+    }
+}
+
+harpy::nest::wrappers::data_buffer::data_buffer(const harpy::nest::wrappers::data_buffer &buffer) {
+    size = buffer.size;
+    type = buffer.type;
+    device = buffer.device;
+    allocator = buffer.allocator;
+    alloc = buffer.alloc;
+    buffers[this->buffer]++;
+}
+
+harpy::nest::wrappers::data_buffer &
+harpy::nest::wrappers::data_buffer::operator=(const harpy::nest::wrappers::data_buffer &buffer) {
+
+    size = buffer.size;
+    type = buffer.type;
+    device = buffer.device;
+    allocator = buffer.allocator;
+    alloc = buffer.alloc;
+    buffers[this->buffer]++;
+    return *this;
 }

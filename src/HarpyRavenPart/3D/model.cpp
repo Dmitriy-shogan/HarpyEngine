@@ -1,5 +1,5 @@
 //
-// Created by Иван on 10.08.2024.
+// Created by Xyeveloper on 10.08.2024.
 //
 
 #include "3D/model.h"
@@ -7,38 +7,33 @@
 #include "glm/gtx/transform.hpp"
 
 namespace harpy::D3 {
-    model::model(sz::string_view id, sz::string_view mesh_id, sz::string_view texture_id, sz::string_view pipeline_id)
-        : id(id), mesh_id(mesh_id), texture_id(texture_id), pipeline_id(pipeline_id) {
-
+    model::model(sz::string_view id, sz::string_view texture_id, sz::string_view pipeline_id)
+        : id(id), material_id(pipeline_id) {
+        all_models[id] = this;
     }
 
     void model::set_id(sz::string_view id) {
+        all_models.erase(this->id);
         this->id = id;
+        all_models[id] = this;
     }
 
     sz::string model::get_id() {
         return id;
     }
 
-    void model::set_texture(sz::string_view path) {
+    void model::set_texture_file(sz::string_view path) {
         texture_loading_path = path;
     }
 
-    void model::set_texture_id(sz::string_view id) {
-        texture_id = id;
+    void model::set_main_texture_id(sz::string_view id) {
+        textures.front().set_id(id);
     }
 
-    sz::string model::get_texture_id() {
-        return texture_id;
+    sz::string model::get_main_texture_id() {
+        return textures.front().get_id();
     }
 
-    void model::set_mesh_id(sz::string_view id) {
-        mesh_id = id;
-    }
-
-    sz::string model::get_mesh_id() {
-        return mesh_id;
-    }
 
     model* model::rotate(float angle, bool x, bool y, bool z) {
         model_matrix = glm::rotate(model_matrix, glm::radians(angle), {x, y, z});
@@ -56,10 +51,19 @@ namespace harpy::D3 {
     }
 
     void model::set_pipeline_id(sz::string_view pipe_id) {
-        pipeline_id = pipe_id;
+        material_id = pipe_id;
     }
 
     sz::string model::get_pipeline_id() {
-        return pipeline_id;
+        return material_id;
+    }
+
+    model::~model() {
+        if(id != "default")
+            all_models.erase(id);
+    }
+
+    void model::set_mesh_file(sz::string_view path) {
+        mesh_loading_path = path;
     }
 } // harpy

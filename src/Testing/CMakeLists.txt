@@ -55,7 +55,11 @@ add_executable(Test
         ../HarpyUtilities/utilities/logger/harpy_little_error.cpp
         ../HarpyUtilities/utilities/logger/logger.cpp
         ../HarpyUtilities/utilities/util/delegate.cpp
-        ${HARPY_INCLUDES}/HarpyUtilities/utilities_dll_macro.h)
+        ${HARPY_INCLUDES}/HarpyUtilities/utilities_dll_macro.h
+        ../HarpyRavenPart/3D/material.cpp
+        ../../include/HarpyRavenPart/3D/material.hpp
+        ../HarpyRavenPart/3D/light.cpp
+        ${HARPY_RAVEN_MODULE}/3D/light.hpp)
 
 target_include_directories(Test
         PRIVATE ${glfw_SOURCE_DIR}/include

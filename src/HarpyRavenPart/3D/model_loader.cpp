@@ -6,35 +6,12 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-std::unique_ptr<harpy::D3::model> harpy::D3::model_loader::load_model(sz::string_view path, sz::string_view id,  sz::string_view pipeline_id) {
-    std::unique_ptr<model> result{new model()};
-    result->set_id(id);
-    result->set_pipeline_id(pipeline_id);
+harpy::D3::mesh harpy::D3::model_loader::load_mesh(sz::string_view path, sz::string_view id, aiScene* valid_scene) {
+    mesh result{};
 
-    uint32_t import_flags = 0;
-
-    import_flags |= aiProcess_ValidateDataStructure; // validates the imported scene data structure.
-    import_flags |= aiProcess_Triangulate;           // triangulates all faces of all meshes.
-    import_flags |= aiProcess_SortByPType;           // splits meshes with more than one primitive type in homogeneous sub-meshes
-    import_flags |= aiProcess_FlipUVs;
-
-    // generate missing normals or UVs
-    import_flags |= aiProcess_CalcTangentSpace; // calculates  tangents and bitangents
-    import_flags |= aiProcess_GenSmoothNormals; // ignored if the mesh already has normals
-    import_flags |= aiProcess_GenUVCoords;      // converts non-UV mappings (such as spherical or cylindrical mapping) to proper texture coordinate channels
-
-    import_flags |= aiProcess_RemoveRedundantMaterials;
-    import_flags |= aiProcess_JoinIdenticalVertices;
-    import_flags |= aiProcess_FindInstances;
-
-
-
-    auto scene = importer.ReadFile(path.cbegin(), import_flags);
-
-
+    auto scene = valid_scene ? valid_scene : importer.ReadFile(path.cbegin(), import_flags);
     if (scene->HasMeshes()) {
         auto *local_mesh = scene->mMeshes[0];
-        mesh actual_mesh{};
 
         std::vector<nest::wrappers::vertex> vertices{local_mesh->mNumVertices};
         std::vector<uint32_t> indices{};
@@ -53,8 +30,7 @@ std::unique_ptr<harpy::D3::model> harpy::D3::model_loader::load_model(sz::string
             vertices[i].texture_coords = {local_mesh->mTextureCoords[0][i].x, local_mesh->mTextureCoords[0][i].y};
             vertices[i].normals = {local_mesh->mNormals[i].x, local_mesh->mNormals[i].y, local_mesh->mNormals[i].z};
         }
-        commander.fast_load_mesh(actual_mesh, vertices, indices);
-        result->msh = std::move(actual_mesh);
+        commander.fast_load_mesh(result, vertices, indices);
         return result;
     }
 
@@ -71,3 +47,25 @@ harpy::D3::model_loader::model_loader(std::unique_ptr<nest::resources::command_t
     commander.bind_thread_res(std::move(thread_res));
 }
 
+void harpy::D3::model_loader::update_model(harpy::D3::model &model) {
+
+
+}
+
+harpy::D3::model harpy::D3::model_loader::load_model(sz::string_view path, sz::string_view id, aiScene* valid_scene) {
+    model md{id};
+    auto scene = valid_scene ? valid_scene : importer.ReadFile(path.cbegin(), import_flags);
+    if(scene->HasMeshes()){
+        for (int i = 0; i < scene->mNumMeshes; i++) {
+            md.meshes.emplace_back(load_mesh(path, id, valid_scene));
+        }
+    }
+    if(scene->HasTextures()) {
+        for (int i = 0; i < scene->mNumTextures; i++) {
+            auto *texture = scene->mTextures[i];
+            texture->pcData;
+        }
+    }
+
+    return model{id};
+}

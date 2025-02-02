@@ -31,7 +31,7 @@ void harpy::nest::wrappers::swapchain::init(
 				format = i.format;
 				color_space = i.colorSpace;
                            
-				//YEAH THIS IS GOTO IT GOES ABOUT 10 ROWS BELOW
+				//YEAH, THIS IS GOTO IT GOES ABOUT 10 ROWS BELOW
 				goto loop_exit;
 			}
 		}

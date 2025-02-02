@@ -7,19 +7,23 @@
 #include <assimp/Importer.hpp>
 #include <3D/model.h>
 #include <nest/command_commander/command_commander.h>
+#include "assimp/postprocess.h"
 
 namespace harpy::D3 {
 
     class model_loader {
         Assimp::Importer importer{};
         nest::command_commander commander{};
-
-        void load_mesh(model& model, aiScene& scene);
+        inline static constinit uint32_t import_flags = aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace |
+                aiProcess_ValidateDataStructure | aiProcess_SortByPType | aiProcess_GenSmoothNormals |
+                aiProcess_GenUVCoords | aiProcess_JoinIdenticalVertices | aiProcess_FindInstances;
 
     public:
         model_loader(std::unique_ptr<nest::resources::command_thread_resource> thread_res);
 
-        std::unique_ptr<model> load_model(sz::string_view path, sz::string_view id,  sz::string_view pipeline_id = "default");
+        [[nodiscard]] mesh load_mesh(sz::string_view path, sz::string_view id, aiScene* valid_scene = nullptr);
+        [[nodiscard]] model load_model(sz::string_view path, sz::string_view id, aiScene* valid_scene = nullptr);
+        void update_model(model &model);
 
     };
 }

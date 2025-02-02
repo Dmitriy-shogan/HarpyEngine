@@ -3,6 +3,11 @@
 #include <nest/shader_works/glsl_shader_factory.h>
 
 using resource = harpy::nest::resources::common_vulkan_resource;
+harpy::nest::shaders::shader_set standard_shader_set{
+    .vertex{std::make_unique<harpy::nest::shaders::shader_module>(harpy::nest::shaders::glsl_shader_factory::get_singleton().create_shader_module("../external_resources/shaders/base/vertex/base.vert"))},
+    .fragment{std::make_unique<harpy::nest::shaders::shader_module>(harpy::nest::shaders::glsl_shader_factory::get_singleton().create_shader_module("../external_resources/shaders/base/fragment/base_light.vert"))}
+};
+
 
 
 harpy::nest::shaders::shader_module::shader_module(const spirv_compilation_result& data, shader_types type, VkDevice* device) : type(type), device(device)

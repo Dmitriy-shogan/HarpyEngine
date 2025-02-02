@@ -1,4 +1,5 @@
-add_executable(HarpyRavenExe ${HARPY_RAVEN_MODULE}/nest/inititalizations.h
+add_executable(HarpyRavenExe
+        ${HARPY_RAVEN_MODULE}/nest/inititalizations.h
         nest/inititalizations.cpp
         nest/command_commander/command_commander.cpp
         nest/managers/queue_manager.cpp
@@ -28,7 +29,6 @@ add_executable(HarpyRavenExe ${HARPY_RAVEN_MODULE}/nest/inititalizations.h
         ../../include/HarpyRavenPart/nest/resources/depth_image.h
         nest/windowing/input_controller.cpp
         ../../include/HarpyRavenPart/nest/windowing/input_controller.h
-        ../../include/HarpyUtilities/utilities/allocators/allocator.h
         nest/wrappers/render_pass.cpp
         ../../include/HarpyRavenPart/nest/wrappers/render_pass.h
         3D/model_loader.cpp
@@ -48,7 +48,11 @@ add_executable(HarpyRavenExe ${HARPY_RAVEN_MODULE}/nest/inititalizations.h
         3D/primitive_models/cube.cpp
         ../../include/HarpyRavenPart/3D/primitive_models/cube.h
         3D/primitive_models/line.cpp
-        ../../include/HarpyRavenPart/3D/primitive_models/line.h)
+        ../../include/HarpyRavenPart/3D/primitive_models/line.h
+        3D/material.cpp
+        ../../include/HarpyRavenPart/3D/material.hpp
+        3D/light.cpp
+        ${HARPY_RAVEN_MODULE}/3D/light.hpp)
 
 add_library(HarpyRavenLib
         ${HARPY_RAVEN_MODULE}/nest/inititalizations.h
@@ -79,7 +83,6 @@ add_library(HarpyRavenLib
         ../../include/HarpyRavenPart/nest/resources/depth_image.h
         nest/windowing/input_controller.cpp
         ../../include/HarpyRavenPart/nest/windowing/input_controller.h
-        ../../include/HarpyUtilities/utilities/allocators/allocator.h
         nest/wrappers/render_pass.cpp
         ../../include/HarpyRavenPart/nest/wrappers/render_pass.h
         3D/model_loader.cpp
@@ -95,7 +98,11 @@ add_library(HarpyRavenLib
         3D/primitive_models/cube.cpp
         ../../include/HarpyRavenPart/3D/primitive_models/cube.h
         3D/primitive_models/line.cpp
-        ../../include/HarpyRavenPart/3D/primitive_models/line.h)
+        ../../include/HarpyRavenPart/3D/primitive_models/line.h
+        3D/material.cpp
+        ../../include/HarpyRavenPart/3D/material.hpp
+        3D/light.cpp
+        ${HARPY_RAVEN_MODULE}/3D/light.hpp)
 
 file(COPY ${CMAKE_SOURCE_DIR}/external_resources DESTINATION ${CMAKE_BINARY_DIR})
 target_compile_definitions(HarpyRavenLib PRIVATE HARPY_RAVEN_DLL_EXPORTS)

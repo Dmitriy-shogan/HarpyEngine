@@ -8,7 +8,7 @@
 #include <variant>
 #include <stringzilla/stringzilla.hpp>
 
-#include "codegen_dll_macro.h"
+#include <codegen_dll_macro.hpp>
 
 namespace harpy::codegen {
     namespace sz = ashvardanian::stringzilla;

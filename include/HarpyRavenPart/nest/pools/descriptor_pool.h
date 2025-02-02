@@ -15,7 +15,7 @@ namespace harpy::nest::pools
         sampler = VK_DESCRIPTOR_TYPE_SAMPLER,
     };
 
-    //TODO: implement four descriptor set levels 0 -- global, 1 -- perpass resources, 2 -- materials (arguable), 3 -- per object
+    //Idea: implement four descriptor set levels 0 -- global, 1 -- perpass resources, 2 -- materials (arguable), 3 -- per object
     class descriptor_pool
     {
         VkDevice* device{};

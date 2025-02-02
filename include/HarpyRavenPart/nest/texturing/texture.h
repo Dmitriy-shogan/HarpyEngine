@@ -7,6 +7,15 @@
 
 namespace harpy::nest::texturing
 {
+    enum texture_type {
+        default_type = 1,
+        specular = 2,
+        diffuse = 4,
+        normal = 8,
+        height = 16,
+        ambient = 32,
+        emissive = 64,
+    };
     class texture
     {
         VkDevice* device{};
@@ -18,6 +27,10 @@ namespace harpy::nest::texturing
         VkExtent3D extent{};
         VkFormat format{};
         size_t image_size{};
+
+        uint32_t height{};
+        uint32_t width{};
+
 
         sz::string id{"default"};
 
@@ -36,6 +49,7 @@ namespace harpy::nest::texturing
                 VmaAllocator* allocator = &resources::common_vulkan_resource::get_resource().get_main_allocator());
 
         void init(utilities::image& image);
+        void init(void* data, uint32_t width, uint32_t height);
         
         texture(const texture& text) = delete;
         texture& operator=(const texture& text) = delete;

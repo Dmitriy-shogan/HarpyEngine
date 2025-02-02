@@ -113,16 +113,23 @@ namespace harpy::nest::pipeline
         VkPipelineLayout layout{};
         std::unique_ptr<graphics_pipeline_ci> saved_ci{nullptr};
 
+        bool is_father = true;
         VkDevice* device{};
+
+        static inline std::unordered_map<VkPipelineLayout, int> layouts{};
 
         void init_layout(std::vector<VkDescriptorSetLayout>& descriptors);
 
+
     public:
 
+        graphics_pipeline(VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device());
+        void init(std::unique_ptr<graphics_pipeline_ci> create_info);
+        void init(shaders::shader_set& set, graphics_pipeline const & pipe, bool is_same_layout = true);
+
         graphics_pipeline(std::unique_ptr<graphics_pipeline_ci> create_info,
-            bool is_wireframe = false,
             VkDevice* device = &resources::common_vulkan_resource::get_resource().get_main_device());
-        graphics_pipeline(shaders::shader_set& set, graphics_pipeline const & pipe);
+        graphics_pipeline(shaders::shader_set& set, graphics_pipeline const & pipe, bool is_same_layout = true);
 
         graphics_pipeline(graphics_pipeline&& other);
         graphics_pipeline& operator=(graphics_pipeline&& other);
@@ -135,8 +142,8 @@ namespace harpy::nest::pipeline
 
         std::vector<VkDescriptorSetLayout>& get_descriptor_set_layouts();
 
-        void set_id(sz::string_view id);
-        sz::string get_id();
+        graphics_pipeline get_wireframe_child();
+        bool is_children_possible();
 
         
     ~graphics_pipeline();

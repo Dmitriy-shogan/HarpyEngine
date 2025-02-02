@@ -52,8 +52,9 @@ namespace harpy::D3
         std::vector<frame_data> frames_data{2}; //TODO: unhardcode
 
         struct render_target {
-            mesh msh{};
+            sz::string mesh{"default"};
             sz::string texture_id{"default"};
+            model& local_model;
         };
 
         std::vector<render_target> render_targets{};
